@@ -401,7 +401,8 @@ belong in a consumer’s own doc.
   **information redundancy**. `label` = short status (`可用` / `未安装` /
   `Not running`); install / repair = labeled Button; path may stay as plain
   meta text; failure detail → **`InfoHint`** on the row — **never** a sibling
-  `FieldHint` that repeats `tool：error…`. Live `#rhythm` service control.
+  `FieldHint` that repeats `tool：error…`. Prefer short status + Button;
+  do not teach multi-row OK/Fail walls in Globals.
 - **DON'T** left-pack ControlRow / `.fynns-control-cluster` **Buttons** (or
   action+meta strips) under the label — clusters **default end-pack**
   (`justify-content: flex-end`, ≥ **0.5.158**). Start packing is **opt-in
@@ -414,7 +415,7 @@ belong in a consumer’s own doc.
   labeled `.fynns-btn` is present under `start`, but CTA stacks should still
   omit `start`. Never invent consumer `justify-content: flex-start` /
   `margin-inline-start: auto` to “fix” left-parked CTAs. Live `#rhythm`
-  service / `#sandbox-rhythm-action-end` / `#sandbox-rhythm-install-cta-end`.
+  end-align strips.
 - **DON'T** crush ControlRow `__label` to a hairline / 2px sliver — form-host
   + standalone label tracks floor at `--fynns-layout-control-row-label`
   (**7.5rem**, ≥ **0.5.159**); long path meta / Button clusters shrink in the
@@ -423,7 +424,7 @@ belong in a consumer’s own doc.
   shrinks + ellipsis — never let end-pack nowrap path **overflow left** and
   paint over the status label (looks like a crushed “就绪” even when the
   track is 120px). Full path → `InfoHint` / Tooltip when users need the
-  untruncated string. Live `#sandbox-rhythm-action-end`.
+  untruncated string. Rules in Hard rules / Content density (no live anti-demo).
 - **DON'T** let `.fynns-table-meta` hard-clip past a Card / unit-stack /
   narrow host **without** `…` — core ≥ **0.5.231** applies
   `overflow: hidden` + `text-overflow: ellipsis` + `min-width: 0` /
@@ -437,7 +438,7 @@ belong in a consumer’s own doc.
   wrapper around Chip — use **`.fynns-list-item-status`** (default success
   wash; `data-tone="danger"` for fail) with optional leading glyph
   (`CheckCircleIcon` / `AlertTriangleIcon`). Neutral muted captions stay
-  `.fynns-table-meta`. Live `#list` run-summary + `#rhythm` status.
+  `.fynns-table-meta`. Live `#list` run-summary + `#provider-settings` active status.
 - **DON'T** dump install / CLI availability (path meta) and backend /
   runtime readiness (outcome marks + model meta) into **one** Card-body
   `ControlStack` — different kinds → adjacent stacks + horizontal `Divider`
@@ -447,7 +448,8 @@ belong in a consumer’s own doc.
   path + marks + `FieldHint` in one `.fynns-control-cluster` under
   `columns={1}` (form-host end-hug misaligns value starts). Model / route
   strings → `.fynns-table-meta`, not FieldHint. Preference Switch stacks keep
-  default end-hug. Live `#sandbox-rhythm-probe-kinds` / `#rhythm` status.
+  default end-hug. Live `#provider-settings` (active-only status) — no
+  multi-kind probe wall in Globals.
 - **DON'T** use `IconButton` `sm` or labeled `Button` `primary`/`tonal` on
   PageScroll **section-body** ControlRows when the row `label` already names
   the section — default **md** ghost IconButton + Tooltip only; primary-end
@@ -465,6 +467,20 @@ belong in a consumer’s own doc.
   **body** `.fynns-table-meta` (never glue into `title` / action cluster).
   Live `#rhythm` catalog. Failure: CONSUMER_TREATY ControlRow unsolicited
   item count.
+- **DON'T** flatten credentialed **provider Manage** into one Card that always
+  shows: every provider's OK/Fail wall + unrelated API-key rows + model picker
+  + probe CTAs + `default=` / `override=` / raw-slug debug footnotes —
+  **information redundancy (hard)** (≥ **0.5.267**). Manage surface = short
+  Card title (≤1 InfoHint) → preference **`ControlRow`** for active provider →
+  credential **when needed** as password `FieldBlock` (eye in `trailing`) +
+  end-align Save **under** the field (GSC `GeminiApiKeyField` / live
+  `#provider-settings` — **not** a connection-chip + Dialog; **do not** revive
+  a competing `#sandbox-field-save-icon` credentials Card)
+  → models as a **selectable `List`** → fail = `InlineAlert` (success silent)
+  → one end-align Verify. Omit debug meta. Status marks when needed =
+  `.fynns-list-item-status`, **not** `Chip`. Runtime composer pickers are a
+  **different** surface. Live `#provider-settings`. Failure: CONSUMER_TREATY
+  provider Manage flat dump.
 - **DON'T** put sibling FieldBlocks in a `Grid` that vertically **centers** when
   a sibling cell grows taller — core ≥ **0.5.172** defaults `.fynns-grid` to
   `align-items: start` so labels share one top edge (Hub Inspector agent | cwd
@@ -490,17 +506,16 @@ belong in a consumer’s own doc.
   Input) — **information redundancy**. Use **`IconButton` + `Tooltip`**
   (+ `aria-label`): copy → `ClipboardIcon`; save key / token / defaults /
   draft → `SaveIcon` (busy → IconButton `loading`); open folder →
-  `FolderOpenIcon`. **Secret save host (hard ≥ **0.5.252**):** one
-  `--end-align` row — `Input` with `className="fynns-control-cluster__grow"`
-  (optional reveal `trailing` sm) **then** Save `IconButton` on the **same
-  line**. Do **not** `unit-stack` the Save under the field. Keep **labeled**
-  Buttons for primary workflow CTAs that need a verb on the face (`Validate` /
-  `Deliver` / Dialog feet / generate). Live `#sandbox-card-chrome-icon-actions`
-  / `#sandbox-field-save-icon` / `#sandbox-card-draft-actions`. Failures:
-  CONSUMER_TREATY Card chrome labeled ghost Copy/Save instead of
-  IconButton+Tooltip; **FieldBlock labeled Save key instead of
-  IconButton+Tooltip** (≥ **0.5.248**); **FieldBlock Save IconButton wraps
-  under Input** (≥ **0.5.252**).
+  `FolderOpenIcon`. **Credential Manage Save (hard ≥ **0.5.267**):** password
+  `FieldBlock` + eye in `trailing` + **end-align Save under the field** (live
+  `#provider-settings`) — not labeled text; do **not** revive a second
+  same-row credentials Card (`#sandbox-field-save-icon` purged). Keep
+  **labeled** Buttons for primary workflow CTAs that need a verb on the face
+  (`Validate` / `Deliver` / Dialog feet / generate). Live
+  `#sandbox-card-chrome-icon-actions` / `#provider-settings` /
+  `#sandbox-card-draft-actions`. Failures: CONSUMER_TREATY Card chrome labeled
+  ghost Copy/Save instead of IconButton+Tooltip; **FieldBlock labeled Save key
+  instead of IconButton+Tooltip**.
 - **DON'T** put `variant="primary"` (filled) **leading** a multi-control
   `.fynns-control-cluster` in Card / Collapsible `actions` (or densified head
   strips) — LTR order is secondary ghost/tonal IconButtons **then primary last**
@@ -736,7 +751,7 @@ belong in a consumer’s own doc.
   no status Chip; Input trailing reveal = `sm` only inside `trailing` (never
   a cloned eye outside the shell; never consumer pad/margin on
   `.fynns-field-shell` / `.fynns-field-affix` — ≥ **0.5.237**). Live `#rhythm` /
-  `#sandbox-field-header-env-keys` / `#password`.
+  `#env-check` / `#password` / `#provider-settings`.
 - **DON'T** paint **named recipe / preset / pack catalogs** as a grid of fat
   Cards each dumping description + evidence + `id:` as stacked `FieldHint`s
   plus a `ChipSet` tag soup in `actions` — that is Path-catalog fat-Card
@@ -857,11 +872,13 @@ belong in a consumer’s own doc.
   PageScroll replace — keep List/Timeline mounted; edit → `Dialog` `size="lg"`
   (+ `FullscreenDialog` only for multi-Card long workflows). Drill-in is
   `#layouts-demo-drill-in`. Don't mount a full-workflow Card as sole
-  FillColumn `header` (compact preview band only ≥ **0.5.76**). Tall
-  PageScroll multi-field brief (≥3 FieldBlocks) → **`Collapsible`** (body
-  end-align **md** save; head actions **sm** only if product asks) — not
-  static Card. Live `#form-recipe` / `#form-recipe-page-scroll` /
-  `#layouts-demo-fill-column`.
+  FillColumn `header` (compact preview band only ≥ **0.5.76**). **DON'T**
+  ship a PageScroll 「要点问卷 / multi-field brief」Collapsible that stacks
+  ≥3 `FieldBlock`+description rows above a generate strip — removed from
+  sandbox (`#form-recipe-page-scroll` purged). Multi-column / label+value
+  records → `#table`; short inspector forms → `#form-recipe` Card /
+  Collapsible / Dialog hosts only. Live `#form-recipe` /
+  `#layouts-demo-fill-column` / `#table`.
 - **DON'T** clear `Dialog` / `ConfirmDialog` title/body source state in the
   same tick as `open→false` — `DialogFrame` exit (~240ms) still paints props;
   keep content until the next open. Never reuse a Confirm title as a Dialog
@@ -925,18 +942,17 @@ Failure: CONSUMER_TREATY consumer restyles keep-set chrome radius.
 
 | Topic | Anchor |
 | --- | --- |
-| Form / FieldStack / Dialog | `#form-recipe`, `#form-recipe-page-scroll`, `#field-header`, `#sandbox-field-stack-grid-select` |
+| Form / FieldStack / Dialog | `#form-recipe`, `#field-header`, `#sandbox-field-stack-grid-select` |
 | List catalogs / density | `#list`, `#page-scroll`, `#sandbox-list-status-action`, `#sandbox-list-repo-path-actions`, `#sandbox-list-recipe-catalog` |
 | Timeline | `#timeline` |
-| Toolbar / ControlRow / service | `#rhythm` |
-| Probe kind split / start-align meta | `#sandbox-rhythm-probe-kinds` |
-| Action cluster end-pack (meta + Button) | `#sandbox-rhythm-action-end` / `#sandbox-rhythm-install-cta-end` |
+| Toolbar / ControlRow / end-align | `#rhythm` |
+| Provider Manage (active-only status) | `#provider-settings` |
 | Banner strip + dismiss center | `#banner` |
 | Busy / loading | `#busy-region`, `#sandbox-pane-load-error` |
 | Busy hang guards (timeout/abort) | `#busy-paint`, `#sandbox-busy-task-timeout`, `#sandbox-busy-task-abort`, `#sandbox-busy-task-generation`, `#sandbox-button-loading-task`, `#sandbox-confirm-loading-trap`, `#sandbox-chat-busy-no-stop` |
 | CodeBlock file body | `#code-block` |
-| Env key FieldHeader | `#sandbox-field-header-env-keys` |
-| Card head Select / draft / chrome icons | `#sandbox-card-head-select`, `#sandbox-card-draft-actions`, `#sandbox-card-chrome-icon-actions`, `#sandbox-field-save-icon`, `#sandbox-card-head-primary-end` |
+| Env key FieldHeader | `#env-check` / `#password` / `#provider-settings` |
+| Card head Select / draft / chrome icons | `#sandbox-card-head-select`, `#sandbox-card-draft-actions`, `#sandbox-card-chrome-icon-actions`, `#sandbox-card-head-primary-end` |
 | Destination shell / EndAside | `#layouts-demo-shell`, `#layouts-demo-drill-in`, `#layouts-demo-fill-column` |
 | Mode drawer / bulk | `#layouts-demo-navigation-drawer` |
 | Mode drawer catalog load fail | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` |
@@ -1329,7 +1345,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Short status + row action | Short meta + `--with-end`; omit `trailingMetaAlign`; hover reserve clears meta (≥ **0.5.207**) | `#list` status+action / `#sandbox-list-recipe-catalog` | `trailingMetaAlign="start"` on status+action; meta under IconButtons |
 | Inspector Select ± CTA | In-flow end strip; portaled menu; trigger-band; open keeps host cross-axis center (≥ **0.5.226**) | `#list` / `#sandbox-list-inspector-trailing` | Absolute flyout; 4dp kiss; open Select yanking trailing to flex-start |
 | Status + identity + duration | Single-line cluster + `.fynns-list-item-status`; one metric/cell | `#list` run-summary | InlineAlert in headline; latency+tokens in one meta; Chip as Success/Failed |
-| Outcome / readiness signal (OK/Fail) | `.fynns-list-item-status` (± `data-tone="danger"`) | `#list` run-summary / `#rhythm` status | `Chip` suggestion/assist / consumer StatusChip as fake Badge |
+| Outcome / readiness signal (OK/Fail) | `.fynns-list-item-status` (± `data-tone="danger"`) | `#list` run-summary / `#provider-settings` | `Chip` suggestion/assist / consumer StatusChip as fake Badge |
 | Catalog create / edit | Keep list mounted → `Dialog` `lg` (+ FullscreenDialog for long) | `#timeline` / `#form-recipe` | Silent PageScroll replace with ghost “back” |
 | Dashboard shortcut links | One Card wrapping one path List | `#list` shortcut Card | Button cluster + empty headline-only rows |
 | Named recipe / preset / pack catalog | One Card + `List` / `ListItem`; one-line `supportingText`; kind in meta; long copy / id → Dialog or InfoHint; end IconButtons | `#sandbox-list-recipe-catalog` / `#list` | Fat Card per recipe + stacked FieldHint essays + ChipSet tag soup; section FieldHint restating TopAppBar |
@@ -1343,21 +1359,22 @@ rules such as timeline-catalog). Live index: `#list`.
 | FieldBlock DropdownMenu trigger | matchTriggerWidth (≥ **0.5.239**) + labeled chevron rotate (≥ **0.5.253**) + panel left flush + icon block / trailing slot (≥ **0.5.254**) + label snug line-height (≥ **0.5.255**) + **`leadingIcon`** flex row (≥ **0.5.258**) | `#sandbox-menu-field-match` / `#sandbox-menu-leading-icon` / `#menu` | Menu width ≠ trigger; labeled trigger without chevron; panel left-shifted; chevron optically high; Latin descenders clipped; leading glyph baseline-misaligned vs label |
 | Table cell status + action | `.fynns-table-meta` + end-align cluster | `#table` | Chip as cell status |
 | Form / preference options | FieldStack (+ Divider on kind jumps) | `#form-recipe` | Flat Card-per-field |
-| Settings scope / field policy | InfoHint on Card/Field actions; short FieldHint only | `#field-header` | Card-body FieldHint essays |
-| Env / config key FieldBlock | Key label + label-row InfoHint; Input trailing `sm` (in-shell only; capsule-chrome end ≥ **0.5.237**) | `#sandbox-field-header-env-keys` / `#password` | Status Chip; portal FieldHint under Input; md in-shell disk; consumer pad/neg-margin on field-shell; eye cloned outside `trailing` |
-| Select + refresh beside | end-align cluster + `__grow`; trail size match | `#field-header` | `Select.trailing` beside chevron; sm+md trail mix |
+| Credentialed provider Manage | Provider ControlRow + password FieldBlock + Save under field + model List + Verify | `#provider-settings` | Connection-chip / Add Dialog instead of password field; all-provider OK/Fail wall; `default=` footer; status Chip |
+| Settings scope / field policy | InfoHint on Card/Field actions; short FieldHint only | `#form-recipe` / `#info-hint` | Card-body FieldHint essays; Manage mega-Card under `#field-header` |
+| Env / config key FieldBlock | Key label + label-row InfoHint; Input trailing `sm` (in-shell only; capsule-chrome end ≥ **0.5.237**) | `#env-check` / `#password` / `#provider-settings` | Status Chip; portal FieldHint under Input; md in-shell disk; consumer pad/neg-margin on field-shell; eye cloned outside `trailing`; revived `#sandbox-field-header-env-keys` |
+| Select + refresh beside | end-align cluster + `__grow`; trail size match | `#form-recipe` | `Select.trailing` beside chevron; sm+md trail mix |
 | Repeatable Textarea + remove | end-align + `__grow` Textarea; add on label row | `#form-recipe` Highlights | Bare cluster (delete wraps under well) |
 | Multi-Card Dialog workflow | Sibling Cards in dialog body (flex-shrink 0) | `#form-recipe` Card stack | Crushed Cards to head height |
 | Toolbar strip (name + control + note) | ControlStack / ControlRow / ControlBlock | `#rhythm` | Hand-rolled flex; full-bleed FieldHint row |
 | Catalog list chrome | Standalone ControlRow + md IconButton cluster (**no** bare count meta / `(N)` in label unless product requires) | `#rhythm` catalog | Content-sized island; private hub-spread; `{n}` / `.length` `.fynns-table-meta` beside Plus/import/clear; `Servers (3/3)` label |
-| PageScroll section-body chrome | Named ControlRow + md ghost IconButtons only | `#rhythm` morph | sm disks; labeled primary generate pill; unsolicited count meta |
-| Section strip + hint + body | `.fynns-unit-stack` (16dp) | `#rhythm` morph + hint | Bare ControlRow + sibling FieldHint (0 gap) |
+| PageScroll section-body chrome | Named ControlRow + md ghost IconButtons only | `#sandbox-rhythm-catalog` | sm disks; labeled primary generate pill; unsolicited count meta; revived morph/cover-letter twin strips |
+| Section strip + hint + body | `.fynns-unit-stack` (16dp) | `#rhythm` | Bare ControlRow + sibling FieldHint (0 gap) |
 | Narrow EndAside Card actions | `label=""`; one primary Button; ghost sm icons; UploadIcon export | `#layouts-demo-shell` aside | Visible label crush; tonal icons; DownloadIcon export |
 | Chrome locale switch | Settings ToggleGroup en/zh | `#layouts-demo-shell` | TopAppBar language control |
-| Action footer / end-align strip | `--end-align`; Cancel…→primary; one loading; cluster **default end** (≥ **0.5.158**) | `#rhythm` / `#timeline` foot / `#sandbox-rhythm-action-end` | Empty-label ControlRow; Delete leftmost of Cancel; left-pack Buttons under label |
+| Action footer / end-align strip | `--end-align`; Cancel…→primary; one loading; cluster **default end** (≥ **0.5.158**) | `#rhythm` / `#timeline` foot | Empty-label ControlRow; Delete leftmost of Cancel; left-pack Buttons under label |
 | Persistent strip + dismiss | `Banner` `onDismiss` (icon \| body \| X **center**) | `#banner` | Sibling X outside host; flex-start top-pin |
 | Error recovery | InlineAlert + hint + end-align reload | `#sandbox-inline-alert-recovery` | Start-aligned bare Button under alert |
-| Service / process / CLI probe | Label = short status only; labeled Buttons (+ optional path meta); detail `InfoHint` | `#rhythm` service | Tool-name label + status Chip + FieldHint essay |
+| Service / process / CLI probe | Label = short status only; labeled Buttons (+ optional path meta); detail `InfoHint` | DESIGN_SYSTEM Hard rules (no live service Card) | Tool-name label + status Chip + FieldHint essay |
 | Mode drawer tools | `--toolbar-end` as **direct** body sibling (or tools host); primary Plus last; ListChecksIcon bulk / sort / refresh OK; tools IconButtons **sm** **32dp** (core ≥ **0.5.235**); Plus / Switch / Item **pill outer** one trailing edge (≥ **0.5.228**); chrome↔next = search-gap **8dp** (≥ **0.5.222**) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus inset by item-pad; tools↔Item crushed to 4dp; default **md** 40dp toolbar disks |
 | Session / history drawer chrome | **`NavigationDrawerNewChat`** full-width labeled New chat, **ghost / no border** (≥ **0.5.256**; ghost ≥ **0.5.257**); optional `trailing` More (bulk delete `tone="danger"`) — never Trash+Plus twin; never icon-only `--toolbar-end` for history (catalog tools still use `--toolbar-end`) | `#sandbox-navdrawer-session-chrome` / `#layouts-demo-navigation-drawer` | Outlined New chat stroke; always-visible Trash + Plus twin; history chrome as end-hug Plus-only strip |
 | Chat product / session host | **`ClippedNavShell`** (flat session or drill-in `navKey`; **`topBar={null}`** on new-chat landing — body fills shell ≥ **0.5.261**) + session `NavigationDrawer` (`NavigationDrawerNewChat` + EmptyState\|Items + footer account) + main **`FillColumn` → `Chat`**. **New-chat landing:** greeting `EmptyState` + soft interactive Surface starters **centered above**; **`ChatComposer` inside `ChatThread.empty`** pinned to the column bottom with the same `--fynns-chat-composer-inset-block` as a docked Chat composer (collapse docked composer row via landing class). Active thread: composer docks under `ChatThread` **inside** Chat. Destination lists stay on `DestinationAppShell` | `#layouts-demo-chat-product` | Trash+Plus twin; Chip / revived ChatStarterPrompts; PageScroll as chat main scroll; composer in FillColumn `footer`; inventing a non–keep-set chat shell |
@@ -1368,9 +1385,9 @@ rules such as timeline-catalog). Live index: `#list`.
 | Mode SyncSideFilter | Omit option `tip`; `showCheck={false}`; **short** visible labels (All / marks); core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp | `#layouts-demo-navigation-drawer` / `#toggle-group` | tip collisions; long product names in equal columns; flush compact 8dp pad |
 | Mode drawer catalog load fail | Short `InlineAlert` + `InfoHint` `danger` detail + end-align Retry (≥ **0.5.215**); keep tools | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` | Full backend essay in `InlineAlert.message`; EmptyState as load-fail |
 | Draft discard / save | Card `actions` on owning Card | `#sandbox-card-draft-actions` | Orphan end-align outside any Card |
-| Self-evident copy / save / open folder | `IconButton` + `Tooltip`; FieldBlock secret Save = same-row `--end-align` + Input `__grow` (≥ **0.5.252**) | `#sandbox-card-chrome-icon-actions` / `#sandbox-field-save-icon` / `#sandbox-card-draft-actions` | Labeled ghost/tonal `Save key`; Save wrapped under Input via `unit-stack` |
+| Self-evident copy / save / open folder | `IconButton` + `Tooltip`; credential Manage Save = under-field end-align (`#provider-settings`) | `#sandbox-card-chrome-icon-actions` / `#provider-settings` / `#sandbox-card-draft-actions` | Labeled ghost/tonal `Save key`; revived `#sandbox-field-save-icon` |
 | Card head mixed IconButtons | Secondary ghost → **`primary` last** (LTR end) | `#sandbox-card-head-primary-end` | Filled primary leftmost of download/folder ghosts |
-| PageScroll multi-field brief | Collapsible + body md save | `#form-recipe-page-scroll` | Static tall Card; md on Collapsible head |
+| PageScroll multi-field brief (≥3 FieldBlocks) | **Forbidden** — use `#table` or short `#form-recipe` hosts | `#table` / `#form-recipe` | Revived `#form-recipe-page-scroll` Collapsible questionnaire stack |
 | PageScroll mid-scroll edges | Core soft-mask `data-fade-top`/`bottom` (≥ **0.5.247**) | `#page-scroll` | Hard clip under TopAppBar; consumer private `mask-image`; bare overflow host |
 | Titled section shell | Card/Collapsible; **short natural-language title** only; counts / chars / tokens / path → body `.fynns-table-meta` (live meta-in-body); ≤1 InfoHint; same trail size; **full content-column width** (never `sheet-max-width` / `chat-max-width` / dialog-max on destination `hub-col`) | `#card` / `#field-header` / `#page-scroll` | `Title · N` / `Title · chars ≈ tokens`; path/count glued in title; Mixed sm/md trail; Card column narrower than sibling tool ToggleGroup or content-column |
 | Card head Select + Button | Trigger-band; 8dp gap; open Select keeps head center (≥ **0.5.227**) | `#sandbox-card-head-select` | Title/CTA yanked by Select `data-expanded` grid |
@@ -1384,8 +1401,8 @@ rules such as timeline-catalog). Live index: `#list`.
 | Pane / section wait | `BusyRegion` (`fill` if height-resolved — FillColumn **or** PageScroll content-column ≥ **0.5.136**); one progress chrome | `#busy-region` / `#sandbox-busy-region-page-scroll-fill` | EmptyState+ring; `fill` in unit-stack/Card; FieldHint + busy in one well; BusyRegion + chrome `loading`; fill overlay collapsed → BusyStack top overflow |
 | Table / list pager | `.fynns-pagination-bar` single row; noun = `.fynns-table-meta` + digit-only **stock** Select (40dp shell + portaled `.fynns-select-menu` like `#select`, ≥ **0.5.208**); siblings share **40dp shell** band (≥ **0.5.197**); noun|Select|range gap **8dp** / start↔end **16dp** (≥ **0.5.202**); H-rail in scrollbar pad | `#pagination` | Two-row wrap; Select grown to crush discs; invent private absolute dock / restyle `.fynns-select-menu`; `Sessions: N` / `每页 N 行` in every option; IconButton-tight **4dp** gaps |
 | Time-series / combo chart | Card + ControlRow ToggleGroup + `.fynns-chart`; line = gentle **monotone** (not Catmull-Rom); hover tip follows pointer via `.fynns-chart-tooltip` + `clampChartPointerTooltipBox()` | `#chart` | Idle dense line dots; locked tooltip Y; tip clipped/jitter at edge; unit-stack inside tip; consumer hex |
-| Multi-status / probe strip | `ControlStack` `controlsAlign="start"` + `columns` = cells; `.fynns-list-item-status` + InfoHint as direct children | `#rhythm` status | Cluster+end-hug misalign; Chip as status; FieldHint essays |
-| Install path vs backend readiness | Adjacent `ControlStack`s + Divider; start-align; model → `.fynns-table-meta` | `#sandbox-rhythm-probe-kinds` | One stack mixing Available + Backend; path/chips/hint in one cluster |
+| Multi-status / probe strip | `ControlStack` `controlsAlign="start"` + `columns` = cells; `.fynns-list-item-status` + InfoHint as direct children | `#provider-settings` (active-only) | All-provider OK/Fail wall; Chip as status; FieldHint essays |
+| Install path vs backend readiness | Adjacent `ControlStack`s + Divider; start-align; model → `.fynns-table-meta` | DESIGN_SYSTEM Hard rules (no live probe-kinds Card) | One stack mixing Available + Backend; path/chips/hint in one cluster |
 | Mode ToggleGroup / Tabs strip | ControlRow + ToggleGroup alone (or ControlBlock description that is **not** the option list) | `#rhythm` Surface | FieldHint / section lead listing the same option labels |
 | Named readiness / tip status | Same ControlRow pattern | `#rhythm` | Lone tip glyph as only cluster child |
 | Suffixed file body | CodeBlock editable + language; autoGrow | `#code-block` | Textarea for real extensions; fixed-height on page |
@@ -1499,7 +1516,8 @@ ControlStack/ControlBlock): ControlStack is label-fill (`1fr`) + end-hug
 controls (`max-content`) so Switch tracks share one trailing edge; form-host
 row gap = `control-stack-form-gap` (**12dp**). Probe / path / outcome meta
 stacks opt in with `controlsAlign="start"` (≥ **0.5.154**) so value cells
-share a start edge — live `#sandbox-rhythm-probe-kinds`. **Action / Button
+share a start edge — live `#provider-settings` for a single active status
+row (no multi-kind probe wall in Globals). **Action / Button
 clusters stay end by default** (≥ **0.5.158**) — start packing is never the
 default for CTAs. Toolbar stacks outside those
 hosts keep `control-stack-gap` (**8dp**). Live `#rhythm` + `#form-recipe`.

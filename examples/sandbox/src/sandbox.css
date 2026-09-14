@@ -1376,7 +1376,6 @@
  */
 #sandbox-card-draft-actions,
 #sandbox-card-chrome-icon-actions,
-#sandbox-field-save-icon,
 #sandbox-card-head-primary-end {
   display: flex;
   flex-direction: column;
@@ -1576,13 +1575,6 @@
 }
 
 .sandbox-globals-form-recipe {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-.sandbox-globals-form-recipe-page-scroll {
-  /* Fill parent — never sheet-max / 40rem reading strip (AGENTS content-column). */
   width: 100%;
   max-width: 100%;
   min-width: 0;

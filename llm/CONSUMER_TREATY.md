@@ -83,9 +83,9 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | mode drawer toolbar trash+new twin | DESIGN_SYSTEM Hard rules / NavigationDrawerNewChat ≥ 0.5.256 | `#sandbox-navdrawer-session-chrome` |
 | chat product / session host wrong tree | DESIGN_SYSTEM Content density / Chat product | `#layouts-demo-chat-product` |
 | chat aside host wrong tree | DESIGN_SYSTEM Content density / Chat aside | `#layouts-demo-chat-aside` |
-| FieldHeader inline InfoHint kissed | AGENTS forms / FieldStack | `#sandbox-field-header-inline-infohint` |
-| env key FieldHint under input (hint split) | AGENTS forms / FieldStack | `#sandbox-field-header-env-keys` |
-| env key status Chip (information redundancy) | AGENTS forms / FieldStack | `#sandbox-field-header-env-keys` |
+| FieldHeader inline InfoHint kissed | AGENTS forms / FieldStack | `#info-hint` / `#form-recipe` |
+| env key FieldHint under input (hint split) | AGENTS forms / FieldStack | `#env-check` / `#password` |
+| env key status Chip (information redundancy) | AGENTS forms / FieldStack | `#env-check` / `#password` |
 | Input trailing md IconButton in field shell | AGENTS shells / Hard rules | `#field-header` |
 | Input trailing affix far from shell edge | AGENTS shells / Hard rules | `#password` / `#input` |
 | mode drawer tools↔filter crushed to 4dp | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
@@ -96,6 +96,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Select language pill in TopAppBar | AGENTS shells / Hard rules | `—` |
 | catalog ControlRow actions float mid-left | AGENTS Content density / List | `#rhythm` |
 | ControlRow unsolicited item count | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-rhythm-catalog` / `#rhythm` |
+| provider Manage flat dump | DESIGN_SYSTEM Hard rules / Content density | `#provider-settings` |
 | org · dates glued in supportingText | AGENTS Language / Hard rules | `#list` |
 | List rail / ChatActivity as timeline | AGENTS Chat / llm/CHAT_* | `#timeline` |
 | lettered timeline A/B/C / list-detail | AGENTS Timeline / timeline-catalog | `#timeline` |
@@ -152,14 +153,14 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | labeled Button cluster gap stacked to 12dp | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | service control status Chip + label (information redundancy) | AGENTS forms / FieldStack | `#rhythm` |
 | CLI/tool probe: name label + status Chip + FieldHint essay (information redundancy) | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` |
-| ControlRow / control-cluster Buttons left-packed under label | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-rhythm-action-end` / `#sandbox-rhythm-install-cta-end` / `#rhythm` |
-| ControlRow label crushed to 2px / hairline sliver | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-rhythm-action-end` |
-| path meta paints over ControlRow label | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-rhythm-action-end` |
-| outcome Chip as status (suggestion/assist / StatusChip fake Badge) | DESIGN_SYSTEM Hard rules / Content density | `#list` / `#rhythm` status |
+| ControlRow / control-cluster Buttons left-packed under label | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` end-align |
+| ControlRow label crushed to 2px / hairline sliver | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` end-align |
+| path meta paints over ControlRow label | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` end-align |
+| outcome Chip as status (suggestion/assist / StatusChip fake Badge) | DESIGN_SYSTEM Hard rules / Content density | `#list` / `#provider-settings |
 | List path catalog Switch+Chip+danger disk soup | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-repo-path-actions` / `#list` |
 | List scroll-well trailing meta kisses overlay rail | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-repo-path-actions` |
 | List scroll-well overflow-y spill overlaps siblings | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-repo-path-actions` |
-| ControlStack probe meta end-hug / kind mix (Available+Backend; path/chips/hint cluster) | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-rhythm-probe-kinds` / `#rhythm` status |
+| ControlStack probe meta end-hug / kind mix (Available+Backend; path/chips/hint cluster) | DESIGN_SYSTEM Hard rules / Content density | `#provider-settings |
 | FieldHint restates ToggleGroup / Tabs labels (information redundancy) | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` |
 | section FieldHint restates TopAppBar InfoHint | DESIGN_SYSTEM Hard rules / Content density | `#layouts-demo-shell` |
 | ListItem overline restates trailing status | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-repo-path-actions` |
@@ -172,7 +173,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Select menu narrower than stretched trigger | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-select-wide-short` / `#select` |
 | Select menu wider than narrow trigger | DESIGN_SYSTEM Hard rules / Content density | `#select` (`.sandbox-select-narrow-host`) |
 | truncated option lacks ellipsis Tooltip | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.240** menus/fields) | `#select` / `#autocomplete` / `#search-bar` / `#sandbox-menu-field-match` |
-| truncated chrome / list / snack label lacks ellipsis Tooltip | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.243**) | `#card` / `#list` / `#select` / `#layouts-demo-shell` / `#toggle-group` / `#activity` / `#sandbox-rhythm-action-end` |
+| truncated chrome / list / snack label lacks ellipsis Tooltip | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.243**) | `#card` / `#list` / `#select` / `#layouts-demo-shell` / `#toggle-group` / `#activity` / `#rhythm` end-align |
 | DropdownMenu wider than FieldBlock trigger | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.239**) | `#sandbox-menu-field-match` / `#menu` |
 | labeled DropdownMenu missing chevron | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.253**) | `#menu` / `#sandbox-menu-field-match` |
 | DropdownMenu panel left-shifted vs trigger | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.254**) | `#sandbox-menu-field-match` / `#menu` |
@@ -246,8 +247,10 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | FieldStack Grid vertically centers short FieldBlock beside expanded Select | AGENTS FieldStack / Grid | `#sandbox-field-stack-grid-select` |
 | FieldStack Grid hugs max-content leaving dead gutter in form Surface | AGENTS FieldStack / Grid | `#sandbox-field-stack-grid-select` |
 | Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip | AGENTS Card / Hard rules | `#sandbox-card-chrome-icon-actions` |
-| FieldBlock labeled Save key instead of IconButton+Tooltip | DESIGN_SYSTEM Hard rules | `#sandbox-field-save-icon` |
-| FieldBlock Save IconButton wraps under Input | DESIGN_SYSTEM Hard rules | `#sandbox-field-save-icon` |
+| FieldBlock labeled Save key instead of IconButton+Tooltip | DESIGN_SYSTEM Hard rules | `#provider-settings` |
+| revived `#sandbox-field-save-icon` credentials Card | DESIGN_SYSTEM Hard rules | `#provider-settings` |
+| revived `#field-header` Manage mega-Card / OK·Fail wall | DESIGN_SYSTEM Hard rules | `#field-header` / `#provider-settings` |
+| `#rhythm` morph + cover-letter twin section strips | DESIGN_SYSTEM Hard rules | `#sandbox-rhythm-catalog` |
 | Card head primary IconButton leftmost in control-cluster | AGENTS Card / Hard rules | `#sandbox-card-head-primary-end` |
 | repeatable Textarea remove wraps below row | AGENTS CodeBlock | `#form-recipe` |
 | Dialog body Card stack crush | AGENTS Dialog / overlays | `#form-recipe` |
@@ -297,8 +300,8 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | section-body IconButton sm | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | section-body labeled generate Button | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | CodeBlock autoGrow stuck in hidden tab | AGENTS CodeBlock | `#code-block` |
-| PageScroll brief Card | AGENTS Card / Collapsible | `#form-recipe-page-scroll` |
-| Collapsible brief save on head | AGENTS Card / Collapsible | `#form-recipe-page-scroll` |
+| PageScroll multi-field brief Collapsible (≥3 FieldBlocks) | AGENTS Hard rules / Form | `#table` / `#form-recipe` |
+| revived `#form-recipe-page-scroll` questionnaire stack | AGENTS Hard rules / Form | `#table` / `#form-recipe` |
 | literal backticks in Chat bubbles | AGENTS Chat / llm/CHAT_* | `—` |
 | ChatComposer field↔Send tighter than glyph↔field | AGENTS Chat / llm/CHAT_* | `#chat` |
 | empty-thread Chip / revived ChatStarterPrompts | AGENTS Chat / Content density | `#chat` |

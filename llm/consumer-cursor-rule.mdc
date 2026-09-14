@@ -233,26 +233,33 @@ trail 用 ASCII `-`。
     仅当产品明确要计数（用户要求、选中 tally、分页范围、命名运维 KPI）才
     显示 — 放 Card/Collapsible **正文** `.fynns-table-meta`，勿塞进动作簇。
     对照 `#rhythm` catalog / `#sandbox-rhythm-catalog`。
+10c. **provider Manage flat dump** — **严禁信息冗余（硬 ≥ 0.5.267）：**
+    凭证型提供商 Manage：当前 provider 用偏好 `ControlRow` → 需要时画密码
+    `FieldBlock`（eye 在 `trailing`）+ 字段下方 end-align Save（对齐 GSC
+    `GeminiApiKeyField`）→ 模型用可选 **`List`** → 失败 `InlineAlert` →
+    一条 Verify。**禁止**用「未设置/添加」连接态或 Dialog 取代密钥输入；
+    **禁止**全提供商 OK/Fail 墙与 `default=` 调试。状态标勿用 `Chip`。对照
+    `#provider-settings`。
 11. **service control status Chip + label / CLI probe FieldHint** — 状态只在
     `ControlRow` `label`（`可用`/`未安装`）；控件簇只有 labeled Button（+ 可选
     路径 meta）；禁止工具名当 label + 状态 Chip + 下方 `FieldHint` 复述
-    `tool：error` — 详情用行内 `InfoHint`。对照 `#rhythm` service。
+    `tool：error` — 详情用行内 `InfoHint`。规则见 DESIGN_SYSTEM Hard rules。
 11b. **ControlRow / control-cluster Buttons left-packed** — `.fynns-control-cluster`
     **默认右齐**（≥ **0.5.158**）。禁止把 labeled Button / meta+CTA 贴在 label
     下左侧。`controlsAlign="start"` **仅**用于探测 / path / 结果标值网格（勿
     给安装 / 服务 CTA 栈加 `start` — ≥ **0.5.205** 即使误加也会右齐）。对照
-    `#sandbox-rhythm-action-end` / `#sandbox-rhythm-install-cta-end` / `#rhythm`。
+    `#rhythm` end-align。
 11c. **ControlRow label crushed to 2px sliver** — form-host / standalone label
     轨地板 `--fynns-layout-control-row-label`（≥ **0.5.159**）；簇内长 path
     `.fynns-table-meta` 收缩 + 省略（≥ **0.5.175**），禁止 end-pack nowrap
-    向左溢出盖住「就绪」。完整路径用 `InfoHint`。对照 `#sandbox-rhythm-action-end`。
+    向左溢出盖住「就绪」。完整路径用 `InfoHint`。对照 `#rhythm` end-align。
 11c2. **table-meta overflows without ellipsis** — keep-set `.fynns-table-meta`
     单行省略（≥ **0.5.231**：`overflow: hidden` + `text-overflow: ellipsis` +
     `min-width: 0` / `max-width: 100%`）。Card / unit-stack / 窄宿主必须显示
     `…`，禁止硬裁切无省略号；长文案用 Tooltip / InfoHint / FieldHint。**禁止**
     消费仓覆写去掉 ellipsis。对照 `#sandbox-card-table-meta-ellipsis`。
 11d. **path meta paints over ControlRow label** — 同上；窄 Card 内 WinGet /
-    长 exe 路径最易复现。对照 `#sandbox-rhythm-action-end`。
+    长 exe 路径最易复现。对照 `#rhythm` end-align。
 12. **FieldHint restates ToggleGroup / Tabs labels** — 禁止栏目 `FieldHint` /
     section lead 复述可见分段选项名（「A / B / C；三 Tab」）。控件已命名模式；
     TopAppBar `InfoHint` 可留短范围说明但勿列选项。对照 `#rhythm` Surface。
@@ -278,7 +285,7 @@ trail 用 ASCII `-`。
     capsule-chrome（**4dp**）— **禁止**消费仓负 margin / 私有 end pad「贴边」、
     **禁止**覆写 `.fynns-field-shell` / `.fynns-field-affix` 的 padding/margin、
     **禁止**在 `Input` `trailing` **外**克隆 eye / reveal（sibling 盘、绝对定位
-    叠层）。对照 `#password` / `#input` / `#sandbox-field-header-env-keys`。
+    叠层）。对照 `#password` / `#input` / `#env-check` / `#provider-settings`。
     失败模式：CONSUMER_TREATY Input trailing md IconButton in field shell；
     Input trailing affix far from shell edge。
 16. **InlineAlert beside List in ControlStack** — 告警在目录上方全宽兄弟。
@@ -295,8 +302,10 @@ trail 用 ASCII `-`。
     `.fynns-page-scroll > .fynns-content-column` 设为 `flex: 0 0 auto` +
     `min-height: 100%`（禁止在滚动宿主上 `flex:1` 吃掉 pad-block-end）。
     对照 `#layouts-demo-shell` EndAside。
-20. **PageScroll brief Card / Collapsible brief save on head** — 多字段 brief
-    → `Collapsible`；默认 body 端对齐 `md` 保存，勿 head `md`。
+20. **PageScroll multi-field brief Collapsible / `#form-recipe-page-scroll`** —
+    **禁止**：PageScroll 上叠 ≥3 个带 description 的 `FieldBlock`「要点问卷」
+    Collapsible（已 purge）。多列记录 → `#table`；短表单 → `#form-recipe`
+    Card / Collapsible / Dialog。
 21. **Textarea for a suffixed file body / fixed-height on page scroll** —
     有扩展名 → `CodeBlock`；页内默认 autoGrow。
 22. **canvas FillColumn megacard zero inset** — `header` 只放紧凑预览带，勿整工作流 Card 贴边。
@@ -389,7 +398,7 @@ trail 用 ASCII `-`。
     ReactNode 在调用点包 OverflowTip。短可见 Toggle 标签仍可 omit `tip`；窄
     fullWidth 长标签传 `tip={全文}`。对照 `#card` / `#list` /
     `#layouts-demo-shell` / `#toggle-group` / `#activity` /
-    `#sandbox-rhythm-action-end`。
+    `#rhythm` end-align。
 26a2. **Select supporting copy kisses trigger** — 控件 → supporting / 教学
     文案用 `--fynns-layout-field-hint-gap`（**8dp**，≥ **0.5.230**）；优先
     `FieldBlock` + `FieldHint` / `ControlBlock` `description`。**禁止**在
@@ -424,11 +433,11 @@ trail 用 ASCII `-`。
 27. **outcome Chip as status** — success / fail / OK / ready 结果信号用
     **`.fynns-list-item-status`**（默认绿；失败 `data-tone="danger"`）+ 可选
     `CheckCircleIcon` / `AlertTriangleIcon` — **禁止** `Chip` 任意 variant 或
-    消费仓 `StatusChip` 冒充 Badge。对照 `#list` run-summary / `#rhythm` status。
+    消费仓 `StatusChip` 冒充 Badge。对照 `#list` run-summary / `#provider-settings。
 28. **ControlStack probe meta end-hug / kind mix** — 安装可用性与后端就绪分栈
     + `Divider`；探测栈 `controlsAlign="start"` + `columns`=格数；禁止
     `columns={1}` 单 cluster 混 path / 结果标 / FieldHint。对照
-    `#sandbox-rhythm-probe-kinds`。
+    `#provider-settings`。
 29. **List path catalog Switch+Chip+danger disk soup** — 路径/仓目录行：
     trailing **仅** ghost **md** IconButton 簇；启用 → leading `Checkbox`；
     状态/kind → overline / `trailingSupportingText` / `.fynns-table-meta`；
@@ -473,15 +482,14 @@ trail 用 ASCII `-`。
     （Validate / Deliver）仍可用 labeled Button。对照
     `#sandbox-card-chrome-icon-actions`。
 32b. **FieldBlock labeled Save key instead of IconButton+Tooltip** — FieldBlock /
-    `--end-align` 下自明「Save key / Save token / 保存密钥」
+    Manage 下自明「Save key / Save token / 保存密钥」
     （含 **tonal** / ghost / primary 带标签 Button）→ **`IconButton` +
-    `Tooltip` + `SaveIcon`**（忙碌用 `loading`）；禁止贴文案药丸。对照
-    `#sandbox-field-save-icon`（≥ **0.5.248**）。
-32c. **FieldBlock Save IconButton wraps under Input** — 密钥 Save 必须与
-    `Input` **同一行**：`.fynns-control-cluster--end-align` + Input
-    `className="fynns-control-cluster__grow"`（reveal 仍用 `trailing` sm）+
-    Save IconButton。禁止 `unit-stack` 把 Save 甩到输入下方。对照
-    `#sandbox-field-save-icon`（≥ **0.5.252**）。
+    `Tooltip` + `SaveIcon`**（忙碌用 `loading`）；禁止贴文案药丸。凭证 Manage
+    权威 = 字段下方 end-align Save（`#provider-settings`）。**禁止**复活
+    `#sandbox-field-save-icon` / `#field-header` Manage 大 Card。
+32c. **`#rhythm` morph + cover-letter twin strips** — **禁止**：PageScroll 上
+    两条几乎同构的「ControlRow 节名 + md ghost IconButton 簇」。节正文 chrome
+    对照 `#sandbox-rhythm-catalog`。
 33. **Card head primary IconButton leftmost in control-cluster** — Card /
     Collapsible `actions` 多盘簇：`variant="primary"` 必须 **LTR 末位**（贴尾）；
     次要 ghost/tonal 在前。禁止主色盘排在下载/开文件夹等 ghost 左侧。对照
