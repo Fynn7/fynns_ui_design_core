@@ -67,15 +67,15 @@ index slugs **squashed drawer** + **wrong shell slot**.
     consumer tips — `git reset --hard FETCH_HEAD`)
     so new barrel symbols (icons, etc.)
     land before Vite starts — prevents blank-page
-    `does not provide an export named …`. Dirty sibling / **pure-ahead** tip
-    (origin is ancestor of HEAD) / local-semver-newer diverged tip →
-    **soft-skip** with a loud bilingual notice that includes the disposable
-    `reset --hard FETCH_HEAD` recovery (dev continues; export check
-    still hard-fails on missing symbols). Equal-semver diverged tips used to
-    soft-skip forever (colleague dead loop); they now reset to origin.
-    **Dirty** means *tracked* changes vs HEAD in the sibling — untracked
-    `.tmp-*` / local notes do **not** block sync. Committing the consumer
-    never clears sibling dirt. CI: `FYNNS_UI_STRICT_SIBLING_SYNC=1`
+    `does not provide an export named …`. **Pure-ahead** tip (origin is
+    ancestor of HEAD) / local-semver-newer diverged tip → **soft-skip** with a
+    loud bilingual notice that includes the disposable `reset --hard FETCH_HEAD`
+    recovery. Equal-semver diverged tips used to soft-skip forever (colleague
+    dead loop); they now reset to origin. **Dirty** (*tracked* changes vs HEAD
+    in the sibling only — untracked `.tmp-*` ignored) → soft-skip with
+    commit/stash/discard guidance (**not** `reset --hard`; committing the
+    consumer never clears sibling dirt). Dev continues; export check still
+    hard-fails on missing symbols. CI: `FYNNS_UI_STRICT_SIBLING_SYNC=1`
     restores hard-fail on dirty/ahead/diverged. Optional: `FYNNS_UI_SKIP_SIBLING_SYNC=1`
     while editing core. Optional floor: consumer `package.json`
     `"fynnsUi": { "minVersion": "0.5.x" }` / `--min-version` — **not** a

@@ -39,11 +39,12 @@ Do **not** commit `_authToken=${NODE_AUTH_TOKEN}` (empty env → E401).
    (or `FYNNS_UI_CORE_REF`) with `git merge --ff-only` after fetch. If FF is
    impossible and remote `package.json` semver is **≥** local (stale shallow
    / diverged consumer tip, including equal versions), it
-   `reset --hard FETCH_HEAD`. Dirty / **pure-ahead** / local-semver-newer
-   diverged tips → **soft-skip** with a loud notice that prints the
-   disposable `reset --hard` recovery (dev continues; export check still
-   runs). Dirty = **tracked** sibling changes only (untracked `.tmp-*` ignored);
-   committing the consumer does not clear sibling dirt.
+   `reset --hard FETCH_HEAD`. **Pure-ahead** / local-semver-newer diverged
+   tips → **soft-skip** with disposable `reset --hard` recovery in the notice.
+   **Dirty** = tracked sibling changes only (untracked `.tmp-*` ignored) →
+   soft-skip with commit/stash/discard guidance (not hard-reset); committing
+   the consumer does not clear sibling dirt. Dev continues; export check still
+   runs.
    `FYNNS_UI_STRICT_SIBLING_SYNC=1` hard-fails those cases (CI). Also
    fails closed on failed fetch or missing `@fynns/ui` barrel symbols.
    Optional: `FYNNS_UI_SKIP_SIBLING_SYNC=1` while editing core. Optional
