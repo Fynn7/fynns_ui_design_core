@@ -268,6 +268,12 @@ trail 用 ASCII `-`。
     勿绑 `asideOpen`。
 19. **EndAside dense labeled Button / ControlRow label crush / tonal disks** —
     `label=""`；一主 CTA；图标 ghost；导出用 `UploadIcon` 菜单。
+19b. **EndAside PageScroll Card flush to pane bottom** — PageScroll 检查器 /
+    EndAside 内 Card **禁止**贴齐窗格底边。靠 `.fynns-content-column` 的
+    `--fynns-layout-dialog-inset` block pad；core ≥ **0.5.263** 把
+    `.fynns-page-scroll > .fynns-content-column` 设为 `flex: 0 0 auto` +
+    `min-height: 100%`（禁止在滚动宿主上 `flex:1` 吃掉 pad-block-end）。
+    对照 `#layouts-demo-shell` EndAside。
 20. **PageScroll brief Card / Collapsible brief save on head** — 多字段 brief
     → `Collapsible`；默认 body 端对齐 `md` 保存，勿 head `md`。
 21. **Textarea for a suffixed file body / fixed-height on page scroll** —

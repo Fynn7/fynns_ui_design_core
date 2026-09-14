@@ -4506,7 +4506,10 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
   /* Pane breath lives here — not on an ancestor of `.fynns-page-scroll`.
    * Block pad matches inline (`dialog-inset`) so the first Card / unit clears
-   * TopAppBar / canvas ceiling — never flush under the shell head. */
+   * TopAppBar / canvas ceiling **and** the last Card clears the pane floor —
+   * never flush under the shell head or against the EndAside / scrollport
+   * bottom edge. Requires `.fynns-page-scroll > .fynns-content-column` to be
+   * `flex: 0 0 auto` (≥ **0.5.263**) so pad-block-end joins scroll overflow. */
   padding-inline: var(--fynns-layout-dialog-inset);
   padding-block: var(--fynns-layout-dialog-inset);
 }
@@ -4517,8 +4520,17 @@ a.fynns-breadcrumb-link:visited {
  * this, `flex: 1` on a scroll child collapses to content height, absolute
  * overlay hosts paint ~0–stack-tall boxes, and BusyStack overflows / parks
  * under TopAppBar (consumer PageScroll + SectionLead cold-start).
+ *
+ * **flex: 0 0 auto (hard ≥ 0.5.263):** do **not** keep `flex: 1 1 auto` on the
+ * column inside a scrolling flex host. That sizes the column to the scrollport
+ * so overflowing Cards paint through `padding-block-end` — EndAside / shell
+ * Card bottom coincides with the pane edge (`spaceAfterLastInCol ≈ 0`). Auto
+ * height + `min-height: 100%` keeps short catalogs fillable while long stacks
+ * include `--fynns-layout-dialog-inset` in scroll overflow. Live:
+ * `#layouts-demo-shell` EndAside + `#page-scroll`.
  */
 .fynns-page-scroll > .fynns-content-column {
+  flex: 0 0 auto;
   min-height: 100%;
 }
 

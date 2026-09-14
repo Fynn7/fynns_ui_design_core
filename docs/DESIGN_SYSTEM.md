@@ -851,8 +851,12 @@ belong in a consumer’s own doc.
   band). Don't paint secondary IconButtons / `iconOnly` menu triggers as
   `tonal` / `primary` — default **ghost**. Don't put PageScroll in EndAside
   without the height chain (track flex + `max-height:100%`, aside `height:100%`,
-  PageScroll `flex:1` `min-height:0` `overflow-y:auto` — ≥ **0.5.93**). Live
-  `#layouts-demo-shell`.
+  PageScroll `flex:1` `min-height:0` `overflow-y:auto` — ≥ **0.5.93**). Don't
+  let PageScroll Cards sit flush on the EndAside / scrollport **bottom** —
+  `.fynns-content-column` keeps `--fynns-layout-dialog-inset` block pad, and
+  core ≥ **0.5.263** sizes that column `flex: 0 0 auto` + `min-height: 100%`
+  so pad-block-end joins scroll overflow (never `flex:1` inside the scrolling
+  host, which ate bottom breath). Live `#layouts-demo-shell`.
 - **DON'T** pad destination labels with redundant meta (`· N`, parenthetical
   glosses) unless asked — short name + optional Item `badge`. Don't pass
   `drawerHeadline` / sheet `headline` under DestinationAppShell / TopAppBar

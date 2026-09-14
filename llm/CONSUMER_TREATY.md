@@ -308,6 +308,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | EndAside toggle workspace BusyRegion flash | AGENTS Busy/Loading | `#layouts-demo-shell` |
 | ControlRow labeled Button cluster overflow (Card / EndAside) | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | EndAside PageScroll no scroll | AGENTS shells / Hard rules | `#layouts-demo-shell` |
+| EndAside PageScroll Card flush to pane bottom | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | EndAside dense labeled Button strip (information redundancy) | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | EndAside ControlRow label crush | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | EndAside icon tonal disks | AGENTS shells / Hard rules | `#layouts-demo-shell` |

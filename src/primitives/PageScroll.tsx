@@ -16,8 +16,11 @@ export type PageScrollProps = HTMLAttributes<HTMLDivElement> & {
    * dialog-inset on **inline and block**). Do **not** put `fynns-scroll` or
    * max-width on these children — the outer host is the only scrollport.
    * Do **not** invent consumer `padding-top` on the first Card — core already
-   * clears the canvas ceiling. Do **not** wrap children in sheet/chat/dialog
-   * max or a private reading-width column (≥ **0.5.186** content-column fills).
+   * clears the canvas ceiling. Do **not** invent consumer `padding-bottom` /
+   * spacer after the last Card — core ≥ **0.5.263** keeps pad-block-end in
+   * scroll overflow (`flex: 0 0 auto` on the content column). Do **not** wrap
+   * children in sheet/chat/dialog max or a private reading-width column
+   * (≥ **0.5.186** content-column fills).
    */
   children?: ReactNode;
 };
