@@ -11,7 +11,7 @@ import {
   BusyRegion,
   BusyScrim,
   Button,
-  BotIcon,
+  MessageSquareIcon,
   useBusyTask,
   useLoadingTask,
   afterNextPaint,
@@ -4784,7 +4784,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                           variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
-                    <BotIcon />
+                    <MessageSquareIcon />
                   </IconButton>
                 </Tooltip>
               }
@@ -4808,7 +4808,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                           variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
-                    <BotIcon />
+                    <MessageSquareIcon />
                   </IconButton>
                 </Tooltip>
               }
@@ -4832,7 +4832,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                           variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
-                    <BotIcon />
+                    <MessageSquareIcon />
                   </IconButton>
                 </Tooltip>
               }
@@ -4918,7 +4918,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </Tooltip>
                   <Tooltip content={t("globals.listTreeOpen")}>
                     <IconButton variant="ghost" aria-label={t("globals.listTreeOpen")}>
-                      <BotIcon />
+                      <MessageSquareIcon />
                     </IconButton>
                   </Tooltip>
                 </div>
