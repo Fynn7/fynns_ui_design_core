@@ -73,7 +73,9 @@ index slugs **squashed drawer** + **wrong shell slot**.
     `reset --hard FETCH_HEAD` recovery (dev continues; export check
     still hard-fails on missing symbols). Equal-semver diverged tips used to
     soft-skip forever (colleague dead loop); they now reset to origin.
-    CI: `FYNNS_UI_STRICT_SIBLING_SYNC=1`
+    **Dirty** means *tracked* changes vs HEAD in the sibling — untracked
+    `.tmp-*` / local notes do **not** block sync. Committing the consumer
+    never clears sibling dirt. CI: `FYNNS_UI_STRICT_SIBLING_SYNC=1`
     restores hard-fail on dirty/ahead/diverged. Optional: `FYNNS_UI_SKIP_SIBLING_SYNC=1`
     while editing core. Optional floor: consumer `package.json`
     `"fynnsUi": { "minVersion": "0.5.x" }` / `--min-version` — **not** a

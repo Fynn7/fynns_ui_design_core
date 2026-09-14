@@ -1422,6 +1422,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [listRecipeDetail, setListRecipeDetail] = useState<"a" | "b">("a");
   const [listRecipeOpen, setListRecipeOpen] = useState(false);
   const [listRepoPathEnabled, setListRepoPathEnabled] = useState(true);
+  const [listRepoRunScope, setListRepoRunScope] = useState<"batch" | string | null>(
+    null,
+  );
   const [tableWheelX, setTableWheelX] = useState(true);
   const [listInspectorKindGap, setListInspectorKindGap] = useState("skill");
   const [cardHeadRevision, setCardHeadRevision] = useState("rev-a");
@@ -4537,6 +4540,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
           <SandboxHelp text={t("globals.listCatalogStaticHelp")} />
           <div id="sandbox-list-repo-path-actions">
+            <Card
+              title={t("globals.listRepoPathCardTitle")}
+              chrome="plain"
+              actions={
+                <div className="fynns-control-cluster">
+                  <Button
+                    variant="primary"
+                    loading={listRepoRunScope === "batch"}
+                    disabled={listRepoRunScope != null && listRepoRunScope !== "batch"}
+                    onClick={() => {
+                      setListRepoRunScope("batch");
+                      window.setTimeout(() => setListRepoRunScope(null), 1200);
+                    }}
+                  >
+                    {t("globals.listRepoPathBatchRebuild")}
+                  </Button>
+                </div>
+              }
+            >
             <List
               className="fynns-scroll"
               aria-label={t("globals.listCatalogStaticAria")}
@@ -4569,6 +4591,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       <IconButton
                         variant="ghost"
                         aria-label={t("globals.listRepoPathRefresh")}
+                        disabled={listRepoRunScope === "batch"}
+                        loading={listRepoRunScope === "sample-repo"}
+                        onClick={() => {
+                          setListRepoRunScope("sample-repo");
+                          window.setTimeout(() => setListRepoRunScope(null), 1200);
+                        }}
                       >
                         <RefreshIcon />
                       </IconButton>
@@ -4577,6 +4605,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       <IconButton
                         variant="ghost"
                         aria-label={t("globals.listCatalogFolder")}
+                        disabled={listRepoRunScope != null}
                       >
                         <FolderOpenIcon />
                       </IconButton>
@@ -4585,6 +4614,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       <IconButton
                         variant="ghost"
                         aria-label={t("globals.listCatalogRemove")}
+                        disabled={listRepoRunScope != null}
                       >
                         <TrashIcon />
                       </IconButton>
@@ -4617,6 +4647,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       <IconButton
                         variant="ghost"
                         aria-label={t("globals.listRepoPathRefresh")}
+                        disabled={listRepoRunScope === "batch"}
+                        loading={listRepoRunScope === "sample-notes"}
+                        onClick={() => {
+                          setListRepoRunScope("sample-notes");
+                          window.setTimeout(() => setListRepoRunScope(null), 1200);
+                        }}
                       >
                         <RefreshIcon />
                       </IconButton>
@@ -4625,6 +4661,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       <IconButton
                         variant="ghost"
                         aria-label={t("globals.listCatalogFolder")}
+                        disabled={listRepoRunScope != null}
                       >
                         <FolderOpenIcon />
                       </IconButton>
@@ -4633,6 +4670,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       <IconButton
                         variant="ghost"
                         aria-label={t("globals.listCatalogRemove")}
+                        disabled={listRepoRunScope != null}
                       >
                         <TrashIcon />
                       </IconButton>
@@ -4665,6 +4703,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       <IconButton
                         variant="ghost"
                         aria-label={t("globals.listRepoPathRefresh")}
+                        disabled={listRepoRunScope === "batch"}
+                        loading={listRepoRunScope === "sample-tools"}
+                        onClick={() => {
+                          setListRepoRunScope("sample-tools");
+                          window.setTimeout(() => setListRepoRunScope(null), 1200);
+                        }}
                       >
                         <RefreshIcon />
                       </IconButton>
@@ -4673,6 +4717,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       <IconButton
                         variant="ghost"
                         aria-label={t("globals.listCatalogFolder")}
+                        disabled={listRepoRunScope != null}
                       >
                         <FolderOpenIcon />
                       </IconButton>
@@ -4681,6 +4726,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       <IconButton
                         variant="ghost"
                         aria-label={t("globals.listCatalogRemove")}
+                        disabled={listRepoRunScope != null}
                       >
                         <TrashIcon />
                       </IconButton>
@@ -4705,6 +4751,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       <IconButton
                         variant="ghost"
                         aria-label={t("globals.listCatalogOpen")}
+                        disabled={listRepoRunScope != null}
                       >
                         <FileIcon />
                       </IconButton>
@@ -4713,6 +4760,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       <IconButton
                         variant="ghost"
                         aria-label={t("globals.listCatalogFolder")}
+                        disabled={listRepoRunScope != null}
                       >
                         <FolderOpenIcon />
                       </IconButton>
@@ -4721,6 +4769,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 }
               />
             </List>
+            </Card>
           </div>
           <SandboxHelp text={t("globals.listStatsHelp")} />
           <List aria-label={t("globals.listStatsAria")}>

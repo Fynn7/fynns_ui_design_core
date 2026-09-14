@@ -204,6 +204,12 @@ trail 用 ASCII `-`。
     `#sandbox-list-recipe-catalog`。
 9. **twin Button loading rings / BusyRegion + chrome loading** — 一簇最多一圈；
    BusyRegion 等待时 chrome 只 `disabled`。
+9z. **Card batch CTA + ListItem row twin loading rings** — **严禁信息冗余（硬 ≥
+    0.5.265）：** 同一批重建 / 刷新任务**禁止** Card/Collapsible `actions` 主
+    `Button` `loading` **与** 每一行（或多行）Rebuild `IconButton` `loading`
+    同时转圈。批量 → 只留 Card 主 CTA 一圈，行只 `disabled`；单行 → 只该行
+    IconButton 一圈，Card 主钮只 `disabled`。禁止 `loading={busy==="run"}`
+    绑在头按钮和每行 Refresh 上。对照 `#sandbox-list-repo-path-actions`。
 9a. **IconButton busy swaps CircularProgress instead of loading** — IconButton
     忙碌用 stock **`loading`**（Spinner；iconOnly 仅圈）。**禁止**把 children
     换成嵌套 `CircularProgress`（尤其 `variant="primary"` / `danger` —
@@ -244,8 +250,15 @@ trail 用 ASCII `-`。
     TopAppBar `InfoHint` 可留短范围说明但勿列选项。对照 `#rhythm` Surface。
 12b. **section FieldHint restates TopAppBar InfoHint** — **严禁信息冗余（硬）：**
     顶栏 `trailing` `InfoHint`（页面说明）已有分区 tip 时，**禁止**再在正文首行
-    用同源 / 改写 `FieldHint` 复述。分区说明只留顶栏「i」。对照
+    用同源 / 改写 `FieldHint` / section-lead / **`FieldBlock` `description`**
+    复述（含「与某 Tab 共用列表」等改写）。分区说明只留顶栏「i」；FieldBlock
+    仅可保留 tip **未写**的操作说明（浏览 / 粘贴路径）。对照
     `#layouts-demo-shell`。
+12c. **ListItem overline restates trailing status** — **严禁信息冗余（硬）：**
+    路径 / 仓 `ListItem` 的状态 / 空态只放 **`overline` 一次**；**禁止**再在
+    `trailingSupportingText` 写同义状态（如 overline「尚无构建记录」+ trailing
+    「未构建」）。trailing meta 只放互补 kind / wiki / 日期。对照
+    `#sandbox-list-repo-path-actions`。
 13. **private labeled Button cluster gap** — 用公共 `.fynns-control-cluster`
     （labeled 间距 8dp），勿私有 4dp 克隆。
 14. **Select refresh crammed beside chevron** — Select + refresh →

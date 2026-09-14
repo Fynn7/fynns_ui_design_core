@@ -208,9 +208,30 @@ function resolveCloneUrlCandidates(gitRoot) {
   return urls;
 }
 
+/**
+ * True when there are no *tracked* changes vs HEAD.
+ * Untracked files (.tmp-*, local notes) must NOT block auto-sync — they used to
+ * make every core checkout with verify artifacts soft-skip forever.
+ */
 function isGitWorkTreeClean(dir) {
-  const r = run("git", ["status", "--porcelain"], dir, { allowFail: true, quiet: true });
-  return (r.status ?? 1) === 0 && !String(r.stdout ?? "").trim();
+  const r = run("git", ["diff-index", "--quiet", "HEAD", "--"], dir, {
+    allowFail: true,
+    quiet: true,
+  });
+  return (r.status ?? 1) === 0;
+}
+
+function listTrackedDirtyPaths(dir, limit = 8) {
+  const r = run("git", ["diff-index", "--name-only", "HEAD", "--"], dir, {
+    allowFail: true,
+    quiet: true,
+  });
+  const names = String(r.stdout ?? "")
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean);
+  if (names.length <= limit) return names;
+  return [...names.slice(0, limit), `… +${names.length - limit} more`];
 }
 
 function gitRevParse(dir, rev) {
@@ -271,7 +292,7 @@ function decideSiblingSyncAction({ ahead, behind, localVer, remoteVer }) {
 function printSyncSkipNotice({ reason, dir, detail, ref = DEFAULT_REF }) {
   const zh =
     reason === "dirty"
-      ? "已跳过自动同步 sibling UI core（检测到本地未提交改动）"
+      ? "已跳过自动同步 sibling UI core（sibling 有已跟踪的未提交改动 — 不是消费仓）"
       : reason === "ahead"
         ? "已跳过自动同步 sibling UI core（本地 tip 超前远端，拒绝丢弃）"
         : reason === "diverged"
@@ -281,7 +302,7 @@ function printSyncSkipNotice({ reason, dir, detail, ref = DEFAULT_REF }) {
             : "已跳过自动同步 sibling UI core";
   const en =
     reason === "dirty"
-      ? "Skipped auto-sync: sibling has local uncommitted changes."
+      ? "Skipped auto-sync: sibling has tracked uncommitted changes (not the consumer repo)."
       : reason === "ahead"
         ? "Skipped auto-sync: local tip is ahead of origin (refusing to discard)."
         : reason === "diverged"
@@ -350,14 +371,16 @@ function updateSiblingCheckout(dir, ref, log) {
     );
   }
   if (!isGitWorkTreeClean(dir)) {
+    const dirtyPaths = listTrackedDirtyPaths(dir);
     return softOrThrow(
       dir,
       "dirty",
-      `${dir} has local changes; cannot auto-update sibling UI core.\n` +
+      `${dir} has tracked local changes; cannot auto-update sibling UI core.\n` +
+        `This is the sibling UI core checkout — committing the consumer does not clear it.\n` +
         `Commit/stash/discard there, or set FYNNS_UI_SKIP_SIBLING_SYNC=1.\n` +
         `Strict hard-fail: FYNNS_UI_STRICT_SIBLING_SYNC=1`,
       log,
-      null,
+      dirtyPaths.length ? dirtyPaths.join(", ") : null,
       ref,
     );
   }
@@ -554,12 +577,14 @@ function main() {
   const minVersion = resolveMinVersion(pkgRoot, opts.minVersion);
   try {
     const sibling = ensureSiblingCheckout(gitRoot, opts.ref, log);
+    let updateResult = null;
     if (opts.update) {
-      updateSiblingCheckout(sibling, opts.ref, log);
+      updateResult = updateSiblingCheckout(sibling, opts.ref, log);
     }
     assertMinVersion(sibling, minVersion, log);
     if (opts.npmrc || opts.install) writeSafeNpmrc(pkgRoot, false, log);
     if (opts.install) installFromSibling(pkgRoot, sibling, log);
+    const updateSkipped = Boolean(updateResult?.skipped);
     const summary = {
       ok: true,
       mode: "sibling-file",
@@ -570,15 +595,17 @@ function main() {
       minVersion,
       tokenRequired: false,
       coreRoot: CORE_ROOT,
+      updateSkipped,
       log,
     };
     if (opts.json) process.stdout.write(`${JSON.stringify(summary, null, 2)}\n`);
     else {
+      const updateTag = !opts.update ? "" : updateSkipped ? " (update skipped)" : " (updated)";
       console.log(
         `[fynns-ui] sibling ready (zero-token): ${summary.sibling}` +
           (summary.version ? `@${summary.version}` : "") +
           (opts.install ? ` → linked into ${pkgRoot}` : "") +
-          (opts.update ? " (updated)" : ""),
+          updateTag,
       );
     }
   } catch (err) {
@@ -611,6 +638,7 @@ export {
   findGitRoot,
   findPkgRoot,
   isGitWorkTreeClean,
+  listTrackedDirtyPaths,
   npmrcHasActiveEmptyAuth,
   npmrcHasActivePackagesRegistry,
   parseSemver,

@@ -42,7 +42,9 @@ Do **not** commit `_authToken=${NODE_AUTH_TOKEN}` (empty env → E401).
    `reset --hard FETCH_HEAD`. Dirty / **pure-ahead** / local-semver-newer
    diverged tips → **soft-skip** with a loud notice that prints the
    disposable `reset --hard` recovery (dev continues; export check still
-   runs). `FYNNS_UI_STRICT_SIBLING_SYNC=1` hard-fails those cases (CI). Also
+   runs). Dirty = **tracked** sibling changes only (untracked `.tmp-*` ignored);
+   committing the consumer does not clear sibling dirt.
+   `FYNNS_UI_STRICT_SIBLING_SYNC=1` hard-fails those cases (CI). Also
    fails closed on failed fetch or missing `@fynns/ui` barrel symbols.
    Optional: `FYNNS_UI_SKIP_SIBLING_SYNC=1` while editing core. Optional
    floor: `"fynnsUi": { "minVersion": "…" }` in the consumer package.json.
