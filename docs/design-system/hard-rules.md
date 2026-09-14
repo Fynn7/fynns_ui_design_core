@@ -661,8 +661,14 @@
   `children` sibling of `Chat` with `paddingBottom: 0` (or any flush stack) —
   Surface kisses `ChatActivity` / thread (≥ **0.5.277**). Put short above-chat
   chrome in **`header`**; core gaps header↔main and main siblings with
-  `unit-stack-gap`. Live `#layouts-demo-fill-column` / `#sandbox-fill-column-guide`.
-  Failure: CONSUMER_TREATY FillColumn guide Surface flush to Chat.
+  `unit-stack-gap`. Canvas-capped header mid-scroll soft-masks (≥ **0.5.278**)
+  — do **not** invent consumer `mask-image` on `.fynns-fill-column-header`.
+  Header stays **content-sized** (`flex: 0 0 auto` ≥ **0.5.279**) and only
+  scrolls when content exceeds the max-height cap — do **not** rely on
+  flex-shrink to crush short guide / answer Surfaces into a nested scrollbar.
+  Live `#layouts-demo-fill-column` / `#sandbox-fill-column-guide`.
+  Failure: CONSUMER_TREATY FillColumn guide Surface flush to Chat /
+  FillColumn header mid-scroll hard clip (no edge fade).
 - **DON'T** clear `Dialog` / `ConfirmDialog` title/body source state in the
   same tick as `open→false` — `DialogFrame` exit (~240ms) still paints props;
   keep content until the next open. Never reuse a Confirm title as a Dialog

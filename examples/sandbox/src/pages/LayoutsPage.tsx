@@ -581,7 +581,7 @@ export function LayoutsPage() {
                         />
                         <FieldBlock label={t("layouts.fillColumnGuideDetails")}>
                           <Textarea
-                            rows={2}
+                            rows={4}
                             placeholder={t("layouts.fillColumnGuideDetailsPh")}
                             value=""
                             onChange={() => {}}

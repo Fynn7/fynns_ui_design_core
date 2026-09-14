@@ -14,10 +14,13 @@ export type FillColumnProps = HTMLAttributes<HTMLDivElement> & {
   /**
    * Top band sized to content (`flex: 0`). Preview / Collapsible / Banner…
    * On `DestinationAppShell` canvas the band soft-caps
-   * (`--fynns-layout-fill-column-header-max-height`) and scrolls — **edge fade
-   * is built-in** (≥ **0.5.278**), same `data-fade-top` / `data-fade-bottom`
-   * family as `PageScroll`. Prefer short soft `Surface` / compact preview;
-   * for tall catalogs put `<PageScroll>` inside (PageScroll owns the mask).
+   * (`--fynns-layout-fill-column-header-max-height`) and scrolls **only when
+   * content exceeds that cap** — it does **not** flex-shrink under Chat
+   * pressure (that would put a nested scrollbar on short guide Surfaces).
+   * **Edge fade is built-in** (≥ **0.5.278**), same `data-fade-top` /
+   * `data-fade-bottom` family as `PageScroll`. Prefer short soft `Surface` /
+   * compact preview; for tall catalogs put `<PageScroll>` inside (PageScroll
+   * owns the mask).
    */
   header?: ReactNode;
   /**
@@ -71,6 +74,20 @@ export function FillColumn({
     const el = headerRef.current;
     if (!el) return;
     let raf = 0;
+    const ro = new ResizeObserver(() => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        syncScrollEdgeFade(el);
+      });
+    });
+    const observeChildren = () => {
+      ro.disconnect();
+      ro.observe(el);
+      for (const child of el.children) {
+        if (child instanceof HTMLElement) ro.observe(child);
+      }
+    };
     const sync = () => {
       if (raf) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
@@ -78,17 +95,21 @@ export function FillColumn({
         syncScrollEdgeFade(el);
       });
     };
+    observeChildren();
     syncScrollEdgeFade(el);
     el.addEventListener("scroll", sync, { passive: true });
-    const ro = new ResizeObserver(sync);
-    ro.observe(el);
-    for (const child of el.children) {
-      if (child instanceof HTMLElement) ro.observe(child);
-    }
+    // Header swaps / conditional Surface remounts — re-observe direct children
+    // (same childList pattern as NavigationDrawer body; avoid deep subtree thrash).
+    const mo = new MutationObserver(() => {
+      observeChildren();
+      sync();
+    });
+    mo.observe(el, { childList: true, subtree: false });
     return () => {
       if (raf) cancelAnimationFrame(raf);
       el.removeEventListener("scroll", sync);
       ro.disconnect();
+      mo.disconnect();
       clearScrollEdgeFade(el);
     };
   }, [header != null]);
