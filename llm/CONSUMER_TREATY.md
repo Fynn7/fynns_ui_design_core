@@ -133,6 +133,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Dialog foot Delete leftmost of Cancel | AGENTS Dialog / overlays | `#timeline` |
 | Dialog exit clears title/body (flash) | DESIGN_SYSTEM Hard rules / overlays | `#sandbox-list-recipe-catalog` |
 | twin Button loading rings in one control-cluster | AGENTS Toolbar / unit rhythm | `#rhythm` |
+| Card batch CTA + ListItem row twin loading rings | DESIGN_SYSTEM Hard rules / Loading placement | `#sandbox-list-repo-path-actions` |
 | BusyRegion + chrome loading stack | AGENTS Busy/Loading | `#busy-region` |
 | runBusyTask hang forever (no timeout/signal) | AGENTS paint-before-work | `#sandbox-busy-task-timeout` / `#busy-paint` |
 | overlapping runBusyTask clears busy early | AGENTS paint-before-work | `#sandbox-busy-task-generation` |
@@ -160,6 +161,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | ControlStack probe meta end-hug / kind mix (Available+Backend; path/chips/hint cluster) | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-rhythm-probe-kinds` / `#rhythm` status |
 | FieldHint restates ToggleGroup / Tabs labels (information redundancy) | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` |
 | section FieldHint restates TopAppBar InfoHint | DESIGN_SYSTEM Hard rules / Content density | `#layouts-demo-shell` |
+| ListItem overline restates trailing status | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-repo-path-actions` |
 | ControlRow IconButton crushed to ellipse | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | end-align IconButton strip crushed | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | Pagination crushed or stacked off-spec | AGENTS Toolbar / unit rhythm | `#pagination` |
