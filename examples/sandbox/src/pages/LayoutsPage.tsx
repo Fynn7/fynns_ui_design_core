@@ -12,6 +12,8 @@ import {
   CheckSquareIcon,
   SquareIcon,
   Chat,
+  ChatActivity,
+  ChatActivityStep,
   ChatComposer,
   ChatMessage,
   ChatThread,
@@ -52,6 +54,7 @@ import {
   StatusBarItem,
   Surface,
   Switch,
+  Textarea,
   ControlRow,
   List,
   ListItem,
@@ -560,6 +563,79 @@ export function LayoutsPage() {
               </FillColumn>
             </div>
             <SandboxHelp text={t("layouts.fillColumnPreviewHelp")} />
+            <div
+              id="sandbox-fill-column-guide"
+              className="sandbox-destination-canvas-stage fynns-destination-app-shell-canvas"
+            >
+              <FillColumn
+                header={
+                  <Surface variant="soft" padded>
+                    <div className="fynns-unit-stack">
+                      <FieldHint>{t("layouts.fillColumnGuideTitle")}</FieldHint>
+                      <div>{t("layouts.fillColumnGuideBody")}</div>
+                      <FieldStack>
+                        <Checkbox
+                          label={t("layouts.fillColumnGuideEvidence")}
+                          checked
+                          onCheckedChange={() => {}}
+                        />
+                        <FieldBlock label={t("layouts.fillColumnGuideDetails")}>
+                          <Textarea
+                            rows={2}
+                            placeholder={t("layouts.fillColumnGuideDetailsPh")}
+                            value=""
+                            onChange={() => {}}
+                          />
+                        </FieldBlock>
+                        <div className="fynns-control-cluster--end-align fynns-control-cluster">
+                          <Button variant="primary">
+                            {t("layouts.fillColumnGuideSubmit")}
+                          </Button>
+                        </div>
+                      </FieldStack>
+                    </div>
+                  </Surface>
+                }
+              >
+                <Chat label={t("layouts.fillColumnPreviewChatLabel")}>
+                  <ChatThread>
+                    <ChatMessage
+                      role="assistant"
+                      thinking={
+                        <ChatActivity
+                          label={t("layouts.fillColumnGuideActivity")}
+                          defaultOpen
+                        >
+                          <ChatActivityStep
+                            status="done"
+                            label={t("layouts.fillColumnGuideStepDone")}
+                          />
+                          <ChatActivityStep
+                            status="active"
+                            label={t("layouts.fillColumnGuideStepActive")}
+                          />
+                          <ChatActivityStep
+                            status="pending"
+                            label={t("layouts.fillColumnGuideStepPending")}
+                          />
+                        </ChatActivity>
+                      }
+                    >
+                      {t("layouts.fillColumnGuideAssistant")}
+                    </ChatMessage>
+                  </ChatThread>
+                  <ChatComposer
+                    value={fillColumnPreviewDraft}
+                    onChange={setFillColumnPreviewDraft}
+                    ariaLabel={t("layouts.fillColumnComposerAria")}
+                    placeholder={t("layouts.fillColumnComposerPlaceholder")}
+                    sendLabel={t("layouts.fillColumnSend")}
+                    onSubmit={() => setFillColumnPreviewDraft("")}
+                  />
+                </Chat>
+              </FillColumn>
+            </div>
+            <SandboxHelp text={t("layouts.fillColumnGuideHelp")} />
           </LayoutsDemo>
 
           <LayoutsDemo id="top-app-bar">

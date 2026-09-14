@@ -657,6 +657,12 @@
   records → `#table`; short inspector forms → `#form-recipe` Card /
   Collapsible / Dialog hosts only. Live `#form-recipe` /
   `#layouts-demo-fill-column` / `#table`.
+- **DON'T** park a guide / questionnaire soft `Surface` as a `FillColumn`
+  `children` sibling of `Chat` with `paddingBottom: 0` (or any flush stack) —
+  Surface kisses `ChatActivity` / thread (≥ **0.5.277**). Put short above-chat
+  chrome in **`header`**; core gaps header↔main and main siblings with
+  `unit-stack-gap`. Live `#layouts-demo-fill-column` / `#sandbox-fill-column-guide`.
+  Failure: CONSUMER_TREATY FillColumn guide Surface flush to Chat.
 - **DON'T** clear `Dialog` / `ConfirmDialog` title/body source state in the
   same tick as `open→false` — `DialogFrame` exit (~240ms) still paints props;
   keep content until the next open. Never reuse a Confirm title as a Dialog

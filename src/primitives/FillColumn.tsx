@@ -33,6 +33,11 @@ export type FillColumnProps = HTMLAttributes<HTMLDivElement> & {
  * nested `Chat` can dock its composer at the column bottom instead of leaving
  * a dead band under content-height stacks.
  *
+ * Above-chat chrome (short soft `Surface` forms, compact preview Card) →
+ * **`header`**. Do **not** stack that chrome as a `children` sibling of Chat
+ * with `paddingBottom: 0` — core ≥ **0.5.277** gaps header↔main and main
+ * siblings with `unit-stack-gap` (16dp). Live: `#layouts-demo-fill-column`.
+ *
  * Does **not** apply aside Chat bubble geometry (`.fynns-chat-host--fill`) —
  * main-column 70% / 48rem rules stay intact. Use `chat-host--fill` / EndAside
  * for full-pane aside chat.

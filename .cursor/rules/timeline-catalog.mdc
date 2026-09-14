@@ -9,8 +9,9 @@ alwaysApply: false
 
 # Timeline catalog (hard gate)
 
-Authority: [`docs/DESIGN_SYSTEM.md`](../../docs/DESIGN_SYSTEM.md) Content density **Chronological
-timeline**; slug index [`llm/CONSUMER_TREATY.md`](../../llm/CONSUMER_TREATY.md);
+Authority: [`docs/design-system/content-density.md`](../../docs/design-system/content-density.md)
+(**Chronological** row; index [`docs/DESIGN_SYSTEM.md`](../../docs/DESIGN_SYSTEM.md)).
+Live sandbox `#timeline`; slug index [`llm/CONSUMER_TREATY.md`](../../llm/CONSUMER_TREATY.md);
 pasteable [`llm/consumer-cursor-rule.mdc`](../../llm/consumer-cursor-rule.mdc).
 Consumer-reported pattern bugs → `/constrain-then-consumer`.
 

@@ -146,6 +146,7 @@ classes.
     step band **2rem** + gap `unit-stack-gap` ≥ **0.5.273**;
     **done** marks = Timeline accent ≥ **0.5.274**;
     pulse rail masked under mark ≥ **0.5.275**;
+    pending wash opaque + rail ends at last mark ≥ **0.5.276**;
     optional `icon` / `ChatActivityArtifact` for rare dense hosts; label tense:
     **active** = *-ing*, **done** = past; header may summarize latest completed
     milestone while later step still streams). `citations`/`ChatCitations`/

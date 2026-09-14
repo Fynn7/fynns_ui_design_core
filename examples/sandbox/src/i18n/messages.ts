@@ -92,6 +92,21 @@ const en = {
   "layouts.fillColumnPreviewChatLabel": "Sample chat below preview",
   "layouts.fillColumnPreviewHelp":
     "Destination canvas FillColumn — `header` = compact preview Card (never zero-margin edge-to-edge workflow shell). Core pads + caps `.fynns-fill-column-header` on `.fynns-destination-app-shell-canvas`. Long preview scrolls in header; `children` = Chat. Live stage uses `fynns-destination-app-shell-canvas` class.",
+  "layouts.fillColumnGuideTitle": "Sample prompt 1/3",
+  "layouts.fillColumnGuideBody":
+    "Describe one real project preference you already keep in notes — region, digests, or a compact mode — without inventing orgs.",
+  "layouts.fillColumnGuideEvidence": "I have notes",
+  "layouts.fillColumnGuideDetails": "Details",
+  "layouts.fillColumnGuideDetailsPh": "Facts only — no invented metrics.",
+  "layouts.fillColumnGuideSubmit": "Submit",
+  "layouts.fillColumnGuideActivity": "Guide steps",
+  "layouts.fillColumnGuideStepDone": "Profile preferences saved",
+  "layouts.fillColumnGuideStepActive": "Collecting evidence…",
+  "layouts.fillColumnGuideStepPending": "Draft summary",
+  "layouts.fillColumnGuideAssistant":
+    "Keep the next answer short. Use the guide steps below the form.",
+  "layouts.fillColumnGuideHelp":
+    "**FillColumn guide chrome (≥ 0.5.277):** short soft `Surface` form → `FillColumn` **`header`**; `Chat` (+ optional `ChatActivity` thinking) → `children`. Core gaps header↔main and main siblings with `unit-stack-gap` (16dp). **DON'T** park the form as a `children` sibling of Chat with `paddingBottom: 0` (Surface kisses ChatActivity). Live `#layouts-demo-fill-column` / `#sandbox-fill-column-guide`.",
   "layouts.chatProductTitle": "Sample chat",
   "layouts.chatProductNavMode": "Show session drawer",
   "layouts.chatProductSessionsEmpty": "No sessions in drawer",
@@ -2455,6 +2470,21 @@ const zh: Record<MessageKey, string> = {
   "layouts.fillColumnPreviewChatLabel": "预览下方的示例对话",
   "layouts.fillColumnPreviewHelp":
     "Destination 画布 FillColumn — `header` = 紧凑预览 Card（禁止零边距铺满 workflow 壳）。Core 在 `.fynns-destination-app-shell-canvas` 上为 `.fynns-fill-column-header` 加 inset + 上限；长预览在 header 内滚；`children` = Chat。舞台带 `fynns-destination-app-shell-canvas` 类。",
+  "layouts.fillColumnGuideTitle": "示例提示 1/3",
+  "layouts.fillColumnGuideBody":
+    "写一条你笔记里已有的真实项目偏好——地区、摘要节奏或紧凑模式——不要编造组织名。",
+  "layouts.fillColumnGuideEvidence": "我有笔记",
+  "layouts.fillColumnGuideDetails": "细节",
+  "layouts.fillColumnGuideDetailsPh": "只写事实——不要编造指标。",
+  "layouts.fillColumnGuideSubmit": "提交",
+  "layouts.fillColumnGuideActivity": "引导步骤",
+  "layouts.fillColumnGuideStepDone": "已保存资料偏好",
+  "layouts.fillColumnGuideStepActive": "正在收集证据…",
+  "layouts.fillColumnGuideStepPending": "草稿摘要",
+  "layouts.fillColumnGuideAssistant":
+    "下一条回答保持简短。表单下方是引导步骤。",
+  "layouts.fillColumnGuideHelp":
+    "**FillColumn 引导铬（≥ 0.5.277）：** 短 soft `Surface` 表单 → `FillColumn` **`header`**；`Chat`（可选 `ChatActivity` thinking）→ `children`。Core 用 `unit-stack-gap`（16dp）拉开 header↔main 与 main 内兄弟。**禁止**把表单当 Chat 的 `children` 兄弟并设 `paddingBottom: 0`（Surface 贴死 ChatActivity）。对照 `#layouts-demo-fill-column` / `#sandbox-fill-column-guide`。",
   "layouts.chatProductTitle": "示例对话",
   "layouts.chatProductNavMode": "显示会话抽屉",
   "layouts.chatProductSessionsEmpty": "侧栏无会话",

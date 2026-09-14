@@ -789,13 +789,12 @@
 }
 
 /*
- * Vertical rail between open steps (≥ **0.5.273**): node-center → next
- * node-center through `activity-step-gap` (unit-stack 16dp) over a
- * `2rem` mark|headline band. Prior: icon-bottom→step-bottom stubs, then
- * 16dp hug + 0.75rem gap still read stubby. Segments only — never a
- * continuous line punched with a fixed surface (`app-bg` mismatched
- * canvas / EndAside / bubble hosts). Queued last shells stay `0fr` /
- * `data-state="closed"` and must not extend the rail.
+ * Vertical rail between open steps (≥ **0.5.276**): node-center → next
+ * node-center. Gap lives on this step as `padding-block-end`, so `bottom`
+ * must be **only** half the next band — prior `-(gap + half)` double-counted
+ * the gap and ran the stroke past the next mark (looked like a stub under
+ * the last node). Segments only — never a continuous punched surface.
+ * Queued last shells stay `0fr` / `data-state="closed"` and must not extend.
  */
 .fynns-chat-activity-step-shell:has(
     + .fynns-chat-activity-step-shell[data-state="open"]
@@ -813,16 +812,14 @@
       var(--fynns-chat-activity-step-row-height, 0px)
     ) / 2
   );
+  /* Gap already in padding-block-end — do not add it again here. */
   bottom: calc(
     -1 *
-      (
-        var(--fynns-chatmessage-activity-step-gap) +
-          max(
-            var(--fynns-chatmessage-activity-step-min-height),
-            var(--fynns-chat-activity-step-row-height, 0px)
-          ) /
-          2
-      )
+      max(
+        var(--fynns-chatmessage-activity-step-min-height),
+        var(--fynns-chat-activity-step-row-height, 0px)
+      ) /
+      2
   );
   width: var(--fynns-border-hairline);
   background: var(--fynns-color-border-strong);
@@ -955,7 +952,12 @@
   font-weight: var(--fynns-font-weight-medium);
 }
 
-.fynns-chat-activity-step--pending {
+/*
+ * Pending mute via ink only (≥ **0.5.276**). Whole-step `opacity` also faded
+ * `node::before` wash so the previous segment's rail punched through the
+ * mark — same class of bug as pulse-through (≥ **0.5.275**).
+ */
+.fynns-chat-activity-step--pending .fynns-chat-activity-desc {
   opacity: var(--fynns-opacity-muted);
 }
 
