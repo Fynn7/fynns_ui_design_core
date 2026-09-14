@@ -77,6 +77,8 @@ import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { NavDrawerFooterAccount } from "../components/NavDrawerFooterAccount";
+import { ChatEmptySurfaceStarters } from "../components/ChatEmptySurfaceStarters";
+import { ChatProductLayoutsDemo } from "../components/ChatProductLayoutsDemo";
 import { TokenList } from "../components/TokenList";
 import { layoutsDemoElementId } from "../catalog/layoutsCatalog";
 import { DrillInLayoutsDemo } from "./DrillInLayoutsDemo";
@@ -409,16 +411,50 @@ export function LayoutsPage() {
             <DrillInLayoutsDemo />
           </LayoutsDemo>
 
+          <LayoutsDemo id="chat-product">
+            <ChatProductLayoutsDemo />
+          </LayoutsDemo>
+
           <LayoutsDemo id="fill-column">
             <div className="sandbox-fill-column-stage">
               <FillColumn>
                 <Chat label={t("layouts.fillColumnLabel")}>
                   <ChatThread
                     empty={
-                      <EmptyState
-                        title={t("layouts.fillColumnEmptyTitle")}
-                        description={t("layouts.fillColumnEmptyBody")}
-                      />
+                      <div className="fynns-unit-stack sandbox-chat-empty">
+                        <EmptyState
+                          title={t("layouts.fillColumnEmptyTitle")}
+                          description={t("layouts.fillColumnEmptyBody")}
+                        />
+                        <ChatEmptySurfaceStarters
+                          ariaLabel={t("globals.chatStarterAria")}
+                          items={[
+                            {
+                              id: "summarize",
+                              label: t("globals.chatStarter1Label"),
+                              prompt: t("globals.chatStarter1Prompt"),
+                            },
+                            {
+                              id: "outline",
+                              label: t("globals.chatStarter2Label"),
+                              prompt: t("globals.chatStarter2Prompt"),
+                            },
+                            {
+                              id: "rewrite",
+                              label: t("globals.chatStarter3Label"),
+                              prompt: t("globals.chatStarter3Prompt"),
+                            },
+                          ]}
+                          onSelect={(prompt) => {
+                            snackbar(
+                              t("globals.chatStarterSent", { prompt }),
+                              {
+                                dismissAriaLabel: t("globals.snackbarDismiss"),
+                              },
+                            );
+                          }}
+                        />
+                      </div>
                     }
                   >
                     <ChatMessage role="user">
@@ -469,10 +505,35 @@ export function LayoutsPage() {
                 <Chat label={t("layouts.fillColumnPreviewChatLabel")}>
                   <ChatThread
                     empty={
-                      <EmptyState
-                        title={t("layouts.fillColumnEmptyTitle")}
-                        description={t("layouts.fillColumnEmptyBody")}
-                      />
+                      <div className="fynns-unit-stack sandbox-chat-empty">
+                        <EmptyState
+                          title={t("layouts.fillColumnEmptyTitle")}
+                          description={t("layouts.fillColumnEmptyBody")}
+                        />
+                        <ChatEmptySurfaceStarters
+                          ariaLabel={t("globals.chatStarterAria")}
+                          items={[
+                            {
+                              id: "summarize",
+                              label: t("globals.chatStarter1Label"),
+                              prompt: t("globals.chatStarter1Prompt"),
+                            },
+                            {
+                              id: "outline",
+                              label: t("globals.chatStarter2Label"),
+                              prompt: t("globals.chatStarter2Prompt"),
+                            },
+                          ]}
+                          onSelect={(prompt) => {
+                            snackbar(
+                              t("globals.chatStarterSent", { prompt }),
+                              {
+                                dismissAriaLabel: t("globals.snackbarDismiss"),
+                              },
+                            );
+                          }}
+                        />
+                      </div>
                     }
                   >
                     <ChatMessage role="user">

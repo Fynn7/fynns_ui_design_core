@@ -10,9 +10,13 @@ alwaysApply: true
 失败模式 slug 索引：`llm/CONSUMER_TREATY.md`（长文已迁出；细节在 `docs/DESIGN_SYSTEM.md` Hard rules + sandbox）。
 
 **可见 UI 标点（硬）：** 强烈不推荐中间点 **`·`** 与破折号 **`—`**（装饰性
-**`–`** 当字段粘合符同禁）。组织 → `supportingText`，日期 →
-`trailingSupportingText`（`2025-10 - 2026-03`）。禁止 `Name · N` /
-`Org · dates`。空 trail 用 ASCII `-`。
+**`–`** 当字段粘合符同禁）——含 **Card / Collapsible `title`**、FieldBlock
+标签、List 文案、目的地名。标题 = **人会说的短分区名**（`系统提示` /
+`消息`），禁止电报式粘合 `系统提示 · 14,279 字` / `消息 · 2` /
+`Name · N`。计数 / 字数 / token / 路径 → 正文 `.fynns-table-meta`（对照
+`#card` meta-in-body）。组织 → `supportingText`，日期 →
+`trailingSupportingText`（`2025-10 - 2026-03`）。禁止 `Org · dates`。空
+trail 用 ASCII `-`。
 
 ## 安装与 API
 
@@ -130,7 +134,9 @@ alwaysApply: true
    `ListItem`（短 `supportingText`；长文 / id → Dialog 或 `InfoHint`）。禁止每项
    一张胖 Card + 多段 `FieldHint` 长文 + `ChipSet` 标签汤。对照 `#list` /
    `#sandbox-list-recipe-catalog`。
-6. **org · dates glued / UI · — punctuation** — 槽位分开；禁用 `·`/`—` 粘合。
+6. **org · dates glued / UI · — punctuation / Card title · meta** — 槽位分开；
+   禁用 `·`/`—` 粘合。Card/Collapsible `title` 只放短名；计数/token → 正文
+   `.fynns-table-meta`（`#card`）。
 6b. **trailingSupportingText right-hug drift** — 日期 / 时间戳目录必须
    `List` / `Timeline` **`trailingMetaAlign="start"`**（固定列 start-ink ≥
    **0.5.223**）。状态 / kind → `overline`；**禁止**把 `已完成, 2025-10 - 2026-03`
@@ -157,6 +163,13 @@ alwaysApply: true
    icon-only `--toolbar-end` 冒充 ChatGPT。目录 sort/refresh/bulk-select 仍用
    `--toolbar-end` + Plus。对照 `#sandbox-navdrawer-session-chrome` /
    `#layouts-demo-navigation-drawer`。
+7b3a. **chat product / session host wrong tree** — chat / 会话历史类默认：
+   **`ClippedNavShell`** + 会话 `NavigationDrawer`（`NavigationDrawerNewChat`
+   + EmptyState|Items + footer 账号）+ 主列 **`FillColumn` → `Chat`**。
+   **新会话：** 问候 + soft starters + `ChatComposer` 放进 `ChatThread.empty`
+   居中堆栈（收起 dock 行）；有消息后 composer 贴在 `ChatThread` 下。扁平目的地
+   根仍用 `DestinationAppShell`。禁止 PageScroll 当 chat 主滚、composer 进
+   FillColumn `footer`、Chip starters。对照 `#layouts-demo-chat-product`。
 7b4. **PageScroll mid-scroll hard clip (no edge fade)** — 目的地目录只用
    keep-set **`PageScroll`**。**渐隐已封装在 core（≥ 0.5.247）** — 中段滚动
    自动 `data-fade-top` / `data-fade-bottom`（与侧栏同族），**消费仓零配置**
@@ -224,6 +237,10 @@ alwaysApply: true
 12. **FieldHint restates ToggleGroup / Tabs labels** — 禁止栏目 `FieldHint` /
     section lead 复述可见分段选项名（「A / B / C；三 Tab」）。控件已命名模式；
     TopAppBar `InfoHint` 可留短范围说明但勿列选项。对照 `#rhythm` Surface。
+12b. **section FieldHint restates TopAppBar InfoHint** — **严禁信息冗余（硬）：**
+    顶栏 `trailing` `InfoHint`（页面说明）已有分区 tip 时，**禁止**再在正文首行
+    用同源 / 改写 `FieldHint` 复述。分区说明只留顶栏「i」。对照
+    `#layouts-demo-shell`。
 13. **private labeled Button cluster gap** — 用公共 `.fynns-control-cluster`
     （labeled 间距 8dp），勿私有 4dp 克隆。
 14. **Select refresh crammed beside chevron** — Select + refresh →
@@ -460,6 +477,11 @@ alwaysApply: true
 
 主栏气泡列宽 / composer 布局权威：`llm/CHAT_COMPOSER_LAYOUT.md`。
 ARIA：`llm/CHAT_ARIA_PARITY.md`。优先 `ChatMessage markdown` / `ChatMarkdown`。
+**产品壳（chat / 会话历史默认）：** `ClippedNavShell` + 会话
+`NavigationDrawer`（`NavigationDrawerNewChat` …）+ `FillColumn` → `Chat`。
+对照 `#layouts-demo-chat-product`。扁平目的地根仍用 `DestinationAppShell`。
+**新会话 landing：** 问候 + soft starter + composer 同进 `ChatThread.empty`
+居中；有消息后 composer 改回 `ChatThread` 下 dock。
 空线程示例 prompt：在 `ChatThread.empty` 用满宽可点 `Surface`
 `variant="soft"` `padded` `interactive`（外缘 = `.fynns-chat-composer-shell`，留在
 `.fynns-chat-thread-inner` pad 内，勿负 margin 顶出对齐 form；内边距四边等距

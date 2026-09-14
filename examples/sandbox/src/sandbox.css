@@ -948,6 +948,53 @@
   min-width: 0;
 }
 
+/*
+ * New-chat landing (product chrome): collapse docked composer row — input
+ * lives in the empty stack with greeting + soft starter (ChatGPT rhythm).
+ */
+.sandbox-chat-product-stage .fynns-chat.sandbox-chat--landing {
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-areas: "thread";
+}
+
+.sandbox-chat-product-stage .fynns-chat.sandbox-chat--landing .fynns-chat-thread {
+  padding-bottom: var(--fynns-chat-thread-pad-block);
+}
+
+.sandbox-chat-product-stage
+  .fynns-chat-thread:has(
+    > .fynns-chat-thread-inner > .sandbox-chat-empty--landing
+  )
+  > .fynns-chat-thread-inner {
+  min-height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.sandbox-chat-empty--landing {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--fynns-layout-unit-stack-gap);
+  box-sizing: border-box;
+}
+
+.sandbox-chat-empty-composer {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.sandbox-chat-empty-composer > .fynns-chat-composer {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+  padding-inline: 0;
+  padding-block: 0;
+}
+
 .sandbox-chat-starters {
   /*
    * Stay inside `.fynns-chat-thread-inner` pad.
@@ -1607,6 +1654,43 @@
 .sandbox-globals-clipped-shell > .fynns-clipped-nav-shell {
   height: 100%;
   max-height: 100%;
+}
+
+/*
+ * Wide × tall stage for the chat product / session host composite
+ * (`#layouts-demo-chat-product`): drawer + FillColumn→Chat.
+ */
+.sandbox-chat-product-stage {
+  box-sizing: border-box;
+  width: min(100%, 56rem);
+  height: 36rem;
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  background: var(--fynns-color-app-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.sandbox-chat-product-stage > .fynns-clipped-nav-shell {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+.sandbox-chat-product-stage .fynns-destination-app-shell-canvas {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  height: 100%;
+}
+
+.sandbox-chat-product-stage .fynns-destination-app-shell-canvas > .fynns-fill-column {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 /*

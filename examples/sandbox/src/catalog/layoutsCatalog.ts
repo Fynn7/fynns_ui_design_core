@@ -49,6 +49,23 @@ export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
     ],
   },
   {
+    id: "chat-product",
+    label: "Chat product host",
+    keywords: [
+      "chat",
+      "会话",
+      "新会话",
+      "new chat",
+      "session",
+      "NavigationDrawerNewChat",
+      "FillColumn",
+      "composer",
+      "starters",
+      "chat product",
+      "产品壳",
+    ],
+  },
+  {
     id: "fill-column",
     label: "FillColumn",
     keywords: [

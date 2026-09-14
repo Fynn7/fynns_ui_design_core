@@ -69,7 +69,7 @@ const en = {
   "layouts.shellAsideBody":
     "Supporting pane content is caller-owned — tokens, forms, or docs — not tied to Chat. Toggle via TopAppBar trailing: width morph matches drawer flyout (`--fynns-duration-flyout`); `EndAsideMorphTrack` stays mounted (≥ 0.5.86). **Chrome toggles must not** remount the shell main into `BusyRegion` / workspace boot copy — keep provider fetch effects keyed on `applicationId` only (stable `onExit` ref).",
   "layouts.fillColumnHelp":
-    "FillColumn — fixed-height host: put Chat in children so the thread takes leftover height and the composer docks at the bottom. Optional header/footer stay content-sized when needed. Do not stack EmptyState / Composer as siblings of Chat (dead band). Aside bubble 100% still uses .fynns-chat-host--fill / EndAside.",
+    "FillColumn — fixed-height host: put Chat in children so the thread takes leftover height and the composer docks at the bottom. Empty thread = EmptyState + soft `Surface` `padded` `interactive` starters (same recipe as `#chat` / `#layouts-demo-chat-product`). Optional header/footer stay content-sized when needed. Do not stack EmptyState / Composer as siblings of Chat (dead band). Aside bubble 100% still uses .fynns-chat-host--fill / EndAside.",
   "layouts.fillColumnEmptyTitle": "No messages yet",
   "layouts.fillColumnEmptyBody":
     "Send a note below. The composer stays docked while the thread fills this column.",
@@ -92,6 +92,22 @@ const en = {
   "layouts.fillColumnPreviewChatLabel": "Sample chat below preview",
   "layouts.fillColumnPreviewHelp":
     "Destination canvas FillColumn — `header` = compact preview Card (never zero-margin edge-to-edge workflow shell). Core pads + caps `.fynns-fill-column-header` on `.fynns-destination-app-shell-canvas`. Long preview scrolls in header; `children` = Chat. Live stage uses `fynns-destination-app-shell-canvas` class.",
+  "layouts.chatProductTitle": "Sample chat",
+  "layouts.chatProductNavMode": "Show session drawer",
+  "layouts.chatProductSessionsEmpty": "No sessions in drawer",
+  "layouts.chatProductSessionsEmptyTitle": "No conversations",
+  "layouts.chatProductSessionsEmptyBody":
+    "Conversations appear here after you start. Tap New chat above.",
+  "layouts.chatProductAccountLabel": "Local user",
+  "layouts.chatProductSessionA": "Sample session A",
+  "layouts.chatProductSessionB": "Sample session B",
+  "layouts.chatProductChatLabel": "Sample chat thread",
+  "layouts.chatProductComposerPlaceholder": "Ask anything…",
+  "layouts.chatProductNewToast": "New chat landing",
+  "layouts.chatProductDeleteAllToast": "Cleared sample sessions",
+  "layouts.chatProductSettingsToast": "Settings (sample)",
+  "layouts.chatProductHelp":
+    "**Chat product / session host (default for chat-like UIs):** `ClippedNavShell` + session `NavigationDrawer` (`NavigationDrawerNewChat` full-width labeled New chat, **ghost / no border** ≥ 0.5.257; optional trailing More → Delete all `tone=\"danger\"`; empty list = `EmptyState` sm; row trailing prefer More; footer = account + settings) + main `FillColumn` → `Chat`. **New-chat landing:** omit TopAppBar; vertically centered greeting `EmptyState` + soft `Surface` `padded` `interactive` starters + `ChatComposer` **inside** `ChatThread.empty` (collapse docked composer row). Active thread: composer docks under `ChatThread` inside Chat — never FillColumn `footer`. Flat **destination** roots stay on `DestinationAppShell`; session-history chat / drill-in hand-compose this tree (CV-style `navKey` ok). Forbidden: Trash+Plus twin; Chip / revived ChatStarterPrompts; PageScroll as chat main scroll; composer outside Chat. Anatomy dual-host → Globals `#chat`.",
   "layouts.drillHelp":
     "Drill-in (ClippedNavShell): tap Catalog → pass `navKey` + `navDirection` so the drawer body Shared-Axis-X slides (short travel + fade; track width stays open — not close→swap→open); mode exit = TopAppBar back with `navDirection=\"back\"`. Do not hard-swap drawer content while open. Main stays full-width detail (EmptyState until a row is selected). Do not put list|detail in the main canvas with --fynns-layout-list-pane-width (legacy hub-split). Flat root-only apps stay on DestinationAppShell; any dynamic nav body uses ClippedNavShell + `navKey` + app state.",
   "layouts.drillNavAria": "Sample destinations",
@@ -1580,7 +1596,7 @@ const en = {
     "Drawer body Card + `.fynns-unit-stack` of stacked Collapsible shells (≥ **0.5.125**): nested unit-stack keeps `--fynns-layout-unit-stack-gap` (**16dp**) — core remaps **only** direct `.fynns-nav-drawer-body > .fynns-unit-stack` to `section-gap` (4dp) for mistaken destination lists. Live: `#sandbox-navdrawer-card-collapsible-stack` (fourth column).",
   "globals.shellPageHintAria": "Page help",
   "globals.shellPageHint":
-    "Sample destination help — put section copy on the TopAppBar InfoHint only; do not twin another section InfoHint in the mode drawer tools strip.",
+    "Sample destination help — put section copy on the TopAppBar InfoHint **once**; do **not** twin a page/section FieldHint (or section-lead) with the same tip (information redundancy — CONSUMER_TREATY section FieldHint restates TopAppBar InfoHint). Also do not twin another section InfoHint in the mode drawer tools strip.",
   "globals.shellTitle": "Clipped shell",
   "globals.shellNavAria": "Sample clipped destinations",
   "globals.shellNavMode": "Destinations open (off = hidden)",
@@ -1590,7 +1606,7 @@ const en = {
   "globals.shellNavLongLabel":
     "Archive and sync-failure retry queue with very long destination label for ellipsis",
   "globals.shellHelp":
-    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navFooter` (Cursor-style **single** account row: Avatar + optional label — soft end fade **only when truncated** (`data-fade`, ≥ 0.4.130); short names stay opaque + settings IconButton end — **no** hairline above the footer; toggle **Show account name** / **Use long account name** below; omit label → avatar/initial only with identity in Tooltip; not TopAppBar `trailing` for settings; **do not** also list Settings as a `NavigationDrawerItem`). **Omit `drawerHeadline` (hard):** TopAppBar `title` already names the app — do not paint `.fynns-nav-drawer-headline` under the bar; root destinations self-label via `NavigationDrawerItem`. **Settings body (hard):** software chrome only (locale / appearance / account) — click the footer gear in this sample. Feature / runtime / domain panels (providers, tools, catalogs) get their **own** destinations — never park them under Settings. This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Main canvas teaches **catalog ControlRow** as the first `PageScroll` child — its label midlines with the active `NavigationDrawerItem` (core ≥ 0.4.101 drops content-column pad-block-start to `--fynns-navdrawer-body-pad-block-start`). Internally uses ClippedNavShell — destinations are **binary**: labeled resizable `NavigationDrawer` or fully `hidden`. Crowding **closes** nav — never densify to an unlabeled icon-only `NavigationRail`. Standalone Rail demos on this page are intentional phone parts only. Live on sandbox Layout templates (this page).",
+    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navFooter` (Cursor-style **single** account row: Avatar + optional label — soft end fade **only when truncated** (`data-fade`, ≥ 0.4.130); short names stay opaque + settings IconButton end — **no** hairline above the footer; toggle **Show account name** / **Use long account name** below; omit label → avatar/initial only with identity in Tooltip; not TopAppBar `trailing` for settings; **do not** also list Settings as a `NavigationDrawerItem`). **Section help (hard ≥ 0.5.262):** TopAppBar `trailing` `InfoHint` only — never twin a page/section `FieldHint` with the same tip. **Omit `drawerHeadline` (hard):** TopAppBar `title` already names the app — do not paint `.fynns-nav-drawer-headline` under the bar; root destinations self-label via `NavigationDrawerItem`. **Settings body (hard):** software chrome only (locale / appearance / account) — click the footer gear in this sample. Feature / runtime / domain panels (providers, tools, catalogs) get their **own** destinations — never park them under Settings. This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Main canvas teaches **catalog ControlRow** as the first `PageScroll` child — its label midlines with the active `NavigationDrawerItem` (core ≥ 0.4.101 drops content-column pad-block-start to `--fynns-navdrawer-body-pad-block-start`). Internally uses ClippedNavShell — destinations are **binary**: labeled resizable `NavigationDrawer` or fully `hidden`. Crowding **closes** nav — never densify to an unlabeled icon-only `NavigationRail`. Standalone Rail demos on this page are intentional phone parts only. Live on sandbox Layout templates (this page).",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -2127,21 +2143,21 @@ const en = {
   "globals.cardModeBodyHelp":
     "Labeled mode ToggleGroup lives in the Card body (ControlRow), not in actions. CatalogMorph / mode-sidebar detail: Card actions IconButtons are size=sm (32dp) to match drawer toolbar-end — never default md (40dp) beside sm mode tools.",
   "globals.cardBody": "Card shares Collapsible chrome (border, radius-md, surface-1). Header is static — no hover layer, no chevron.",
-  "globals.cardChromePlainTitle": "chrome=\"plain\" · nest-gap siblings",
+  "globals.cardChromePlainTitle": "Plain chrome nest-gap siblings",
   "globals.cardChromePlainBody": "Child Surface owns the well.",
   "globals.cardChromePlainNote":
     "Prose sibling — same nest-gap as the Surface above (pad + sibling gap).",
   "globals.cardChromeHelp":
-    "Default chrome=\"card\". Header actions = interactive chrome only (IconButton / Button / **at most one** InfoHint — one nowrap strip; nested control-clusters hug). **Draft discard/save** IconButtons belong in Card `actions` of the editable subject Card (live `#sandbox-card-draft-actions`) — never a lone end-align strip outside any Card. **Do not** put `ToggleGroup` in actions — body `ControlRow` (live mode-in-body sample). Lead yields under dense IconButton strips (≥ 0.5.57). InfoHint content = short tip (≈1–2 sentences); never twin head “i” icons or essay bubbles — longer include/exclude → body FieldHint / InlineAlert. Never put path / branch / mono meta in actions — body first. Use chrome=\"plain\" when nesting surface wells / mixed body children: outer Card stays the main shell; body uses `--fynns-layout-nest-gap` for inset and sibling spacing — no split chips, no flush / negative-margin cancel.",
+    "Default chrome=\"card\". Header actions = interactive chrome only (IconButton / Button / **at most one** InfoHint — one nowrap strip; nested control-clusters hug). **Draft discard/save** IconButtons belong in Card `actions` of the editable subject Card (live `#sandbox-card-draft-actions`) — never a lone end-align strip outside any Card. **Do not** put `ToggleGroup` in actions — body `ControlRow` (live mode-in-body sample). Lead yields under dense IconButton strips (≥ 0.5.57). InfoHint content = short tip (≈1–2 sentences); never twin head “i” icons or essay bubbles — longer include/exclude → body FieldHint / InlineAlert. Never put path / branch / mono meta in actions — body first. **Never** glue counts / tokens into `title` with middle-dot `·` (`Messages · 2`) — short natural name + body `.fynns-table-meta` (live meta-in-body sample). Use chrome=\"plain\" when nesting surface wells / mixed body children: outer Card stays the main shell; body uses `--fynns-layout-nest-gap` for inset and sibling spacing — no split chips, no flush / negative-margin cancel.",
   "globals.cardMetaBodyTitle": "sample-repo status",
   "globals.cardMetaBodyCount": "8 catalog entries",
   "globals.cardMetaBodyBranch": "default branch: main",
   "globals.cardMetaBodyHelp":
-    "Counts / branch / path meta belong in the Card body (`.fynns-table-meta` / mono). `title` = short section name only — never wrap name + count in a title `fynns-control-cluster` (reads as glued `OpenSpec8`). Leave actions empty unless there is an IconButton / InfoHint strip.",
+    "Counts / branch / path / token meta belong in the Card body (`.fynns-table-meta` / mono). `title` = short natural-language section name only — never glue with middle-dot `·` (`System prompt · 14,279 chars`, `Messages · 2`) and never wrap name + count in a title `fynns-control-cluster` (reads as glued `OpenSpec8`). Leave actions empty unless there is an IconButton / InfoHint strip.",
   "globals.collapsible": "Fold section sample",
   "globals.collapsibleHelp":
     "Collapsible headers use `radius-md`. Optional `icon` rests in the chevron slot and swaps to the expand chevron on header hover (Preview → Collapsible). `actions` stay trailing. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border. Nesting body children → `chrome=\"plain\"` + nest-gap (Preview toggle).",
-  "globals.collapsibleChromePlainTitle": "chrome=\"plain\" · nest-gap siblings",
+  "globals.collapsibleChromePlainTitle": "Plain chrome nest-gap siblings",
   "globals.collapsibleChromePlainNote":
     "Prose sibling after two CodeBlocks — `--fynns-layout-nest-gap` spaces every body child the same (wells or plain text).",
   "globals.collapsibleChromeHelp":
@@ -2477,7 +2493,7 @@ const zh: Record<MessageKey, string> = {
   "layouts.shellAsideBody":
     "侧栏内容由调用方决定 — token、表单或文档均可，不绑定 Chat。用顶栏 trailing 切换：宽度 morph 与抽屉 flyout 同节奏（`--fynns-duration-flyout`）；`EndAsideMorphTrack` 保持挂载（≥ 0.5.86）。**禁止**因切换侧栏把主画布 remount 成 `BusyRegion` /「正在加载工作区」— 管线 Provider 的 fetch 只应依赖 `applicationId`（`onExit` 用稳定 ref）。",
   "layouts.fillColumnHelp":
-    "FillColumn — 已定高宿主：Chat 放在 children，thread 吃剩余高度、composer 贴底。需要时再用可选 header/footer（内容定高）。禁止把 EmptyState / Composer 当 Chat 兄弟堆叠（会留下空白带）。aside 气泡 100% 仍用 .fynns-chat-host--fill / EndAside。",
+    "FillColumn — 已定高宿主：Chat 放在 children，thread 吃剩余高度、composer 贴底。空线程 = EmptyState + soft `Surface` `padded` `interactive` starters（同 `#chat` / `#layouts-demo-chat-product`）。需要时再用可选 header/footer（内容定高）。禁止把 EmptyState / Composer 当 Chat 兄弟堆叠（会留下空白带）。aside 气泡 100% 仍用 .fynns-chat-host--fill / EndAside。",
   "layouts.fillColumnEmptyTitle": "暂无消息",
   "layouts.fillColumnEmptyBody":
     "在下方发送一条笔记。composer 贴底，thread 填满本列剩余高度。",
@@ -2499,6 +2515,22 @@ const zh: Record<MessageKey, string> = {
   "layouts.fillColumnPreviewChatLabel": "预览下方的示例对话",
   "layouts.fillColumnPreviewHelp":
     "Destination 画布 FillColumn — `header` = 紧凑预览 Card（禁止零边距铺满 workflow 壳）。Core 在 `.fynns-destination-app-shell-canvas` 上为 `.fynns-fill-column-header` 加 inset + 上限；长预览在 header 内滚；`children` = Chat。舞台带 `fynns-destination-app-shell-canvas` 类。",
+  "layouts.chatProductTitle": "示例对话",
+  "layouts.chatProductNavMode": "显示会话抽屉",
+  "layouts.chatProductSessionsEmpty": "侧栏无会话",
+  "layouts.chatProductSessionsEmptyTitle": "暂无会话",
+  "layouts.chatProductSessionsEmptyBody":
+    "开始后对话会出现在这里。点上方「新会话」即可。",
+  "layouts.chatProductAccountLabel": "本地用户",
+  "layouts.chatProductSessionA": "示例会话 A",
+  "layouts.chatProductSessionB": "示例会话 B",
+  "layouts.chatProductChatLabel": "示例对话线程",
+  "layouts.chatProductComposerPlaceholder": "有问题，随便问…",
+  "layouts.chatProductNewToast": "已回到新会话空态",
+  "layouts.chatProductDeleteAllToast": "已清空示例会话",
+  "layouts.chatProductSettingsToast": "设置（示例）",
+  "layouts.chatProductHelp":
+    "**Chat 产品 / 会话宿主（chat 类默认）：** `ClippedNavShell` + 会话 `NavigationDrawer`（`NavigationDrawerNewChat` 满宽带文案新建，**ghost 无描边** ≥ 0.5.257；可选 trailing More → 全部删除 `tone=\"danger\"`；空列表 = `EmptyState` sm；行尾优先 More；footer = 账号 + 设置）+ 主列 `FillColumn` → `Chat`。**新会话空态：** 省略 TopAppBar；垂直居中问候 `EmptyState` + soft `Surface` `padded` `interactive` starters + `ChatComposer` 放进 `ChatThread.empty`（收起底部 dock 行）。有消息线程：composer 贴在 `ChatThread` 下、仍在 Chat 内 — 勿放进 FillColumn `footer`。扁平**目的地**根仍用 `DestinationAppShell`；会话历史 chat / 钻入手组本树（可用 CV 式 `navKey`）。禁止：Trash+Plus 双盘；Chip / 复活 ChatStarterPrompts；用 PageScroll 当 chat 主滚；composer 落在 Chat 外。主/侧气泡解剖 → Globals `#chat`。",
   "layouts.drillHelp":
     "钻入导航（ClippedNavShell）：点 Catalog → 传 `navKey` + `navDirection`，侧栏 body 做 Shared Axis X（短位移 + 淡入淡出；轨宽保持打开 — 禁止关轨再开）；退出模式 = TopAppBar 返回 + `navDirection=\"back\"` — 禁止塞进 NavigationDrawer.headline。禁止在打开态硬切侧栏内容。主区始终全宽详情（未选时 EmptyState）。禁止在主画布用 --fynns-layout-list-pane-width 做 list|detail（旧 hub-split）。仅扁平根目的地用 DestinationAppShell；任何动态侧栏内容用手拼 ClippedNavShell + `navKey` + 应用状态。",
   "layouts.drillNavAria": "示例目的地",
@@ -3968,7 +4000,7 @@ const zh: Record<MessageKey, string> = {
     "Drawer body 内 Card + `.fynns-unit-stack` 堆叠 Collapsible（≥ **0.5.125**）：嵌套 unit-stack 保持 `--fynns-layout-unit-stack-gap`（**16dp**）— core **仅**把直接子级 `.fynns-nav-drawer-body > .fynns-unit-stack` 重映射为 `section-gap`（4dp），避免误包目的地列表。样例：`#sandbox-navdrawer-card-collapsible-stack`（第四列）。",
   "globals.shellPageHintAria": "页面说明",
   "globals.shellPageHint":
-    "示例目的地说明 — 分区帮助只放在 TopAppBar 的 InfoHint；不要在模式侧栏工具条再放一个分区 InfoHint。",
+    "示例目的地说明 — 分区帮助只放 TopAppBar InfoHint **一次**；**禁止**再在正文首行用同源 / 改写 FieldHint 复述（信息冗余 — CONSUMER_TREATY section FieldHint restates TopAppBar InfoHint）。也不要在模式侧栏工具条再放一个分区 InfoHint。",
   "globals.shellTitle": "裁切壳",
   "globals.shellNavAria": "裁切壳示例目的地",
   "globals.shellNavMode": "打开目的地（关 = 完全收起）",
@@ -3978,7 +4010,7 @@ const zh: Record<MessageKey, string> = {
   "globals.shellNavLongLabel":
     "归档与同步失败的重试队列以及故意超长的目的地标签用来验证省略号截断",
   "globals.shellHelp":
-    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` IconButton、可选 `navFooter`（Cursor 式**单**账户行：Avatar + 可选**渐隐**标签 + 右端设置齿轮 — footer **无**顶部分隔线；下方 Switch 切换「显示账户名」；省略标签时仅头像/首字母，身份放 Tooltip；不要把设置塞进 TopAppBar `trailing`；**也不要**再把「设置」做成 `NavigationDrawerItem`）。**省略 `drawerHeadline`（硬）：** TopAppBar `title` 已命名应用 — 禁止在栏下再画 `.fynns-nav-drawer-headline` 灰标题带；根目的地靠 `NavigationDrawerItem` `label` 自解释。**设置正文（硬）：** 只放软件壳层偏好（语言 / 外观 / 账户）— 点本样例底栏齿轮进入。功能 / 运行时 / 领域面板（后端、工具、目录）用**独立目的地**，禁止堆进设置。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。主画布以 **catalog ControlRow** 作为 `PageScroll` 首子 — 其标签与活跃 `NavigationDrawerItem` 中线对齐（core ≥ 0.4.101 把 content-column pad-block-start 降到 `--fynns-navdrawer-body-pad-block-start`）。内部是 ClippedNavShell — 目的地**二态**：全宽可调 `NavigationDrawer` 或完全 `hidden`。拥挤时**收起**侧栏 — 禁止 densify 成仅 icon 的 unlabeled `NavigationRail`。本页独立 Rail 样例仅作有意的手机零件。样例在 sandbox 布局模板（本页）首屏。",
+    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` IconButton、可选 `navFooter`（Cursor 式**单**账户行：Avatar + 可选**渐隐**标签 + 右端设置齿轮 — footer **无**顶部分隔线；下方 Switch 切换「显示账户名」；省略标签时仅头像/首字母，身份放 Tooltip；不要把设置塞进 TopAppBar `trailing`；**也不要**再把「设置」做成 `NavigationDrawerItem`）。**分区说明（硬 ≥ 0.5.262）：** 只留 TopAppBar `trailing` `InfoHint` — **禁止**再在正文首行用同源 FieldHint 复述。**省略 `drawerHeadline`（硬）：** TopAppBar `title` 已命名应用 — 禁止在栏下再画 `.fynns-nav-drawer-headline` 灰标题带；根目的地靠 `NavigationDrawerItem` `label` 自解释。**设置正文（硬）：** 只放软件壳层偏好（语言 / 外观 / 账户）— 点本样例底栏齿轮进入。功能 / 运行时 / 领域面板（后端、工具、目录）用**独立目的地**，禁止堆进设置。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。主画布以 **catalog ControlRow** 作为 `PageScroll` 首子 — 其标签与活跃 `NavigationDrawerItem` 中线对齐（core ≥ 0.4.101 把 content-column pad-block-start 降到 `--fynns-navdrawer-body-pad-block-start`）。内部是 ClippedNavShell — 目的地**二态**：全宽可调 `NavigationDrawer` 或完全 `hidden`。拥挤时**收起**侧栏 — 禁止 densify 成仅 icon 的 unlabeled `NavigationRail`。本页独立 Rail 样例仅作有意的手机零件。样例在 sandbox 布局模板（本页）首屏。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",
@@ -4501,21 +4533,21 @@ const zh: Record<MessageKey, string> = {
   "globals.cardModeBodyHelp":
     "带文案的模式 ToggleGroup 放在 Card 正文（ControlRow），不要进 actions。CatalogMorph / mode 详情：Card actions IconButton 一律 size=sm（32dp），与抽屉 toolbar-end 对齐 — 禁止在 sm 模式工具旁用默认 md（40dp）。",
   "globals.cardBody": "Card 与 Collapsible 同壳（描边、radius-md、surface-1）。标题栏静态 — 无悬停层、无 chevron。",
-  "globals.cardChromePlainTitle": "chrome=\"plain\" · nest-gap 兄弟",
+  "globals.cardChromePlainTitle": "Plain chrome nest-gap 兄弟",
   "globals.cardChromePlainBody": "子级 Surface 自带井面。",
   "globals.cardChromePlainNote":
     "散文兄弟节点 — 与上方 Surface 同用 nest-gap（外边距 + 兄弟间距）。",
   "globals.cardChromeHelp":
-    "默认 chrome=\"card\"。标题栏 actions = **仅交互 chrome**（IconButton / Button / **最多一个** InfoHint — 一条 nowrap 横向带；嵌套 control-cluster 会 hug）。**草稿撤回/保存** IconButton 放在可编辑主体 Card 的 `actions`（对照 `#sandbox-card-draft-actions`）— 禁止在任何 Card 外单独挂 end-align 条。禁止把 `ToggleGroup` 塞进 actions — 正文 `ControlRow`（对照正文模式样例）。Lead 在密集 IconButton 条下会让位（≥ 0.5.57）。InfoHint content = 短 tip（约 1–2 句）；禁止双「i」并排或气泡百科段 — 长纳入/排除改放正文 FieldHint / InlineAlert。禁止把路径 / 分支 / mono 元数据塞进 actions — 放正文。嵌套表面井 / 混合正文子节点时用 chrome=\"plain\"：外层 Card 仍是主壳，正文用 `--fynns-layout-nest-gap` 做缩进与兄弟间距 — 禁止拆成两个芯片，禁止贴边 / 负 margin 冲掉 nest-gap。",
+    "默认 chrome=\"card\"。标题栏 actions = **仅交互 chrome**（IconButton / Button / **最多一个** InfoHint — 一条 nowrap 横向带；嵌套 control-cluster 会 hug）。**草稿撤回/保存** IconButton 放在可编辑主体 Card 的 `actions`（对照 `#sandbox-card-draft-actions`）— 禁止在任何 Card 外单独挂 end-align 条。禁止把 `ToggleGroup` 塞进 actions — 正文 `ControlRow`（对照正文模式样例）。Lead 在密集 IconButton 条下会让位（≥ 0.5.57）。InfoHint content = 短 tip（约 1–2 句）；禁止双「i」并排或气泡百科段 — 长纳入/排除改放正文 FieldHint / InlineAlert。禁止把路径 / 分支 / mono 元数据塞进 actions — 放正文。**禁止**用中间点 `·` 把计数 / token 粘进 `title`（`消息 · 2`）— 短自然语言名 + 正文 `.fynns-table-meta`（对照下方 meta-in-body 样例）。嵌套表面井 / 混合正文子节点时用 chrome=\"plain\"：外层 Card 仍是主壳，正文用 `--fynns-layout-nest-gap` 做缩进与兄弟间距 — 禁止拆成两个芯片，禁止贴边 / 负 margin 冲掉 nest-gap。",
   "globals.cardMetaBodyTitle": "示例仓库状态",
   "globals.cardMetaBodyCount": "8 条目录条目",
   "globals.cardMetaBodyBranch": "默认分支：main",
   "globals.cardMetaBodyHelp":
-    "计数 / 分支 / 路径元数据放 Card 正文（`.fynns-table-meta` / mono）。`title` 只要短分区名 — 禁止用 title 内 `fynns-control-cluster` 包「名 + 计数」（会读成粘连的 `OpenSpec8`）。没有 IconButton / InfoHint 就不要写 actions。",
+    "计数 / 分支 / 路径 / token 元数据放 Card 正文（`.fynns-table-meta` / mono）。`title` = 人会说的短分区名 — 禁止中间点粘合（`系统提示 · 14,279 字`、`消息 · 2`），也禁止用 title 内 `fynns-control-cluster` 包「名 + 计数」（会读成粘连的 `OpenSpec8`）。没有 IconButton / InfoHint 就不要写 actions。",
   "globals.collapsible": "折叠分区示例",
   "globals.collapsibleHelp":
     "折叠分区标题栏使用 `radius-md`。可选 `icon` 占 chevron 位，悬停标题栏时换成展开箭头（预览 → Collapsible）。`actions` 仍在右侧。展开时标题下为通栏 hairline；焦点边框与 Input 相同的淡青绿。嵌套正文子节点 → `chrome=\"plain\"` + nest-gap（Preview 可切换）。",
-  "globals.collapsibleChromePlainTitle": "chrome=\"plain\" · nest-gap 兄弟",
+  "globals.collapsibleChromePlainTitle": "Plain chrome nest-gap 兄弟",
   "globals.collapsibleChromePlainNote":
     "两个 CodeBlock 后的说明 — `--fynns-layout-nest-gap` 对每个正文子节点间距相同（井面或纯文本）。",
   "globals.collapsibleChromeHelp":

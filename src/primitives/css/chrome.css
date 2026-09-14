@@ -4000,6 +4000,11 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   color: var(--fynns-color-text);
 }
 
+/* No topBar: body is the only direct child — fill the shell (new-chat landing). */
+.fynns-clipped-nav-shell:has(> .fynns-clipped-nav-shell-body:first-child) {
+  grid-template-rows: minmax(0, 1fr);
+}
+
 /* Prefer clipped chrome: surface-1 + hairline under the bar (no crosshair).
  * Keep radius 0 / no side borders — bar stays flush with the viewport top. */
 .fynns-clipped-nav-shell > .fynns-top-app-bar {
