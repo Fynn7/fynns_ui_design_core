@@ -23,9 +23,7 @@ GitHub Packages login. Helper:
 day-to-day consume. Publish / optional Packages bumps:
 [`docs/package-propagation.md`](package-propagation.md).
 **Public API purge / migration:** [`llm/BREAKING_PURGE.md`](../llm/BREAKING_PURGE.md).
-**Short prompts:** still start from `llm/CONSUME.md` (OpenCode rule template:
-[`llm/opencode-fynns-ui-consume.md`](../llm/opencode-fynns-ui-consume.md)) — do not
-expect a long task brief.
+**Short prompts:** still start from `llm/CONSUME.md` (install + greenfield skeleton) and look props up with `node scripts/api.mjs <Name>` — do not expect a long task brief.
 
 ## Directory
 
@@ -64,13 +62,3 @@ expect a long task brief.
 | Flush-start overlay | `#fullscreen-flush` |
 | Split / Tree / Chart / Table | `#split-pane`, `#tree`, `#chart`, `#table` |
 | Icons | `#icons` |
-
-<!-- OPENWIKI:START -->
-
-## OpenWiki
-
-This repository uses OpenWiki for agent-facing docs under `openwiki/`. Start with [`openwiki/quickstart.md`](../openwiki/quickstart.md), then architecture / workflows / consume.
-
-Local updates: **Agents Hub → OpenWiki** (thin wrap: `openwiki code --update --print` + Cursor Agent CLI `auto` via `cursor-api-proxy`). Brief: [`openwiki/INSTRUCTIONS.md`](../openwiki/INSTRUCTIONS.md). Prefer updating source + regenerating over rewriting seeds unless fixing a seed; authority specs stay in [`docs/design-system/`](design-system/) and `llm/`.
-
-<!-- OPENWIKI:END -->

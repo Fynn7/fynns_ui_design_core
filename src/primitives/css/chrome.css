@@ -4316,15 +4316,20 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 /*
  * FillColumn on the destination canvas: preview `header` keeps dialog-inset
  * breath (never edge-to-edge Card chrome) and caps tall workflow Cards so
- * `main` (Chat / BusyRegion fill) stays visible. PageScroll in `header` owns
- * inline breath via `.fynns-content-column` — do not double pad inline.
+ * `main` (Chat / BusyRegion fill) stays visible. Soft edge fade on this host
+ * is built-in (≥ **0.5.278** — `data-fade-top` / `data-fade-bottom`). PageScroll
+ * in `header` owns inline breath via `.fynns-content-column` — do not double
+ * pad inline.
  */
 .fynns-destination-app-shell-canvas > .fynns-fill-column {
   gap: var(--fynns-layout-unit-stack-gap);
 }
 
 .fynns-destination-app-shell-canvas > .fynns-fill-column > .fynns-fill-column-header {
-  flex: 0 1 auto;
+  /* Content-sized; do not flex-shrink under Chat pressure (that forced a
+   * nested scrollbar on short guide / answer Surfaces). Cap + scroll only
+   * when the band exceeds --fynns-layout-fill-column-header-max-height. */
+  flex: 0 0 auto;
   min-height: 0;
   max-height: var(--fynns-layout-fill-column-header-max-height);
   overflow-x: clip;

@@ -1,348 +1,222 @@
-# LLM / agent: consume `@fynns/ui` (zero-token sibling)
+# Consume `@fynns/ui` — install + greenfield skeleton
 
-**Single source of truth for *installing* this design system into any app repo.**  
-Design language & component catalog remain in [`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md).  
-Machine contract: [`consume.json`](consume.json).  
-**Consumer-agent doc + custom-highlight map:** [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) / [`agent-interfaces.json`](agent-interfaces.json).  
-**Publish / version bumps:** [`docs/package-propagation.md`](../docs/package-propagation.md).
+**Single source of truth for installing this design system into any app** and
+for starting a new app with it. Design rules live in
+[`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md) (index) — do not restate
+them here. Machine twin of the install contract: [`consume.json`](consume.json).
 
-**Short user prompts:** humans often say only “use `@fynns/ui` / build a Collapsible page”. Treat this file as mandatory before writing UI code — do **not** wait for a long task doc.
+Short user prompts (“build X with @fynns/ui”) still mean: read **this file**
+first, then look props up with `node scripts/api.mjs <Name>` (never read whole
+source files).
 
-**Pasteable consumer treaty** (drop into any app’s `.cursor/rules/` so agents
-obey without opening this file): pasteable rule
-[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) + slug index
-[`CONSUMER_TREATY.md`](CONSUMER_TREATY.md). **Default app chrome:**
-`DestinationAppShell` (sandbox Layout templates). If composing
-`ClippedNavShell` slots: `navMode` must stay in sync with Drawer vs Rail
-children (never a rail-width track hosting a labeled drawer); `nav` =
-destinations only (never wiki / page body / Chat). “Clipped” = M3 chrome
-topology, not text clipping — see [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md)
-index slugs **squashed drawer** + **wrong shell slot**.
+## 1. Quickstart (zero-token sibling, ~2 min)
 
-## Hard rules
-
-1. **Zero-token day-to-day (default)** — this git repo is **public**. Consumers
-   depend on **`@fynn7/ui-design-core`** via a **sibling checkout**
-   `../fynns_ui_design_core` + `file:` link (Vite/tsconfig alias
-   **`@fynns/ui`** → `node_modules/@fynn7/ui-design-core/src/index.ts`).
-   **No** `NODE_AUTH_TOKEN` / `GITHUB_TOKEN` / `gh` packages login for clone →
-   `npm install` → `npm run dev`. Auto-clone the sibling on first setup/dev
-   (reference: CV Generator `scripts/ensure-node.mjs`; core helper
-   `scripts/ensure-sibling-ui-core.mjs`). Do **not** use a git submodule.
-   Do **not** commit
-   `//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}` in consumer `.npmrc`
-   (empty expansion → E401). Prefer a safe `.npmrc` that keeps `@fynn7` off
-   GitHub Packages while on sibling (`@fynn7:registry=https://registry.npmjs.org`).
-2. **Do** add `@fynn7/ui-design-core` to consumer `package.json` `dependencies`
-   (usually `file:../../fynns_ui_design_core` or absolute `file:` URL after
-   ensure). Do **not** depend on obsolete registry names `@fynns/ui` /
-   `@fynns/ui-design-core` (not the published package id).
-3. Alias name is **`@fynns/ui`** →
-   `node_modules/@fynn7/ui-design-core/src/index.ts` (Vite `resolve.alias` +
-   tsconfig `paths`). App code keeps `import { … } from "@fynns/ui"`.
-4. Vite must **`dedupe: ["react", "react-dom"]`**.
-5. Do not edit `node_modules/@fynn7/ui-design-core` for consumer features —
-   change this core repo, then refresh the sibling (`git pull` / ensure script)
-   or bump. Authority:
-   [`docs/package-propagation.md`](../docs/package-propagation.md).
-   **Do** use sibling `file:` for day-to-day. Do **not** point *only* the Vite
-   alias at a sibling while `package.json` still resolves a registry tarball
-   (inconsistent / looks like rollback). Optional GitHub Packages
-   (`npm.pkg.github.com`) is for **publishers / bump workflows only** and still
-   needs a packages token — never require it for “anyone clones the consumer”.
-5a. **Install freshness (mandatory before UI work):** ensure sibling exists and
-    `file:` links; run
-    `node scripts/ensure-sibling-ui-core.mjs --target <CONSUMER_ROOT> --install --npmrc --update`
-    and/or `npm run consume:check -- --target <CONSUMER_ROOT>`. Fails when the
-    dependency / alias is missing, or a legacy submodule tree remains.
-    Re-paste [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) after
-    treaty updates (installer does not overwrite an existing rule file).
-5b. **Sibling auto-sync + export hard gate (mandatory):** `consume:install`
-    wires `fynns-ui:gate` (`ensure-sibling --update` then
-    `check-ui-exports`) into consumer `predev` / `prebuild` / `prepreview` /
-    `postinstall`. Clean sibling worktrees **fast-forward** to
-    `origin/dev` (or `FYNNS_UI_CORE_REF`) via `git fetch` +
-    `git merge --ff-only` (or, when FF is impossible and remote
-    `package.json` semver is **≥** local — stale shallow / diverged
-    consumer tips — `git reset --hard FETCH_HEAD`)
-    so new barrel symbols (icons, etc.)
-    land before Vite starts — prevents blank-page
-    `does not provide an export named …`. **Pure-ahead** tip (origin is
-    ancestor of HEAD) / local-semver-newer diverged tip → **soft-skip** with a
-    loud bilingual notice that includes the disposable `reset --hard FETCH_HEAD`
-    recovery. Equal-semver diverged tips used to soft-skip forever (colleague
-    dead loop); they now reset to origin. **Dirty** (*tracked* changes vs HEAD
-    in the sibling only — untracked `.tmp-*` ignored) → soft-skip with
-    commit/stash/discard guidance (**not** `reset --hard`; committing the
-    consumer never clears sibling dirt). Dev continues; export check still
-    hard-fails on missing symbols. CI: `FYNNS_UI_STRICT_SIBLING_SYNC=1`
-    restores hard-fail on dirty/ahead/diverged. Optional: `FYNNS_UI_SKIP_SIBLING_SYNC=1`
-    while editing core. Optional floor: consumer `package.json`
-    `"fynnsUi": { "minVersion": "0.5.x" }` / `--min-version` — **not** a
-    substitute for the export scan. Soft registry notice remains
-    `fynns-ui:check-update` (`FYNNS_UI_SKIP_UPDATE_CHECK=1`).
-    **Bootstrap note:** if a colleague’s sibling tip is older than the
-    `--update` / `check-ui-exports` scripts, consumer wrappers
-    (CV / agents-hub `scripts/fynns-ui-gate.mjs`) fall back to local
-    `fetch`+ff/`reset` once, then re-run the gate — do not leave
-    `predev` calling only an ancient ensure-sibling with unknown flags.
-6. **TypeScript:** consumer `compilerOptions.target` and `lib` must be **ES2022** (or later).
-7. **Do not** import deleted symbols — [`BREAKING_PURGE.md`](BREAKING_PURGE.md).
-   Transient feedback: `snackbar` + `SnackbarHost`. Modals: `Dialog` /
-   `ConfirmDialog` / `Drawer`.
-8. **Entry:** `createRoot(...).render(<App />)` — CSS-only main is a fail.
-9. **No fakes:** no hand-rolled Collapsible; no `@radix-ui/*` / `sonner`. Nest
-   surface children with `chrome="plain"` / `.fynns-nest`.
-9a. **CodeBlock** titled `default` requires non-empty `label`; else `variant="plain"`.
-9b. **CodeBlock `language`:** always pass matching `language` / profile — `label` is not a detector.
-9c. **CodeBlock headless copy:** core reserves an end column (`--copy-float`) so
-    glyphs never sit under Copy. Do **not** pad `.fynns-code-block-pre` in the app.
-9d. **Suffixed file bodies:** any real extension other than `.txt` / `.text`
-    (`.md`, `.xml`, `.py`, `.ts`, `.json`, …) → **`CodeBlock`**, not `Textarea`.
-    Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK).
-    Card host → `chrome="plain"`; **default autoGrow** on PageScroll / Card /
-    Dialog (page scrolls). `autoGrow={false}` **only** for height-resolved
-    fill hosts (FullscreenDialog fill, SplitPane, `textarea { height: 100% }`).
-    Authority: [`AGENTS.md`](../AGENTS.md) Content density +
-    [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md).
-10. **API-only:** props/children/labels only; never restyle `.fynns-*`. Missing
-    capability → implement in this core first. Chat radius floor ≥ `--fynns-radius-22`;
-    fonts: body `ui`, code `mono`, never serif for main prose.
-10a. Prefer `ChatMessage markdown` / `ChatMarkdown` for LLM turns.
-11. **CSS for tsc:** `vite-env.d.ts` with `vite/client` when needed.
-12. **Preview pages:** mirror sandbox `*PreviewCanvas`.
-13. **Performance:** read [`PERF.md`](PERF.md) for shells / inspectors / catalogs.
-14. **Default chrome:** `DestinationAppShell`. ClippedNavShell slot sync — see
-    [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md). Main Preview+Chat → `FillColumn`.
-    Catalog in that band → `.fynns-unit-stack` + `fynns-scroll`; default
-    `Surface` is content-sized (`fill` only for stretching wells).
-15. **WYSIWYG:** sandbox resting look = consumer default; `check:wysiwyg`.
-16. **Loading placement:** pane cold-start → `BusyRegion` `fill` as
-    **`FillColumn` children** / shell main **or** PageScroll →
-    `.fynns-content-column` (core ≥ **0.5.136** fills the scrollport + passes
-    thin section wrappers so BusyStack centers) — **not** nested under App-level
-    `.fynns-unit-stack` / `Card` / `List` / Dialog body without height.
-    Dialog / Card / section **body** load → `BusyRegion` (+ `fill` only when
-    height-resolved) — **not** bare default-`md` `CircularProgress` as the
-    body. Do **not** use `EmptyState` + `CircularProgress` (content-sized →
-    ring stuck at the top). Known % / counts → `indicator="linear"` + `value`;
-    `message` is copy only (never nest a bar or ring). Full-app block →
-    `BusyScrim`. Inline widget busy → `CircularProgress` `sm` only.
-    Authority: [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**.
-    Live: sandbox `#busy-region` / `#sandbox-busy-region-page-scroll-fill`.
-    Index: [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md)
-    **BusyRegion fill nested in unit-stack / Card** /
-    **BusyRegion fill BusyStack top overflow in PageScroll**.
-
-## Agent checklist (greenfield / short prompt)
-
-1. Read this file + `consume.json`.
-2. **No packages token.** Ensure sibling `../fynns_ui_design_core` (public HTTPS
-   clone) + safe `.npmrc` (no `_authToken=${NODE_AUTH_TOKEN}`).
-3. `node scripts/ensure-sibling-ui-core.mjs --target <CONSUMER_ROOT> --install --npmrc`
-   (or wire the same into consumer `setup` / first `dev`).
-4. `npm run consume:check -- --target <CONSUMER_ROOT>` until exit 0; remove leftover submodule trees.
-5. Scaffold React + Vite + TS; `lib`/`target` ES2022+.
-6. Default chrome: `DestinationAppShell` unless the user names another template.
-7. Playground / inspector / shell → [`PERF.md`](PERF.md).
-8. `npm install` → `npm run build` exit 0.
-
-## One-shot install (zero-token)
+Day-to-day consume = public sibling checkout `../fynns_ui_design_core` +
+`file:` dependency. **No** `NODE_AUTH_TOKEN`, no GitHub Packages login, no git
+submodule.
 
 ```bash
-# from a core checkout (or after cloning core anywhere)
-node scripts/ensure-sibling-ui-core.mjs --target ../my-app --install --npmrc --json
-npm run consume:install -- --target ../my-app --sibling --json   # wire alias + rule
-npm run consume:check -- --target ../my-app --json
+# 1. new app (skip if it exists)
+npm create vite@latest my-app -- --template react-ts && cd my-app
+
+# 2. clone core next to the app (public HTTPS), link it, wire alias + rule
+node ../fynns_ui_design_core/scripts/ensure-sibling-ui-core.mjs --target . --install --npmrc --json
+node ../fynns_ui_design_core/scripts/install-as-npm.mjs --target . --sibling --json
+
+# 3. verify (exit 0 = dependency + .npmrc + alias + dedupe + rule OK)
+node ../fynns_ui_design_core/scripts/install-as-npm.mjs --target . --check --json
+npm run dev
 ```
 
-Bootstrap for a fresh machine (no PAT):
+What the two scripts leave behind (all idempotent):
 
-```bash
-git clone https://github.com/Fynn7/my-consumer.git
-git clone --depth 1 --branch dev https://github.com/Fynn7/fynns_ui_design_core.git ../fynns_ui_design_core
-# or let the consumer's setup / ensure script clone the sibling automatically
-cd my-consumer && npm install && npm run dev
-```
+| File | Change |
+| --- | --- |
+| `package.json` | `dependencies["@fynn7/ui-design-core"] = "file:../fynns_ui_design_core"`; scripts `fynns-ui:gate` / `fynns-ui:check-update` on `predev` / `prebuild` / `prepreview` / `postinstall` |
+| `.npmrc` | `@fynn7:registry=https://registry.npmjs.org` (safe; never commit an `_authToken=${NODE_AUTH_TOKEN}` line) |
+| `vite.config.*` | `resolve.alias["@fynns/ui"] → node_modules/@fynn7/ui-design-core/src/index.ts` + `resolve.dedupe: ["react", "react-dom"]` |
+| `tsconfig*.json` | `paths["@fynns/ui"]` → same entry; `target` / `lib` **ES2022+** |
+| `.cursor/rules/fynns-ui-consumer.mdc` | copy of [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) (written once; `--sync-consumer-rule` to refresh) |
+| `AGENTS.md` | copy of [`consumer-AGENTS.md`](consumer-AGENTS.md) when the app has none (OpenCode / small local models) |
 
-Consumer **safe** `.npmrc` (sibling mode — commit this shape):
+App code imports only the alias: `import { Button } from "@fynns/ui";` — CSS
+(tokens + primitives) loads with the barrel, and overlay scrollbars start
+automatically. `vite-env.d.ts` needs `/// <reference types="vite/client" />`
+when `tsc` runs against the sources.
 
-```
-# Zero-token sibling consume: do not point @fynn7 at npm.pkg.github.com.
-@fynn7:registry=https://registry.npmjs.org
-```
+## 2. Greenfield skeleton (generic content app)
 
-**Do not** commit:
+Default chrome is **`DestinationAppShell`** (labeled destinations drawer +
+TopAppBar + optional `EndAside`). Main canvas = **`PageScroll`** → Cards /
+List / EmptyState (the inner `.fynns-content-column` already has gap + inset;
+never add your own padding or scroll containers). Props below are verified with
+`node scripts/api.mjs DestinationAppShell PageScroll Card ListItem Dialog`.
 
-```
-@fynn7:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
-```
-
-**If you still see E401:** you are on the optional Packages path (or a leftover
-`.npmrc` / user `~/.npmrc` with empty `${NODE_AUTH_TOKEN}`). Switch back to
-sibling `file:` + safe `.npmrc`. GitHub Packages npm **always** needs a token
-even when the package is public — that is why day-to-day consume is sibling,
-not Packages. Optional Packages bump for publishers only:
-[`docs/package-propagation.md`](../docs/package-propagation.md).
-
-Treaty: [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) **zero-token sibling consume** /
-[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **安装与 API**.
-
-## What the scripts do
-
-**`ensure-sibling-ui-core.mjs`:** clone/update
-`<consumer-git-root>/../fynns_ui_design_core` over public HTTPS; optional
-`--install` (`file:`) + `--npmrc` (safe scope). **No token.**
-
-**`install-as-npm.mjs` (wire + optional Packages):**
-
-1. Resolves the nearest `package.json` above `--target` (so monorepo apps
-   like `agents-hub/gui` or `tools/gsc-live-preview` work) and the git root
-   (for the Cursor consumer rule).
-2. Default **`--sibling`**: safe `.npmrc` + prefer `file:` sibling (no token).
-   Opt-in **`--packages`**: GitHub Packages install (needs token — publishers).
-3. Wires Vite `@fynns/ui` → `node_modules/@fynn7/ui-design-core/src/index.ts` + React dedupe.
-4. Wires tsconfig `paths`.
-5. Writes `.cursor/rules/fynns-ui-consumer.mdc` if missing (from `consumer-cursor-rule.mdc`).
-6. Wires **`fynns-ui:check-update`** into consumer
-   `predev` / `prebuild` / `prepreview` / `postinstall`. On sibling/`file:`
-   the registry lookup is skipped quietly without a token. Silence:
-   `FYNNS_UI_SKIP_UPDATE_CHECK=1`. Cache: `.fynns-ui-update-check.json`.
-7. `--json` structured result for agents.
-
-**Monorepo bump (hard):** `fynns-ui:check-update` runs from the **consumer app
-package** (the nearest `package.json` above `--target` / cwd — e.g.
-`apps/web`), not the git root. Vite resolves
-`node_modules/@fynn7/ui-design-core` from that package first. Installing only
-at the repo root updates a parent copy the app does not use; `npm run dev`
-will keep warning until you run `npm install @fynn7/ui-design-core@x.y.z` (or
-`npm run consume:install -- --target <app>`) **in the app package**. The notice
-names that package path and flags parent drift when detected.
-
-Flags: `--check`, `--wire-only` / `--skip-install`, `--dry-run`, `--vite`, `--tsconfig`, `--version`.
-
-## After install
-
-```json
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "paths": {
-      "@fynns/ui": ["./node_modules/@fynn7/ui-design-core/src/index.ts"]
-    }
-  }
-}
-```
-
-```ts
-/// <reference types="vite/client" />
+```tsx
+// src/main.tsx
+import { createRoot } from "react-dom/client";
+import { App } from "./App";
+createRoot(document.getElementById("root")!).render(<App />);
 ```
 
 ```tsx
-import { Button, Collapsible, FullscreenDialog } from "@fynns/ui";
+// src/App.tsx
+import { useState } from "react";
+import {
+  Button, Card, ChatMarkdown, DestinationAppShell, Dialog, EmptyState,
+  FieldBlock, FieldStack, FileIcon, Input, List, ListItem, PageScroll,
+  PersonIcon, SnackbarHost, Textarea, snackbar,
+} from "@fynns/ui";
+
+const destinations = [
+  { id: "entries", icon: <FileIcon />, label: "Entries" },
+  { id: "about", icon: <PersonIcon />, label: "About" },
+];
+
+export function App() {
+  const [active, setActive] = useState("entries");
+  const [open, setOpen] = useState(false);
+  const entries = [{ id: "a", title: "Sample entry", date: "2026-09", body: "# Hello\n\nMarkdown body." }];
+
+  return (
+    <>
+      <DestinationAppShell
+        title="Sample app"
+        destinations={destinations}
+        activeId={active}
+        onActiveIdChange={setActive}
+        navAriaLabel="Sections"
+        expandNavLabel="Open navigation"
+        collapseNavLabel="Close navigation"
+        trailing={<Button variant="primary" size="sm" onClick={() => setOpen(true)}>New</Button>}
+      >
+        <PageScroll>
+          {active === "entries" ? (
+            <Card title="Latest">
+              {entries.length ? (
+                <List>
+                  {entries.map((e) => (
+                    <ListItem
+                      key={e.id}
+                      headline={e.title}
+                      trailingSupportingText={e.date}
+                      onClick={() => snackbar(`Opened ${e.title}`)}
+                    />
+                  ))}
+                </List>
+              ) : (
+                <EmptyState title="No entries yet" description="Create the first one." />
+              )}
+            </Card>
+          ) : (
+            <Card title="About">
+              <ChatMarkdown source={entries[0].body} />
+            </Card>
+          )}
+        </PageScroll>
+      </DestinationAppShell>
+
+      <Dialog open={open} onOpenChange={setOpen} title="New entry" size="lg" showCloseButton>
+        <FieldStack>
+          <FieldBlock label="Title" htmlFor="title"><Input id="title" /></FieldBlock>
+          <FieldBlock label="Body" htmlFor="body"><Textarea id="body" minRows={6} /></FieldBlock>
+        </FieldStack>
+        {/* foot: Cancel left, primary rightmost (sandbox #form-recipe) */}
+        <div className="fynns-control-cluster fynns-control-cluster--end-align">
+          <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button variant="primary" size="sm" onClick={() => { setOpen(false); snackbar("Saved"); }}>Save</Button>
+        </div>
+      </Dialog>
+      <SnackbarHost />
+    </>
+  );
+}
 ```
 
-See [`BREAKING_PURGE.md`](BREAKING_PURGE.md) and [`AGENTS.md`](../AGENTS.md).
+Pick primitives by job (details: `node scripts/api.mjs <Name>`; catalog:
+[`docs/design-system/catalog.md`](../docs/design-system/catalog.md)):
 
-**Token / layout pointers (do not invent hex, rem, or private inset vars):**
-- Style only with `--fynns-*` from `src/theme/tokens.ts` (`npm run gen:theme`).
-- **Scroll hosts:** every `overflow: auto/scroll` surface must use `.fynns-scroll`
-  (primitives already do). Importing `@fynns/ui` auto-starts overlay thumbs
-  (`ensureOverlayScrollbars` — fixed portal at `--fynns-z-scroll-overlay`; native bars
-  hidden so they never steal width). Textarea / single-line inputs hide the
-  native bar only (no overlay rail). Do not reintroduce classic bars or
-  `scrollbar-gutter: stable`. Authority: AGENTS.md **Scrollbar discipline**.
-- **Hard gate:** never hardcode shell / column / chat margins in consumer CSS
-  (`padding: 16px`, `1.25rem`, ad-hoc `--app-chat-pad`, etc.). Reuse
-  `--fynns-layout-*` or the component alias that already points at one. Missing
-  value → land it in this core package first, then consume.
-- Shell insets: Collapsible / Drawer / Card / Fullscreen →
-  `--fynns-layout-content-inset` (`chrome="card"` and `chrome="plain"` share
-  the outer shell; **`plain` body pad = `content-inset`, column gap =
-  `--fynns-layout-nest-gap`** — nested surfaces inset; plain ≠ flush).
-  **FullscreenDialog flush-start:** first body child a bordered well
-  (`CodeBlock` / `Surface` / table wrap) → core drops `padding-block-start`
-  (one unpadded fill wrapper allowed). Do not add consumer pad-top. See
-  AGENTS.md **Inset decision tree** / `#fullscreen-flush`. Outside
-  Card/Collapsible use `.fynns-nest`. Centered Dialog head/foot/inline **and**
-  Chat conversation column (thread + composer outer) →
-  `--fynns-layout-dialog-inset` (via `--fynns-chat-thread-pad-inline`;
-  composer inset aliases the thread token). Dialog body block also uses
-  content-inset. **Dialog ControlStack rows:** full-width `ControlStack` /
-  `ControlRow` / track-only `Switch` (`label=""` + `ariaLabel`) — one visible
-  name per row; form-host row gap is `--fynns-layout-control-stack-form-gap` (**12dp**). **Do not** copy Globals `#info-hint` (labeled Switch + trailing
-  `InfoHint`) as a Preferences/Settings Dialog shell; do **not** stack
-  `ControlRow` label + Switch visible label on the same row; do **not** add a
-  second padding wrapper or toolbar `max-content` stack (Switch tracks must
-  share the **CloseIcon glyph** end edge, not the 40dp hit box). Authority:
-  [`AGENTS.md`](../AGENTS.md) keep-set **Dialog** + **Inset decision tree**.
-  Long-strip / `radius-3xl` **text** (Banner, InlineAlert,
-  Snackbar, ChatComposer collapsed text-only start; expanded ChatComposer
-  text edge still lands at strip via glyph-inset math) →
-  `--fynns-layout-strip-pad-inline`. Expanded shell pad =
-  strip − glyph-inset; textarea pad = glyph-inset (optical + / Send glyphs —
-  see [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md)).
-  Capsule chrome next to IconButtons
-  (SearchBar + Input affix-owned field-shell edges ≥ **0.5.237** — not
-  ChatComposer shell) →
-  `--fynns-layout-capsule-chrome-pad-inline`. ChatComposer collapsed shell →
-  `--fynns-chat-composer-pad-inline` / `pad-block` (see
-  [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md)). Dense form `Input` /
-  field-shell **text** edges → `capsule-chrome-pad-inline` + `field-pad-inline`
-  (Select text start parity); affix-owned edges → capsule-chrome only
-  (≥ **0.5.237**). `Textarea` also uses
-  `--fynns-layout-field-pad-block` (not Input’s sm zero block pad) and
-  auto-grows by default (`--fynns-layout-textarea-max-height` soft cap). See
-  AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm** / nested
-  containment (`chrome="plain"` = content-inset pad + nest-gap child).
-  **Control + related note:** wrap in `ControlBlock` (`description` /
-  `errorText`). On a single ControlRow the hint docks in the **label column**;
-  ToggleGroup / cluster vertically centers on name + hint — not a full-bleed
-  next row. Padded `Surface` is a form host (same as Card body).
-  **Semantic form clusters (strongly recommended):** partition
-  inspector / settings / Dialog options with `FieldStack` by kind (identity
-  FieldBlocks, Radio/Checkbox/Slider choice FieldBlocks, Preference
-  ControlBlocks, …) — plain FieldBlocks share `field-stack-gap` 12dp;
-  FieldBlocks with description/error (no choice cluster) open the next
-  sibling to `unit-stack-gap` 16dp; FieldBlocks hosting a
-  `.fynns-control-cluster` open to visual `form-cluster-gap` 32dp; sibling
-  ControlBlocks to `unit-stack-gap` 16dp; adjacent FieldStacks use
-  `form-cluster-gap` (32dp) **and strongly prefer a horizontal `Divider`
-  between stacks** on kind jumps; other Card / Collapsible siblings use
-  `unit-stack-gap` (16dp). Choice lists use `.fynns-control-cluster--stack`
-  (`--choice-extra` = Google-style Other+Input same-row; keep Input mounted,
-  `disabled` when Other is not selected — draft text preserved). Do **not**
-  flatten multi-topic forms as
-  bare siblings or invent muted subtitle classes. Live tree: sandbox
-  `#form-recipe` (Card / Collapsible / Dialog) / AGENTS.md **FieldStack
-  semantic clusters**. Outside Card use `.fynns-unit-stack`.
-  ChatComposer multiline (full-width text + bottom toolbar when expanded):
-  [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md) — do not invent a
-  parallel multi-line shell in the consumer.
-- Focus rings: `--fynns-focus-ring-width` + `--fynns-color-focus` (there is no
-  bare `--fynns-focus`).
-- Design language lives in the package `AGENTS.md` (also in this git repo) — open
-  `node_modules/@fynn7/ui-design-core/AGENTS.md` or the core checkout.
+| Job | Primitive |
+| --- | --- |
+| Record collection (posts, paths, bookmarks) | one `List` of `ListItem` (`headline` / `supportingText` / `trailingSupportingText`), `Pagination` or `useRevealMore` + `RevealMore` for long lists |
+| Titled section | `Card` (static) / `Collapsible`; untitled well → `Surface` |
+| Markdown body | `ChatMarkdown source={md}` (GFM subset); source code → `CodeBlock language="ts" label="file.ts"` |
+| Forms | `FieldStack` → `FieldBlock` → `Input` / `Textarea` / `Switch` / `Checkbox` / `Radio`; discrete choices → `DropdownMenu` / `ToggleGroup` |
+| Modal | `Dialog` (`size="lg"` for forms) / `ConfirmDialog` / `FullscreenDialog` |
+| Feedback | `snackbar()` + `<SnackbarHost />`; inline → `InlineAlert`; announcement → `Banner` |
+| Loading | pane cold-start `BusyRegion fill`; whole app `BusyScrim`; buttons `loading` + `runLoadingTask` |
+| Search / filter | `SearchBar` (requires `ariaLabel`); tags → `Chip` / `ChipSet` (never as status) |
+| Icons | `*Icon` from the barrel (`node scripts/api.mjs --search Icon$`) |
 
-## Local development (no worktree sync)
+## 3. Rules (consumer side, short)
 
-There is **no** `consume:sync` / `consume:watch`. To try unreleased core changes
-in an app:
+1. **API-only:** props / children / labels. Never restyle `.fynns-*`, never
+   hardcode hex / px / rem — only `var(--fynns-*)` (`node scripts/api.mjs --tokens <regex>`).
+   Missing capability → implement in this core first, then refresh the sibling.
+2. **No fakes:** no `@radix-ui/*`, `sonner`, native `<select>` / `<dialog>` /
+   `alert()`, hand-rolled Collapsible, purged symbols
+   ([`BREAKING_PURGE.md`](BREAKING_PURGE.md)). `Select` / `Autocomplete` are
+   soft-deprecated — use `DropdownMenu` / `SearchBar`.
+3. **Every state visible:** loading (`BusyRegion` / `BusyScrim`), empty
+   (`EmptyState`), error (`InlineAlert` + Retry, or `snackbar`).
+4. **Chrome:** destinations only in the shell nav; inspector = `EndAside`
+   (toggle `open`, keep mounted); page scroll only via `PageScroll`.
+5. **Copy:** no `·` / `—` glue in titles or list rows; org → `supportingText`,
+   dates → `trailingSupportingText`.
+6. **CodeBlock:** titled needs non-empty `label` (else `variant="plain"`);
+   always pass a matching `language` (`codeLanguageFromPath`).
+7. Full failure-mode index (when a screen looks wrong):
+   [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md); pasteable Cursor rule:
+   [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc); shells / inspectors
+   performance: [`PERF.md`](PERF.md).
 
-- temporary `"@fynn7/ui-design-core": "file:../fynns_ui_design_core"`, or
-- `npm link`, or
-- publish a prerelease / bump the semver after Release.
+## 4. Install mechanics (reference)
 
-Formal delivery: publish to GitHub Packages then bump the consumer dependency.
-See [`docs/package-propagation.md`](../docs/package-propagation.md).
+**`scripts/ensure-sibling-ui-core.mjs --target <app> [--install] [--npmrc] [--update] [--json]`**
+— clones / fast-forwards `<git-root>/../fynns_ui_design_core` over public HTTPS
+(branch `dev`, or `FYNNS_UI_CORE_REF`), optionally `npm install`s the `file:`
+link and writes the safe `.npmrc`. `--update` on a **clean** sibling
+fast-forwards to `origin/dev` (or `reset --hard FETCH_HEAD` when the remote
+semver is newer and FF is impossible); a **dirty** or **ahead** sibling is
+soft-skipped with a notice (`FYNNS_UI_STRICT_SIBLING_SYNC=1` hard-fails;
+`FYNNS_UI_SKIP_SIBLING_SYNC=1` skips while editing core).
 
-## Verify
+**`scripts/install-as-npm.mjs --target <app>`** — resolves the nearest
+`package.json` above `--target` (monorepo apps) and the git root (for the Cursor
+rule / `AGENTS.md`). Flags: `--sibling` (default: safe `.npmrc` + `file:`),
+`--packages` (GitHub Packages, publishers only — needs a token), `--check`,
+`--wire-only` / `--skip-install`, `--sync-consumer-rule`, `--dry-run`,
+`--vite <file>`, `--tsconfig <file>`, `--json`. Wires `fynns-ui:gate`
+(`ensure-sibling --update` + `check-ui-exports`) and the soft registry notice
+`fynns-ui:check-update` (`FYNNS_UI_SKIP_UPDATE_CHECK=1` silences; cache
+`.fynns-ui-update-check.json`). Optional floor: consumer `package.json`
+`"fynnsUi": { "minVersion": "0.5.x" }`.
+
+**`scripts/check-ui-exports.mjs --target <app>`** — hard gate: every named
+import from `@fynns/ui` must exist on the linked barrel (prevents blank pages
+after a stale sibling).
+
+**Monorepo:** run the scripts against the app package that owns `predev`
+(e.g. `apps/web`), not only the git root — Vite resolves the nested
+`node_modules` first.
+
+**E401 on install:** a leftover Packages `.npmrc` (`npm.pkg.github.com` /
+empty `${NODE_AUTH_TOKEN}`). Switch back to sibling `file:` + the safe
+`.npmrc`. GitHub Packages always needs a token even for public packages —
+that is why day-to-day consume is the sibling. Publishing / optional Packages
+bumps: [`docs/package-propagation.md`](../docs/package-propagation.md).
+
+**Unreleased core changes in an app:** edit the sibling checkout directly
+(Vite serves its sources), or `npm link`; there is no `consume:sync` /
+`consume:watch`.
+
+## 5. Verify
 
 ```bash
-npm run consume:check -- --target <CONSUMER_ROOT> --json
+node ../fynns_ui_design_core/scripts/install-as-npm.mjs --target . --check --json
+npm run build
 ```
 
-Exit `0` means `@fynn7/ui-design-core` is declared, `.npmrc` scopes `@fynn7`,
-`@fynns/ui` alias + React dedupe look good, and no legacy submodule tree remains.
+Exit `0` + a green build means: `@fynn7/ui-design-core` declared (`file:`),
+safe `.npmrc`, `@fynns/ui` alias + React dedupe, ES2022+, consumer rule in
+sync, no leftover submodule tree, and every `@fynns/ui` import exists.

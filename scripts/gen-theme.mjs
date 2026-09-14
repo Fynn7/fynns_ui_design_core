@@ -235,18 +235,20 @@ button {
 
 /*
  * Soft scroll-edge fade (Cursor-style): when more content sits past the top /
- * bottom of a capped CodeBlock / Textarea / NavigationDrawer body / PageScroll,
- * mask the overflowing edge instead of a hard clip. Attrs from
- * syncScrollEdgeFade. Overlay thumbs stay in the portal (unaffected by host
- * mask). CodeBlock/Textarea/PageScroll read layout token; NavDrawer reads
- * navdrawer alias so overriding --fynns-navdrawer-body-fade-length still
- * applies. PageScroll ≥ 0.5.247.
+ * bottom of a capped CodeBlock / Textarea / NavigationDrawer body / PageScroll /
+ * FillColumn header, mask the overflowing edge instead of a hard clip. Attrs
+ * from syncScrollEdgeFade. Overlay thumbs stay in the portal (unaffected by
+ * host mask). CodeBlock/Textarea/PageScroll/FillColumn header read layout
+ * token; NavDrawer reads navdrawer alias so overriding
+ * --fynns-navdrawer-body-fade-length still applies. PageScroll ≥ 0.5.247;
+ * FillColumn header ≥ 0.5.278.
  */
 .fynns-code-block-pre[data-fade-bottom],
 .fynns-code-block-input[data-fade-bottom],
 .fynns-code-block-highlight[data-fade-bottom],
 .fynns-textarea[data-fade-bottom],
-.fynns-page-scroll[data-fade-bottom] {
+.fynns-page-scroll[data-fade-bottom],
+.fynns-fill-column-header[data-fade-bottom] {
   -webkit-mask-image: linear-gradient(
     to bottom,
     #000 0%,
@@ -280,7 +282,8 @@ button {
 .fynns-code-block-input[data-fade-top],
 .fynns-code-block-highlight[data-fade-top],
 .fynns-textarea[data-fade-top],
-.fynns-page-scroll[data-fade-top] {
+.fynns-page-scroll[data-fade-top],
+.fynns-fill-column-header[data-fade-top] {
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
@@ -314,7 +317,8 @@ button {
 .fynns-code-block-input[data-fade-top][data-fade-bottom],
 .fynns-code-block-highlight[data-fade-top][data-fade-bottom],
 .fynns-textarea[data-fade-top][data-fade-bottom],
-.fynns-page-scroll[data-fade-top][data-fade-bottom] {
+.fynns-page-scroll[data-fade-top][data-fade-bottom],
+.fynns-fill-column-header[data-fade-top][data-fade-bottom] {
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,

@@ -1797,6 +1797,20 @@
   flex-direction: column;
 }
 
+/*
+ * Shorter stage + tight header ceiling so `#sandbox-fill-column-guide`
+ * always overflows — mid-scroll `data-fade-top`/`bottom` are teachable
+ * (≥ 0.5.278). Production canvas still uses
+ * `--fynns-layout-fill-column-header-max-height`.
+ */
+#sandbox-fill-column-guide.sandbox-destination-canvas-stage {
+  height: 24rem;
+}
+
+#sandbox-fill-column-guide .fynns-fill-column-header {
+  max-height: 11rem;
+}
+
 .sandbox-destination-canvas-stage.fynns-destination-app-shell-canvas {
   flex: 0 0 auto;
 }

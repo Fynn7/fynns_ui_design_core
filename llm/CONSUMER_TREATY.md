@@ -122,6 +122,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | ListItem trailing IconButtons stacked vertically | DESIGN_SYSTEM hard-rules | `#list` |
 | page-scroll host flush with Card | DESIGN_SYSTEM Card / Collapsible | `#page-scroll` |
 | PageScroll mid-scroll hard clip (no edge fade) | DESIGN_SYSTEM Hard rules / Scrollbar | `#page-scroll` |
+| FillColumn header mid-scroll hard clip (no edge fade) | DESIGN_SYSTEM Hard rules / Scrollbar | `#sandbox-fill-column-guide` |
 | PageScroll Card sheet-max-width under ControlRow | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
 | PageScroll form Card chat-max-width column | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
 | PageScroll content-column soft reading-width gutters | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
@@ -325,8 +326,10 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 
 | Doc | Role |
 | --- | --- |
-| [`CONSUME.md`](CONSUME.md) / [`consume.json`](consume.json) | Install |
+| [`CONSUME.md`](CONSUME.md) / [`consume.json`](consume.json) | Install + greenfield skeleton |
+| [`consumer-AGENTS.md`](consumer-AGENTS.md) | Consumer `AGENTS.md` template (OpenCode / local models) |
 | [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) | Pasteable always-on consumer rule |
 | [`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md) | Hard rules / density SoT index |
-| [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | **Full documentation catalog** (+ CodeBlock highlight) |
+| [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | **Full documentation catalog** (+ CodeBlock highlight + `api.mjs`) |
 | [`PERF.md`](PERF.md) | Shells / inspectors / catalogs |
+| [`LOCAL_LLM.md`](LOCAL_LLM.md) | LM Studio + OpenCode local-model budgets |

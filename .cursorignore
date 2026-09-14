@@ -1,11 +1,14 @@
-﻿# Local dumps / commit-split snaps — never inject as AGENTS or rules context
+# Local dumps — never inject as AGENTS or rules context
 .tmp/
+.tmp-*
+scripts/_*
 
 # Generated / local build noise
 examples/sandbox/dist/
 dist/
 *.tgz
-scripts/_focus-verify/
-scripts/_scale-out/
-scripts/_tmp-*/
-scripts/_verify-*/
+package-lock.json
+src/theme/theme.css
+
+# Huge sandbox blobs (grep/read on demand with explicit path only)
+examples/sandbox/src/i18n/messages.ts

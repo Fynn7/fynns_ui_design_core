@@ -96,19 +96,23 @@ belong in a consumer’s own doc.
    **on**; opt out `data-fynns-wheel-x="off"`. While H overflows, vertical wheel
    stays on that host even at the left/right edge (no PageScroll chaining mid
    hover — avoids thumb jump when sliding back). Live `#table`. **Scroll-edge
-   fade (≥ 0.5.135; PageScroll ≥ **0.5.247**):**
-   capped CodeBlock / Textarea / NavigationDrawer body / **`PageScroll`**
-   soft-mask top+bottom when content overflows mid-scroll
+   fade (≥ 0.5.135; PageScroll ≥ **0.5.247**; FillColumn header ≥ **0.5.278**):**
+   capped CodeBlock / Textarea / NavigationDrawer body / **`PageScroll`** /
+   canvas-capped **`FillColumn` `header`** soft-mask top+bottom when content
+   overflows mid-scroll
    (`data-fade-top` / `data-fade-bottom`, length
    `--fynns-layout-scroll-edge-fade-length`) — **built into `PageScroll`
-   (≥ **0.5.247**); zero consumer props / private mask CSS**. Not a hard clip
-   into TopAppBar / canvas floor. Do **not** invent consumer `mask-image` on
-   `.fynns-page-scroll`, and do **not** replace destination catalogs with a bare
+   (≥ **0.5.247**) and FillColumn header (≥ **0.5.278**); zero consumer props /
+   private mask CSS**. Not a hard clip
+   into TopAppBar / canvas floor / Chat. Do **not** invent consumer `mask-image` on
+   `.fynns-page-scroll` / `.fynns-fill-column-header`, and do **not** replace
+   destination catalogs with a bare
    `overflow:auto` host that hard-clips. Textarea / input hosts hide the native
    bar only (no overlay rail). Do **not** use `scrollbar-gutter: stable` /
    `both-edges`. NavigationDrawer keeps `--fynns-navdrawer-pad-inline` (10dp)
    only. Vertical scroll hosts must pin `overflow-x: clip` (not bare
-   `overflow: auto`). Live `#page-scroll` (scroll mid-pane → both edges fade).
+   `overflow: auto`). Live `#page-scroll` (scroll mid-pane → both edges fade) /
+   `#sandbox-fill-column-guide` (scroll capped guide Surface → bottom edge fades).
 5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress` (inline / determinate), `BusyScrim` (fullscreen blocking) /
    `BusyRegion` (sectional **soft frosted blur** + tokenized gray mask
