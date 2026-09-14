@@ -57,9 +57,8 @@ const SAMPLE_MODELS: Record<"local" | "cloud", readonly string[]> = {
 };
 
 /**
- * Living Manage-surface recipe (aligned with bachelor-thesis / GSC
- * Connection-and-model: provider row → credential when needed → model
- * DropdownMenu + refresh — not a selectable List wall).
+ * Living Manage-surface recipe: provider row → credential when needed →
+ * model DropdownMenu + refresh — not a selectable List wall.
  * Secret Save stays same-row (`--end-align` + Input `__grow`, ≥ 0.5.252).
  * Live: Globals `#provider-settings`.
  */

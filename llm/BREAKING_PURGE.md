@@ -124,6 +124,10 @@ as a hard fail.
 
 ## Behavioral breaking (still exported)
 
+| Change | Consumer fix |
+| --- | --- |
+| ChatActivity minimal tree / step band / done accent / pulse rail mask (≥ **0.5.272**–**0.5.275**) | Default step chrome = status **mark** + continuous rail (node-center → next). Do **not** default tool icons or require `ChatActivityArtifact`. Step band **2rem**; gap = `unit-stack-gap`. **Done** marks = Timeline `--fynns-color-accent`. Opaque `node::before` wash under pulsing marks. Live: `#activity`. Re-paste `consumer-cursor-rule.mdc`. |
+
 Older version-churn rows (ChatMessage, Pagination Select history, NavDrawer footer tunes, …) live in [llm/archive/BREAKING_PURGE_ARCHIVE.md](archive/BREAKING_PURGE_ARCHIVE.md).
 
 When a **new** behavioral break ships, add a short row here (and keep ## Removed → how consumers should fix machine-checked). Do not paste multi-version history essays back into this file.

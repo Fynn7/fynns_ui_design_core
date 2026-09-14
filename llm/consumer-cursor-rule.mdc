@@ -76,9 +76,8 @@ ASCII `-`。
 - 模式侧栏偏好：单行 `ControlRow` + `InfoHint` `sm` + 仅轨道 `Switch` — 禁止
   `ControlBlock` 长 description。标签左缘对齐 Item pad；`--toolbar-end` 主新建
   Plus / Switch 与目的地 Item pill **共右端** — 禁止再套 `item-pad-end`。
-  `--toolbar-end` IconButton 一律 **sm** **32dp**。`--toolbar-end` / 偏好
-  ControlRow 作 body 直接子时与下一兄弟间距 = `search-gap` **8dp**。对照
-  `#layouts-demo-navigation-drawer`。
+  `--toolbar-end` IconButton 一律 **sm** **32dp**。body 直接子间距 =
+  `search-gap` **8dp**。对照 `#layouts-demo-navigation-drawer`。
 - SyncSideFilter：`ToggleGroup` `compact` `fullWidth` + `showCheck={false}` +
   省略 option `tip`；短可见标签。对照 `#layouts-demo-navigation-drawer` /
   `#toggle-group`。
@@ -95,108 +94,45 @@ sandbox `#anchor`。
 
 - **sandbox-only aesthetics** — 勿只改 sandbox overrides；token 进 `tokens.ts`。
 - **squashed drawer / icon-only rail densify** — 拥挤 → `hidden`，勿假 rail。
-- **drawer sheet headline under TopAppBar** — DestinationAppShell 勿传
-  `drawerHeadline`。
-- **hub-split / catalog edit as silent PageScroll** — 列表保持挂载；编辑 →
-  `Dialog` `size="lg"` + `showCloseButton`。
-- **drill-in / mode sidebar hard-swap** — 换 body 须 `navKey` + `navDirection`；
-  退出用 `"back"`；禁止硬切。对照 `#layouts-demo-drill-in`。
-- **fat Surface / Card per catalog row** — 路径/书签/配方 → 一个 `List` of
-  `ListItem`；禁止每项胖 Card + FieldHint 长文 + ChipSet。对照 `#list` /
-  `#sandbox-list-recipe-catalog`。
-- **org · dates / UI · — punctuation / Card title · meta** — 槽位分开；禁用
-  `·`/`—` 粘合。对照 `#card` / `#list`。
-- **trailingSupportingText right-hug drift** — 日期目录须
-  `trailingMetaAlign="start"`；状态/kind → `overline`。对照 `#list` /
-  `#timeline`。
-- **Timeline row hover edit/delete** — 编辑在 Dialog 脚栏；勿 rail `--with-end`
-  铅笔/垃圾桶。对照 `#timeline`。
-- **NavigationDrawerItem badge IconButton always visible** — 行动作用
-  `trailing` ghost sm / More-menu；**禁止**删进 `badge`。对照
-  `#layouts-demo-navigation-drawer`。
-- **NavigationDrawerItem always-visible trash / no more-menu** — 行尾优先 More
-  + `DropdownMenu`（删 `tone="danger"`）；破坏性进菜单。对照
-  `#layouts-demo-navigation-drawer`。
-- **mode drawer toolbar trash+new twin** — 会话用 `NavigationDrawerNewChat`；
-  可选 trailing More 放全部删除；禁止 Trash+Plus 并排。对照
-  `#sandbox-navdrawer-session-chrome`。
-- **chat product / session host wrong tree** —
-  `ClippedNavShell` + 会话 drawer + `FillColumn` → `Chat`；禁止 PageScroll 当
-  chat 主滚、composer 进 FillColumn `footer`。对照 `#layouts-demo-chat-product`。
-- **chat aside host wrong tree** — `DestinationAppShell` + `EndAside` →
-  `.fynns-chat-host--fill` → `Chat`。对照 `#layouts-demo-chat-aside`。
-- **PageScroll mid-scroll hard clip** — 只用 keep-set `PageScroll`（渐隐已封装）；
-  禁止裸 `overflow:auto`。对照 `#page-scroll`。
-- **overlay scrollbar above Select/Menu flyout** — 页轨 z 在 modal-flyout 下；
-  飞层轨用 scroll-overlay-flyout。对照 `#sandbox-scroll-menu-stack`。
-- **mode drawer tools↔filter crushed / toolbar-end md** — body 直接子间距 8dp；
-  toolbar-end 盘 sm 32dp。对照 `#layouts-demo-navigation-drawer`。
-- **Dialog foot Delete leftmost / exit clears title** — Cancel 左、主确认右；
-  `open→false` 同拍勿清空 title/body。对照 `#sandbox-list-recipe-catalog`。
-- **twin loading rings / BusyRegion + chrome loading / Card batch + row twin** —
-  一簇最多一圈；BusyRegion 等待时 chrome 只 `disabled`；批量只留 Card 主 CTA。
-  对照 `#sandbox-list-repo-path-actions`。
-- **IconButton busy swaps CircularProgress** — 用 stock `loading`；禁止嵌套
-  `CircularProgress`。对照 `#icon-button`。
-- **runBusyTask hang / Confirm trap / empty-as-busy** — 长任务须
-  `timeoutMs`/`signal`/`onError`；Confirm 用 `runLoadingTask` + `onAbort`；
-  ChatComposer `busy` 须配对 `onStop`。
-- **section-body IconButton sm / ControlRow unsolicited item count** —
-  段级只用 md ghost + Tooltip；顶栏禁止裸 `{n}` / `(N)` 塞动作簇。对照
-  `#rhythm` / `#sandbox-rhythm-catalog`。
-- **provider Manage flat dump** — ControlRow → 密码 FieldBlock + 同行 Input
-  `__grow` + Save `IconButton` ghost sm → 模型 `DropdownMenu` + 刷新 → Verify；
-  禁止 List 墙 / Chip 状态 / Dialog 代密钥。对照 `#provider-settings`。
-- **service control status Chip + label / ControlRow left-packed / label crush** —
-  状态只在 `label`；簇默认右齐；长 path meta 省略 + InfoHint。对照 `#rhythm`。
-- **FieldHint restates ToggleGroup / TopAppBar InfoHint / ListItem overline
-  restates trailing** — 禁止同源复述。对照 `#rhythm` / `#layouts-demo-shell` /
-  `#sandbox-list-repo-path-actions`。
-- **private labeled Button cluster gap / Select refresh crammed** — 用
-  `.fynns-control-cluster`（+ `--end-align` / `__grow`）。对照 `#rhythm`。
-- **env key FieldHint / Input trailing md / affix far from edge** — 门户文案用
-  标签行 InfoHint；壳内盘一律 `IconButton` `sm`；禁止负 margin / 壳外克隆 eye。
-  对照 `#password` / `#input` / `#env-check`。
-- **InlineAlert beside List / Banner icon top-pinned** — 告警全宽兄弟在上；多行
-  Banner icon/X 垂直居中。对照 `#banner`。
-- **EndAside instant open / dense labeled / Card flush bottom** — 切 `open`；
-  `label=""` + 一主 CTA；PageScroll 内 Card 勿贴窗格底。对照
-  `#layouts-demo-shell`。
-- **PageScroll multi-field Collapsible / Textarea for file body / FillColumn
-  megacard / Card sheet-max under ControlRow** — 短表单走 `#form-recipe`；有扩展
-  名用 `CodeBlock`；内容列铺满页滚，禁止 sheet/chat/dialog-max。对照
-  `#page-scroll`。
-- **long Table/List dumps all rows** — Table `RevealMore` 10/10；List 5/5。对照
-  `#table` / `#list`。
-- **Pagination Select invents overlay / option repeats noun / gaps crushed** —
-  stock Select；options 仅数字；间距 8/16dp。对照 `#pagination`。
-- **Select stretched without fullWidth / menu width mismatch / supporting
-  kisses** — 铺满用 `fullWidth`/`__grow`；菜单 width=live shell；hint 用
-  `field-hint-gap`。对照 `#select` / `#sandbox-select-wide-short`。
-- **DropdownMenu FieldBlock width / missing chevron / panel shift / chrome
-  clip** — matchTriggerWidth；core 注入 chevron；禁止消费仓 left/transform/
-  translateY。对照 `#menu` / `#sandbox-menu-field-match`。
-- **truncated option / chrome label lacks OverflowTip** — 溢出须 `…` + Tooltip
-  全文；禁止 `title=`。对照 `#select` / `#card` / `#list`。
-- **consumer restyles keep-set chrome / Select Autocomplete deprecated** —
-  铬改只在 core；新屏用 Menu/SearchBar。对照 `#select` / `#menu`。
-- **outcome Chip as status / List path Switch+Chip+danger soup** — 结果标用
-  `.fynns-list-item-status`；目录 trailing 仅 ghost md 簇。对照 `#list` /
-  `#sandbox-list-repo-path-actions`。
-- **List scroll-well meta/rail / spill / underlap / focus ring crack** —
-  勿私造 end pad / overflow / z-index。对照 `#sandbox-list-repo-path-actions` /
-  `#sandbox-list-status-action`。
-- **FieldStack Grid centers / hugs max-content** — Grid `align-items: start`；
-  列铺满父级；勿消费仓改回 center/`1fr` 赌。对照
-  `#sandbox-field-stack-grid-select` / `#form-recipe`。
-- **Card chrome labeled Copy/Save / FieldBlock Save wraps / primary leftmost** —
-  自明动作用 `IconButton`+Tooltip；Save 与 Input 同行 ghost sm；primary 盘 LTR
-  末位。对照 `#sandbox-card-chrome-icon-actions` / `#provider-settings` /
-  `#sandbox-card-head-primary-end`。
-- **`#rhythm` morph + twin strips** — 禁止 PageScroll 上两条同构 ControlRow 节名
-  + md 簇。对照 `#sandbox-rhythm-catalog`。
-- **Chat empty starters as Chip** — 空线程 starter 用满宽可点 `Surface`
-  soft/padded/interactive；勿 Chip / 勿复活 `ChatStarterPrompts`。对照 `#chat`。
+- **drawer sheet headline under TopAppBar** — DestinationAppShell 勿传 `drawerHeadline`。
+- **hub-split / catalog edit as silent PageScroll** — 列表保持挂载；编辑 → `Dialog` `lg` + `showCloseButton`。
+- **drill-in / mode sidebar hard-swap** — 换 body 须 `navKey` + `navDirection`；退出 `"back"`；禁止硬切。`#layouts-demo-drill-in`
+- **fat Surface / Card per catalog row** — 路径/书签/配方 → 一个 `List` of `ListItem`；禁止每项胖 Card。`#list` / `#sandbox-list-recipe-catalog`
+- **org · dates / UI · — punctuation / Card title · meta** — 槽位分开；禁用 `·`/`—` 粘合。`#card` / `#list`
+- **trailingSupportingText right-hug drift** — 日期目录须 `trailingMetaAlign="start"`；状态/kind → `overline`。`#list` / `#timeline`
+- **Timeline row hover edit/delete** — 编辑在 Dialog 脚栏；勿 rail `--with-end` 铅笔/垃圾桶。`#timeline`
+- **NavigationDrawerItem badge / trash / no more-menu** — 行动作用 `trailing` ghost sm 或 More+`DropdownMenu`（删 `tone="danger"`）；禁止删进 `badge`。`#layouts-demo-navigation-drawer`
+- **mode drawer toolbar trash+new twin** — 会话用 `NavigationDrawerNewChat`；可选 trailing More 放全部删除；禁止 Trash+Plus 并排。`#sandbox-navdrawer-session-chrome`
+- **chat product / aside host wrong tree** — 会话：`ClippedNavShell`+drawer+`FillColumn`→`Chat`；侧栏主题：`DestinationAppShell`+`EndAside`→`.fynns-chat-host--fill`→`Chat`。禁止 PageScroll 当 chat 主滚、composer 进 FillColumn `footer`。`#layouts-demo-chat-product` / `#layouts-demo-chat-aside`
+- **PageScroll mid-scroll hard clip** — 只用 keep-set `PageScroll`（渐隐已封装）；禁止裸 `overflow:auto`。`#page-scroll`
+- **overlay scrollbar above / buried under Select/Menu** — 页轨 z 在 modal-flyout 下；飞层轨用 scroll-overlay-flyout。`#sandbox-scroll-menu-stack`
+- **mode drawer tools↔filter crushed / toolbar-end md** — body 直接子间距 8dp；toolbar-end 盘 sm 32dp。`#layouts-demo-navigation-drawer`
+- **Dialog foot Delete leftmost / exit clears title** — Cancel 左、主确认右；`open→false` 同拍勿清空 title/body。`#sandbox-list-recipe-catalog`
+- **twin loading rings / BusyRegion + chrome loading / Card batch + row twin** — 一簇最多一圈；busy 时 chrome 只 `disabled`；批量只留 Card 主 CTA。`#sandbox-list-repo-path-actions`
+- **IconButton busy swaps CircularProgress** — 用 stock `loading`；禁止嵌套 `CircularProgress`。`#icon-button`
+- **runBusyTask hang / Confirm trap / empty-as-busy** — 须 `timeoutMs`/`signal`/`onError`；Confirm 用 `runLoadingTask`+`onAbort`；ChatComposer `busy` 须 `onStop`。
+- **section-body IconButton sm / ControlRow unsolicited item count** — 段级只用 md ghost+Tooltip；顶栏禁止裸 `{n}`/`(N)` 塞动作簇。`#rhythm` / `#sandbox-rhythm-catalog`
+- **provider Manage flat dump** — ControlRow → 密码 FieldBlock + 同行 Input `__grow` + Save `IconButton` ghost sm → 模型 `DropdownMenu`+刷新 → Verify；禁止 List 墙/Chip/Dialog 代密钥。`#provider-settings`
+- **ChatActivity tool-icon / artifact default** — 默认 status mark + 连续轨（done = accent；pulse 时 node 洗底挡住轨）；勿默认扳手/文件图标或强制 Artifact。`#activity`
+- **service Chip+label / ControlRow left-packed / label crush** — 状态只在 `label`；簇默认右齐；长 path meta 省略+InfoHint。`#rhythm`
+- **FieldHint restates ToggleGroup / TopAppBar InfoHint / overline restates trailing** — 禁止同源复述。`#rhythm` / `#layouts-demo-shell` / `#sandbox-list-repo-path-actions`
+- **private labeled Button cluster gap / Select refresh crammed** — 用 `.fynns-control-cluster`（+ `--end-align`/`__grow`）。`#rhythm`
+- **env key FieldHint / Input trailing md / affix far from edge** — 门户文案用标签行 InfoHint；壳内盘一律 `IconButton` `sm`；禁止负 margin/壳外克隆 eye。`#password` / `#input` / `#env-check`
+- **InlineAlert beside List / Banner icon top-pinned** — 告警全宽兄弟在上；多行 Banner icon/X 垂直居中。`#banner`
+- **EndAside instant open / dense labeled / Card flush bottom** — 切 `open`；`label=""`+一主 CTA；PageScroll 内 Card 勿贴窗格底。`#layouts-demo-shell`
+- **PageScroll Collapsible / Textarea file body / FillColumn megacard / Card sheet-max** — 短表单走 `#form-recipe`；有扩展名用 `CodeBlock`；内容列铺满页滚，禁止 sheet/chat/dialog-max。`#page-scroll`
+- **long Table/List dumps all rows** — Table `RevealMore` 10/10；List 5/5。`#table` / `#list`
+- **Pagination overlay / option repeats noun / gaps crushed** — stock Select；options 仅数字；间距 8/16dp。`#pagination`
+- **Select fullWidth / menu width / supporting kisses** — 铺满用 `fullWidth`/`__grow`；菜单 width=live shell；hint 用 `field-hint-gap`。`#select` / `#sandbox-select-wide-short`
+- **DropdownMenu FieldBlock width / chevron / panel shift / chrome clip** — matchTriggerWidth；core 注入 chevron；禁止消费仓 left/transform/translateY。`#menu` / `#sandbox-menu-field-match`
+- **truncated option / chrome label lacks OverflowTip** — 溢出须 `…`+Tooltip 全文；禁止 `title=`。`#select` / `#card` / `#list`
+- **consumer restyles keep-set chrome / Select Autocomplete deprecated** — 铬改只在 core；新屏用 Menu/SearchBar。`#select` / `#menu`
+- **outcome Chip as status / List path Switch+Chip+danger soup** — 结果标用 `.fynns-list-item-status`；目录 trailing 仅 ghost md 簇。`#list` / `#sandbox-list-repo-path-actions`
+- **List scroll-well meta/rail / spill / underlap / focus ring crack** — 勿私造 end pad/overflow/z-index。`#sandbox-list-repo-path-actions` / `#sandbox-list-status-action`
+- **FieldStack Grid centers / hugs max-content** — Grid `align-items: start`；列铺满父级；勿消费仓改回 center。`#sandbox-field-stack-grid-select` / `#form-recipe`
+- **Card chrome labeled Copy/Save / FieldBlock Save wraps / primary leftmost** — 自明动作用 `IconButton`+Tooltip；Save 与 Input 同行 ghost sm；primary 盘 LTR 末位。`#sandbox-card-chrome-icon-actions` / `#provider-settings` / `#sandbox-card-head-primary-end`
+- **`#rhythm` morph + twin strips** — 禁止 PageScroll 上两条同构 ControlRow 节名+md 簇。`#sandbox-rhythm-catalog`
+- **Chat empty starters as Chip** — 空线程 starter 用满宽可点 `Surface` soft/padded/interactive；勿 Chip / 勿复活 `ChatStarterPrompts`。`#chat`
 
 ## 表单与密度（短）
 

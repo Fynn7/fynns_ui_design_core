@@ -249,9 +249,9 @@
   `#provider-settings` — **not** a connection-chip / Add Dialog; **not**
   `unit-stack` Save under the field)
   → model as `FieldBlock` + **`DropdownMenu`** (`__grow`) + refresh sm
-  IconButton (bachelor-thesis / GSC Connection-and-model; **not** a
-  selectable `List` wall of model chips; keep-set prefers Menu over soft-
-  deprecated `Select`) → fail = `InlineAlert` (success silent) → one
+  IconButton (**not** a selectable `List` wall of model chips; keep-set
+  prefers Menu over soft-deprecated `Select`) → fail = `InlineAlert`
+  (success silent) → one
   end-align Verify. Omit debug meta. Status marks when needed =
   `.fynns-list-item-status`, **not** `Chip`. Runtime composer pickers are a
   **different** surface. Live `#provider-settings`. Failure: CONSUMER_TREATY
