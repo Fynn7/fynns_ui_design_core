@@ -927,7 +927,7 @@ export const CHAT_TOKENS = {
   "composer-expanded-gap": "var(--fynns-space-sm)",
   /**
    * Cap for each **labeled** DropdownMenu in `.fynns-chat-composer-leading`
-   * / primary-slot endActions (≥ **0.5.285** / **0.5.286**). Long volume /
+   * / primary-slot endActions (≥ **0.5.288**). Long volume /
    * model ids ellipsize inside the shell — never mid-glyph hard-clip past
    * the capsule edge. Icon-only menus stay content-sized.
    */
@@ -935,7 +935,7 @@ export const CHAT_TOKENS = {
   /**
    * Narrow-shell ceiling for the same labeled menus when the composer
    * container is ≤ **26rem** (≥ **0.5.288**). Keeps draft field readable
-   * beside + / volume / model / Send (GSC landing ~365px lesson).
+   * beside + / volume / model / Send (narrow ~365px host lesson).
    */
   "composer-leading-menu-max-narrow": "7rem",
   /**

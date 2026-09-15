@@ -74,7 +74,7 @@
 /*
  * Nested label wrappers (consumer `<span>`, OverflowTip) must shrink under
  * a capped host — flex `min-width: auto` otherwise refuses to ellipsize and
- * the capsule hard-clips mid-glyph (≥ **0.5.285**). Prefer string `trigger`
+ * the capsule hard-clips mid-glyph (≥ **0.5.288**). Prefer string `trigger`
  * so core wraps OverflowTip; this is the seatbelt for ReactNode labels.
  */
 .fynns-menu-trigger-label
@@ -284,7 +284,6 @@
   color: var(--fynns-color-danger);
 }
 
-.fynns-menu-item--danger 
 .fynns-menu-item--sub .fynns-menu-item-sub-chevron {
   margin-inline-start: auto;
   display: inline-flex;
@@ -303,7 +302,8 @@
 .fynns-menu--sub {
   min-width: 10rem;
 }
-.fynns-menu-item-icon,
+
+.fynns-menu-item--danger .fynns-menu-item-icon,
 .fynns-menu-item--danger .fynns-menu-item-leading {
   color: var(--fynns-color-danger);
 }

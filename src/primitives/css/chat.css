@@ -1493,7 +1493,7 @@ a.fynns-chat-activity-artifact:hover {
   background: var(--fynns-color-surface-2);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   box-sizing: border-box;
-  /* Keep labeled-menu hover / focus paint inside the capsule (≥ 0.5.285). */
+  /* Keep labeled-menu hover / focus paint inside the capsule (≥ 0.5.288). */
   overflow: hidden;
   /* Narrow hosts: tighten labeled-menu caps so field is not starved (≥ 0.5.288). */
   container-type: inline-size;
@@ -1751,7 +1751,7 @@ a.fynns-chat-activity-artifact:hover {
 /*
  * Leading may host labeled Menus (volume / model). Allow shrink so long
  * labels ellipsize inside the shell — never mid-glyph clip past the capsule
- * (≥ **0.5.285**). Primary Send/Stop stays content-sized.
+ * (≥ **0.5.288**). Primary Send/Stop stays content-sized.
  */
 .fynns-chat-composer-leading {
   flex: 0 1 auto;
@@ -1762,7 +1762,7 @@ a.fynns-chat-activity-artifact:hover {
 
 .fynns-chat-composer-primary-slot {
   /* Must shrink with labeled endActions — `0 0 auto` kept model at the soft
-   * cap while volume/field starved on ~22rem shells (GSC landing ≤ **0.5.288**). */
+   * cap while volume/field starved on ~22rem shells (≤ **0.5.288**). */
   flex: 0 1 auto;
   min-width: 0;
   gap: var(--fynns-chat-composer-gap);
@@ -1771,7 +1771,7 @@ a.fynns-chat-activity-artifact:hover {
 /*
  * Labeled Menu triggers in leading / endActions prefer content width, then
  * shrink under a soft cap — never spill past the capsule mid-glyph
- * (≥ **0.5.285** / endActions ≥ **0.5.286**). `min-width: 0` so both sides
+ * (≥ **0.5.288**). `min-width: 0` so both sides
  * share shrink on narrow shells (≥ **0.5.288**); OverflowTip still owns the
  * full label. Icon-only menus / IconButtons stay fixed.
  */

@@ -229,7 +229,7 @@ export type ChatComposerProps = Omit<
    * Optional end-of-toolbar actions **before** Send/Stop (e.g. model Menu).
    * Renders in `.fynns-chat-composer-primary-slot` — visually **end / right**,
    * not in `leading`. Ignored when `trailing` overrides the primary slot.
-   * (≥ **0.5.286**)
+   * (≥ **0.5.288**)
    */
   endActions?: ReactNode;
   /** Override trailing primary action (replaces Send/Stop entirely). */

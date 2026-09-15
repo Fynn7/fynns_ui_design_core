@@ -101,8 +101,9 @@ export function OverflowTip({
 
 /**
  * Tip body for a string-or-ReactNode label (prefer string; else fallback).
- * Single-child text elements (e.g. consumer `<span>model-id</span>` Menu
- * triggers) unwrap so OverflowTip still fires (≥ **0.5.285**).
+ * Unwraps single-child text elements / Fragments (e.g. consumer
+ * `<span>model-id</span>` Menu triggers) so OverflowTip still fires
+ * (≥ **0.5.288**).
  */
 export function overflowTipText(
   label: ReactNode,
@@ -116,6 +117,13 @@ export function overflowTipText(
       .children;
     if (typeof kids === "string" || typeof kids === "number") {
       return String(kids);
+    }
+    // Single child only — recurse through wrappers / Fragments.
+    if (isValidElement(kids)) {
+      return overflowTipText(kids, fallback);
+    }
+    if (Array.isArray(kids) && kids.length === 1) {
+      return overflowTipText(kids[0], fallback);
     }
   }
   if (fallback != null && fallback !== "") return fallback;

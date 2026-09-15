@@ -24,7 +24,10 @@ type MenuContextValue = {
   close: () => void;
   /** Close the outermost DropdownMenu (and nested submenus). */
   closeRoot: () => void;
+  /** This surface's id. */
   menuId: string;
+  /** Outermost DropdownMenu panel id (outside-click seatbelt). */
+  rootMenuId: string;
 };
 
 const MenuContext = createContext<MenuContextValue | null>(null);
@@ -162,9 +165,12 @@ export function MenuSurface({
   if (!mounted || typeof document === "undefined") return null;
 
   const closeRoot = parent?.closeRoot ?? onClose;
+  const rootMenuId = parent?.rootMenuId ?? menuId;
 
   return createPortal(
-    <MenuContext.Provider value={{ close: onClose, closeRoot, menuId }}>
+    <MenuContext.Provider
+      value={{ close: onClose, closeRoot, menuId, rootMenuId }}
+    >
       <div
         ref={setPanelRef}
         id={menuId}
@@ -643,7 +649,7 @@ export type DropdownMenuSubProps = {
 /**
  * Nested submenu row inside a `DropdownMenu` / `MenuSurface`.
  * Opens on hover / focus / ArrowRight; panel docks to the **end** (right in
- * LTR) of the row via `useFloatingBoxPosition` (≥ **0.5.287**). Live
+ * LTR) of the row via `useFloatingBoxPosition` (≥ **0.5.288**). Live
  * `#sandbox-menu-submenu`.
  */
 export function DropdownMenuSub({
@@ -766,7 +772,7 @@ export function DropdownMenuSub({
       >
         {children}
       </MenuSurface>
-      <SubmenuOwnerMarker ownerId={parent.menuId} panelEl={panelEl} />
+      <SubmenuOwnerMarker ownerId={parent.rootMenuId} panelEl={panelEl} />
     </div>
   );
 }

@@ -408,12 +408,12 @@
   hover/focus paint outside the shell) — pass **string** `trigger` (core wraps
   OverflowTip); core caps each labeled menu at
   `--fynns-chat-composer-leading-menu-max` and clips shell overflow
-  (≥ **0.5.285**). Do **not** invent consumer `max-width` / manual `slice` /
+  (≥ **0.5.288**). Do **not** invent consumer `max-width` / manual `slice` /
   private chip-label CSS. Live `#sandbox-chat-composer-leading-menus` /
   `#chat`. Failure: CONSUMER_TREATY ChatComposer leading Menu label hard-clips.
 - **DON'T** park the **model** picker in `ChatComposer` `leading` (stays
   start-clustered) — put it in `endActions` (end / right, before Send) with
-  `align="end"` (≥ **0.5.286**). Volume / tools stay in `leading`. Do **not**
+  `align="end"` (≥ **0.5.288**). Volume / tools stay in `leading`. Do **not**
   use `trailing` for the model Menu (`trailing` **replaces** Send). Live
   `#sandbox-chat-composer-leading-menus`. Failure: CONSUMER_TREATY ChatComposer
   model Menu left-clustered.

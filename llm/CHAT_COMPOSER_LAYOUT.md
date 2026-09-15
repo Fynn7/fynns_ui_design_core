@@ -30,13 +30,13 @@ form.fynns-chat-composer
         textarea.fynns-chat-composer-input
       .fynns-chat-composer-toolbar[role="toolbar"]
         [?].fynns-chat-composer-leading   ← wraps `leading` automatically
-        .fynns-chat-composer-primary-slot ← Send / Stop / Dictate / `trailing`
+        .fynns-chat-composer-primary-slot ← `endActions` + Send / Stop / Dictate / `trailing`
 ```
 
 Public props stay `leading` / `trailing` / `attachments` / `busy` / … — no
 rename required for consumers.
 
-**Labeled Menus (≥ 0.5.285 / model end ≥ 0.5.286):** pass **string**
+**Labeled Menus (≥ 0.5.288):** pass **string**
 `DropdownMenu` `trigger` values (core wraps `OverflowTip`). Core caps each
 labeled menu at `--fynns-chat-composer-leading-menu-max` so long ids
 ellipsize inside the shell — never mid-glyph hard-clip, and never invent
