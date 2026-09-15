@@ -1453,7 +1453,7 @@
   width: 100%;
 }
 
-/* Keep `__grow` from collapsing to 0 under long sibling meta cells. */
+/* Keep `__grow` from collapsing to 0 under long sibling meta cells (grid). */
 #sandbox-list-run-summary-narrow .fynns-control-cluster__grow {
   min-width: 8rem;
 }

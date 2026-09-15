@@ -1621,8 +1621,11 @@ a.fynns-breadcrumb-link:visited {
 /*
  * Single-line run / job summary: status mark + title + metrics in one
  * `.fynns-control-cluster` as the sole headline child (not InlineAlert —
- * that is width:100% panel chrome and forces wrap). Cluster owns nowrap;
- * `__grow` ellipsizes the identity string. Spec: AGENTS Content density.
+ * that is width:100% panel chrome and forces wrap). **CSS grid** (not flex
+ * content-width) so status / identity / optional meta share column edges
+ * across sibling rows — same lesson as `.fynns-list-item-trailing-stats`.
+ * `__grow` sits in `minmax(0, 1fr)` and ellipsizes. Spec: Content density.
+ * ≥ **0.5.295**. Live: `#list` run-summary.
  */
 .fynns-list-item-headline:has(> .fynns-control-cluster) {
   display: flex;
@@ -1632,25 +1635,45 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-list-item-headline > .fynns-control-cluster {
+  --fynns-list-headline-meta-width: calc(
+    var(--fynns-list-stats-col-elapse) + var(--fynns-size-icon) +
+      var(--fynns-layout-control-cluster-gap)
+  );
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns:
+    var(--fynns-list-stats-col-status)
+    minmax(0, 1fr);
+  column-gap: var(--fynns-layout-control-stack-gap);
+  align-items: center;
+  justify-items: start;
   flex: 1 1 auto;
-  flex-wrap: nowrap;
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  /* Status pill ↔ title / metrics: one step above IconButton cluster 4dp. */
-  gap: var(--fynns-layout-control-stack-gap);
+}
+
+.fynns-list-item-headline > .fynns-control-cluster:has(> .fynns-table-meta) {
+  grid-template-columns:
+    var(--fynns-list-stats-col-status)
+    minmax(0, 1fr)
+    var(--fynns-list-headline-meta-width);
+}
+
+.fynns-list-item-headline > .fynns-control-cluster > .fynns-list-item-status {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  justify-self: start;
+  overflow: hidden;
 }
 
 .fynns-list-item-headline > .fynns-control-cluster > .fynns-control-cluster__grow {
-  flex: 1 1 auto;
   min-width: 0;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.fynns-list-item-headline > .fynns-control-cluster > :not(.fynns-control-cluster__grow) {
-  flex: 0 0 auto;
 }
 
 /*
@@ -1664,18 +1687,14 @@ a.fynns-breadcrumb-link:visited {
  * icons never shrink. Live: `#list` run-summary.
  */
 .fynns-list-item-headline > .fynns-control-cluster > .fynns-table-meta {
-  --fynns-list-headline-meta-width: calc(
-    var(--fynns-list-stats-col-elapse) + var(--fynns-size-icon) +
-      var(--fynns-layout-control-cluster-gap)
-  );
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
   gap: var(--fynns-layout-control-cluster-gap);
-  width: var(--fynns-list-headline-meta-width);
-  min-width: var(--fynns-list-headline-meta-width);
-  max-width: var(--fynns-list-headline-meta-width);
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   overflow: hidden;
   text-align: start;
   white-space: nowrap;
@@ -1684,13 +1703,16 @@ a.fynns-breadcrumb-link:visited {
 
 /* Second headline metric (tokens / count) — sibling cell, not jammed. */
 .fynns-list-item-headline
-  > .fynns-control-cluster
-  > .fynns-table-meta
-  + .fynns-table-meta {
-  --fynns-list-headline-meta-width: calc(
+  > .fynns-control-cluster:has(> .fynns-table-meta + .fynns-table-meta) {
+  --fynns-list-headline-meta-width-2: calc(
     var(--fynns-list-stats-col-tokens) + var(--fynns-size-icon) +
       var(--fynns-layout-control-cluster-gap)
   );
+  grid-template-columns:
+    var(--fynns-list-stats-col-status)
+    minmax(0, 1fr)
+    var(--fynns-list-headline-meta-width)
+    var(--fynns-list-headline-meta-width-2);
 }
 
 .fynns-list-item-headline > .fynns-control-cluster > .fynns-table-meta svg {

@@ -1116,6 +1116,14 @@ export const LIST_TOKENS = {
   "stats-col-tokens": "3.5rem",
   "stats-col-cost": "3.75rem",
   "stats-col-count": "3.25rem",
+  /**
+   * Run-summary headline grid: fixed track for `.fynns-list-item-status`
+   * (icon + Success / Failed / Cancelled / …) so the model/`__grow` column
+   * starts on the same edge across sibling rows. Flex content-width pills
+   * drift — same lesson as trailing-stats. Live: `#list` run-summary.
+   * ≥ **0.5.295**.
+   */
+  "stats-col-status": "8rem",
 } as const;
 
 /**
