@@ -284,6 +284,8 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | skinny form Dialog (tall FieldStack / CodeBlock) | DESIGN_SYSTEM catalog | `#form-recipe` |
 | Dialog body end-align footer clipped | DESIGN_SYSTEM hard-rules | `#form-recipe` |
 | Dialog title top ≠ body-end IconButton | DESIGN_SYSTEM hard-rules / Dialog | `#overlays` |
+| Dialog title top ≠ body-end foot | DESIGN_SYSTEM Hard rules / overlays (≥ **0.5.286**) | `#overlays` |
+| Dialog foot IconButton / check-disk | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.286**) | `#overlays` |
 | BottomSheet title top ≠ actions bottom | DESIGN_SYSTEM hard-rules / overlays | `#overlays` |
 | FillColumn header top-only inset | DESIGN_SYSTEM hard-rules / FillColumn | `#sandbox-fill-column-guide` |
 | vacant band under FullscreenDialog title | DESIGN_SYSTEM Dialog / overlays | `#fullscreen-flush` |

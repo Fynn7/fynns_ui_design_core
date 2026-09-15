@@ -706,11 +706,20 @@
 - **DON'T** crush centered `Dialog` title top clearance below body end —
   non-confirm `.fynns-dialog-head` `padding-block-start` is
   `--fynns-layout-content-inset` (**18dp**, ≥ **0.5.280**) so title ink top
-  matches body `padding-block-end` / trailing primary `IconButton` bottom
-  inset on form Dialogs without a foot. Do **not** patch consumer
-  `.fynns-dialog-head` pad or revive `dialog-inset/2`. Confirm heads keep
-  full `dialog-inset`. Live `#overlays`. Failure: CONSUMER_TREATY Dialog
-  title top ≠ body-end IconButton.
+  matches body `padding-block-end` / labeled Dialog-foot Button bottom inset.
+  Do **not** patch consumer `.fynns-dialog-head` pad or revive `dialog-inset/2`.
+  Confirm heads keep full `dialog-inset`. Live `#overlays`. Failure:
+  CONSUMER_TREATY Dialog title top ≠ body-end foot.
+- **DON'T** park **`IconButton` / check-disk / Fab** (or any icon-only primary)
+  as the confirm / dismiss control inside a centered `Dialog` /
+  `ConfirmDialog` **body or foot** — **one Dialog foot style only** (≥
+  **0.5.286**). Canonical foot = `.fynns-control-cluster--end-align` with
+  **labeled** `Button`s only: LTR **Cancel** `ghost` `sm` leftmost → optional
+  secondary tonal → **primary** confirm **rightmost** (Wave1 OverflowTip on
+  long labels). `ConfirmDialog` stock foot counts. How-to stays on
+  `headActions` `InfoHint` `sm` — not a `description` essay that restates the
+  FieldBlock label. Live `#overlays` (create Dialog). Failure: CONSUMER_TREATY
+  Dialog foot IconButton / check-disk.
 - **DON'T** crush BottomSheet title top below actions bottom — header outer
   `padding-block-start` aliases `--fynns-layout-sheet-actions-pad-bottom`
   (**24dp**, ≥ **0.5.281**). Do not revive `sheet-header-gap` as the outer

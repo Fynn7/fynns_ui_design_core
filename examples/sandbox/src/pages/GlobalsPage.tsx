@@ -25,7 +25,6 @@ import {
   Surface,
   Checkbox,
   ChevronRightIcon,
-  CheckIcon,
   Chip,
   ChipSet,
   CircularProgress,
@@ -5769,19 +5768,24 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 placeholder={t("globals.dialogCreateNamePlaceholder")}
               />
             </FieldBlock>
-            <div className="fynns-control-cluster">
-              <Tooltip content={t("globals.dialogCreateAction")}>
-                <IconButton
-                  aria-label={t("globals.dialogCreateAction")}
-                  variant="primary"
-                  onClick={() => setCenteredDialogOpen(false)}
-                >
-                  <CheckIcon />
-                </IconButton>
-              </Tooltip>
+            <div className="fynns-control-cluster fynns-control-cluster--end-align">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setCenteredDialogOpen(false)}
+              >
+                {t("globals.dialogCreateCancel")}
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => setCenteredDialogOpen(false)}
+              >
+                {t("globals.dialogCreateAction")}
+              </Button>
             </div>
           </FieldStack>
         </Dialog>
+        <SandboxHelp text={t("globals.dialogFootCanonicalHelp")} />
         <SandboxHelp text={t("globals.dialogTitleBodyInsetHelp")} />
         <Dialog
           open={labeledDialogOpen}
