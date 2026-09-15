@@ -22,7 +22,11 @@ export type ChatComposerToggleProps = Omit<
    * pass `EyeIcon` (or other) for vision / context modes.
    */
   leadingIcon?: ReactNode;
-  /** Accessible name when the visible label is not enough alone. */
+  /**
+   * Accessible name. Prefer always passing this for icon-only CQ (≤36rem);
+   * when omitted and `children` is a string, that string is used as
+   * `aria-label` so the narrow visually-hidden label still names the control.
+   */
   ariaLabel?: string;
 };
 
@@ -53,6 +57,8 @@ export const ChatComposerToggle = forwardRef<
   },
   ref,
 ) {
+  const resolvedAriaLabel =
+    ariaLabel ?? (typeof children === "string" ? children : undefined);
   return (
     <button
       {...rest}
@@ -60,7 +66,7 @@ export const ChatComposerToggle = forwardRef<
       type="button"
       role="switch"
       aria-checked={pressed}
-      aria-label={ariaLabel}
+      aria-label={resolvedAriaLabel}
       disabled={disabled}
       data-pressed={pressed ? "true" : "false"}
       className={join(

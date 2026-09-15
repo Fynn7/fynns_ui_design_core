@@ -1,4 +1,4 @@
-import type { MessageKey } from "../i18n";
+﻿import type { MessageKey } from "../i18n";
 
 /** M3 / sandbox family ids used by Components page Collapsibles. */
 export type GlobalsCategoryId =
@@ -83,7 +83,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "帮助",
       "sandbox-control-row-tip-switch-narrow",
       "ControlRow",
-      "隐藏内置",
+      "示例偏好",
     ],
   },
   {

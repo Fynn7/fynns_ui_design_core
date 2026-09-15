@@ -1825,8 +1825,17 @@ a.fynns-chat-activity-artifact:hover {
     padding-inline: var(--fynns-chat-composer-toggle-pad-inline);
   }
 
+  /* Keep label in the a11y tree (display:none would drop the name). */
   .fynns-chat-composer-toggle-label {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 }
 
@@ -1903,7 +1912,7 @@ a.fynns-chat-activity-artifact:hover {
  * Leading volume Menus share free space with the draft (`1 1 0`).
  * Primary-slot model Menus are content-first (`0 1 auto`): `1 1 0` left only
  * leftover crumbs beside Thinking / Vision / Send and crushed to chevron-only
- * (GSC landing ≤ **0.5.291**). Both sides keep a readable min floor.
+ * (landing composer ≤ **0.5.291**). Both sides keep a readable min floor.
  */
 .fynns-chat-composer-leading .fynns-menu-root:has(.fynns-menu-trigger-label) {
   flex: 1 1 0;

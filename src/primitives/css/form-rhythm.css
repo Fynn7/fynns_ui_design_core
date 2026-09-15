@@ -241,8 +241,8 @@
 
 /*
  * Preference tip + Switch (≥ **0.5.292**): never wrap into a vertical stack in
- * narrow NavigationDrawer / mode-sidebar ControlRows (agents-hub「隐藏内置」
- * lesson — tip above track). Prefer InfoHint on the ControlRow **label**
+ * narrow NavigationDrawer / mode-sidebar ControlRows (narrow-drawer lesson —
+ * tip above track). Prefer InfoHint on the ControlRow **label**
  * (see `:has(.fynns-info-hint-trigger)` above); if both sit in `__controls` /
  * a cluster, keep one horizontal band.
  */
