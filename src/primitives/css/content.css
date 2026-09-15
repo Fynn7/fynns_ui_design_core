@@ -3998,6 +3998,8 @@ a.fynns-breadcrumb-link:visited {
   padding-inline: var(--fynns-layout-content-inset);
   min-width: 0;
   max-width: 100%;
+  /* Set on root via CodeBlock `maxHeight` → `--fynns-code-block-max-height`. */
+  max-height: var(--fynns-code-block-max-height);
   /* Default `wrap` (no `--nowrap`): soft-wrap; vertical scroll only when
    * `data-scrollable` (content exceeds host — avoids early thumbs). */
   white-space: pre-wrap;
@@ -4227,6 +4229,8 @@ a.fynns-breadcrumb-link:visited {
   display: block;
   width: 100%;
   min-height: 0;
+  /* Same cap as `.fynns-code-block-pre` — root CSS var, not inline style. */
+  max-height: var(--fynns-code-block-max-height);
   border: 0;
   border-radius: 0;
   background: transparent;

@@ -878,6 +878,11 @@ const en = {
   "globals.drawerNestedScrollCard": "Mounted sample card",
   "globals.drawerNestedScrollHelp":
     "Drawer body scroll + nested CodeBlock: overlay Y rails clamp below shell TopAppBar, `.fynns-dialog-head`, and section heads so thumbs never paint over higher chrome when an outer scrollport moves. Page rails stay under menus via `--fynns-z-scroll-overlay`; menu/Select own thumbs use `--fynns-z-scroll-overlay-flyout` (≥ **0.5.251** — live `#sandbox-scroll-menu-stack`). Live `#drawer-nested-scroll`.",
+  "globals.dialogNestedScrollOpen": "Open dialog nested scroll",
+  "globals.dialogNestedScrollTitle": "Sample nested scroll",
+  "globals.dialogNestedScrollFold": "Mounted sample body",
+  "globals.dialogNestedScrollHelp":
+    "Centered Dialog + List + Collapsible + plain CodeBlock: `maxHeight` sets `--fynns-code-block-max-height` on the root; copy-float overlay Y rails run rounded-clip clamp then chrome clamp so thumbs stay inside `radius-3xl` (never past the panel floor). Live `#dialog-nested-scroll`.",
   "globals.overlayHelp":
     "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). First-child bordered well (CodeBlock) flush-starts under the title — `#fullscreen-flush`. Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
@@ -3304,6 +3309,11 @@ const zh: Record<MessageKey, string> = {
   "globals.drawerNestedScrollCard": "已挂载示例卡片",
   "globals.drawerNestedScrollHelp":
     "Drawer 正文滚动 + 嵌套 CodeBlock：overlay Y 轨道裁剪在 TopAppBar、`.fynns-dialog-head` 与分区标题下方，外层滚动时拇指不会画在更高 chrome 上。页轨经 `--fynns-z-scroll-overlay` 低于菜单；菜单/Select 自身拇指用 `--fynns-z-scroll-overlay-flyout`（≥ **0.5.251** — 对照 `#sandbox-scroll-menu-stack`）。活样例 `#drawer-nested-scroll`。",
+  "globals.dialogNestedScrollOpen": "打开对话框嵌套滚动",
+  "globals.dialogNestedScrollTitle": "示例嵌套滚动",
+  "globals.dialogNestedScrollFold": "已挂载示例正文",
+  "globals.dialogNestedScrollHelp":
+    "居中 Dialog + List + Collapsible + plain CodeBlock：`maxHeight` 写到根上的 `--fynns-code-block-max-height`；copy-float 的 overlay Y 轨先做圆角裁剪再做 chrome 裁剪，拇指不超出 `radius-3xl`、不越过面板底边。活样例 `#dialog-nested-scroll`。",
   "globals.overlayHelp":
     "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。正文首个带边框井（CodeBlock）顶天贴标题 — `#fullscreen-flush`。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",

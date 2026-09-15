@@ -84,9 +84,11 @@ belong in a consumer’s own doc.
    phantom idle thumb. **Modal `.fynns-dialog-body`:** suppress thumb until panel
    enter settles (≥ **0.5.34**, mount + `transitionend` ≥ **0.5.35**); on fine
    pointer reveal on **host hover only** — not `:focus-within` from the focus
-   trap. **Nested scroll in Drawer / FullscreenDialog:** Y rails clamp below
-   overlay chrome heads (TopAppBar, dialog head, Card / Collapsible heads, nav
-   headlines ≥ **0.5.134**) — live `#drawer-nested-scroll` /
+   trap. **Nested scroll in Drawer / FullscreenDialog / centered Dialog:** Y
+   rails clamp below overlay chrome heads (TopAppBar, dialog head, Card /
+   Collapsible heads, nav headlines ≥ **0.5.134**) and inside panel
+   `radius-3xl` via copy-float + rounded-clip clamp — live
+   `#drawer-nested-scroll` / `#dialog-nested-scroll` /
    `#sandbox-scroll-menu-stack`. Fine pointer + hover:
    idle-transparent thumbs with soft fade; touch / coarse keeps thumbs tinted.
    **Wheel → horizontal (≥ 0.5.184 / trap at edge ≥ **0.5.186**):**

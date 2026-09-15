@@ -268,6 +268,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Dialog body Card stack crush | DESIGN_SYSTEM Dialog / overlays | `#form-recipe` |
 | phantom PageScroll rail behind modal Dialog | DESIGN_SYSTEM hard-rules | `#form-recipe` |
 | overlay scrollbar paints through chrome heads | DESIGN_SYSTEM Hard rules | `#drawer-nested-scroll` |
+| overlay scrollbar past Dialog radius | DESIGN_SYSTEM Hard rules | `#dialog-nested-scroll` |
 | overlay scrollbar paints above Select/Menu flyout | DESIGN_SYSTEM Scrollbar discipline | `#sandbox-scroll-menu-stack` |
 | Menu/Select flyout scroll thumb buried under panel | DESIGN_SYSTEM Scrollbar discipline | `#sandbox-scroll-menu-stack` |
 | modal Dialog scrollbar flash on enter | DESIGN_SYSTEM Dialog / overlays | `#timeline` |

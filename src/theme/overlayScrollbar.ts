@@ -750,33 +750,27 @@ function updateHost(host: HTMLElement, state: HostState) {
     if (copyRoot) {
       const rail = copyFloatVerticalRailGeometry(copyRoot, rect, sb);
       railLeft = rail.left;
-      const belowChrome = clampVerticalRailBelowOverlayChrome(
-        host,
-        rail.top,
-        rail.height,
-        railLeft,
-        sb,
-      );
-      railTop = belowChrome.top;
-      railHeight = belowChrome.height;
-    } else {
-      const rounded = clampVerticalRailToRoundedClip(
-        host,
-        railTop,
-        railHeight,
-        railLeft,
-        sb,
-      );
-      const belowChrome = clampVerticalRailBelowOverlayChrome(
-        host,
-        rounded.top,
-        rounded.height,
-        railLeft,
-        sb,
-      );
-      railTop = belowChrome.top;
-      railHeight = belowChrome.height;
+      railTop = rail.top;
+      railHeight = rail.height;
     }
+    /* Plain / `--copy-float` CodeBlock still needs rounded-clip clamp so
+       thumbs stay inside centered Dialog `radius-3xl` (live `#dialog-nested-scroll`). */
+    const rounded = clampVerticalRailToRoundedClip(
+      host,
+      railTop,
+      railHeight,
+      railLeft,
+      sb,
+    );
+    const belowChrome = clampVerticalRailBelowOverlayChrome(
+      host,
+      rounded.top,
+      rounded.height,
+      railLeft,
+      sb,
+    );
+    railTop = belowChrome.top;
+    railHeight = belowChrome.height;
 
     const thumbH = Math.max(
       MIN_THUMB_PX,
