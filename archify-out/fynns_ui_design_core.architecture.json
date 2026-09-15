@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "@fynn7/ui-design-core 运行时架构",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "viewBox": [1280, 820],
+    "repository": {
+      "url": "https://github.com/Fynn7/fynns_ui_design_core.git",
+      "revision": "e762fc284fd8ffb998a07130011d0fcfa3e6035e"
+    },
+    "views": [
+      {
+        "id": "consumer-render",
+        "label": "消费渲染主路径",
+        "focus": ["consumer", "alias", "barrel", "shell", "content", "primitives"],
+        "note": "从消费应用经 @fynns/ui 别名进入 barrel，再落到壳层与 keep-set 原语。"
+      },
+      {
+        "id": "theme-feedback",
+        "label": "主题与反馈",
+        "focus": ["barrel", "theme", "shell", "snack", "busy"],
+        "note": "barrel 副作用注入 theme.css；壳层挂 SnackbarHost；栏目态走 BusyRegion。"
+      },
+      {
+        "id": "living-contract",
+        "label": "活契约",
+        "focus": ["barrel", "sandbox", "primitives"],
+        "note": "Sandbox Globals/Preview 决定公开表面；扩 barrel 须同步活示例。"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "consumer",
+      "type": "frontend",
+      "label": "消费应用",
+      "sublabel": "Vite + React 19",
+      "pos": [48, 300],
+      "size": [128, 64],
+      "sources": [{ "path": "llm/CONSUME.md", "line": 35, "label": "file: 安装" }]
+    },
+    {
+      "id": "alias",
+      "type": "frontend",
+      "label": "@fynns/ui",
+      "sublabel": "alias → index.ts",
+      "tag": "file:",
+      "pos": [230, 300],
+      "size": [132, 64],
+      "sources": [{ "path": "llm/CONSUME.md", "line": 37, "label": "Vite alias" }]
+    },
+    {
+      "id": "barrel",
+      "type": "frontend",
+      "label": "公开 barrel",
+      "sublabel": "src/index.ts",
+      "pos": [430, 300],
+      "size": [132, 64],
+      "sources": [{ "path": "src/index.ts", "line": 1, "end_line": 18, "label": "入口" }]
+    },
+    {
+      "id": "theme",
+      "type": "frontend",
+      "label": "主题运行时",
+      "sublabel": "theme.css + tokens",
+      "tag": "ensureOverlayScrollbars",
+      "pos": [416, 110],
+      "size": [160, 64],
+      "sources": [
+        { "path": "src/theme/theme.css", "label": "生成 CSS" },
+        { "path": "package.json", "line": 13, "end_line": 19, "label": "exports" }
+      ]
+    },
+    {
+      "id": "shell",
+      "type": "frontend",
+      "label": "DestinationAppShell",
+      "sublabel": "默认产品壳",
+      "pos": [630, 300],
+      "size": [156, 64],
+      "sources": [{ "path": "src/index.ts", "line": 300, "label": "export" }]
+    },
+    {
+      "id": "content",
+      "type": "frontend",
+      "label": "PageScroll",
+      "sublabel": "FillColumn / 滚动井",
+      "pos": [850, 300],
+      "size": [140, 64],
+      "sources": [
+        { "path": "src/index.ts", "line": 223, "end_line": 225, "label": "hosts" }
+      ]
+    },
+    {
+      "id": "primitives",
+      "type": "frontend",
+      "label": "Keep-set 原语",
+      "sublabel": "Button / Dialog / Chat…",
+      "pos": [1050, 300],
+      "size": [148, 64],
+      "sources": [{ "path": "src/primitives/Button.tsx", "label": "Button" }]
+    },
+    {
+      "id": "busy",
+      "type": "frontend",
+      "label": "BusyRegion",
+      "sublabel": "BusyScrim + busyTask",
+      "pos": [850, 480],
+      "size": [140, 64],
+      "sources": [
+        { "path": "src/primitives/Busy.tsx", "line": 218, "label": "BusyRegion" },
+        { "path": "src/scheduling/busyTask.ts", "line": 173, "label": "runBusyTask" }
+      ]
+    },
+    {
+      "id": "snack",
+      "type": "frontend",
+      "label": "SnackbarHost",
+      "sublabel": "snackbar() 瞬时反馈",
+      "pos": [630, 480],
+      "size": [148, 64],
+      "sources": [{ "path": "src/primitives/Snackbar.tsx", "line": 157, "label": "API" }]
+    },
+    {
+      "id": "sandbox",
+      "type": "external",
+      "label": "Sandbox",
+      "sublabel": "Globals / Preview",
+      "tag": "活契约",
+      "pos": [230, 480],
+      "size": [132, 64],
+      "sources": [
+        { "path": "examples/sandbox/vite.config.ts", "label": "Vite 配置" },
+        { "path": "package.json", "line": 51, "label": "npm run sandbox" }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "消费侧",
+      "wraps": ["consumer", "alias"]
+    },
+    {
+      "kind": "region",
+      "label": "@fynn7/ui-design-core",
+      "wraps": ["barrel", "theme", "shell", "content", "primitives", "busy", "snack"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "consumer-to-alias",
+      "from": "consumer",
+      "to": "alias",
+      "label": "import",
+      "variant": "emphasis",
+      "labelDy": -28
+    },
+    {
+      "id": "alias-to-barrel",
+      "from": "alias",
+      "to": "barrel",
+      "label": "解析",
+      "variant": "emphasis",
+      "labelDy": -28
+    },
+    {
+      "id": "barrel-to-shell",
+      "from": "barrel",
+      "to": "shell",
+      "label": "导出壳层",
+      "variant": "emphasis",
+      "labelDy": -28
+    },
+    {
+      "id": "shell-to-content",
+      "from": "shell",
+      "to": "content",
+      "label": "主栏",
+      "variant": "emphasis",
+      "labelDy": -28
+    },
+    {
+      "id": "content-to-primitives",
+      "from": "content",
+      "to": "primitives",
+      "label": "渲染",
+      "variant": "emphasis",
+      "labelDy": -28
+    },
+    {
+      "id": "barrel-to-theme",
+      "from": "barrel",
+      "to": "theme",
+      "label": "注入 CSS",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "labelDx": 56
+    },
+    {
+      "id": "shell-to-snack",
+      "from": "shell",
+      "to": "snack",
+      "label": "根挂载",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDx": -56
+    },
+    {
+      "id": "content-to-busy",
+      "from": "content",
+      "to": "busy",
+      "label": "冷启动",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "barrel-to-sandbox",
+      "from": "barrel",
+      "to": "sandbox",
+      "label": "活表面",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDx": -72
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "包出口",
+      "items": [
+        "`.` → src/index.ts；另导出 theme.css / styles.css / tokens / scrollbar",
+        "日常同级 file: 链接；peer 为 react / react-dom ^19"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "运行时辅助",
+      "items": [
+        "src/layout：overflowBounds 等几何辅助，供原语定位",
+        "src/scheduling/busyTask：与 BusyScrim / BusyRegion 配对"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "门禁（非运行时）",
+      "items": [
+        "check:wysiwyg 保证 barrel ↔ sandbox 原子一致",
+        "check:no-consumer 禁止 sandbox/文档粘贴消费产品文案"
+      ]
+    }
+  ]
+}
