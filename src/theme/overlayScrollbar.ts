@@ -30,6 +30,11 @@
  * Auto-starts when `@fynns/ui` is imported. Idempotent.
  */
 
+import {
+  clearScrollEdgeFade,
+  syncScrollEdgeFade,
+} from "../primitives/scrollEdgeFade";
+
 const HOST_ATTR = "data-fynns-overlay-scroll";
 /** Ties portal rails to a host across Vite HMR / dual-bundle loads. */
 const HOST_ID_ATTR = "data-fynns-scroll-host";
@@ -806,6 +811,9 @@ function updateHost(host: HTMLElement, state: HostState) {
   }
 
   syncThumbVisibility(state, host);
+  /* Soft edge fade (V + H). Table wraps pick up `data-fade-left/right` CSS
+   * masks in theme.css — live `#table` / consumer Card + `.fynns-table-wrap`. */
+  syncScrollEdgeFade(host);
 }
 
 function attach(host: HTMLElement) {
@@ -962,6 +970,7 @@ function detach(host: HTMLElement) {
   host.removeAttribute(HOST_ATTR);
   host.removeAttribute(HOST_ID_ATTR);
   host.classList.remove("fynns-scroll--overlay-host");
+  clearScrollEdgeFade(host);
   states.delete(host);
   setBoundState(host, undefined);
 }

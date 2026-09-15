@@ -4725,6 +4725,26 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             size="lg"
             showCloseButton
             closeAriaLabel={t("globals.dialogClose")}
+            feet={
+              <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setListCatalogEditOpen(false)}
+                >
+                  {t("globals.formRecipeDialogCancel")}
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setListCatalogEditOpen(false);
+                    snackbar(t("globals.listCatalogEditDialogSaved"));
+                  }}
+                >
+                  {t("globals.formRecipeSave")}
+                </Button>
+              </div>
+            }
           >
             <FieldStack>
               <FieldBlock label={t("globals.listCatalogEditDialogName")}>
@@ -4743,24 +4763,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 />
               </FieldBlock>
             </FieldStack>
-            <div className="fynns-control-cluster fynns-control-cluster--end-align">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setListCatalogEditOpen(false)}
-              >
-                {t("globals.formRecipeDialogCancel")}
-              </Button>
-              <Button
-                size="sm"
-                onClick={() => {
-                  setListCatalogEditOpen(false);
-                  snackbar(t("globals.listCatalogEditDialogSaved"));
-                }}
-              >
-                {t("globals.formRecipeSave")}
-              </Button>
-            </div>
           </Dialog>
           <SandboxHelp text={t("globals.listCatalogHelp")} />
           <List aria-label={t("globals.listCatalogAria")}>
@@ -5510,6 +5512,36 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               size="lg"
               showCloseButton
               closeAriaLabel={t("globals.dialogClose")}
+              feet={
+                <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setTimelineEditOpen(false)}
+                  >
+                    {t("globals.formRecipeDialogCancel")}
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => {
+                      setTimelineEditOpen(false);
+                      snackbar(t("globals.timelineEditDialogDeleted"));
+                    }}
+                  >
+                    {t("globals.timelineEditDialogDelete")}
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      setTimelineEditOpen(false);
+                      snackbar(t("globals.timelineEditDialogSaved"));
+                    }}
+                  >
+                    {t("globals.formRecipeSave")}
+                  </Button>
+                </div>
+              }
             >
               <FieldStack>
                 <FieldBlock label={t("globals.timelineEditDialogName")}>
@@ -5528,34 +5560,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   />
                 </FieldBlock>
               </FieldStack>
-              <div className="fynns-control-cluster fynns-control-cluster--end-align">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setTimelineEditOpen(false)}
-                >
-                  {t("globals.formRecipeDialogCancel")}
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => {
-                    setTimelineEditOpen(false);
-                    snackbar(t("globals.timelineEditDialogDeleted"));
-                  }}
-                >
-                  {t("globals.timelineEditDialogDelete")}
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    setTimelineEditOpen(false);
-                    snackbar(t("globals.timelineEditDialogSaved"));
-                  }}
-                >
-                  {t("globals.formRecipeSave")}
-                </Button>
-              </div>
             </Dialog>
 
             <SandboxHelp text={t("globals.timelineDetailHelp")} />
@@ -6246,14 +6250,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           }
           size="sm"
           closeAriaLabel={t("globals.dialogClose")}
-        >
-          <FieldStack>
-            <FieldBlock label={t("globals.dialogCreateNameLabel")} htmlFor="sandbox-dialog-create-name">
-              <Input
-                id="sandbox-dialog-create-name"
-                placeholder={t("globals.dialogCreateNamePlaceholder")}
-              />
-            </FieldBlock>
+          feet={
             <div className="fynns-control-cluster fynns-control-cluster--end-align">
               <Button
                 variant="ghost"
@@ -6269,6 +6266,15 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 {t("globals.dialogCreateAction")}
               </Button>
             </div>
+          }
+        >
+          <FieldStack>
+            <FieldBlock label={t("globals.dialogCreateNameLabel")} htmlFor="sandbox-dialog-create-name">
+              <Input
+                id="sandbox-dialog-create-name"
+                placeholder={t("globals.dialogCreateNamePlaceholder")}
+              />
+            </FieldBlock>
           </FieldStack>
         </Dialog>
         <SandboxHelp text={t("globals.dialogFootCanonicalHelp")} />
@@ -6503,6 +6509,23 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           size="md"
           showCloseButton
           closeAriaLabel={t("globals.dialogClose")}
+          feet={
+            <div className="fynns-control-cluster fynns-control-cluster--end-align">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setDialogNestedScrollOpen(false)}
+              >
+                {t("globals.dialogCreateCancel")}
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => setDialogNestedScrollOpen(false)}
+              >
+                {t("globals.dialogCreateAction")}
+              </Button>
+            </div>
+          }
         >
           <div className="fynns-unit-stack">
             <List aria-label={t("globals.dialogNestedScrollTitle")}>
@@ -8312,25 +8335,27 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             size="lg"
             showCloseButton
             closeAriaLabel={t("globals.dialogClose")}
+            feet={
+              <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                <Button variant="ghost" size="sm" disabled>
+                  {t("globals.formRecipeDialogCancel")}
+                </Button>
+                <Button variant="tonal" size="sm" disabled>
+                  {t("globals.formRecipeDialogCopyPrompt")}
+                </Button>
+                <Button variant="tonal" size="sm" disabled>
+                  {t("globals.formRecipeDialogImportJson")}
+                </Button>
+                <Button size="sm" loading>
+                  {t("globals.formRecipeDialogExtract")}
+                </Button>
+              </div>
+            }
           >
             <FormRecipeFields
               idPrefix="sandbox-form-dialog"
               {...formRecipeFieldProps}
             />
-            <div className="fynns-control-cluster fynns-control-cluster--end-align">
-              <Button variant="ghost" size="sm" disabled>
-                {t("globals.formRecipeDialogCancel")}
-              </Button>
-              <Button variant="tonal" size="sm" disabled>
-                {t("globals.formRecipeDialogCopyPrompt")}
-              </Button>
-              <Button variant="tonal" size="sm" disabled>
-                {t("globals.formRecipeDialogImportJson")}
-              </Button>
-              <Button size="sm" loading>
-                {t("globals.formRecipeDialogExtract")}
-              </Button>
-            </div>
           </Dialog>
           <Dialog
             open={formRecipeStackDialogOpen}
@@ -8390,6 +8415,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             size="lg"
             showCloseButton
             closeAriaLabel={t("globals.dialogClose")}
+            feet={
+              <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setFormRecipeFileDialogOpen(false)}
+                >
+                  {t("globals.formRecipeDialogCancel")}
+                </Button>
+                <Button size="sm" onClick={() => setFormRecipeFileDialogOpen(false)}>
+                  {t("globals.formRecipeFileDialogSave")}
+                </Button>
+              </div>
+            }
           >
             <CodeBlock
               variant="editable"
@@ -8399,18 +8438,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               copyAriaLabel={t("globals.codeBlockCopy")}
               aria-label={t("globals.codeBlockFileBodyAria")}
             />
-            <div className="fynns-control-cluster fynns-control-cluster--end-align">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setFormRecipeFileDialogOpen(false)}
-              >
-                {t("globals.formRecipeDialogCancel")}
-              </Button>
-              <Button size="sm" onClick={() => setFormRecipeFileDialogOpen(false)}>
-                {t("globals.formRecipeFileDialogSave")}
-              </Button>
-            </div>
           </Dialog>
           <SandboxHelp text={t("globals.formRecipeHelp")} />
         </GlobalsDemo>

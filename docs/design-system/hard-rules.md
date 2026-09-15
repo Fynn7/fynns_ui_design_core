@@ -758,13 +758,21 @@
 - **DON'T** park **`IconButton` / check-disk / Fab** (or any icon-only primary)
   as the confirm / dismiss control inside a centered `Dialog` /
   `ConfirmDialog` **body or foot** — **one Dialog foot style only** (≥
-  **0.5.286**). Canonical foot = `.fynns-control-cluster--end-align` with
-  **labeled** `Button`s only: LTR **Cancel** `ghost` `sm` leftmost → optional
-  secondary tonal → **primary** confirm **rightmost** (Wave1 OverflowTip on
-  long labels). `ConfirmDialog` stock foot counts. How-to stays on
+  **0.5.286**). Canonical foot = Dialog **`feet`** prop (sticky
+  `.fynns-dialog-foot`, ≥ **0.5.297**) or `ConfirmDialog` stock foot — never
+  bury Cancel inside scrollable `children`. Inside `feet`: 
+  `.fynns-control-cluster--end-align` with **labeled** `Button`s only: LTR
+  **Cancel** `ghost` `sm` leftmost → optional secondary tonal → **primary**
+  confirm **rightmost** (Wave1 OverflowTip on long labels). Always render
+  Cancel in `feet` on loading / empty-plan branches. How-to stays on
   `headActions` `InfoHint` `sm` — not a `description` essay that restates the
-  FieldBlock label. Live `#overlays` (create Dialog). Failure: CONSUMER_TREATY
-  Dialog foot IconButton / check-disk.
+  FieldBlock label. Live `#overlays` / `#dialog-nested-scroll`. Failure:
+  CONSUMER_TREATY Dialog foot IconButton / check-disk;
+  Dialog body end-align footer clipped; Dialog feet omitted on empty plan.
+- **DON'T** leave a transparent Dialog overlay eating clicks while
+  `data-state="closing"` — core sets `pointer-events: none` on closing
+  overlays (≥ **0.5.297**). Live `#overlays`. Failure: CONSUMER_TREATY
+  Dialog closing scrim blocks clicks.
 - **DON'T** crush BottomSheet title top below actions bottom — header outer
   `padding-block-start` aliases `--fynns-layout-sheet-actions-pad-bottom`
   (**24dp**, ≥ **0.5.281**). Do not revive `sheet-header-gap` as the outer

@@ -3871,6 +3871,7 @@ a.fynns-breadcrumb-link:visited {
  * scroll hosts. Pair with `.fynns-scroll` for overlay thumbs. Vertical wheel
  * pans horizontally when H overflows and Y cannot consume (≥ 0.5.184;
  * edge trap ≥ 0.5.186; `data-fynns-wheel-x="off"` to opt out).
+ * Inline soft-edge fade: `data-fade-left` / `data-fade-right` (≥ **0.5.296**).
  */
 .fynns-table-wrap {
   overflow: auto;

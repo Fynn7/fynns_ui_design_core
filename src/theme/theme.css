@@ -938,7 +938,8 @@ button {
  * host mask). CodeBlock/Textarea/PageScroll/FillColumn header read layout
  * token; NavDrawer reads navdrawer alias so overriding
  * --fynns-navdrawer-body-fade-length still applies. PageScroll ≥ 0.5.247;
- * FillColumn header ≥ 0.5.278.
+ * FillColumn header ≥ 0.5.278. Table wrap inline-axis ≥ **0.5.296**
+ * (data-fade-left / data-fade-right).
  *
  * Textarea uses a separate multi-layer mask (≥ 0.5.282): opaque hairline
  * frame + inset content fade — a single vertical mask would erase side
@@ -1216,6 +1217,58 @@ button {
     var(--fynns-border-hairline) var(--fynns-border-hairline);
   mask-repeat: no-repeat;
   mask-composite: add;
+}
+
+/*
+ * Table wrap — inline-axis soft edge (≥ **0.5.296**). Driven by
+ * data-fade-left / data-fade-right from syncScrollEdgeFade (overlay
+ * scroll hosts call it on scroll/resize). Live #table.
+ */
+.fynns-table-wrap[data-fade-right] {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+}
+
+.fynns-table-wrap[data-fade-left] {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 100%
+  );
+}
+
+.fynns-table-wrap[data-fade-left][data-fade-right] {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
 }
 
 .fynns-sr-only {

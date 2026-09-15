@@ -98,14 +98,16 @@ belong in a consumer’s own doc.
    **on**; opt out `data-fynns-wheel-x="off"`. While H overflows, vertical wheel
    stays on that host even at the left/right edge (no PageScroll chaining mid
    hover — avoids thumb jump when sliding back). Live `#table`. **Scroll-edge
-   fade (≥ 0.5.135; PageScroll ≥ **0.5.247**; FillColumn header ≥ **0.5.278**):**
+   fade (≥ 0.5.135; PageScroll ≥ **0.5.247**; FillColumn header ≥ **0.5.278**;
+   Table wrap inline ≥ **0.5.296**):**
    capped CodeBlock / Textarea / NavigationDrawer body / **`PageScroll`** /
    canvas-capped **`FillColumn` `header`** soft-mask top+bottom when content
-   overflows mid-scroll
-   (`data-fade-top` / `data-fade-bottom`, length
-   `--fynns-layout-scroll-edge-fade-length`) — **built into `PageScroll`
-   (≥ **0.5.247**) and FillColumn header (≥ **0.5.278**); zero consumer props /
-   private mask CSS**. Masks keep the outer `--fynns-border-hairline` strip
+   overflows mid-scroll (`data-fade-top` / `data-fade-bottom`); wide
+   **`.fynns-table-wrap`** soft-masks left+right mid-scroll (`data-fade-left` /
+   `data-fade-right`, same length `--fynns-layout-scroll-edge-fade-length`) —
+   **built into overlay `.fynns-scroll` hosts** (≥ **0.5.296** for tables;
+   PageScroll ≥ **0.5.247**; FillColumn header ≥ **0.5.278**); zero consumer
+   props / private mask CSS**. Masks keep the outer `--fynns-border-hairline` strip
    opaque (≥ **0.5.282**) so Textarea / bordered wells do **not** fade their
    stroke with the content. Not a hard clip
    into TopAppBar / canvas floor / Chat. Do **not** invent consumer `mask-image` on

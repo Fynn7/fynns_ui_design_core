@@ -773,7 +773,7 @@ const en = {
   "globals.tableMapUnpriced": "Unpriced",
   "globals.tableMapAction": "Map",
   "globals.tableHelp":
-    "Titled tables: `Card` `title` + `.fynns-table-wrap.fynns-scroll` (`chrome=\"plain\"` when the wrap is the nested well). Table + Head / Body / Row / HeaderCell / Cell / Caption. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers). Mapping kind / status in a cell is `.fynns-table-meta` (muted caption), **not** `Chip`. Kind + optional id + trailing action: `.fynns-control-cluster--end-align` (**centers on the row band** ≥ 0.5.79); missing middle → `.fynns-control-cluster__grow` so the action shares one trailing edge.",
+    "Titled tables: `Card` `title` + `.fynns-table-wrap.fynns-scroll` (`chrome=\"plain\"` when the wrap is the nested well). Table + Head / Body / Row / HeaderCell / Cell / Caption. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers). Mid-scroll inline edges soft-mask via `data-fade-left` / `data-fade-right` (≥ **0.5.296** — same family as PageScroll block fades; zero consumer `mask-image`). Mapping kind / status in a cell is `.fynns-table-meta` (muted caption), **not** `Chip`. Kind + optional id + trailing action: `.fynns-control-cluster--end-align` (**centers on the row band** ≥ 0.5.79); missing middle → `.fynns-control-cluster__grow` so the action shares one trailing edge.",
   "globals.tableWheelX": "Wheel → horizontal",
   "globals.tableWheelXHelp":
     "Wide `.fynns-table-wrap.fynns-scroll` (≥ **0.5.184**): when the host has horizontal overflow and cannot scroll further on Y, a vertical mouse wheel pans `scrollLeft` instead of driving the outer PageScroll. Default **on** (core). Opt out with `data-fynns-wheel-x=\"off\"` — toggle below. While H overflows, wheel stays trapped on the wrap even at the left/right edge (≥ **0.5.186**) so slide-back does not yank the page thumb. First Card is width-capped (H-only) so the wheel remap is easy to feel.",
@@ -3204,7 +3204,7 @@ const zh: Record<MessageKey, string> = {
   "globals.tableMapUnpriced": "未定价",
   "globals.tableMapAction": "映射",
   "globals.tableHelp":
-    "带标题表格：`Card` `title` + `.fynns-table-wrap.fynns-scroll`（wrap 作为嵌套井时 `chrome=\"plain\"`）。Table + Head / Body / Row / HeaderCell / Cell / Caption。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。单元格里的映射来源/状态用 `.fynns-table-meta`（muted 文案），**禁止** `Chip`。种类 + 可选 id + 行尾操作：`.fynns-control-cluster--end-align`（**整行高度内竖直居中** ≥ 0.5.79）；中间缺内容时插 `.fynns-control-cluster__grow`，让操作跨行右对齐。",
+    "带标题表格：`Card` `title` + `.fynns-table-wrap.fynns-scroll`（wrap 作为嵌套井时 `chrome=\"plain\"`）。Table + Head / Body / Row / HeaderCell / Cell / Caption。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。横向滚到中间时左右软渐隐：`data-fade-left` / `data-fade-right`（≥ **0.5.296**，与 PageScroll 上下渐隐同族；禁止消费侧私有 `mask-image`）。单元格里的映射来源/状态用 `.fynns-table-meta`（muted 文案），**禁止** `Chip`。种类 + 可选 id + 行尾操作：`.fynns-control-cluster--end-align`（**整行高度内竖直居中** ≥ 0.5.79）；中间缺内容时插 `.fynns-control-cluster__grow`，让操作跨行右对齐。",
   "globals.tableWheelX": "滚轮 → 横向",
   "globals.tableWheelXHelp":
     "宽 `.fynns-table-wrap.fynns-scroll`（≥ **0.5.184**）：宿主有横向溢出且 Y 方向已无法继续滚动时，纵向鼠标滚轮改为推动 `scrollLeft`，而不是带动外层 PageScroll。默认 **开启**（core）。关闭：`data-fynns-wheel-x=\"off\"` — 见下方开关。只要仍有横向溢出，滚轮留在 wrap 上（含左右边缘，≥ **0.5.186**），滑回起点时不会拽动页面滚动条。首张 Card 仅限宽（纯横向溢出），便于感受滚轮映射。",
