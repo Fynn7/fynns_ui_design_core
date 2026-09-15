@@ -2613,7 +2613,7 @@ a.fynns-breadcrumb-link:visited {
   white-space: nowrap;
   font-size: var(--fynns-font-size-md);
   font-weight: var(--fynns-font-weight-medium);
-  line-height: var(--fynns-line-height-tight);
+  line-height: var(--fynns-line-height-snug);
   color: var(--fynns-color-text);
 }
 

@@ -55,7 +55,9 @@ Vision pills use keep-set `ChatComposerToggle` in `endActions` — order
 **Model Menu → Thinking → Vision → Send/Dictate**. Wrap each toggle in
 `Tooltip` for tip copy (required when the pill goes icon-only). Do **not**
 bury mode switches in the leading `+` Menu, or invent a consumer chip CSS
-clone. On ≤ **36rem** composer containers (≥ **0.5.293**; was 26rem in 0.5.291),
+clone. Labeled pills use `--fynns-line-height-snug` (≥ **0.5.294**) so Latin
+descenders (Thinking **g**) are never clipped by `overflow: hidden`. On ≤
+**36rem** composer containers (≥ **0.5.293**; was 26rem in 0.5.291),
 core hides the pill label (icon-only; Tooltip + `aria-label` keep the name)
 so mid-width landing shells never ellipsize to “T.” / one-glyph crumbs —
 do **not** invent consumer icon-only CSS. Sandbox teaches **wide** (labeled,

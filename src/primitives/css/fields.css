@@ -504,6 +504,7 @@ input.fynns-input:focus::-webkit-scrollbar {
   white-space: nowrap;
   flex: 1 1 auto;
   min-width: 0;
+  line-height: var(--fynns-line-height-snug);
 }
 
 .fynns-select-chevron {
@@ -590,7 +591,8 @@ input.fynns-input:focus::-webkit-scrollbar {
   justify-content: space-between;
   gap: var(--fynns-space-sm);
   color: var(--fynns-color-text);
-  line-height: var(--fynns-line-height-tight);
+  /* Snug — end-label ellipsis must not clip descenders (≥ **0.5.294**). */
+  line-height: var(--fynns-line-height-snug);
   min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
@@ -1288,6 +1290,7 @@ input.fynns-input:focus::-webkit-scrollbar {
   position: relative;
   z-index: 1;
   white-space: nowrap;
+  line-height: var(--fynns-line-height-snug);
 }
 
 .fynns-chip-check {

@@ -406,12 +406,16 @@
   (≥ **0.5.254**); Menu chevron lives in `.fynns-menu-trigger-trailing`. Do
   **not** invent consumer `transform: translateY` optical nudges. Failure:
   CONSUMER_TREATY Menu chevron optically high.
-- **DON'T** clip Latin descenders on a labeled `DropdownMenu` trigger
-  (`g` / `y` / `p` look flat) — `.fynns-menu-trigger-label` uses
-  `--fynns-line-height-snug` (≥ **0.5.255**), never `line-height: 1` with
-  `overflow: hidden` + OverflowTip. Do **not** invent consumer padding /
-  line-height on `.fynns-overflow-tip-label`. Live `#sandbox-menu-field-match`.
-  Failure: CONSUMER_TREATY Menu trigger clips descenders.
+- **DON'T** clip Latin descenders on **any** single-line ellipsis label
+  (`g` / `y` / `p` look flat) — including `DropdownMenu` triggers,
+  `ChatComposerToggle`, `Button` / SplitButton labels, `ToggleChip`, Chip,
+  Switch end-labels, DatePicker title, and **`.fynns-overflow-tip-label`**
+  (global seatbelt ≥ **0.5.294**; Menu ≥ **0.5.255**). Use
+  `--fynns-line-height-snug`, never `line-height: 1` /
+  `--fynns-line-height-tight` together with `overflow: hidden`. Do **not**
+  invent consumer padding / line-height on tip or pill labels. Live
+  `#sandbox-menu-field-match` / `#sandbox-chat-composer-thinking-toggle`
+  (Thinking **g**). Failure: CONSUMER_TREATY Ellipsis label clips descenders.
 - **DON'T** ship a labeled `DropdownMenu` with a leading glyph **misaligned**
   vs the label (icon rides baseline / floats high) — pass **`leadingIcon`**
   (16dp `.fynns-menu-trigger-leading`, flex-centered with the label — ≥

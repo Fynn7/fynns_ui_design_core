@@ -3665,6 +3665,12 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  /*
+   * Global seatbelt: any OverflowTip ellipsis host inherits this — never
+   * `line-height: 1` / `--fynns-line-height-tight` or Latin descenders clip
+   * (g / y / p) (≥ **0.5.294**; Menu trigger ≥ **0.5.255**).
+   */
+  line-height: var(--fynns-line-height-snug);
 }
 
 /*

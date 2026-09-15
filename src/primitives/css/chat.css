@@ -1186,6 +1186,7 @@ a.fynns-chat-activity-artifact:hover {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: var(--fynns-line-height-snug);
 }
 
 .fynns-chat-citation-chip--more {
@@ -1798,7 +1799,12 @@ a.fynns-chat-activity-artifact:hover {
   font-family: inherit;
   font-size: var(--fynns-chat-composer-toggle-font-size);
   font-weight: var(--fynns-font-weight-medium);
-  line-height: 1;
+  /*
+   * Never `line-height: 1` / `--fynns-line-height-tight` with the label’s
+   * overflow:hidden — clips Latin descenders (Thinking “g”) (≥ **0.5.294**;
+   * same seatbelt as Menu ≥ **0.5.255**).
+   */
+  line-height: var(--fynns-line-height-snug);
   cursor: pointer;
   user-select: none;
   transition:
@@ -1871,6 +1877,7 @@ a.fynns-chat-activity-artifact:hover {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: var(--fynns-line-height-snug);
 }
 
 .fynns-chat-composer-primary-slot > .fynns-tooltip-trigger:has(.fynns-chat-composer-toggle) {

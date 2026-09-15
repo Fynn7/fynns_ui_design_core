@@ -1063,6 +1063,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  /* Descender seatbelt with overflow:hidden (≥ **0.5.294**). */
+  line-height: var(--fynns-line-height-snug);
 }
 
 .fynns-toggle-group--full .fynns-toggle-chip-content {
