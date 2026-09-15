@@ -678,6 +678,13 @@
   `--toolbar-end` — **not** a lone trash twin. Live
   `#sandbox-navdrawer-session-chrome`. Failure: CONSUMER_TREATY mode drawer
   toolbar trash+new twin.
+- **DON'T** put a leading `icon` on session / history `NavigationDrawerItem`s
+  by default — rows are **label (+ optional `trailing` More) only**. `icon` is
+  **opt-in** when the glyph carries meaning (typed destinations, distinct
+  kinds) — never a uniform decorative `FileIcon` on every chat title. Live
+  `#sandbox-navdrawer-session-chrome` (clean default) /
+  `#sandbox-navdrawer-session-icon` (opt-in icon variant). Failure:
+  CONSUMER_TREATY session history leading icon by default.
 - **DON'T** invent a chat / session-history product layout that skips the
   keep-set tree — default = **`ClippedNavShell`** + session
   `NavigationDrawer` (`NavigationDrawerNewChat` …) + **`FillColumn` → `Chat`**.
@@ -760,13 +767,21 @@
 - **DON'T** park **`IconButton` / check-disk / Fab** (or any icon-only primary)
   as the confirm / dismiss control inside a centered `Dialog` /
   `ConfirmDialog` **body or foot** — **one Dialog foot style only** (≥
-  **0.5.286**). Canonical foot = `.fynns-control-cluster--end-align` with
-  **labeled** `Button`s only: LTR **Cancel** `ghost` `sm` leftmost → optional
-  secondary tonal → **primary** confirm **rightmost** (Wave1 OverflowTip on
-  long labels). `ConfirmDialog` stock foot counts. How-to stays on
+  **0.5.286**). Canonical foot = Dialog **`feet`** prop (sticky
+  `.fynns-dialog-foot`, ≥ **0.5.297**) or `ConfirmDialog` stock foot — never
+  bury Cancel inside scrollable `children`. Inside `feet`: 
+  `.fynns-control-cluster--end-align` with **labeled** `Button`s only: LTR
+  **Cancel** `ghost` `sm` leftmost → optional secondary tonal → **primary**
+  confirm **rightmost** (Wave1 OverflowTip on long labels). Always render
+  Cancel in `feet` on loading / empty-plan branches. How-to stays on
   `headActions` `InfoHint` `sm` — not a `description` essay that restates the
-  FieldBlock label. Live `#overlays` (create Dialog). Failure: CONSUMER_TREATY
-  Dialog foot IconButton / check-disk.
+  FieldBlock label. Live `#overlays` / `#dialog-nested-scroll`. Failure:
+  CONSUMER_TREATY Dialog foot IconButton / check-disk;
+  Dialog body end-align footer clipped; Dialog feet omitted on empty plan.
+- **DON'T** leave a transparent Dialog overlay eating clicks while
+  `data-state="closing"` — core sets `pointer-events: none` on closing
+  overlays (≥ **0.5.297**). Live `#overlays`. Failure: CONSUMER_TREATY
+  Dialog closing scrim blocks clicks.
 - **DON'T** crush BottomSheet title top below actions bottom — header outer
   `padding-block-start` aliases `--fynns-layout-sheet-actions-pad-bottom`
   (**24dp**, ≥ **0.5.281**). Do not revive `sheet-header-gap` as the outer

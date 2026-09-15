@@ -24,6 +24,8 @@ export type TableProps = HTMLAttributes<HTMLTableElement> & {
  * columns scroll horizontally instead of crushing / CJK-shattering. Overlay
  * scrollbars map vertical wheel → `scrollLeft` when the wrap has H overflow
  * and cannot scroll further on Y (edge trap; opt out: `data-fynns-wheel-x="off"`).
+ * Mid-scroll inline edges soft-mask via `data-fade-left` / `data-fade-right`
+ * (≥ **0.5.296** — same family as PageScroll block fades). Live `#table`.
  */
 export function Table({
   stickyHeader = false,

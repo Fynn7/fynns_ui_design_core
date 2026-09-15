@@ -113,7 +113,9 @@ classes.
     **`ClippedNavShell`** (or drill-in with `navKey`; omit TopAppBar on
     new-chat landing) + session **`NavigationDrawer`**
     (`NavigationDrawerNewChat` ghost labeled New chat + optional More; empty
-    list `EmptyState` sm; row trailing prefer More; footer account) + main
+    list `EmptyState` sm; session Items **label-only by default** — leading
+    `icon` opt-in only when the glyph carries meaning ≥ **0.5.298**; row
+    trailing prefer More; footer account) + main
     **`FillColumn` → `Chat`**. **New-chat landing:** greeting `EmptyState` +
     soft starters **centered above**; **`ChatComposer` inside `ChatThread.empty`**
     pinned to the column bottom with the same
@@ -121,8 +123,11 @@ classes.
     docked composer row). Active thread: composer under `ChatThread` inside
     Chat. Flat **destination** roots stay on `DestinationAppShell`. Do **not**
     put `ChatComposer` in FillColumn `footer` or use `PageScroll` as the chat
-    main scroll. Live `#layouts-demo-chat-product`. Failure: CONSUMER_TREATY
-    chat product / session host wrong tree.
+    main scroll. Live `#layouts-demo-chat-product` /
+    `#sandbox-navdrawer-session-chrome` (clean) /
+    `#sandbox-navdrawer-session-icon` (opt-in icon). Failure: CONSUMER_TREATY
+    chat product / session host wrong tree /
+    session history leading icon by default.
   - **Main vs aside:** **main** = column ceiling `--fynns-layout-chat-max-width`
     (**48rem**); user bubble **70%** of host (`radius-22`,
     `--fynns-color-chat-user-bubble`); composer **100%** of same host

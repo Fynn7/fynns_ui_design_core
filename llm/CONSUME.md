@@ -116,16 +116,23 @@ export function App() {
         </PageScroll>
       </DestinationAppShell>
 
-      <Dialog open={open} onOpenChange={setOpen} title="New entry" size="lg" showCloseButton>
+      <Dialog
+        open={open}
+        onOpenChange={setOpen}
+        title="New entry"
+        size="lg"
+        showCloseButton
+        feet={
+          <div className="fynns-control-cluster fynns-control-cluster--end-align">
+            <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button variant="primary" size="sm" onClick={() => { setOpen(false); snackbar("Saved"); }}>Save</Button>
+          </div>
+        }
+      >
         <FieldStack>
           <FieldBlock label="Title" htmlFor="title"><Input id="title" /></FieldBlock>
           <FieldBlock label="Body" htmlFor="body"><Textarea id="body" minRows={6} /></FieldBlock>
         </FieldStack>
-        {/* foot: Cancel left, primary rightmost (sandbox #form-recipe) */}
-        <div className="fynns-control-cluster fynns-control-cluster--end-align">
-          <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>Cancel</Button>
-          <Button variant="primary" size="sm" onClick={() => { setOpen(false); snackbar("Saved"); }}>Save</Button>
-        </div>
       </Dialog>
       <SnackbarHost />
     </>

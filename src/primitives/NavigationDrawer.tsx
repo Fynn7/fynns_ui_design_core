@@ -431,7 +431,11 @@ export type NavigationDrawerItemProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
   "children"
 > & {
-  /** Leading icon (optional). */
+  /**
+   * Leading icon (optional). Session / history rows default to **label-only**
+   * — omit unless the glyph carries meaning. Opt-in demo:
+   * `#sandbox-navdrawer-session-icon`.
+   */
   icon?: ReactNode;
   /** Destination label (required for visible text). */
   label: string;

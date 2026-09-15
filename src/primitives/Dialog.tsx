@@ -55,13 +55,17 @@ export function DialogShell({
 }
 
 /**
- * High-level dialog with a standard head (title + actions + close) and a body
- * slot. Focus trap, scroll lock, Esc + scrim dismiss are built in via
+ * High-level dialog with a standard head (title + actions + close), a scrollable
+ * body, and an optional sticky `feet` slot (same `.fynns-dialog-foot` as
+ * ConfirmDialog). Focus trap, scroll lock, Esc + scrim dismiss are built in via
  * `DialogFrame`.
  *
- * Keep `title` / body source state until the next open — do not clear them in
- * the same tick as `open→false` (`DialogFrame` exit still paints props ~240ms).
- * Never reuse a ConfirmDialog title as this Dialog’s title fallback.
+ * Keep `title` / body / feet source state until the next open — do not clear
+ * them in the same tick as `open→false` (`DialogFrame` exit still paints props
+ * ~240ms). Never reuse a ConfirmDialog title as this Dialog’s title fallback.
+ *
+ * Canonical dismiss/confirm actions belong in `feet` (Cancel ghost → primary),
+ * not inside scrollable `children` — long Lists must not bury Cancel.
  */
 export type DialogProps = {
   open: boolean;
@@ -70,6 +74,13 @@ export type DialogProps = {
   visibleTitle?: boolean;
   description?: ReactNode;
   children: ReactNode;
+  /**
+   * Sticky action row below the scroll body (`.fynns-dialog-foot`). Prefer
+   * `.fynns-control-cluster--end-align` with labeled Buttons: Cancel `ghost`
+   * `sm` leftmost → primary rightmost. Always render Cancel here — including
+   * loading / empty-plan branches — so dismiss stays reachable.
+   */
+  feet?: ReactNode;
   headActions?: ReactNode;
   variant?: DialogVariant;
   /**
@@ -92,6 +103,7 @@ export function Dialog({
   visibleTitle = true,
   description,
   children,
+  feet,
   headActions,
   variant = "centered",
   size = "md",
@@ -147,6 +159,7 @@ export function Dialog({
       )}
       {description ? <p className="fynns-dialog-description">{description}</p> : null}
       <div className="fynns-dialog-body fynns-scroll">{children}</div>
+      {feet != null ? <div className="fynns-dialog-foot">{feet}</div> : null}
     </DialogFrame>
   );
 }

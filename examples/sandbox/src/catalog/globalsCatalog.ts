@@ -509,6 +509,22 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     ],
   },
   {
+    id: "dialog-nested-scroll",
+    categoryId: "containment",
+    label: "Dialog nested CodeBlock scroll",
+    keywords: [
+      "dialog",
+      "scrollbar",
+      "overlay",
+      "codeblock",
+      "collapsible",
+      "copy-float",
+      "overflow",
+      "对话框",
+      "溢出",
+    ],
+  },
+  {
     id: "empty-state",
     categoryId: "patterns",
     label: "EmptyState",

@@ -773,7 +773,7 @@ const en = {
   "globals.tableMapUnpriced": "Unpriced",
   "globals.tableMapAction": "Map",
   "globals.tableHelp":
-    "Titled tables: `Card` `title` + `.fynns-table-wrap.fynns-scroll` (`chrome=\"plain\"` when the wrap is the nested well). Table + Head / Body / Row / HeaderCell / Cell / Caption. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers). Mapping kind / status in a cell is `.fynns-table-meta` (muted caption), **not** `Chip`. Kind + optional id + trailing action: `.fynns-control-cluster--end-align` (**centers on the row band** ≥ 0.5.79); missing middle → `.fynns-control-cluster__grow` so the action shares one trailing edge.",
+    "Titled tables: `Card` `title` + `.fynns-table-wrap.fynns-scroll` (`chrome=\"plain\"` when the wrap is the nested well). Table + Head / Body / Row / HeaderCell / Cell / Caption. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers). Mid-scroll inline edges soft-mask via `data-fade-left` / `data-fade-right` (≥ **0.5.296** — same family as PageScroll block fades; zero consumer `mask-image`). Mapping kind / status in a cell is `.fynns-table-meta` (muted caption), **not** `Chip`. Kind + optional id + trailing action: `.fynns-control-cluster--end-align` (**centers on the row band** ≥ 0.5.79); missing middle → `.fynns-control-cluster__grow` so the action shares one trailing edge.",
   "globals.tableWheelX": "Wheel → horizontal",
   "globals.tableWheelXHelp":
     "Wide `.fynns-table-wrap.fynns-scroll` (≥ **0.5.184**): when the host has horizontal overflow and cannot scroll further on Y, a vertical mouse wheel pans `scrollLeft` instead of driving the outer PageScroll. Default **on** (core). Opt out with `data-fynns-wheel-x=\"off\"` — toggle below. While H overflows, wheel stays trapped on the wrap even at the left/right edge (≥ **0.5.186**) so slide-back does not yank the page thumb. First Card is width-capped (H-only) so the wheel remap is easy to feel.",
@@ -878,6 +878,11 @@ const en = {
   "globals.drawerNestedScrollCard": "Mounted sample card",
   "globals.drawerNestedScrollHelp":
     "Drawer body scroll + nested CodeBlock: overlay Y rails clamp below shell TopAppBar, `.fynns-dialog-head`, and section heads so thumbs never paint over higher chrome when an outer scrollport moves. Page rails stay under menus via `--fynns-z-scroll-overlay`; menu/Select own thumbs use `--fynns-z-scroll-overlay-flyout` (≥ **0.5.251** — live `#sandbox-scroll-menu-stack`). Live `#drawer-nested-scroll`.",
+  "globals.dialogNestedScrollOpen": "Open dialog nested scroll",
+  "globals.dialogNestedScrollTitle": "Sample nested scroll",
+  "globals.dialogNestedScrollFold": "Mounted sample body",
+  "globals.dialogNestedScrollHelp":
+    "Centered Dialog + List + Collapsible + plain CodeBlock: `maxHeight` sets `--fynns-code-block-max-height` on the root; copy-float overlay Y rails run rounded-clip clamp then chrome clamp so thumbs stay inside `radius-3xl` (never past the panel floor). Live `#dialog-nested-scroll`.",
   "globals.overlayHelp":
     "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). First-child bordered well (CodeBlock) flush-starts under the title — `#fullscreen-flush`. Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
@@ -1511,7 +1516,10 @@ const en = {
   "globals.navDrawerSessionNew": "New chat",
   "globals.navDrawerSessionEntry": "Sample session",
   "globals.navDrawerSessionToolbarHelp":
-    "Session chrome (≥ 0.5.257): NavigationDrawerNewChat = full-width labeled New chat, ghost (no border; Item-like hover wash). Optional trailing More for Delete all (danger). Never Trash+Plus twin; never icon-only --toolbar-end for history.",
+    "Session chrome (≥ 0.5.257 / ≥ 0.5.298): NavigationDrawerNewChat = full-width labeled New chat, ghost (no border; Item-like hover wash). Optional trailing More for Delete all (danger). Session Items default label-only — no leading icon unless opt-in. Never Trash+Plus twin; never icon-only --toolbar-end for history.",
+  "globals.navDrawerSessionIconAria": "Sample session sidebar with leading icons",
+  "globals.navDrawerSessionIconHelp":
+    "Opt-in icon variant (≥ 0.5.298): pass NavigationDrawerItem icon only when the glyph carries meaning. Default session / history rows stay clean (no icon) — see #sandbox-navdrawer-session-chrome.",
   "globals.navDrawerModeHideBuiltin": "Hide samples",
   "globals.navDrawerModeHideBuiltinAria": "Hide sample catalog entries",
   "globals.navDrawerModeHideBuiltinHint":
@@ -3199,7 +3207,7 @@ const zh: Record<MessageKey, string> = {
   "globals.tableMapUnpriced": "未定价",
   "globals.tableMapAction": "映射",
   "globals.tableHelp":
-    "带标题表格：`Card` `title` + `.fynns-table-wrap.fynns-scroll`（wrap 作为嵌套井时 `chrome=\"plain\"`）。Table + Head / Body / Row / HeaderCell / Cell / Caption。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。单元格里的映射来源/状态用 `.fynns-table-meta`（muted 文案），**禁止** `Chip`。种类 + 可选 id + 行尾操作：`.fynns-control-cluster--end-align`（**整行高度内竖直居中** ≥ 0.5.79）；中间缺内容时插 `.fynns-control-cluster__grow`，让操作跨行右对齐。",
+    "带标题表格：`Card` `title` + `.fynns-table-wrap.fynns-scroll`（wrap 作为嵌套井时 `chrome=\"plain\"`）。Table + Head / Body / Row / HeaderCell / Cell / Caption。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。横向滚到中间时左右软渐隐：`data-fade-left` / `data-fade-right`（≥ **0.5.296**，与 PageScroll 上下渐隐同族；禁止消费侧私有 `mask-image`）。单元格里的映射来源/状态用 `.fynns-table-meta`（muted 文案），**禁止** `Chip`。种类 + 可选 id + 行尾操作：`.fynns-control-cluster--end-align`（**整行高度内竖直居中** ≥ 0.5.79）；中间缺内容时插 `.fynns-control-cluster__grow`，让操作跨行右对齐。",
   "globals.tableWheelX": "滚轮 → 横向",
   "globals.tableWheelXHelp":
     "宽 `.fynns-table-wrap.fynns-scroll`（≥ **0.5.184**）：宿主有横向溢出且 Y 方向已无法继续滚动时，纵向鼠标滚轮改为推动 `scrollLeft`，而不是带动外层 PageScroll。默认 **开启**（core）。关闭：`data-fynns-wheel-x=\"off\"` — 见下方开关。只要仍有横向溢出，滚轮留在 wrap 上（含左右边缘，≥ **0.5.186**），滑回起点时不会拽动页面滚动条。首张 Card 仅限宽（纯横向溢出），便于感受滚轮映射。",
@@ -3304,6 +3312,11 @@ const zh: Record<MessageKey, string> = {
   "globals.drawerNestedScrollCard": "已挂载示例卡片",
   "globals.drawerNestedScrollHelp":
     "Drawer 正文滚动 + 嵌套 CodeBlock：overlay Y 轨道裁剪在 TopAppBar、`.fynns-dialog-head` 与分区标题下方，外层滚动时拇指不会画在更高 chrome 上。页轨经 `--fynns-z-scroll-overlay` 低于菜单；菜单/Select 自身拇指用 `--fynns-z-scroll-overlay-flyout`（≥ **0.5.251** — 对照 `#sandbox-scroll-menu-stack`）。活样例 `#drawer-nested-scroll`。",
+  "globals.dialogNestedScrollOpen": "打开对话框嵌套滚动",
+  "globals.dialogNestedScrollTitle": "示例嵌套滚动",
+  "globals.dialogNestedScrollFold": "已挂载示例正文",
+  "globals.dialogNestedScrollHelp":
+    "居中 Dialog + List + Collapsible + plain CodeBlock：`maxHeight` 写到根上的 `--fynns-code-block-max-height`；copy-float 的 overlay Y 轨先做圆角裁剪再做 chrome 裁剪，拇指不超出 `radius-3xl`、不越过面板底边。活样例 `#dialog-nested-scroll`。",
   "globals.overlayHelp":
     "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。正文首个带边框井（CodeBlock）顶天贴标题 — `#fullscreen-flush`。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",
@@ -3934,7 +3947,10 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerSessionNew": "新会话",
   "globals.navDrawerSessionEntry": "示例会话",
   "globals.navDrawerSessionToolbarHelp":
-    "会话顶栏（≥ 0.5.257）：NavigationDrawerNewChat = 满宽带文案新建，ghost（无描边；悬停同 Item wash）。可选 trailing More 放全部删除（danger）。禁止 Trash+Plus 双盘；历史侧栏勿用仅图标的 --toolbar-end。",
+    "会话顶栏（≥ 0.5.257 / ≥ 0.5.298）：NavigationDrawerNewChat = 满宽带文案新建，ghost（无描边；悬停同 Item wash）。可选 trailing More 放全部删除（danger）。会话 Item 默认仅 label — 未指定时不要 leading icon。禁止 Trash+Plus 双盘；历史侧栏勿用仅图标的 --toolbar-end。",
+  "globals.navDrawerSessionIconAria": "带 leading icon 的示例会话侧栏",
+  "globals.navDrawerSessionIconHelp":
+    "可选 icon 变体（≥ 0.5.298）：仅在字形有语义时传 NavigationDrawerItem icon。默认会话/历史行保持干净无 icon — 见 #sandbox-navdrawer-session-chrome。",
   "globals.navDrawerModeHideBuiltin": "隐藏示例",
   "globals.navDrawerModeHideBuiltinAria": "隐藏示例目录条目",
   "globals.navDrawerModeHideBuiltinHint":

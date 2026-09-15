@@ -3656,6 +3656,15 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   max-width: 100%;
 }
 
+/* Host-width tip (nav rails / path rows). Prefer OverflowTip `fill` — do not
+ * restyle `.fynns-overflow-tip` from a consumer (≥ **0.5.297**). */
+.fynns-overflow-tip--fill.fynns-tooltip-trigger {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
 .fynns-overflow-tip-label {
   display: block;
   box-sizing: border-box;

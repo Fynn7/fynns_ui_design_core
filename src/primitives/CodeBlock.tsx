@@ -304,8 +304,20 @@ export function CodeBlock(props: CodeBlockProps) {
       : typeof maxHeight === "number"
         ? `${maxHeight}px`
         : maxHeight;
-  const surfaceStyle: CSSProperties | undefined =
-    maxHeightCss == null ? undefined : { maxHeight: maxHeightCss };
+  /* Cap via CSS var on the root (not inline maxHeight on pre/textarea)
+     so host CSS can compose without fighting specificity. Live
+     `#dialog-nested-scroll`. */
+  const rootStyle: CSSProperties | undefined =
+    style == null && maxHeightCss == null
+      ? undefined
+      : {
+          ...style,
+          ...(maxHeightCss != null
+            ? ({
+                ["--fynns-code-block-max-height"]: maxHeightCss,
+              } as CSSProperties)
+            : {}),
+        };
 
   const readOnly = editable ? props.readOnly : undefined;
   const showEditorOverlay = editable && !readOnly;
@@ -613,7 +625,7 @@ export function CodeBlock(props: CodeBlockProps) {
         className,
       )}
       data-language={language}
-      style={style}
+      style={rootStyle}
     >
       {showHead ? (
         <div className="fynns-code-block-head">
@@ -637,7 +649,6 @@ export function CodeBlock(props: CodeBlockProps) {
           <textarea
             ref={inputRef}
             className="fynns-code-block-input fynns-scroll"
-            style={surfaceStyle}
             value={source}
             onChange={onInputChange}
             onFocus={onInputFocus}
@@ -665,7 +676,6 @@ export function CodeBlock(props: CodeBlockProps) {
         <pre
           ref={preRef}
           className="fynns-code-block-pre fynns-scroll"
-          style={surfaceStyle}
         >
           <code className="fynns-code-block-code">
             {editable

@@ -568,6 +568,9 @@
 
 .fynns-dialog-overlay[data-state="closing"] {
   opacity: 0;
+  /* Match menu closing: transparent overlay must not eat clicks under it
+   * during the ~240ms exit (presets export / nested dismiss). */
+  pointer-events: none;
   transition-duration: var(--fynns-duration-fast);
   transition-timing-function: var(--fynns-ease-in-out);
 }

@@ -1456,7 +1456,7 @@ export const LAYOUT_TOKENS = {
    */
   "textarea-max-height": "min(70dvh, 40rem)",
   /**
-   * Soft mask length for scroll-edge fade (`data-fade-top` / `data-fade-bottom`)
+   * Soft mask length for scroll-edge fade (`data-fade-top`/`bottom` / `left`/`right`)
    * on CodeBlock / Textarea / **PageScroll** (≥ **0.5.247**) / **FillColumn
    * header** (≥ **0.5.278**) / NavigationDrawer body (via alias) — not a hard
    * clip. Textarea uses a multi-layer mask (≥ **0.5.282**) so the hairline
