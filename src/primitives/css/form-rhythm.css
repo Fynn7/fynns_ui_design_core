@@ -239,6 +239,26 @@
   overflow: visible;
 }
 
+/*
+ * Preference tip + Switch (≥ **0.5.292**): never wrap into a vertical stack in
+ * narrow NavigationDrawer / mode-sidebar ControlRows (narrow-drawer lesson —
+ * tip above track). Prefer InfoHint on the ControlRow **label**
+ * (see `:has(.fynns-info-hint-trigger)` above); if both sit in `__controls` /
+ * a cluster, keep one horizontal band.
+ */
+.fynns-control-row__controls:has(> .fynns-switch):has(
+    > .fynns-tooltip-trigger:has(.fynns-info-hint-trigger--icon)
+  ),
+.fynns-control-cluster:has(> .fynns-switch):has(
+    > .fynns-tooltip-trigger:has(.fynns-info-hint-trigger--icon)
+  ):not(:has(> .fynns-control-cluster__grow)):not(:has(> .fynns-select)):not(
+    :has(> .fynns-btn:not(.fynns-btn--icon))
+  ) {
+  flex-wrap: nowrap;
+  width: auto;
+  max-width: 100%;
+}
+
 /* Sibling switches / chips in one ControlRow when ControlStack would otherwise
    place each child on its own shared column (narrow hosts overflow).
    Default **end** (≥ **0.5.158**) — wide Chip+meta+Button clusters used to
@@ -1043,6 +1063,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  /* Descender seatbelt with overflow:hidden (≥ **0.5.294**). */
+  line-height: var(--fynns-line-height-snug);
 }
 
 .fynns-toggle-group--full .fynns-toggle-chip-content {

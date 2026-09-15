@@ -31,17 +31,18 @@
 2. **Prompt Template → reasoning_effort 默认值改成 `low`**。LM Studio 目前只暴露 On/Off，API 传 `reasoning_effort` 会被忽略并回落到模板默认（`xhigh`）；模板默认改成 `low` 才是真正的「low thinking」。可选：推理 token 预算 ≈ 1024。
 3. **Preserve Thinking 关**：Qwen3.8 默认把历史轮的思考重新塞回 prompt，32k 窗口顶不住。
 4. 设置 → 默认上下文长度 8192 只影响 JIT 自动加载；**必须**用上面的命令显式加载（带 `--context-length 32768`），否则模型会以 8k 上下文加载。
-5. GPU 分配：不要强制 `--gpu max`（8 GB 装不下 17.6 GB，会走 sysmem fallback 变慢）；先用自动，再试 `--gpu 0.3`。
+5. GPU 分配：默认 **`--gpu 0.3`**。本机 smoke（4060 8 GB / ctx 32k）：`0.3` ≈ 2.7 tok/s，`0.4` ≈ 2.3，`max` ≈ 1.3；`max` 估显存 22 GiB，溢出到内存后更慢。不要为了「榨满 GPU」选 `max`。
+6. 上下文长度：默认 **32768**。smoke：decode 16k/24k/32k 接近（≈2.2–2.5 tok/s）；短 prefill 16k 明显更快，但绿地会话峰值曾到 ≈26.5k，**24k/16k 会顶窗**。只有同时降 `limit.output` 并接受更短会话才考虑 `24576`。
 
 ### OpenCode（`~/.config/opencode/opencode.json`，旧版已备份为 `opencode.json.bak-before-plain-lms-*`）
 
 | 项 | 值 | 目的 |
 |----|----|------|
 | provider `lmstudio` | `@ai-sdk/openai-compatible` → `http://127.0.0.1:1234/v1`；`timeout/headerTimeout/chunkTimeout: false` | 8 min 的 prompt 处理不会被超时打断 |
-| model `qwen38-q4xl` | `limit.context 32768 / output 6144`，`reasoningEffort: low`，variants low/medium | 可用窗口 ≈ 26.6k |
+| model `qwen38-q4xl` | `limit.context 32768 / output 4096`，`reasoningEffort: low`，variants low/medium | 可用窗口 ≈ 28.7k（绿地峰值曾 ≈26.5k；6144 余量几乎为 0，已改回 4096） |
 | `tools` | 关 `task / webfetch / websearch / codesearch / todowrite / todoread / skill` | system prompt 从 ≈12k 降到 ≈4k；无子代理、无联网 |
-| `tool_output` | `max_lines 300 / max_bytes 12000` | 单次工具输出 ≤ ≈3k tokens，超出落盘只回预览 |
-| `compaction` | `auto + prune`，`preserve_recent_tokens 3000` | 真要压缩时只保留很短的近期上下文 |
+| `tool_output` | `max_lines 300 / max_bytes 8000` | 单次工具输出 ≤ ≈2k tokens（原 12000≈3k；绿地曾顶到 11899，再压回灌） |
+| `compaction` | `auto + prune`，`preserve_recent_tokens 2000` | 真要压缩时只保留很短的近期上下文（原 3000；再短一点减摘要后体积） |
 | `plugin: []`，`mcp: {}` | 停用 oh-my-opencode-slim 与内置 MCP | 单卡 8 GB 跑不起多代理；每个子代理都要再付一次 system prompt |
 | `permission.external_directory` | **仅**允许 `D:/fynns_local_ws/fynns_ui_design_core/**` | 绿地可读 sibling UI core；**禁止**整棵 `fynns_local_ws`（含各仓 `node_modules`）|
 | `instructions` | 4 个短规则（含 `search-budget.md` 禁父目录 recurse + `fynns-ui-consume.md` → `llm/CONSUME.md`） | 软约束 + 消费入口 |

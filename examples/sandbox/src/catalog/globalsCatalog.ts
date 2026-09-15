@@ -1,4 +1,4 @@
-import type { MessageKey } from "../i18n";
+﻿import type { MessageKey } from "../i18n";
 
 /** M3 / sandbox family ids used by Components page Collapsibles. */
 export type GlobalsCategoryId =
@@ -76,7 +76,15 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "info-hint",
     categoryId: "actions",
     label: "InfoHint",
-    keywords: ["提示", "help", "info", "帮助"],
+    keywords: [
+      "提示",
+      "help",
+      "info",
+      "帮助",
+      "sandbox-control-row-tip-switch-narrow",
+      "ControlRow",
+      "示例偏好",
+    ],
   },
   {
     id: "fab",
@@ -98,6 +106,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "fieldblock",
       "matchTriggerWidth",
       "chevron",
+      "sandbox-menu-field-match",
       "sandbox-menu-submenu",
       "sandbox-scroll-menu-stack",
       "scroll-overlay",
@@ -329,6 +338,17 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "leading",
       "sandbox-chat-composer-leading-menus",
       "sandbox-chat-composer-leading-menus-narrow",
+      "sandbox-chat-composer-model-sections",
+      "sandbox-chat-composer-model-empty",
+      "sandbox-chat-composer-thinking-toggle",
+      "sandbox-chat-composer-thinking-toggle-narrow",
+      "ChatComposerToggle",
+      "Vision",
+      "icon-only",
+      "Tooltip",
+      "Local",
+      "Cloud",
+      "CLI",
     ],
   },
   {

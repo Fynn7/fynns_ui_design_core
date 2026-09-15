@@ -49,11 +49,38 @@ consumer `max-width` / manual `slice` / private chip-label CSS.
   Do **not** park the model picker in `leading` (stays start-clustered) and
   do **not** use `trailing` for it (`trailing` **replaces** Send).
 
-**Narrow shells (≥ 0.5.288):** labeled menus share shrink (`min-width: 0`)
-under `--fynns-chat-composer-leading-menu-max` (and a tighter
-`*-narrow` cap when the shell container ≤ **26rem**). The draft field keeps
-`--fynns-chat-composer-field-min` so + / volume / model / Send cannot crush
-it to a stub. Live `#sandbox-chat-composer-leading-menus-narrow`.
+**Mode toggles (≥ 0.5.289, live `#sandbox-chat-composer-thinking-toggle` /
+`#sandbox-chat-composer-thinking-toggle-narrow`):** ChatGPT-style Thinking /
+Vision pills use keep-set `ChatComposerToggle` in `endActions` — order
+**Model Menu → Thinking → Vision → Send/Dictate**. Wrap each toggle in
+`Tooltip` for tip copy (required when the pill goes icon-only). Do **not**
+bury mode switches in the leading `+` Menu, or invent a consumer chip CSS
+clone. Labeled pills use `--fynns-line-height-snug` (≥ **0.5.294**) so Latin
+descenders (Thinking **g**) are never clipped by `overflow: hidden`. On ≤
+**36rem** composer containers (≥ **0.5.293**; was 26rem in 0.5.291),
+core hides the pill label (icon-only; Tooltip + `aria-label` keep the name)
+so mid-width landing shells never ellipsize to “T.” / one-glyph crumbs —
+do **not** invent consumer icon-only CSS. Sandbox teaches **wide** (labeled,
+host &gt; 36rem) and **narrow** (icon-only) hosts side by side.
+
+**Model Menu sections (≥ 0.5.290, live `#sandbox-chat-composer-model-sections`
+/ `#sandbox-chat-composer-model-empty`):** partition the model picker with
+`DropdownMenuGroup` + `DropdownMenuSeparator` into **Local** / **Cloud** /
+**CLI** (Cursor / Codex / Claude Code, …). **Only render a section when that
+source is configured** (local endpoint reachable / API key present / CLI
+auth file or login). Omit empty sections entirely. If **no** section has
+models, show one disabled “No models available” row (then optional
+Connection refresh foot). Do **not** dump every provider into one flat list.
+
+**Narrow shells (≥ 0.5.288 / floor ≥ 0.5.291):** labeled menus shrink under
+`--fynns-chat-composer-leading-menu-max` (tighter `*-narrow` caps ≤ **26rem**).
+**endActions** model Menus are content-first (`flex: 0 1 auto`) with
+`--fynns-chat-composer-leading-menu-min` so they never crush to chevron-only
+beside toggles / Send. Leading volume Menus still share free space with the
+draft (`flex: 1 1 0`). The draft keeps `--fynns-chat-composer-field-min`.
+Live `#sandbox-chat-composer-leading-menus-narrow` /
+`#sandbox-chat-composer-thinking-toggle` (wide &gt; 36rem, labeled) /
+`#sandbox-chat-composer-thinking-toggle-narrow` (≤ 36rem icon-only).
 
 ## Compact vs expanded (`data-expanded`)
 

@@ -157,6 +157,8 @@ import {
   SparklesIcon,
   useOverflowBounds,
 } from "@fynns/ui";
+import { ChatComposerModelMenuSections } from "../components/ChatComposerModelMenuSections";
+import { ChatComposerModeTogglesEndActions } from "../components/ChatComposerModeTogglesEndActions";
 import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
@@ -1303,6 +1305,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   );
   const [chatComposerLeadingMenusDraft, setChatComposerLeadingMenusDraft] =
     useState("");
+  const [chatComposerThinkingOn, setChatComposerThinkingOn] = useState(true);
+  const [chatComposerVisionOn, setChatComposerVisionOn] = useState(false);
   const [chatAsideDraft, setChatAsideDraft] = useState("");
   const [thinkingStreaming, setThinkingStreaming] = useState(false);
   const [thinkingDoneMs, setThinkingDoneMs] = useState<number | undefined>(4200);
@@ -1905,19 +1909,50 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             ariaLabel={t("globals.infoHintLabeledAria")}
           />
           <ControlStack columns={2}>
-            <ControlRow label={t("globals.infoHintRowLabel")}>
+            <ControlRow
+              label={
+                <>
+                  {t("globals.infoHintRowLabel")}
+                  <InfoHint
+                    size="sm"
+                    content={t("globals.infoHintRowBody")}
+                    ariaLabel={t("globals.infoHintRowAria")}
+                  />
+                </>
+              }
+            >
               <Switch
-                labelSide="end"
-                label={t("globals.infoHintRowSwitch")}
+                label=""
+                ariaLabel={t("globals.infoHintRowSwitch")}
                 checked={switchOn}
                 onCheckedChange={setSwitchOn}
               />
-              <InfoHint
-                content={t("globals.infoHintRowBody")}
-                ariaLabel={t("globals.infoHintRowAria")}
-              />
             </ControlRow>
           </ControlStack>
+          <div
+            id="sandbox-control-row-tip-switch-narrow"
+            className="sandbox-select-narrow-host"
+          >
+            <ControlRow
+              label={
+                <>
+                  {t("globals.infoHintNarrowLabel")}
+                  <InfoHint
+                    size="sm"
+                    content={t("globals.infoHintNarrowBody")}
+                    ariaLabel={t("globals.infoHintNarrowAria")}
+                  />
+                </>
+              }
+            >
+              <Switch
+                label=""
+                ariaLabel={t("globals.infoHintNarrowSwitch")}
+                checked={switchOn}
+                onCheckedChange={setSwitchOn}
+              />
+            </ControlRow>
+          </div>
         </div>
         <SandboxHelp text={t("globals.infoHintHelp")} />
         </GlobalsDemo>
@@ -2089,6 +2124,49 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </DropdownMenu>
             </FieldBlock>
           </div>
+          <FieldStack>
+            <FieldBlock
+              label={t("globals.menuFieldTipWrapLongLabel")}
+              actions={
+                <InfoHint
+                  size="sm"
+                  ariaLabel={t("globals.menuFieldTipWrapHintAria")}
+                  content={t("globals.menuFieldTipWrapHint")}
+                />
+              }
+            >
+              <Tooltip content={t("globals.selectLongOption")} align="start">
+                <span>
+                  <DropdownMenu
+                    ariaLabel={t("globals.menuFieldTipWrapLongAria")}
+                    trigger={t("globals.selectLongOption")}
+                    matchTriggerWidth
+                  >
+                    <DropdownMenuItem onClick={() => {}}>
+                      {t("globals.autocompleteOptTeal")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {}}>
+                      {t("globals.selectLongOption")}
+                    </DropdownMenuItem>
+                  </DropdownMenu>
+                </span>
+              </Tooltip>
+            </FieldBlock>
+            <FieldBlock label={t("globals.menuFieldTipWrapShortLabel")}>
+              <DropdownMenu
+                ariaLabel={t("globals.menuFieldTipWrapShortAria")}
+                trigger={t("globals.autocompleteOptCyan")}
+                matchTriggerWidth
+              >
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.autocompleteOptTeal")}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.autocompleteOptCyan")}
+                </DropdownMenuItem>
+              </DropdownMenu>
+            </FieldBlock>
+          </FieldStack>
           <FieldBlock label={t("globals.menuFieldRefreshLabel")}>
             <div className="fynns-control-cluster fynns-control-cluster--end-align">
               <DropdownMenu
@@ -3518,8 +3596,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <p className="sandbox-chat-aside-label">
           {t("globals.chatComposerLeadingMenusLabel")}
         </p>
+        <div id="sandbox-chat-composer-leading-menus" hidden aria-hidden="true" />
         <div
-          id="sandbox-chat-composer-leading-menus"
+          id="sandbox-chat-composer-model-sections"
           className="sandbox-chat-composer-leading-menus-host"
         >
           <ChatComposer
@@ -3555,17 +3634,40 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </>
             }
             endActions={
-              <DropdownMenu
+              <ChatComposerModelMenuSections
                 trigger={t("globals.chatComposerLeadingMenusModel")}
                 ariaLabel={t("globals.chatComposerLeadingMenusModelAria")}
-                size="sm"
-                variant="ghost"
-                align="end"
-              >
-                <DropdownMenuItem>
-                  {t("globals.chatComposerLeadingMenusModel")}
-                </DropdownMenuItem>
-              </DropdownMenu>
+                emptyLabel={t("globals.chatComposerModelMenuEmpty")}
+                sections={[
+                  {
+                    id: "local",
+                    label: t("globals.chatComposerModelSectionLocal"),
+                    models: [
+                      t("globals.chatComposerLeadingMenusModel"),
+                      t("globals.chatComposerModelLocalSample"),
+                    ],
+                  },
+                  {
+                    id: "cloud",
+                    label: t("globals.chatComposerModelSectionCloud"),
+                    models: [t("globals.chatComposerModelCloudSample")],
+                  },
+                  {
+                    id: "cli",
+                    label: t("globals.chatComposerModelSectionCli"),
+                    models: [
+                      t("globals.chatComposerModelCliCursor"),
+                      t("globals.chatComposerModelCliCodex"),
+                      t("globals.chatComposerModelCliClaude"),
+                    ],
+                  },
+                ]}
+                footer={
+                  <DropdownMenuItem>
+                    {t("globals.chatComposerModelMenuRefresh")}
+                  </DropdownMenuItem>
+                }
+              />
             }
           />
         </div>
@@ -3606,22 +3708,240 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </>
             }
             endActions={
-              <DropdownMenu
+              <ChatComposerModelMenuSections
                 trigger={t("globals.chatComposerLeadingMenusModel")}
                 ariaLabel={t("globals.chatComposerLeadingMenusModelAria")}
-                size="sm"
-                variant="ghost"
-                align="end"
-              >
-                <DropdownMenuItem>
-                  {t("globals.chatComposerLeadingMenusModel")}
-                </DropdownMenuItem>
-              </DropdownMenu>
+                emptyLabel={t("globals.chatComposerModelMenuEmpty")}
+                sections={[
+                  {
+                    id: "local",
+                    label: t("globals.chatComposerModelSectionLocal"),
+                    models: [
+                      t("globals.chatComposerLeadingMenusModel"),
+                      t("globals.chatComposerModelLocalSample"),
+                    ],
+                  },
+                  {
+                    id: "cloud",
+                    label: t("globals.chatComposerModelSectionCloud"),
+                    models: [t("globals.chatComposerModelCloudSample")],
+                  },
+                  {
+                    id: "cli",
+                    label: t("globals.chatComposerModelSectionCli"),
+                    models: [
+                      t("globals.chatComposerModelCliCursor"),
+                      t("globals.chatComposerModelCliCodex"),
+                      t("globals.chatComposerModelCliClaude"),
+                    ],
+                  },
+                ]}
+                footer={
+                  <DropdownMenuItem>
+                    {t("globals.chatComposerModelMenuRefresh")}
+                  </DropdownMenuItem>
+                }
+              />
             }
           />
         </div>
         <SandboxHelp text={t("globals.chatComposerLeadingMenusNarrowHelp")} />
         <SandboxHelp text={t("globals.chatComposerLeadingMenusHelp")} />
+
+        <p className="sandbox-chat-aside-label">
+          {t("globals.chatComposerThinkingToggleLabel")}
+        </p>
+        <div
+          id="sandbox-chat-composer-thinking-toggle"
+          className="sandbox-chat-composer-leading-menus-host"
+        >
+          <ChatComposer
+            value={chatComposerLeadingMenusDraft}
+            onChange={setChatComposerLeadingMenusDraft}
+            ariaLabel={t("globals.chatComposerThinkingToggleAria")}
+            placeholder={t("globals.chatComposerPlaceholder")}
+            onSubmit={() => setChatComposerLeadingMenusDraft("")}
+            sendLabel={t("globals.chatSend")}
+            leading={
+              <>
+                <Tooltip content={t("globals.chatComposerLeadingTip")}>
+                  <IconButton
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.chatComposerLeadingTip")}
+                  >
+                    <PlusIcon />
+                  </IconButton>
+                </Tooltip>
+                <DropdownMenu
+                  trigger={t("globals.chatComposerLeadingMenusVolume")}
+                  ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
+                  size="sm"
+                  variant="ghost"
+                  align="start"
+                >
+                  <DropdownMenuItem>
+                    {t("globals.chatComposerLeadingMenusVolume")}
+                  </DropdownMenuItem>
+                </DropdownMenu>
+              </>
+            }
+            endActions={
+              <ChatComposerModeTogglesEndActions
+                modelTrigger={t("globals.chatComposerLeadingMenusModel")}
+                modelAriaLabel={t("globals.chatComposerLeadingMenusModelAria")}
+                modelEmptyLabel={t("globals.chatComposerModelMenuEmpty")}
+                modelSections={[
+                  {
+                    id: "local",
+                    label: t("globals.chatComposerModelSectionLocal"),
+                    models: [t("globals.chatComposerLeadingMenusModel")],
+                  },
+                  {
+                    id: "cloud",
+                    label: t("globals.chatComposerModelSectionCloud"),
+                    models: [t("globals.chatComposerModelCloudSample")],
+                  },
+                  {
+                    id: "cli",
+                    label: t("globals.chatComposerModelSectionCli"),
+                    models: [t("globals.chatComposerModelCliCursor")],
+                  },
+                ]}
+                thinkingPressed={chatComposerThinkingOn}
+                onThinkingChange={setChatComposerThinkingOn}
+                thinkingLabel={t("globals.chatComposerThinking")}
+                thinkingAriaLabel={t("globals.chatComposerThinkingAria")}
+                thinkingTip={t("globals.chatComposerThinkingTip")}
+                visionPressed={chatComposerVisionOn}
+                onVisionChange={setChatComposerVisionOn}
+                visionLabel={t("globals.chatComposerVision")}
+                visionAriaLabel={t("globals.chatComposerVisionAria")}
+                visionTip={t("globals.chatComposerVisionTip")}
+              />
+            }
+          />
+        </div>
+        <SandboxHelp text={t("globals.chatComposerThinkingToggleHelp")} />
+        <p className="sandbox-chat-aside-label">
+          {t("globals.chatComposerThinkingToggleNarrowLabel")}
+        </p>
+        <div
+          id="sandbox-chat-composer-thinking-toggle-narrow"
+          className="sandbox-chat-composer-leading-menus-narrow"
+        >
+          <ChatComposer
+            value={chatComposerLeadingMenusDraft}
+            onChange={setChatComposerLeadingMenusDraft}
+            ariaLabel={t("globals.chatComposerThinkingToggleNarrowAria")}
+            placeholder={t("globals.chatComposerPlaceholder")}
+            onSubmit={() => setChatComposerLeadingMenusDraft("")}
+            sendLabel={t("globals.chatSend")}
+            leading={
+              <>
+                <Tooltip content={t("globals.chatComposerLeadingTip")}>
+                  <IconButton
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.chatComposerLeadingTip")}
+                  >
+                    <PlusIcon />
+                  </IconButton>
+                </Tooltip>
+                <DropdownMenu
+                  trigger={t("globals.chatComposerLeadingMenusVolume")}
+                  ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
+                  size="sm"
+                  variant="ghost"
+                  align="start"
+                >
+                  <DropdownMenuItem>
+                    {t("globals.chatComposerLeadingMenusVolume")}
+                  </DropdownMenuItem>
+                </DropdownMenu>
+              </>
+            }
+            endActions={
+              <ChatComposerModeTogglesEndActions
+                modelTrigger={t("globals.chatComposerLeadingMenusModel")}
+                modelAriaLabel={t("globals.chatComposerLeadingMenusModelAria")}
+                modelEmptyLabel={t("globals.chatComposerModelMenuEmpty")}
+                modelSections={[
+                  {
+                    id: "local",
+                    label: t("globals.chatComposerModelSectionLocal"),
+                    models: [t("globals.chatComposerLeadingMenusModel")],
+                  },
+                  {
+                    id: "cloud",
+                    label: t("globals.chatComposerModelSectionCloud"),
+                    models: [t("globals.chatComposerModelCloudSample")],
+                  },
+                  {
+                    id: "cli",
+                    label: t("globals.chatComposerModelSectionCli"),
+                    models: [t("globals.chatComposerModelCliCursor")],
+                  },
+                ]}
+                thinkingPressed={chatComposerThinkingOn}
+                onThinkingChange={setChatComposerThinkingOn}
+                thinkingLabel={t("globals.chatComposerThinking")}
+                thinkingAriaLabel={t("globals.chatComposerThinkingAria")}
+                thinkingTip={t("globals.chatComposerThinkingTip")}
+                visionPressed={chatComposerVisionOn}
+                onVisionChange={setChatComposerVisionOn}
+                visionLabel={t("globals.chatComposerVision")}
+                visionAriaLabel={t("globals.chatComposerVisionAria")}
+                visionTip={t("globals.chatComposerVisionTip")}
+              />
+            }
+          />
+        </div>
+        <SandboxHelp text={t("globals.chatComposerThinkingToggleNarrowHelp")} />
+        <p className="sandbox-chat-aside-label">
+          {t("globals.chatComposerModelEmptyLabel")}
+        </p>
+        <div
+          id="sandbox-chat-composer-model-empty"
+          className="sandbox-chat-composer-leading-menus-host"
+        >
+          <ChatComposer
+            value={chatComposerLeadingMenusDraft}
+            onChange={setChatComposerLeadingMenusDraft}
+            ariaLabel={t("globals.chatComposerModelEmptyAria")}
+            placeholder={t("globals.chatComposerPlaceholder")}
+            onSubmit={() => setChatComposerLeadingMenusDraft("")}
+            sendLabel={t("globals.chatSend")}
+            leading={
+              <Tooltip content={t("globals.chatComposerLeadingTip")}>
+                <IconButton
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  aria-label={t("globals.chatComposerLeadingTip")}
+                >
+                  <PlusIcon />
+                </IconButton>
+              </Tooltip>
+            }
+            endActions={
+              <ChatComposerModelMenuSections
+                trigger={t("globals.chatComposerModelEmptyTrigger")}
+                ariaLabel={t("globals.chatComposerModelEmptyAria")}
+                emptyLabel={t("globals.chatComposerModelMenuEmpty")}
+                sections={[]}
+                footer={
+                  <DropdownMenuItem>
+                    {t("globals.chatComposerModelMenuRefresh")}
+                  </DropdownMenuItem>
+                }
+              />
+            }
+          />
+        </div>
+        <SandboxHelp text={t("globals.chatComposerModelSectionsHelp")} />
         <SandboxHelp text={t("globals.chatHelp")} />
         <TokenList group="chat" title={t("globals.tokenListChat")} />
         <TokenList group="chatmessage" title={t("globals.tokenListChatMessage")} />

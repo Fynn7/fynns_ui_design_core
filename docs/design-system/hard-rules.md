@@ -196,6 +196,14 @@
   paint over the status label (looks like a crushed “就绪” even when the
   track is 120px). Full path → `InfoHint` / Tooltip when users need the
   untruncated string. Rules in Hard rules / Content density (no live anti-demo).
+- **DON'T** stack `InfoHint` **above** a `Switch` in a ControlRow controls
+  cluster (narrow NavigationDrawer / mode-sidebar lesson) — preference how-to
+  lives as trailing **`InfoHint` on the ControlRow `label`** (core styles
+  `:has(.fynns-info-hint-trigger)`); `__controls` keeps the track-only Switch.
+  Core ≥ **0.5.292** also nowraps tip+Switch when both remain in `__controls`
+  / a tip-only cluster. Do **not** invent consumer `flex-direction: column` /
+  private wrap overrides. Live `#info-hint`. Failure: CONSUMER_TREATY
+  ControlRow InfoHint stacks above Switch.
 - **DON'T** let `.fynns-table-meta` hard-clip past a Card / unit-stack /
   narrow host **without** `…` — core ≥ **0.5.231** applies
   `overflow: hidden` + `text-overflow: ellipsis` + `min-width: 0` /
@@ -369,6 +377,14 @@
   Toolbar / `iconOnly` menus stay content-fit. Do **not** invent consumer
   `width` / `min-width` on `.fynns-menu`. Live `#sandbox-menu-field-match`.
   Failure: CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger.
+- **DON'T** wrap a FieldBlock match-width `DropdownMenu` in `Tooltip` (or a
+  bare `span`) and leave it **content-sized** while a sibling bare Menu
+  stretches — tip hosts default `inline-flex` shrink-wrap. Core ≥ **0.5.290**
+  stretches `.fynns-field-block__main > .fynns-tooltip-trigger:has(.fynns-menu-root)`
+  (+ nested `span:has(.fynns-menu-root)`). Prefer string `trigger` (built-in
+  OverflowTip) + FieldHeader `InfoHint` for how-to; do **not** invent consumer
+  `width: 100%` on tip wrappers. Live `#sandbox-menu-field-match`. Failure:
+  CONSUMER_TREATY FieldBlock Menu tip-wrap shrinks trigger.
 - **DON'T** leave a FieldBlock / match-width `DropdownMenu` panel **left-shifted**
   vs the trigger — floating default is `anchorMode: "element"` (≥ **0.5.254**);
   `anchorTargetRect` seatbelt measures `button` / `[aria-haspopup]` as **self**,
@@ -390,12 +406,16 @@
   (≥ **0.5.254**); Menu chevron lives in `.fynns-menu-trigger-trailing`. Do
   **not** invent consumer `transform: translateY` optical nudges. Failure:
   CONSUMER_TREATY Menu chevron optically high.
-- **DON'T** clip Latin descenders on a labeled `DropdownMenu` trigger
-  (`g` / `y` / `p` look flat) — `.fynns-menu-trigger-label` uses
-  `--fynns-line-height-snug` (≥ **0.5.255**), never `line-height: 1` with
-  `overflow: hidden` + OverflowTip. Do **not** invent consumer padding /
-  line-height on `.fynns-overflow-tip-label`. Live `#sandbox-menu-field-match`.
-  Failure: CONSUMER_TREATY Menu trigger clips descenders.
+- **DON'T** clip Latin descenders on **any** single-line ellipsis label
+  (`g` / `y` / `p` look flat) — including `DropdownMenu` triggers,
+  `ChatComposerToggle`, `Button` / SplitButton labels, `ToggleChip`, Chip,
+  Switch end-labels, DatePicker title, and **`.fynns-overflow-tip-label`**
+  (global seatbelt ≥ **0.5.294**; Menu ≥ **0.5.255**). Use
+  `--fynns-line-height-snug`, never `line-height: 1` /
+  `--fynns-line-height-tight` together with `overflow: hidden`. Do **not**
+  invent consumer padding / line-height on tip or pill labels. Live
+  `#sandbox-menu-field-match` / `#sandbox-chat-composer-thinking-toggle`
+  (Thinking **g**). Failure: CONSUMER_TREATY Ellipsis label clips descenders.
 - **DON'T** ship a labeled `DropdownMenu` with a leading glyph **misaligned**
   vs the label (icon rides baseline / floats high) — pass **`leadingIcon`**
   (16dp `.fynns-menu-trigger-leading`, flex-centered with the label — ≥
@@ -422,6 +442,28 @@
   floor (`--fynns-chat-composer-field-min`). Live
   `#sandbox-chat-composer-leading-menus-narrow`. Failure: CONSUMER_TREATY
   ChatComposer narrow host crushes draft.
+- **DON'T** let `endActions` model Menu crush to chevron-only beside
+  Thinking / Vision / Send — core ≥ **0.5.291** uses content-first model flex
+  + `--fynns-chat-composer-leading-menu-min`; mode pills go icon-only on
+  ≤ **36rem** containers (≥ **0.5.293**, was 26rem — mid widths must not
+  ellipsize to “T.”). Do **not** invent consumer min-width / icon-only
+  chip CSS. Live `#sandbox-chat-composer-thinking-toggle` /
+  `#sandbox-chat-composer-thinking-toggle-narrow`. Failure:
+  CONSUMER_TREATY ChatComposer endActions model crushed by toggles.
+- **DON'T** bury ChatComposer **mode** switches (Thinking / Vision / …) in the
+  leading `+` Menu — use keep-set `ChatComposerToggle` in `endActions`
+  (Model → Thinking → Vision → Send; Tooltip for tip copy — ≥ **0.5.289**).
+  Do **not** invent consumer chip / Switch CSS inside the capsule. Live
+  `#sandbox-chat-composer-thinking-toggle` (wide / labeled) /
+  `#sandbox-chat-composer-thinking-toggle-narrow` (≤ **36rem** icon-only +
+  Tooltip). Failure: CONSUMER_TREATY ChatComposer mode toggle buried in + Menu.
+- **DON'T** flatten every LLM source into one ChatComposer model Menu — use
+  `DropdownMenuGroup` sections **Local** / **Cloud** / **CLI** with
+  separators (≥ **0.5.290**). Show a section **only** when that source is
+  configured (key / endpoint / CLI auth); omit empty sections; if none →
+  disabled “No models available”. Live `#sandbox-chat-composer-model-sections`
+  / `#sandbox-chat-composer-model-empty`. Failure: CONSUMER_TREATY ChatComposer
+  model Menu flat without source sections.
 - **DON'T** park supporting / muted helper copy **flush** under a Select (or
   other form control) at 0–4dp — control → hint uses
   `--fynns-layout-field-hint-gap` (**8dp**). Prefer `FieldBlock` + `FieldHint`

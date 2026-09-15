@@ -26,6 +26,8 @@ const DEMO_FILES = [
   "examples/sandbox/src/pages/CollapsiblePreviewCanvas.tsx",
   "examples/sandbox/src/shell/SandboxShell.tsx",
   "examples/sandbox/src/components/IconsLibraryDemo.tsx",
+  // Live ChatComposer endActions recipe (Thinking/Vision toggles + model Menu).
+  "examples/sandbox/src/components/ChatComposerModeTogglesEndActions.tsx",
 ];
 
 const COMPANION_PATH = "llm/wysiwyg-companion.json";

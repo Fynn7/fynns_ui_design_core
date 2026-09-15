@@ -73,11 +73,13 @@ ASCII `-`。
   开关在 Settings 内 `ToggleGroup` — **禁止** TopAppBar。Footer `Avatar`
   `name` = **可见**账户标签全文 — **禁止**另传截断名。对照 `#layouts-demo-shell`
   / `#avatar`。
-- 模式侧栏偏好：单行 `ControlRow` + `InfoHint` `sm` + 仅轨道 `Switch` — 禁止
-  `ControlBlock` 长 description。标签左缘对齐 Item pad；`--toolbar-end` 主新建
-  Plus / Switch 与目的地 Item pill **共右端** — 禁止再套 `item-pad-end`。
-  `--toolbar-end` IconButton 一律 **sm** **32dp**。body 直接子间距 =
-  `search-gap` **8dp**。对照 `#layouts-demo-navigation-drawer`。
+- 模式侧栏偏好：单行 `ControlRow` — **`InfoHint` `sm` 挂在 `label` 尾**，
+  `__controls` 仅轨道 `Switch`（≥ **0.5.292**）— 禁止 tip+Switch 进会 wrap 的
+  `control-cluster` 竖叠；禁止 `ControlBlock` 长 description。标签左缘对齐
+  Item pad；`--toolbar-end` 主新建 Plus / Switch 与目的地 Item pill **共右端**
+  — 禁止再套 `item-pad-end`。`--toolbar-end` IconButton 一律 **sm** **32dp**。
+  body 直接子间距 = `search-gap` **8dp**。对照 `#info-hint` /
+  `#layouts-demo-navigation-drawer`。
 - SyncSideFilter：`ToggleGroup` `compact` `fullWidth` + `showCheck={false}` +
   省略 option `tip`；短可见标签。对照 `#layouts-demo-navigation-drawer` /
   `#toggle-group`。
@@ -122,6 +124,7 @@ sandbox `#anchor`。
 - **provider Manage flat dump** — ControlRow → 密码 FieldBlock + 同行 Input `__grow` + Save `IconButton` ghost sm → 模型 `DropdownMenu`+刷新 → Verify；禁止 List 墙/Chip/Dialog 代密钥。`#provider-settings`
 - **ChatActivity tool-icon / artifact default** — 默认 status mark + 连续轨（done = accent；pulse 时 node 洗底挡住轨）；勿默认扳手/文件图标或强制 Artifact。`#activity`
 - **service Chip+label / ControlRow left-packed / label crush** — 状态只在 `label`；簇默认右齐；长 path meta 省略+InfoHint。`#rhythm`
+- **ControlRow InfoHint stacks above Switch** — 偏好说明挂 `label` 尾 `InfoHint` `sm`；`__controls` 仅 Switch；禁止 tip+Switch wrap 竖叠（≥ **0.5.292**）。`#info-hint`
 - **FieldHint restates ToggleGroup / TopAppBar InfoHint / overline restates trailing** — 禁止同源复述。`#rhythm` / `#layouts-demo-shell` / `#sandbox-list-repo-path-actions`
 - **Dialog description how-to essay** — `description` 仅短 caption；方向/路径/勾选说明进 `headActions` `InfoHint` `sm`（≥ **0.5.284**）；禁止多行 how-to 挂在标题下。`#overlays`
 - **private labeled Button cluster gap / Select refresh crammed** — 用 `.fynns-control-cluster`（+ `--end-align`/`__grow`）。`#rhythm`
@@ -133,10 +136,15 @@ sandbox `#anchor`。
 - **Pagination overlay / option repeats noun / gaps crushed** — stock Select；options 仅数字；间距 8/16dp。`#pagination`
 - **Select fullWidth / menu width / supporting kisses** — 铺满用 `fullWidth`/`__grow`；菜单 width=live shell；hint 用 `field-hint-gap`。`#select` / `#sandbox-select-wide-short`
 - **DropdownMenu FieldBlock width / chevron / panel shift / chrome clip** — matchTriggerWidth；core 注入 chevron；禁止消费仓 left/transform/translateY。`#menu` / `#sandbox-menu-field-match`
+- **FieldBlock Menu tip-wrap shrinks trigger** — `Tooltip`/`span` 包 Menu 仍须铺满 FieldBlock（≥ **0.5.290**）；长文案用 string `trigger`+OverflowTip，how-to 用 `InfoHint`；禁止消费仓给 tip 壳写 `width:100%`。`#sandbox-menu-field-match`
 - **DropdownMenu nested submenu** — 二级用 `DropdownMenuSub`（hover/ArrowRight）；禁止消费仓绝对定位二级飞层。`#sandbox-menu-submenu`
 - **ChatComposer leading Menu label hard-clips** — 带标签 Menu 须壳内 `…`+OverflowTip；`trigger` 传 string；禁止消费仓 max-width / 手写截断 / 私有 chip-label。`#sandbox-chat-composer-leading-menus`
 - **ChatComposer model Menu left-clustered** — 模型选择放 `endActions`（靠右、Send 前，`align=end`）；卷/工具留 `leading`；勿用 `trailing` 顶掉 Send。`#sandbox-chat-composer-leading-menus`
 - **ChatComposer narrow host crushes draft** — 窄壳两侧 Menu 须可缩 + field 下限；禁止消费仓私有 max-width 挤死草稿。`#sandbox-chat-composer-leading-menus-narrow`
+- **Ellipsis label clips descenders** — 单行 `…` 标签（Menu / Button / Chip / ChatComposerToggle / OverflowTip / Select…）须 `--fynns-line-height-snug`；禁止 `line-height: 1` / `tight` + `overflow:hidden`（Thinking **g** 被切）。core ≥ **0.5.294**。`#sandbox-chat-composer-thinking-toggle` / `#sandbox-menu-field-match`
+- **ChatComposer endActions model crushed by toggles** — Model + Thinking/Vision + Send 时模型触发器勿被压成仅 chevron；core ≥ **0.5.291** 有 menu min floor；≥ **0.5.293** 在 ≤ **36rem** 壳切 icon-only pills（勿中宽 ellipsis 成 “T.”）；禁止消费仓私有 min-width / 自绘 icon-only。`#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-thinking-toggle-narrow`
+- **ChatComposer mode toggle buried in + Menu** — Thinking / Vision 等模式用 `ChatComposerToggle` 放 `endActions`（Model → Thinking → Vision → Send）+ Tooltip（窄壳仅图标时 tip 必留）；禁止埋进 leading `+` 菜单或消费仓自绘 chip。`#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-thinking-toggle-narrow`
+- **ChatComposer model Menu flat without source sections** — 模型 Menu 分 Local / Cloud / CLI（`DropdownMenuGroup` + Separator）；仅已配置源显示分区，皆无则禁用「No models available」。`#sandbox-chat-composer-model-sections`
 - **truncated option / chrome label lacks OverflowTip** — 溢出须 `…`+Tooltip 全文；禁止 `title=`。`#select` / `#card` / `#list`
 - **consumer restyles keep-set chrome / Select Autocomplete deprecated** — 铬改只在 core；新屏用 Menu/SearchBar。`#select` / `#menu`
 - **outcome Chip as status / List path Switch+Chip+danger soup** — 结果标用 `.fynns-list-item-status`；目录 trailing 仅 ghost md 簇。`#list` / `#sandbox-list-repo-path-actions`

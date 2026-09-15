@@ -48,6 +48,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  /* Descender seatbelt with overflow:hidden (≥ **0.5.294**). */
+  line-height: var(--fynns-line-height-snug);
 }
 
 /* OverflowTip inside the label (≥ **0.5.241**): cancel global flex width:0
@@ -451,8 +453,8 @@
   border-radius: var(--fynns-radius-pill) 0 0 var(--fynns-radius-pill);
   /* Join side open — one shared divider is painted via ::after. */
   border-inline-end: none;
-  /* Match glyph box — default body line-height makes CJK read high. */
-  line-height: var(--fynns-line-height-tight);
+  /* Snug — never tight/1 with ellipsis label (descenders) (≥ **0.5.294**). */
+  line-height: var(--fynns-line-height-snug);
   /* Outer curve needs a touch more pad so the label reads centered in the half. */
   padding-inline: var(--fynns-space-lg) var(--fynns-space-md);
 }
@@ -531,7 +533,7 @@
   display: inline-block;
   min-width: 0;
   max-width: 100%;
-  line-height: var(--fynns-line-height-tight);
+  line-height: var(--fynns-line-height-snug);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -856,7 +858,7 @@
   font-family: var(--fynns-font-ui);
   font-size: var(--fynns-font-size-sm);
   font-weight: var(--fynns-font-weight-medium);
-  line-height: var(--fynns-line-height-tight, 1.25);
+  line-height: var(--fynns-line-height-snug);
   white-space: nowrap;
   user-select: none;
   transform-origin: right center;

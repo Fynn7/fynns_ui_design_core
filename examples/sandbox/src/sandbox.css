@@ -927,7 +927,9 @@
 }
 .sandbox-chat-composer-leading-menus-host {
   width: 100%;
-  max-width: 36rem;
+  /* Wider than the ≤36rem icon-only toggle CQ so labeled Thinking/Vision
+   * stay teachable on this host (≥ **0.5.293**). */
+  max-width: 42rem;
   min-width: 0;
   box-sizing: border-box;
 }
