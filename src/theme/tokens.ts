@@ -929,7 +929,9 @@ export const CHAT_TOKENS = {
    * Cap for each **labeled** DropdownMenu in `.fynns-chat-composer-leading`
    * / primary-slot endActions (≥ **0.5.288**). Long volume /
    * model ids ellipsize inside the shell — never mid-glyph hard-clip past
-   * the capsule edge. Icon-only menus stay content-sized.
+   * the capsule edge. Short labels hug content (content-first flex ≥
+   * **0.5.300**) — never invent empty pad before the chevron. Icon-only
+   * menus stay content-sized.
    */
   "composer-leading-menu-max": "10rem",
   /**
@@ -939,9 +941,12 @@ export const CHAT_TOKENS = {
    */
   "composer-leading-menu-max-narrow": "7rem",
   /**
-   * Floor for labeled volume / model Menu triggers so `flex: 1 1 0` leftover
-   * math cannot crush them to chevron-only beside Thinking / Vision / Send
-   * (≥ **0.5.291**). Soft — still ellipsizes under the max caps.
+   * Soft floor for labeled volume / model Menu triggers when flex-shrinking
+   * under chrome pressure (≥ **0.5.291**). Applied as
+   * `min(menu-min, max-content)` (≥ **0.5.300**) so short labels stay
+   * content-sized (no empty pad before the chevron) while long ids still
+   * refuse to crush below this floor. Soft — still ellipsizes under the max
+   * caps.
    */
   "composer-leading-menu-min": "5rem",
   /** Narrow-shell floor for the same labeled menus (≤ **26rem** container). */

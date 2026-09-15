@@ -1342,6 +1342,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   );
   const [chatComposerLeadingMenusDraft, setChatComposerLeadingMenusDraft] =
     useState("");
+  const [chatComposerLeadingMenusVolume, setChatComposerLeadingMenusVolume] =
+    useState<"short" | "long">("short");
   const [chatComposerThinkingOn, setChatComposerThinkingOn] = useState(true);
   const [chatComposerVisionOn, setChatComposerVisionOn] = useState(false);
   const [chatAsideDraft, setChatAsideDraft] = useState("");
@@ -3659,14 +3661,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     </IconButton>
                   </Tooltip>
                   <DropdownMenu
-                    trigger={t("globals.chatComposerLeadingMenusVolume")}
+                    trigger={
+                      chatComposerLeadingMenusVolume === "long"
+                        ? t("globals.chatComposerLeadingMenusVolumeLong")
+                        : t("globals.chatComposerLeadingMenusVolume")
+                    }
                     ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
                     size="sm"
                     variant="ghost"
                     align="start"
                   >
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => setChatComposerLeadingMenusVolume("short")}
+                    >
                       {t("globals.chatComposerLeadingMenusVolume")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => setChatComposerLeadingMenusVolume("long")}
+                    >
+                      {t("globals.chatComposerLeadingMenusVolumeLong")}
                     </DropdownMenuItem>
                   </DropdownMenu>
                 </>
@@ -3734,14 +3747,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </IconButton>
                 </Tooltip>
                 <DropdownMenu
-                  trigger={t("globals.chatComposerLeadingMenusVolume")}
+                  trigger={
+                    chatComposerLeadingMenusVolume === "long"
+                      ? t("globals.chatComposerLeadingMenusVolumeLong")
+                      : t("globals.chatComposerLeadingMenusVolume")
+                  }
                   ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
                   size="sm"
                   variant="ghost"
                   align="start"
                 >
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setChatComposerLeadingMenusVolume("short")}
+                  >
                     {t("globals.chatComposerLeadingMenusVolume")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setChatComposerLeadingMenusVolume("long")}
+                  >
+                    {t("globals.chatComposerLeadingMenusVolumeLong")}
                   </DropdownMenuItem>
                 </DropdownMenu>
               </>
@@ -3814,14 +3838,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </IconButton>
                 </Tooltip>
                 <DropdownMenu
-                  trigger={t("globals.chatComposerLeadingMenusVolume")}
+                  trigger={
+                    chatComposerLeadingMenusVolume === "long"
+                      ? t("globals.chatComposerLeadingMenusVolumeLong")
+                      : t("globals.chatComposerLeadingMenusVolume")
+                  }
                   ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
                   size="sm"
                   variant="ghost"
                   align="start"
                 >
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setChatComposerLeadingMenusVolume("short")}
+                  >
                     {t("globals.chatComposerLeadingMenusVolume")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setChatComposerLeadingMenusVolume("long")}
+                  >
+                    {t("globals.chatComposerLeadingMenusVolumeLong")}
                   </DropdownMenuItem>
                 </DropdownMenu>
               </>
@@ -3890,14 +3925,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </IconButton>
                 </Tooltip>
                 <DropdownMenu
-                  trigger={t("globals.chatComposerLeadingMenusVolume")}
+                  trigger={
+                    chatComposerLeadingMenusVolume === "long"
+                      ? t("globals.chatComposerLeadingMenusVolumeLong")
+                      : t("globals.chatComposerLeadingMenusVolume")
+                  }
                   ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
                   size="sm"
                   variant="ghost"
                   align="start"
                 >
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setChatComposerLeadingMenusVolume("short")}
+                  >
                     {t("globals.chatComposerLeadingMenusVolume")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setChatComposerLeadingMenusVolume("long")}
+                  >
+                    {t("globals.chatComposerLeadingMenusVolumeLong")}
                   </DropdownMenuItem>
                 </DropdownMenu>
               </>

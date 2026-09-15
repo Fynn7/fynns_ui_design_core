@@ -72,12 +72,14 @@ auth file or login). Omit empty sections entirely. If **no** section has
 models, show one disabled “No models available” row (then optional
 Connection refresh foot). Do **not** dump every provider into one flat list.
 
-**Narrow shells (≥ 0.5.288 / floor ≥ 0.5.291):** labeled menus shrink under
-`--fynns-chat-composer-leading-menu-max` (tighter `*-narrow` caps ≤ **26rem**).
-**endActions** model Menus are content-first (`flex: 0 1 auto`) with
-`--fynns-chat-composer-leading-menu-min` so they never crush to chevron-only
-beside toggles / Send. Leading volume Menus still share free space with the
-draft (`flex: 1 1 0`). The draft keeps `--fynns-chat-composer-field-min`.
+**Narrow shells (≥ 0.5.288 / floor ≥ 0.5.291 / hug ≥ 0.5.300):** labeled
+menus shrink under `--fynns-chat-composer-leading-menu-max` (tighter
+`*-narrow` caps ≤ **26rem**). Leading **and** endActions model Menus are
+content-first (`flex: 0 1 auto` + `width: fit-content`) with soft floor
+`min(--fynns-chat-composer-leading-menu-min, max-content)` so short ids hug
+the chevron (no empty mid-capsule pad) while long ids still refuse to crush
+to chevron-only beside toggles / Send. The draft keeps
+`--fynns-chat-composer-field-min`.
 Live `#sandbox-chat-composer-leading-menus-narrow` /
 `#sandbox-chat-composer-thinking-toggle` (wide &gt; 36rem, labeled) /
 `#sandbox-chat-composer-thinking-toggle-narrow` (≤ 36rem icon-only).

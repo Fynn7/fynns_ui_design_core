@@ -44,6 +44,35 @@ App code imports only the alias: `import { Button } from "@fynns/ui";` — CSS
 automatically. `vite-env.d.ts` needs `/// <reference types="vite/client" />`
 when `tsc` runs against the sources.
 
+## 1b. Install contract without scripts (escape hatch)
+
+The table above **is** the install contract. `ensure-sibling-ui-core.mjs` /
+`install-as-npm.mjs` only accelerate it. If either script fails, is missing, or
+misbehaves in this environment:
+
+1. **Do not** open, debug, or edit `fynns_ui_design_core/scripts/**` (or other
+   core sources) to unblock a **consumer** task.
+2. **Hand-apply** the same outcomes as the table (adjust the relative path to
+   the sibling if the app is not a direct neighbor):
+
+```bash
+# from the app package that owns package.json / vite
+npm pkg set dependencies.@fynn7/ui-design-core=file:../fynns_ui_design_core
+# .npmrc: @fynn7:registry=https://registry.npmjs.org
+# vite: resolve.alias["@fynns/ui"] → node_modules/@fynn7/ui-design-core/src/index.ts
+#       + resolve.dedupe: ["react", "react-dom"]
+# tsconfig: paths["@fynns/ui"] → same; target/lib ES2022+
+npm install
+```
+
+3. Continue **product work in the consumer app** (`import` from `@fynns/ui`).
+4. If the failure looks like a core-script bug: note it and stop; fix upstream
+   only in a task whose goal is the design-system / installer — not mid
+   consumer feature work.
+
+Same class of recovery as **E401** below: return to sibling `file:` wiring,
+do not fight Packages auth or patch installers in-session.
+
 ## 2. Greenfield skeleton (generic content app)
 
 Default chrome is **`DestinationAppShell`** (labeled destinations drawer +
@@ -213,9 +242,10 @@ empty `${NODE_AUTH_TOKEN}`). Switch back to sibling `file:` + the safe
 that is why day-to-day consume is the sibling. Publishing / optional Packages
 bumps: [`docs/package-propagation.md`](../docs/package-propagation.md).
 
-**Unreleased core changes in an app:** edit the sibling checkout directly
-(Vite serves its sources), or `npm link`; there is no `consume:sync` /
-`consume:watch`.
+**Unreleased core changes:** when the **task is to change the design system
+itself**, edit the sibling checkout (Vite serves its sources) or `npm link`.
+There is no `consume:sync` / `consume:watch`. **Consumer** tasks still use
+§1 / §1b — do not treat install friction as a reason to edit core.
 
 ## 5. Verify
 

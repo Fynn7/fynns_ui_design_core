@@ -444,12 +444,16 @@
   ChatComposer narrow host crushes draft.
 - **DON'T** let `endActions` model Menu crush to chevron-only beside
   Thinking / Vision / Send — core ≥ **0.5.291** uses content-first model flex
-  + `--fynns-chat-composer-leading-menu-min`; mode pills go icon-only on
+  + soft `min(menu-min, max-content)` floor (≥ **0.5.300** also for leading
+  volume Menus — short labels hug the chevron, no empty mid-capsule pad);
+  mode pills go icon-only on
   ≤ **36rem** containers (≥ **0.5.293**, was 26rem — mid widths must not
   ellipsize to “T.”). Do **not** invent consumer min-width / icon-only
   chip CSS. Live `#sandbox-chat-composer-thinking-toggle` /
-  `#sandbox-chat-composer-thinking-toggle-narrow`. Failure:
-  CONSUMER_TREATY ChatComposer endActions model crushed by toggles.
+  `#sandbox-chat-composer-thinking-toggle-narrow` /
+  `#sandbox-chat-composer-leading-menus`. Failure:
+  CONSUMER_TREATY ChatComposer endActions model crushed by toggles /
+  ChatComposer leading Menu short-label pad.
 - **DON'T** bury ChatComposer **mode** switches (Thinking / Vision / …) in the
   leading `+` Menu — use keep-set `ChatComposerToggle` in `endActions`
   (Model → Thinking → Vision → Send; Tooltip for tip copy — ≥ **0.5.289**).
@@ -502,6 +506,12 @@
   Live `#select` / `#menu` / `#password` / `#input`. Failure: CONSUMER_TREATY
   consumer restyles keep-set chrome radius; Input trailing affix far from
   shell edge.
+- **DON'T** use bare **`Input type="number"`** for numeric values — UA spin
+  buttons are not fynns chrome. Use **`NumberInput`** (custom steppers,
+  `role="spinbutton"`). Core hides UA spinners on `.fynns-input[type=number]`
+  as a safety net (≥ **0.5.301**) but that is **not** a substitute for
+  `NumberInput`. Live `#number-input`. Failure: CONSUMER_TREATY Input
+  type=number UA spinners.
 - **DON'T** invent consumer negative margin / private pad on
   `.fynns-field-shell` / `.fynns-field-affix`, ship **md** IconButton in Input
   `leading`/`trailing`, or clone reveal/clear **outside** `Input` `trailing`

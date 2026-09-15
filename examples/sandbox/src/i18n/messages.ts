@@ -610,7 +610,7 @@ const en = {
   "globals.numberInputInc": "Increment",
   "globals.numberInputDec": "Decrement",
   "globals.numberInputHelp":
-    "NumberInput — spinbutton field with trailing steppers for discrete inspector / form values. Prefer over Slider when the value is typed or stepped (counts, rem steps). Not a RangeSlider.",
+    "NumberInput — spinbutton field with trailing steppers for discrete inspector / form values. Prefer over Slider when the value is typed or stepped (counts, rem steps). Not a RangeSlider. Do **not** use bare Input type=\"number\" (UA spinners are not fynns) — live #number-input (≥ **0.5.301**).",
   "globals.passwordAria": "Password",
   "globals.passwordPlaceholder": "Password",
   "globals.passwordShow": "Show password",
@@ -1715,7 +1715,8 @@ const en = {
   "globals.chatComposerLeadingMenusHelp": "Recipe (≥ 0.5.286): leading = + IconButton + volume Menu (`align=start`); model Menu in `endActions` (end / right, before Send, `align=end`). Long labels ellipsize with OverflowTip — never mid-glyph hard-clip. Pass string trigger (no consumer max-width / manual slice). Live #sandbox-chat-composer-leading-menus.",
   "globals.chatComposerLeadingMenusNarrowHelp":
     "Narrow host (~365px): menus share shrink under a tighter cap; draft keeps a field floor. Live #sandbox-chat-composer-leading-menus-narrow.",
-  "globals.chatComposerLeadingMenusVolume": "Sample volume · Visible Human Head dataset",
+  "globals.chatComposerLeadingMenusVolume": "Sphere",
+  "globals.chatComposerLeadingMenusVolumeLong": "Sample volume · Visible Human Head dataset",
   "globals.chatComposerLeadingMenusModel": "sample-model-2.5-flash-preview-long-id",
   "globals.chatComposerLeadingMenusVolumeAria": "Sample volume",
   "globals.chatComposerLeadingMenusModelAria": "Sample model",
@@ -3044,7 +3045,7 @@ const zh: Record<MessageKey, string> = {
   "globals.numberInputInc": "增加",
   "globals.numberInputDec": "减少",
   "globals.numberInputHelp":
-    "NumberInput — 带尾部步进器的 spinbutton 数字字段，用于检查器 / 表单的离散值。需要键入或步进（计数、rem 档）时优先于 Slider。不是 RangeSlider。",
+    "NumberInput — 带尾部步进器的 spinbutton 数字字段，用于检查器 / 表单的离散值。需要键入或步进（计数、rem 档）时优先于 Slider。不是 RangeSlider。**禁止**裸 Input type=\"number\"（浏览器原生箭头不是 fynns）— 活样例 #number-input（≥ **0.5.301**）。",
   "globals.passwordAria": "密码",
   "globals.passwordPlaceholder": "密码",
   "globals.passwordShow": "显示密码",
@@ -4138,7 +4139,8 @@ const zh: Record<MessageKey, string> = {
   "globals.chatComposerLeadingMenusHelp": "配方（≥ 0.5.286）：leading = + IconButton + 卷 Menu（`align=start`）；模型 Menu 放 `endActions`（靠右、Send 前，`align=end`）。长标签壳内 …+OverflowTip，禁止半字硬裁。trigger 传 string（勿消费仓 max-width / 手写截断）。活样 #sandbox-chat-composer-leading-menus。",
   "globals.chatComposerLeadingMenusNarrowHelp":
     "窄宿主（约 365px）：两侧带标签 Menu 共用收缩上限；草稿区保留 field 下限。Live #sandbox-chat-composer-leading-menus-narrow。",
-  "globals.chatComposerLeadingMenusVolume": "示例卷 · Visible Human Head 数据集",
+  "globals.chatComposerLeadingMenusVolume": "球体",
+  "globals.chatComposerLeadingMenusVolumeLong": "示例卷 · Visible Human Head 数据集",
   "globals.chatComposerLeadingMenusModel": "sample-model-2.5-flash-preview-long-id",
   "globals.chatComposerLeadingMenusVolumeAria": "示例卷",
   "globals.chatComposerLeadingMenusModelAria": "示例模型",

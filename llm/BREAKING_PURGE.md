@@ -79,7 +79,7 @@ Anything else must be deleted or kept as a non-exported internal.
 | `toast` / `Toaster` / `Toast` / `ToastProvider` / `useToast` | Use `snackbar` + `SnackbarHost`. Do not revive toast/sonner names. |
 | `Popover` | Build a local anchored panel, or use `DropdownMenu` / `Tooltip` where they fit. |
 | `SearchInput` | Use `SearchBar` (chrome) or `Input` (dense forms). |
-| `Counter` | `Input type="number"` (+ steppers if needed in the app). |
+| `Counter` | `NumberInput` (custom steppers). Do **not** use bare `Input type="number"` (UA spinners — not fynns). |
 | `ToggleControl` | Prefer `Checkbox` / `Radio` / `Switch` / `ToggleGroup`. |
 | `SwitchSize` / Switch `size` prop (`md` / `sm`) | Dense track only (former sm ~39×24). Drop the `size` prop; `--fynns-toggle-*-sm` keys removed — use `--fynns-toggle-track-*` etc. Do **not** treat `Switch` itself as removed. |
 | `InfoBanner` / `WarningBanner` / `ErrorBanner` / `SuccessBanner` / `AlertMessageBase` | Use `InlineAlert` for in-panel severity, or chrome `Banner`. Do not revive Alert `*Banner` names. |

@@ -85,6 +85,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | chat product / session host wrong tree | DESIGN_SYSTEM Content density / Chat product | `#layouts-demo-chat-product` |
 | chat aside host wrong tree | DESIGN_SYSTEM Content density / Chat aside | `#layouts-demo-chat-aside` |
 | FieldHeader inline InfoHint kissed | DESIGN_SYSTEM forms / FieldStack | `#info-hint` / `#form-recipe` |
+| Input type=number UA spinners | DESIGN_SYSTEM hard-rules (≥ **0.5.301**) | `#number-input` |
 | env key FieldHint under input (hint split) | DESIGN_SYSTEM forms / FieldStack | `#env-check` / `#password` |
 | env key status Chip (information redundancy) | DESIGN_SYSTEM forms / FieldStack | `#env-check` / `#password` |
 | Input trailing md IconButton in field shell | DESIGN_SYSTEM hard-rules | `#field-header` |
@@ -190,6 +191,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | ChatComposer model Menu left-clustered | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus` / `#chat` |
 | ChatComposer narrow host crushes draft | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus-narrow` / `#chat` |
 | ChatComposer endActions model crushed by toggles | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.291** / icon-only ≤ **36rem** ≥ **0.5.293**) | `#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-thinking-toggle-narrow` / `#chat` |
+| ChatComposer leading Menu short-label empty pad | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.300**) | `#sandbox-chat-composer-leading-menus` / `#chat` |
 | ChatComposer mode toggle buried in + Menu | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.289**) | `#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-thinking-toggle-narrow` / `#chat` |
 | ChatComposer model Menu flat without source sections | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.290**) | `#sandbox-chat-composer-model-sections` / `#sandbox-chat-composer-model-empty` / `#chat` |
 | Menu trigger leading icon misaligned | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.258**) | `#sandbox-menu-leading-icon` / `#menu` |

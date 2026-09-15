@@ -238,6 +238,22 @@
   outline: none;
 }
 
+/*
+ * Never paint UA number spinners on `.fynns-input` — that chrome is not fynns.
+ * Numeric fields → `NumberInput` (custom steppers). Hiding here is a safety net
+ * if a consumer still passes `type="number"` on bare Input.
+ */
+input.fynns-input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+input.fynns-input[type="number"]::-webkit-outer-spin-button,
+input.fynns-input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
 /* Hide native spelling/grammar marks (Chromium may still paint them). */
 .fynns-input::spelling-error,
 .fynns-input::grammar-error,

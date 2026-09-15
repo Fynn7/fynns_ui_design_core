@@ -1909,14 +1909,22 @@ a.fynns-chat-activity-artifact:hover {
  * (≥ **0.5.288**). OverflowTip still owns the full label. Icon-only menus /
  * IconButtons stay fixed.
  *
- * Leading volume Menus share free space with the draft (`1 1 0`).
- * Primary-slot model Menus are content-first (`0 1 auto`): `1 1 0` left only
- * leftover crumbs beside Thinking / Vision / Send and crushed to chevron-only
- * (landing composer ≤ **0.5.291**). Both sides keep a readable min floor.
+ * Labeled Menus are **content-first** (`0 1 auto` + `fit-content`) so short
+ * volume / model ids hug the chevron — no empty pad between glyphs and
+ * trailing caret (≥ **0.5.300**). Soft floor is
+ * `min(menu-min, max-content)` so short labels stay content-sized while long
+ * ones still refuse to crush below the min when flex-shrinking. Caps stay
+ * `--fynns-chat-composer-leading-menu-max` (+ narrow). Triggers are
+ * `width: auto; max-width: 100%` (not `width: 100%`) so a grown flex parent
+ * cannot invent mid-capsule whitespace.
  */
 .fynns-chat-composer-leading .fynns-menu-root:has(.fynns-menu-trigger-label) {
-  flex: 1 1 0;
-  min-width: var(--fynns-chat-composer-leading-menu-min);
+  flex: 0 1 auto;
+  width: fit-content;
+  min-width: min(
+    var(--fynns-chat-composer-leading-menu-min),
+    max-content
+  );
   max-width: var(--fynns-chat-composer-leading-menu-max);
   overflow: hidden;
 }
@@ -1924,7 +1932,11 @@ a.fynns-chat-activity-artifact:hover {
 .fynns-chat-composer-primary-slot
   .fynns-menu-root:has(.fynns-menu-trigger-label) {
   flex: 0 1 auto;
-  min-width: var(--fynns-chat-composer-leading-menu-min);
+  width: fit-content;
+  min-width: min(
+    var(--fynns-chat-composer-leading-menu-min),
+    max-content
+  );
   max-width: var(--fynns-chat-composer-leading-menu-max);
   overflow: hidden;
 }
@@ -1934,7 +1946,10 @@ a.fynns-chat-activity-artifact:hover {
   .fynns-chat-composer-leading .fynns-menu-root:has(.fynns-menu-trigger-label),
   .fynns-chat-composer-primary-slot
     .fynns-menu-root:has(.fynns-menu-trigger-label) {
-    min-width: var(--fynns-chat-composer-leading-menu-min-narrow);
+    min-width: min(
+      var(--fynns-chat-composer-leading-menu-min-narrow),
+      max-content
+    );
     max-width: var(--fynns-chat-composer-leading-menu-max-narrow);
   }
 }
@@ -1945,11 +1960,21 @@ a.fynns-chat-activity-artifact:hover {
 .fynns-chat-composer-primary-slot
   .fynns-menu-root:has(.fynns-menu-trigger-label)
   > .fynns-menu-trigger-btn {
-  width: 100%;
+  width: auto;
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
   justify-content: flex-start;
+}
+
+/* Label hugs glyphs — do not flex-grow into empty space before the chevron. */
+.fynns-chat-composer-leading
+  .fynns-menu-root:has(.fynns-menu-trigger-label)
+  .fynns-menu-trigger-label,
+.fynns-chat-composer-primary-slot
+  .fynns-menu-root:has(.fynns-menu-trigger-label)
+  .fynns-menu-trigger-label {
+  flex: 0 1 auto;
 }
 
 .fynns-chat-composer-leading .fynns-menu-root:has(.fynns-btn--icon),
