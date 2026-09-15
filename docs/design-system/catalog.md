@@ -235,6 +235,10 @@ classes.
   **requires** non-empty `label`; else `variant="plain"`; `label` ≠ `language`
   — always pass matching `language` / `codeLanguageFromPath`; editable
   autoGrow default on PageScroll; soft-wrap live highlight ≥ **0.5.52**;
+  fill-host overflow gate uses shared min(ta,pre) slack (floor 8px)
+  ≥ **0.5.299** so short scripts / textarea-only phantom delta stay
+  non-scrollable (no edge fade / selection drift); caret scroll clamped
+  to glyph-layer max;
   `readOnly` = single pre), Stepper, Dropzone, Avatar / AvatarGroup
 - **Layout helpers:** ControlStack, ControlRow, ControlBlock `{ description?,
   errorText? }`, FieldHint, FieldBlock / FieldHeader, FieldStack,

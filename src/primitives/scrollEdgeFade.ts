@@ -10,27 +10,63 @@
  * `header` ≥ **0.5.278**. `.fynns-table-wrap` gets inline-axis fade when
  * columns overflow (≥ **0.5.296** — live `#table`). Masks keep the outer
  * hairline opaque on Textarea (≥ **0.5.282**) so borders are not erased with
- * the fade.
+ * the fade. Editable CodeBlock: never mask `.fynns-code-block-input` — fade
+ * the highlight twin via `syncScrollEdgeFadeOnto` (≥ **0.5.299**) so
+ * Chromium `::selection` stays locked to the scrolling caret host.
  */
 
-export function syncScrollEdgeFade(el: HTMLElement): void {
-  const maxY = Math.max(0, el.scrollHeight - el.clientHeight);
-  const canDown = maxY > 1 && el.scrollTop < maxY - 1;
-  const canUp = maxY > 1 && el.scrollTop > 1;
-  if (canDown) el.setAttribute("data-fade-bottom", "");
-  else el.removeAttribute("data-fade-bottom");
-  if (canUp) el.setAttribute("data-fade-top", "");
-  else el.removeAttribute("data-fade-top");
+const FADE_ATTRS = [
+  "data-fade-top",
+  "data-fade-bottom",
+  "data-fade-left",
+  "data-fade-right",
+] as const;
 
-  const maxX = Math.max(0, el.scrollWidth - el.clientWidth);
+function writeScrollEdgeFadeAttrs(
+  target: HTMLElement,
+  metrics: {
+    scrollTop: number;
+    scrollLeft: number;
+    scrollHeight: number;
+    scrollWidth: number;
+    clientHeight: number;
+    clientWidth: number;
+  },
+): void {
+  const maxY = Math.max(0, metrics.scrollHeight - metrics.clientHeight);
+  const canDown = maxY > 1 && metrics.scrollTop < maxY - 1;
+  const canUp = maxY > 1 && metrics.scrollTop > 1;
+  if (canDown) target.setAttribute("data-fade-bottom", "");
+  else target.removeAttribute("data-fade-bottom");
+  if (canUp) target.setAttribute("data-fade-top", "");
+  else target.removeAttribute("data-fade-top");
+
+  const maxX = Math.max(0, metrics.scrollWidth - metrics.clientWidth);
   /* Use absolute scrollLeft so RTL / negative-scroll engines still gate. */
-  const left = Math.abs(el.scrollLeft);
+  const left = Math.abs(metrics.scrollLeft);
   const canRight = maxX > 1 && left < maxX - 1;
   const canLeft = maxX > 1 && left > 1;
-  if (canRight) el.setAttribute("data-fade-right", "");
-  else el.removeAttribute("data-fade-right");
-  if (canLeft) el.setAttribute("data-fade-left", "");
-  else el.removeAttribute("data-fade-left");
+  if (canRight) target.setAttribute("data-fade-right", "");
+  else target.removeAttribute("data-fade-right");
+  if (canLeft) target.setAttribute("data-fade-left", "");
+  else target.removeAttribute("data-fade-left");
+}
+
+export function syncScrollEdgeFade(el: HTMLElement): void {
+  writeScrollEdgeFadeAttrs(el, el);
+}
+
+/**
+ * Apply fade attrs to `target` using another element's scroll metrics.
+ * Editable CodeBlock: metrics from the transparent textarea, attrs on the
+ * visible highlight twin only — never mask the textarea (Chromium sticks
+ * `::selection` in viewport space under `mask-image` while scrollTop moves).
+ */
+export function syncScrollEdgeFadeOnto(
+  metricsEl: HTMLElement,
+  target: HTMLElement,
+): void {
+  writeScrollEdgeFadeAttrs(target, metricsEl);
 }
 
 /** Mirror fade attrs onto a scroll-synced twin (editable CodeBlock highlight). */
@@ -38,12 +74,7 @@ export function copyScrollEdgeFadeAttrs(
   from: HTMLElement,
   to: HTMLElement,
 ): void {
-  for (const attr of [
-    "data-fade-top",
-    "data-fade-bottom",
-    "data-fade-left",
-    "data-fade-right",
-  ] as const) {
+  for (const attr of FADE_ATTRS) {
     if (from.hasAttribute(attr)) to.setAttribute(attr, "");
     else to.removeAttribute(attr);
   }

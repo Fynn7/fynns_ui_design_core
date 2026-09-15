@@ -225,7 +225,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | SyncSideFilter tooltip covers chrome or list | DESIGN_SYSTEM content-density / List | `—` |
 | SyncSideFilter / ToggleGroup segment wash bleed | DESIGN_SYSTEM Hard rules | `#toggle-group` |
 | SyncSideFilter long labels crush / flush pad | DESIGN_SYSTEM content-density / shells | `#layouts-demo-navigation-drawer` / `#toggle-group` |
-| CodeBlock editable selection stripes | DESIGN_SYSTEM catalog | `#code-block` |
+| CodeBlock editable selection stripes / false scroll on short fill / dual-layer desync | DESIGN_SYSTEM catalog / shared-overflow gate ≥ 0.5.299 | `#code-block` |
 | Collapsible inside List (skeleton crush) | DESIGN_SYSTEM content-density / List | `#list` |
 | nested short List well + invented list-well token | DESIGN_SYSTEM content-density / List | `#list` |
 | tiny InfoHint in TopAppBar / toolbar chrome | DESIGN_SYSTEM forms / FieldStack | `—` |

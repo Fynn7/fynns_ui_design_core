@@ -248,8 +248,10 @@ button {
  * frame + inset content fade — a single vertical mask would erase side
  * strokes in the fade band.
  */
+/* Editable CodeBlock: never mask .fynns-code-block-input — Chromium keeps
+ * ::selection stuck under mask-image while the caret host scrolls (>= 0.5.299).
+ * Soft fade paints on .fynns-code-block-highlight (glyph twin) only. */
 .fynns-code-block-pre[data-fade-bottom],
-.fynns-code-block-input[data-fade-bottom],
 .fynns-code-block-highlight[data-fade-bottom],
 .fynns-page-scroll[data-fade-bottom],
 .fynns-fill-column-header[data-fade-bottom] {
@@ -283,7 +285,6 @@ button {
 }
 
 .fynns-code-block-pre[data-fade-top],
-.fynns-code-block-input[data-fade-top],
 .fynns-code-block-highlight[data-fade-top],
 .fynns-page-scroll[data-fade-top],
 .fynns-fill-column-header[data-fade-top] {
@@ -317,7 +318,6 @@ button {
 }
 
 .fynns-code-block-pre[data-fade-top][data-fade-bottom],
-.fynns-code-block-input[data-fade-top][data-fade-bottom],
 .fynns-code-block-highlight[data-fade-top][data-fade-bottom],
 .fynns-page-scroll[data-fade-top][data-fade-bottom],
 .fynns-fill-column-header[data-fade-top][data-fade-bottom] {
