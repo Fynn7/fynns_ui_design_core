@@ -6,7 +6,6 @@ import {
   DropdownMenu,
   DropdownMenuItem,
   EmptyState,
-  FileIcon,
   FillColumn,
   MoreHorizontalIcon,
   NavigationDrawer,
@@ -189,7 +188,6 @@ export function ChatProductLayoutsDemo() {
               ) : (
                 <>
                   <NavigationDrawerItem
-                    icon={<FileIcon />}
                     label={t("layouts.chatProductSessionA")}
                     active={activeSession === "alpha"}
                     onClick={() => setActiveSession("alpha")}
@@ -212,7 +210,6 @@ export function ChatProductLayoutsDemo() {
                     }
                   />
                   <NavigationDrawerItem
-                    icon={<FileIcon />}
                     label={t("layouts.chatProductSessionB")}
                     active={activeSession === "beta"}
                     onClick={() => setActiveSession("beta")}

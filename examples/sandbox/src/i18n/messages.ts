@@ -1516,7 +1516,10 @@ const en = {
   "globals.navDrawerSessionNew": "New chat",
   "globals.navDrawerSessionEntry": "Sample session",
   "globals.navDrawerSessionToolbarHelp":
-    "Session chrome (≥ 0.5.257): NavigationDrawerNewChat = full-width labeled New chat, ghost (no border; Item-like hover wash). Optional trailing More for Delete all (danger). Never Trash+Plus twin; never icon-only --toolbar-end for history.",
+    "Session chrome (≥ 0.5.257 / ≥ 0.5.298): NavigationDrawerNewChat = full-width labeled New chat, ghost (no border; Item-like hover wash). Optional trailing More for Delete all (danger). Session Items default label-only — no leading icon unless opt-in. Never Trash+Plus twin; never icon-only --toolbar-end for history.",
+  "globals.navDrawerSessionIconAria": "Sample session sidebar with leading icons",
+  "globals.navDrawerSessionIconHelp":
+    "Opt-in icon variant (≥ 0.5.298): pass NavigationDrawerItem icon only when the glyph carries meaning. Default session / history rows stay clean (no icon) — see #sandbox-navdrawer-session-chrome.",
   "globals.navDrawerModeHideBuiltin": "Hide samples",
   "globals.navDrawerModeHideBuiltinAria": "Hide sample catalog entries",
   "globals.navDrawerModeHideBuiltinHint":
@@ -3944,7 +3947,10 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerSessionNew": "新会话",
   "globals.navDrawerSessionEntry": "示例会话",
   "globals.navDrawerSessionToolbarHelp":
-    "会话顶栏（≥ 0.5.257）：NavigationDrawerNewChat = 满宽带文案新建，ghost（无描边；悬停同 Item wash）。可选 trailing More 放全部删除（danger）。禁止 Trash+Plus 双盘；历史侧栏勿用仅图标的 --toolbar-end。",
+    "会话顶栏（≥ 0.5.257 / ≥ 0.5.298）：NavigationDrawerNewChat = 满宽带文案新建，ghost（无描边；悬停同 Item wash）。可选 trailing More 放全部删除（danger）。会话 Item 默认仅 label — 未指定时不要 leading icon。禁止 Trash+Plus 双盘；历史侧栏勿用仅图标的 --toolbar-end。",
+  "globals.navDrawerSessionIconAria": "带 leading icon 的示例会话侧栏",
+  "globals.navDrawerSessionIconHelp":
+    "可选 icon 变体（≥ 0.5.298）：仅在字形有语义时传 NavigationDrawerItem icon。默认会话/历史行保持干净无 icon — 见 #sandbox-navdrawer-session-chrome。",
   "globals.navDrawerModeHideBuiltin": "隐藏示例",
   "globals.navDrawerModeHideBuiltinAria": "隐藏示例目录条目",
   "globals.navDrawerModeHideBuiltinHint":

@@ -676,6 +676,13 @@
   `--toolbar-end` — **not** a lone trash twin. Live
   `#sandbox-navdrawer-session-chrome`. Failure: CONSUMER_TREATY mode drawer
   toolbar trash+new twin.
+- **DON'T** put a leading `icon` on session / history `NavigationDrawerItem`s
+  by default — rows are **label (+ optional `trailing` More) only**. `icon` is
+  **opt-in** when the glyph carries meaning (typed destinations, distinct
+  kinds) — never a uniform decorative `FileIcon` on every chat title. Live
+  `#sandbox-navdrawer-session-chrome` (clean default) /
+  `#sandbox-navdrawer-session-icon` (opt-in icon variant). Failure:
+  CONSUMER_TREATY session history leading icon by default.
 - **DON'T** invent a chat / session-history product layout that skips the
   keep-set tree — default = **`ClippedNavShell`** + session
   `NavigationDrawer` (`NavigationDrawerNewChat` …) + **`FillColumn` → `Chat`**.

@@ -105,6 +105,7 @@ sandbox `#anchor`。
 - **Timeline row hover edit/delete** — 编辑在 Dialog 脚栏；勿 rail `--with-end` 铅笔/垃圾桶。`#timeline`
 - **NavigationDrawerItem badge / trash / no more-menu** — 行动作用 `trailing` ghost sm 或 More+`DropdownMenu`（删 `tone="danger"`）；禁止删进 `badge`。`#layouts-demo-navigation-drawer`
 - **mode drawer toolbar trash+new twin** — 会话用 `NavigationDrawerNewChat`；可选 trailing More 放全部删除；禁止 Trash+Plus 并排。`#sandbox-navdrawer-session-chrome`
+- **session history leading icon by default** — 会话/历史 `NavigationDrawerItem` 默认**无** leading `icon`（仅 label + 可选 trailing More）；`icon` 仅在字形有语义时 opt-in，禁止每行统一装饰性 `FileIcon`。`#sandbox-navdrawer-session-chrome` / `#sandbox-navdrawer-session-icon`
 - **chat product / aside host wrong tree** — 会话：`ClippedNavShell`+drawer+`FillColumn`→`Chat`；侧栏主题：`DestinationAppShell`+`EndAside`→`.fynns-chat-host--fill`→`Chat`。禁止 PageScroll 当 chat 主滚、composer 进 FillColumn `footer`。`#layouts-demo-chat-product` / `#layouts-demo-chat-aside`
 - **FillColumn guide Surface flush to Chat** — 短 soft Surface / 预览 → `header`；Chat → `children`；禁止 `children` 兄弟 + `paddingBottom:0` 贴死 ChatActivity。`#layouts-demo-fill-column` / `#sandbox-fill-column-guide`
 - **PageScroll mid-scroll hard clip** — 只用 keep-set `PageScroll`（渐隐已封装）；禁止裸 `overflow:auto`。`#page-scroll`
@@ -177,7 +178,8 @@ sandbox `#anchor`。
 `llm/CHAT_ARIA_PARITY.md`。优先 `ChatMessage markdown` / `ChatMarkdown`。
 产品壳默认：`ClippedNavShell` + 会话 `NavigationDrawer`（`NavigationDrawerNewChat`
 …）+ `FillColumn` → `Chat`（`#layouts-demo-chat-product`）；扁平根仍用
-`DestinationAppShell`。新会话：问候 + text starter + composer 进
+`DestinationAppShell`。会话/历史 Item **默认无** leading `icon`（`#sandbox-navdrawer-session-chrome`）；
+仅在字形有语义时 opt-in（`#sandbox-navdrawer-session-icon`）。新会话：问候 + text starter + composer 进
 `ChatThread.empty` 居中；有消息后 composer 贴 `ChatThread` 下。空线程 starter：
 满宽可点 `Surface` soft/padded/interactive（M3 Shared Axis Y 轮播；勿 Chip /
 勿 `ChatStarterPrompts`）。对照 `#chat`。勿私有 CSS「修」body stack gap。
