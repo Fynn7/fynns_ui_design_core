@@ -122,6 +122,7 @@ sandbox `#anchor`。
 - **ChatActivity tool-icon / artifact default** — 默认 status mark + 连续轨（done = accent；pulse 时 node 洗底挡住轨）；勿默认扳手/文件图标或强制 Artifact。`#activity`
 - **service Chip+label / ControlRow left-packed / label crush** — 状态只在 `label`；簇默认右齐；长 path meta 省略+InfoHint。`#rhythm`
 - **FieldHint restates ToggleGroup / TopAppBar InfoHint / overline restates trailing** — 禁止同源复述。`#rhythm` / `#layouts-demo-shell` / `#sandbox-list-repo-path-actions`
+- **Dialog description how-to essay** — `description` 仅短 caption；方向/路径/勾选说明进 `headActions` `InfoHint` `sm`（≥ **0.5.284**）；禁止多行 how-to 挂在标题下。`#overlays`
 - **private labeled Button cluster gap / Select refresh crammed** — 用 `.fynns-control-cluster`（+ `--end-align`/`__grow`）。`#rhythm`
 - **env key FieldHint / Input trailing md / affix far from edge** — 门户文案用标签行 InfoHint；壳内盘一律 `IconButton` `sm`；禁止负 margin/壳外克隆 eye。`#password` / `#input` / `#env-check`
 - **InlineAlert beside List / Banner icon top-pinned** — 告警全宽兄弟在上；多行 Banner icon/X 垂直居中。`#banner`

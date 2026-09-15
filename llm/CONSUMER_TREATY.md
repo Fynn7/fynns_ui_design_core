@@ -165,6 +165,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | ControlStack probe meta end-hug / kind mix (Available+Backend; path/chips/hint cluster) | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` |
 | FieldHint restates ToggleGroup / Tabs labels (information redundancy) | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` |
 | section FieldHint restates TopAppBar InfoHint | DESIGN_SYSTEM Hard rules / Content density | `#layouts-demo-shell` |
+| Dialog description how-to essay (information redundancy) | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.284**) | `#overlays` |
 | ListItem overline restates trailing status | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-repo-path-actions` |
 | ControlRow IconButton crushed to ellipse | DESIGN_SYSTEM form-rhythm | `#rhythm` |
 | end-align IconButton strip crushed | DESIGN_SYSTEM form-rhythm | `#rhythm` |

@@ -36,6 +36,7 @@ in sandbox demos (and on-demand rules such as timeline-catalog). Live index:
 | Select + refresh beside | end-align cluster + `__grow`; trail size match | `#form-recipe` | `Select.trailing` beside chevron; sm+md trail mix |
 | Repeatable Textarea + remove | end-align + `__grow` Textarea; add on label row | `#form-recipe` Highlights | Bare cluster (delete wraps under well) |
 | Multi-Card Dialog workflow | Sibling Cards in dialog body (flex-shrink 0) | `#form-recipe` Card stack | Crushed Cards to head height |
+| Centered Dialog how-to help | Optional **short** `description` only; how-to / path / overwrite → `headActions` InfoHint `sm` (≥ **0.5.284**) | `#overlays` | How-to essay in `description` |
 | Toolbar strip (name + control + note) | ControlStack / ControlRow / ControlBlock | `#rhythm` | Hand-rolled flex; full-bleed FieldHint row |
 | Catalog list chrome | Standalone ControlRow + md IconButton cluster (**no** bare count meta / `(N)` in label unless product requires) | `#rhythm` catalog | Content-sized island; private hub-spread; `{n}` / `.length` `.fynns-table-meta` beside Plus/import/clear; `Servers (3/3)` label |
 | PageScroll section-body chrome | Named ControlRow + md ghost IconButtons only | `#sandbox-rhythm-catalog` | sm disks; labeled primary generate pill; unsolicited count meta; revived morph/cover-letter twin strips |

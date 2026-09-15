@@ -558,6 +558,15 @@
   Live `#layouts-demo-shell` (TopAppBar InfoHint; main canvas has **no** sibling
   lead / FieldBlock description restating that tip). Failure: CONSUMER_TREATY
   section FieldHint restates TopAppBar InfoHint.
+- **DON'T** park a **how-to / direction / path essay** in Dialog / Drawer /
+  BottomSheet **`description`** (or a multi-line caption under the title) —
+  **information redundancy (hard)** (≥ **0.5.284**). `description` is optional
+  **short caption** only (≤ ~one sentence). Ops / scan / overwrite / path help
+  → **one** `headActions` **`InfoHint`** `sm` (Tooltip on the “i”); do **not**
+  dump the same paragraph as body lead. ConfirmDialog may keep a short
+  **confirm-intent** line (what will happen). Live `#overlays` (create Dialog:
+  no essay `description`; tip on head `InfoHint`). Failure: CONSUMER_TREATY
+  Dialog description how-to essay.
 - **DON'T** twin the same empty/status signal on a `ListItem` in both `overline`
   **and** `trailingSupportingText` (e.g. overline “尚无构建记录” + trailing
   “未构建”) — **information redundancy (hard)**. Status / empty → **`overline`

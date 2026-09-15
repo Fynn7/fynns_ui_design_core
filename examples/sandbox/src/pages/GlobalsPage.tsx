@@ -5757,7 +5757,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           open={centeredDialogOpen}
           onOpenChange={setCenteredDialogOpen}
           title={t("globals.dialogTitle")}
-          description={t("globals.dialogDescription")}
+          headActions={
+            <InfoHint size="sm" content={t("globals.dialogCreateHelp")} />
+          }
           size="sm"
           closeAriaLabel={t("globals.dialogClose")}
         >
