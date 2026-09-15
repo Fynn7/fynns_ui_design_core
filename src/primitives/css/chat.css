@@ -1800,11 +1800,11 @@ a.fynns-chat-activity-artifact:hover {
   font-size: var(--fynns-chat-composer-toggle-font-size);
   font-weight: var(--fynns-font-weight-medium);
   /*
-   * Never `line-height: 1` / `--fynns-line-height-tight` with the label’s
-   * overflow:hidden — clips Latin descenders (Thinking “g”) (≥ **0.5.294**;
-   * same seatbelt as Menu ≥ **0.5.255**).
+   * Never `line-height: 1` / `--fynns-line-height-tight` / snug with the
+   * label’s overflow:hidden — clips Latin descenders (Thinking “g”).
+   * Body (≥ **0.5.302**; snug seatbelt was **0.5.294** / Menu **0.5.255**).
    */
-  line-height: var(--fynns-line-height-snug);
+  line-height: var(--fynns-line-height-body);
   cursor: pointer;
   user-select: none;
   transition:

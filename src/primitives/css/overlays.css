@@ -76,10 +76,12 @@
   white-space: nowrap;
   text-align: start;
   /*
-   * Never `line-height: 1` / `--fynns-line-height-tight` here: OverflowTip
-   * + overflow:hidden clips Latin descenders (g / y / p) — ≥ **0.5.255**.
+   * Never `line-height: 1` / `--fynns-line-height-tight` / snug here:
+   * OverflowTip + overflow:hidden clips Latin descenders (g / y / p) when
+   * the line box equals the font bounding box (12px × 1.25 = 15px Segoe).
+   * Body (≥ **0.5.302**; snug was **0.5.255**).
    */
-  line-height: var(--fynns-line-height-snug);
+  line-height: var(--fynns-line-height-body);
 }
 
 .fynns-menu-trigger-leading {

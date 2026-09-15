@@ -186,7 +186,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | DropdownMenu missing nested submenu | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-menu-submenu` / `#menu` |
 | DropdownMenu panel left-shifted vs trigger | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.254**) | `#sandbox-menu-field-match` / `#menu` |
 | Menu chevron optically high | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.254**) | `#menu` / `#sandbox-menu-field-match` |
-| Ellipsis label clips descenders | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.294**; Menu ≥ **0.5.255**) | `#sandbox-chat-composer-thinking-toggle` / `#sandbox-menu-field-match` / `#menu` / `#chat` |
+| Ellipsis label clips descenders | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.302**; was snug ≥ **0.5.294**; Menu ≥ **0.5.255**) | `#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-leading-menus` / `#sandbox-menu-field-match` / `#menu` / `#chat` |
 | ChatComposer leading Menu label hard-clips | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus` / `#chat` |
 | ChatComposer model Menu left-clustered | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus` / `#chat` |
 | ChatComposer narrow host crushes draft | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus-narrow` / `#chat` |

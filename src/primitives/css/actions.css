@@ -48,8 +48,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  /* Descender seatbelt with overflow:hidden (≥ **0.5.294**). */
-  line-height: var(--fynns-line-height-snug);
+  /* Descender seatbelt with overflow:hidden (≥ **0.5.302**; was snug). */
+  line-height: var(--fynns-line-height-body);
 }
 
 /* OverflowTip inside the label (≥ **0.5.241**): cancel global flex width:0

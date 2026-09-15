@@ -3677,9 +3677,12 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   /*
    * Global seatbelt: any OverflowTip ellipsis host inherits this — never
    * `line-height: 1` / `--fynns-line-height-tight` or Latin descenders clip
-   * (g / y / p) (≥ **0.5.294**; Menu trigger ≥ **0.5.255**).
+   * (g / y / p). `--fynns-line-height-snug` (1.25) is still too tight at
+   * 12px / Segoe (font bounding box ≈ line box → AA clips “g”) — use
+   * `--fynns-line-height-body` (≥ **0.5.302**; snug seatbelt was
+   * **0.5.294**; Menu trigger ≥ **0.5.255**).
    */
-  line-height: var(--fynns-line-height-snug);
+  line-height: var(--fynns-line-height-body);
 }
 
 /*
