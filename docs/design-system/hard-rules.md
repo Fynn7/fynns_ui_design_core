@@ -430,12 +430,25 @@
   floor (`--fynns-chat-composer-field-min`). Live
   `#sandbox-chat-composer-leading-menus-narrow`. Failure: CONSUMER_TREATY
   ChatComposer narrow host crushes draft.
+- **DON'T** let `endActions` model Menu crush to chevron-only beside
+  Thinking / Vision / Send — core ≥ **0.5.291** uses content-first model flex
+  + `--fynns-chat-composer-leading-menu-min`, and icon-only mode pills on
+  ≤ **26rem** containers. Do **not** invent consumer min-width / icon-only
+  chip CSS. Live `#sandbox-chat-composer-thinking-toggle`. Failure:
+  CONSUMER_TREATY ChatComposer endActions model crushed by toggles.
 - **DON'T** bury ChatComposer **mode** switches (Thinking / Vision / …) in the
   leading `+` Menu — use keep-set `ChatComposerToggle` in `endActions`
   (Model → Thinking → Vision → Send; Tooltip for tip copy — ≥ **0.5.289**).
   Do **not** invent consumer chip / Switch CSS inside the capsule. Live
   `#sandbox-chat-composer-thinking-toggle`. Failure: CONSUMER_TREATY
   ChatComposer mode toggle buried in + Menu.
+- **DON'T** flatten every LLM source into one ChatComposer model Menu — use
+  `DropdownMenuGroup` sections **Local** / **Cloud** / **CLI** with
+  separators (≥ **0.5.290**). Show a section **only** when that source is
+  configured (key / endpoint / CLI auth); omit empty sections; if none →
+  disabled “No models available”. Live `#sandbox-chat-composer-model-sections`
+  / `#sandbox-chat-composer-model-empty`. Failure: CONSUMER_TREATY ChatComposer
+  model Menu flat without source sections.
 - **DON'T** park supporting / muted helper copy **flush** under a Select (or
   other form control) at 0–4dp — control → hint uses
   `--fynns-layout-field-hint-gap` (**8dp**). Prefer `FieldBlock` + `FieldHint`

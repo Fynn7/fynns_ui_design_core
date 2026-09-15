@@ -1766,6 +1766,8 @@ a.fynns-chat-activity-artifact:hover {
   flex: 0 1 auto;
   min-width: 0;
   gap: var(--fynns-chat-composer-gap);
+  /* Clip crushed leftovers so model glyphs never paint over toggles. */
+  overflow: hidden;
 }
 
 /*
@@ -1803,8 +1805,19 @@ a.fynns-chat-activity-artifact:hover {
 }
 
 @container fynns-chat-composer (max-width: 26rem) {
+  /*
+   * Icon-only mode pills on landing / EndAside widths (≥ **0.5.291**).
+   * Tooltip + aria-label keep the name; frees space for model Menu floor.
+   */
   .fynns-chat-composer-toggle {
-    max-width: var(--fynns-chat-composer-toggle-max-narrow);
+    flex: 0 0 auto;
+    max-width: none;
+    min-width: auto;
+    padding-inline: var(--fynns-chat-composer-toggle-pad-inline);
+  }
+
+  .fynns-chat-composer-toggle-label {
+    display: none;
   }
 }
 
@@ -1866,31 +1879,43 @@ a.fynns-chat-activity-artifact:hover {
 @container fynns-chat-composer (max-width: 26rem) {
   .fynns-chat-composer-primary-slot
     > .fynns-tooltip-trigger:has(.fynns-chat-composer-toggle) {
-    max-width: var(--fynns-chat-composer-toggle-max-narrow);
+    flex: 0 0 auto;
+    min-width: auto;
+    max-width: none;
   }
 }
 
 /*
- * Labeled Menu triggers in leading / endActions prefer content width, then
- * shrink under a soft cap — never spill past the capsule mid-glyph
- * (≥ **0.5.288**). `min-width: 0` so both sides
- * share shrink on narrow shells (≥ **0.5.288**); OverflowTip still owns the
- * full label. Icon-only menus / IconButtons stay fixed.
+ * Labeled Menu triggers — never mid-glyph spill past the capsule
+ * (≥ **0.5.288**). OverflowTip still owns the full label. Icon-only menus /
+ * IconButtons stay fixed.
+ *
+ * Leading volume Menus share free space with the draft (`1 1 0`).
+ * Primary-slot model Menus are content-first (`0 1 auto`): `1 1 0` left only
+ * leftover crumbs beside Thinking / Vision / Send and crushed to chevron-only
+ * (GSC landing ≤ **0.5.291**). Both sides keep a readable min floor.
  */
-.fynns-chat-composer-leading .fynns-menu-root:has(.fynns-menu-trigger-label),
-.fynns-chat-composer-primary-slot
-  .fynns-menu-root:has(.fynns-menu-trigger-label) {
-  /* Share row with field (basis 0); soft max still caps long ids. */
+.fynns-chat-composer-leading .fynns-menu-root:has(.fynns-menu-trigger-label) {
   flex: 1 1 0;
-  min-width: 0;
+  min-width: var(--fynns-chat-composer-leading-menu-min);
   max-width: var(--fynns-chat-composer-leading-menu-max);
+  overflow: hidden;
 }
 
-/* ~365px landing hosts: tighter menu ceiling so draft stays readable. */
+.fynns-chat-composer-primary-slot
+  .fynns-menu-root:has(.fynns-menu-trigger-label) {
+  flex: 0 1 auto;
+  min-width: var(--fynns-chat-composer-leading-menu-min);
+  max-width: var(--fynns-chat-composer-leading-menu-max);
+  overflow: hidden;
+}
+
+/* ~365px landing hosts: tighter menu ceiling + floor so draft stays readable. */
 @container fynns-chat-composer (max-width: 26rem) {
   .fynns-chat-composer-leading .fynns-menu-root:has(.fynns-menu-trigger-label),
   .fynns-chat-composer-primary-slot
     .fynns-menu-root:has(.fynns-menu-trigger-label) {
+    min-width: var(--fynns-chat-composer-leading-menu-min-narrow);
     max-width: var(--fynns-chat-composer-leading-menu-max-narrow);
   }
 }

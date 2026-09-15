@@ -939,6 +939,14 @@ export const CHAT_TOKENS = {
    */
   "composer-leading-menu-max-narrow": "7rem",
   /**
+   * Floor for labeled volume / model Menu triggers so `flex: 1 1 0` leftover
+   * math cannot crush them to chevron-only beside Thinking / Vision / Send
+   * (≥ **0.5.291**). Soft — still ellipsizes under the max caps.
+   */
+  "composer-leading-menu-min": "5rem",
+  /** Narrow-shell floor for the same labeled menus (≤ **26rem** container). */
+  "composer-leading-menu-min-narrow": "4rem",
+  /**
    * Collapsed field flex floor so chrome menus cannot crush the draft to a
    * stub (≥ **0.5.288**). Expanded field is full-width — this only applies
    * while the field shares the single control row. Keep modest (~4.5rem) so
@@ -963,6 +971,11 @@ export const CHAT_TOKENS = {
   "composer-toggle-font-size": "var(--fynns-font-size-xs)",
   /** Soft max so long localized labels ellipsize on narrow hosts. */
   "composer-toggle-max": "6.5rem",
+  /**
+   * ≤ **26rem** hosts drop the text and keep icon-only pills (≥ **0.5.291**)
+   * so model Menu keeps a readable floor. Wider shells still use the soft
+   * max above for labeled pills.
+   */
   "composer-toggle-max-narrow": "4.75rem",
   /**
    * Outer form inset — aliases `--fynns-chat-thread-pad-inline` (→

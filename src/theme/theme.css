@@ -377,6 +377,8 @@
   --fynns-chat-composer-expanded-gap: var(--fynns-space-sm);
   --fynns-chat-composer-leading-menu-max: 10rem;
   --fynns-chat-composer-leading-menu-max-narrow: 7rem;
+  --fynns-chat-composer-leading-menu-min: 5rem;
+  --fynns-chat-composer-leading-menu-min-narrow: 4rem;
   --fynns-chat-composer-field-min: 4.5rem;
   --fynns-chat-composer-control-size: 2rem;
   --fynns-chat-composer-toggle-height: 1.75rem;
