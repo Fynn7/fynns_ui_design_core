@@ -179,9 +179,13 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | truncated chrome / list / snack label lacks ellipsis Tooltip | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.243**) | `#card` / `#list` / `#select` / `#layouts-demo-shell` / `#toggle-group` / `#activity` / `#rhythm` end-align |
 | DropdownMenu wider than FieldBlock trigger | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.239**) | `#sandbox-menu-field-match` / `#menu` |
 | labeled DropdownMenu missing chevron | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.253**) | `#menu` / `#sandbox-menu-field-match` |
+| DropdownMenu missing nested submenu | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.287**) | `#sandbox-menu-submenu` / `#menu` |
 | DropdownMenu panel left-shifted vs trigger | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.254**) | `#sandbox-menu-field-match` / `#menu` |
 | Menu chevron optically high | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.254**) | `#menu` / `#sandbox-menu-field-match` |
 | Menu trigger clips descenders | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.255**) | `#sandbox-menu-field-match` / `#menu` |
+| ChatComposer leading Menu label hard-clips | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.285**) | `#sandbox-chat-composer-leading-menus` / `#chat` |
+| ChatComposer model Menu left-clustered | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.286**) | `#sandbox-chat-composer-leading-menus` / `#chat` |
+| ChatComposer narrow host crushes draft | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus-narrow` / `#chat` |
 | Menu trigger leading icon misaligned | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.258**) | `#sandbox-menu-leading-icon` / `#menu` |
 | Select supporting copy kisses trigger | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-select-wide-short` |
 | Card teaching help kisses shell | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-card-draft-actions` / `#sandbox-card-chrome-icon-actions` / `#sandbox-card-head-primary-end` |
@@ -249,9 +253,6 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Select row-action IconButton drifts when open | DESIGN_SYSTEM forms / FieldStack | `#field-header` |
 | FieldStack Grid vertically centers short FieldBlock beside expanded Select | DESIGN_SYSTEM FieldStack / Grid | `#sandbox-field-stack-grid-select` |
 | FieldStack Grid hugs max-content leaving dead gutter in form Surface | DESIGN_SYSTEM FieldStack / Grid | `#sandbox-field-stack-grid-select` |
-| FieldStack Grid inline field-stack-gap style | DESIGN_SYSTEM Hard rules / FieldStack (≥ **0.5.285**) | `#sandbox-field-stack-grid-select` |
-| FieldStack Grid FieldHeader action-row skew | DESIGN_SYSTEM Hard rules / FieldStack (≥ **0.5.285**) | `#sandbox-field-stack-grid-select` |
-| Card title restates actions Button (information redundancy) | DESIGN_SYSTEM Hard rules (≥ **0.5.285**) | `#sandbox-field-stack-grid-select` |
 | Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip | DESIGN_SYSTEM Card / Hard rules | `#sandbox-card-chrome-icon-actions` |
 | FieldBlock labeled Save key instead of IconButton+Tooltip | DESIGN_SYSTEM Hard rules | `#provider-settings` |
 | FieldBlock Save IconButton wraps under Input | DESIGN_SYSTEM Hard rules | `#provider-settings` |

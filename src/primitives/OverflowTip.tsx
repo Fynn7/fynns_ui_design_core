@@ -1,7 +1,9 @@
 import {
+  isValidElement,
   useLayoutEffect,
   useRef,
   useState,
+  type ReactElement,
   type ReactNode,
 } from "react";
 import { Tooltip, type TooltipSide } from "./Tooltip";
@@ -97,13 +99,24 @@ export function OverflowTip({
   );
 }
 
-/** Tip body for a string-or-ReactNode label (prefer string; else fallback). */
+/**
+ * Tip body for a string-or-ReactNode label (prefer string; else fallback).
+ * Single-child text elements (e.g. consumer `<span>model-id</span>` Menu
+ * triggers) unwrap so OverflowTip still fires (≥ **0.5.285**).
+ */
 export function overflowTipText(
   label: ReactNode,
   fallback?: string,
 ): string | null {
   if (typeof label === "string" || typeof label === "number") {
     return String(label);
+  }
+  if (isValidElement(label)) {
+    const kids = (label as ReactElement<{ children?: ReactNode }>).props
+      .children;
+    if (typeof kids === "string" || typeof kids === "number") {
+      return String(kids);
+    }
   }
   if (fallback != null && fallback !== "") return fallback;
   return null;

@@ -274,26 +274,6 @@
   is for measured tile catalogs (`#code-block` tokens). Live
   `#sandbox-field-stack-grid-select`. Failure: CONSUMER_TREATY FieldStack Grid
   hugs max-content leaving dead gutter in form Surface.
-- **DON'T** invent inline `style={{ gap: "var(--fynns-layout-field-stack-gap)" }}`
-  (or other private gap) on form `Grid` — use the Grid **`gap`** prop
-  (`gap="md"` = `--fynns-space-md` = field-stack / control-stack-form gap). Live
-  `#sandbox-field-stack-grid-select`. Failure: CONSUMER_TREATY FieldStack Grid
-  inline field-stack-gap style.
-- **DON'T** let one FieldBlock `actions` (InfoHint / IconButton) skew a
-  FieldStack→**Grid** row so labels / controls sit on different baselines —
-  core ≥ **0.5.285** equalizes **every** `.fynns-field-header` in a FieldStack
-  that `:has(.fynns-field-header__actions)` (including FieldBlocks nested under
-  `Grid`, not only direct FieldStack children). Do **not** invent consumer
-  min-height / align patches. Live `#sandbox-field-stack-grid-select`. Failure:
-  CONSUMER_TREATY FieldStack Grid FieldHeader action-row skew.
-- **DON'T** twin a Card / Collapsible **`title`** with the **visible label** of a
-  head `actions` labeled `Button` (e.g. title「抓取」+ primary「抓取」) —
-  **information redundancy (hard)** (≥ **0.5.285**). Title already names the
-  strip; head CTA → **`IconButton` + `Tooltip`** (+ `aria-label`), or a **non-
-  echoing** verb. Keep labeled Buttons for Dialog feet / generate when the title
-  does **not** repeat that verb. Live `#sandbox-field-stack-grid-select` (Card
-  title ≠ run IconButton tip). Failure: CONSUMER_TREATY Card title restates
-  actions Button.
 - **DON'T** paint self-evident save / copy / open-folder actions as **labeled**
   `Button`s (ghost **or** tonal / primary) in Card chrome, densified Select
   clusters, **or FieldBlock / form `.fynns-control-cluster--end-align`**
@@ -401,6 +381,10 @@
   open; `iconOnly` stays glyph-only. Do **not** invent consumer chevron markup /
   CSS. Live `#menu` / `#sandbox-menu-field-match`. Failure: CONSUMER_TREATY
   labeled DropdownMenu missing chevron.
+- **DON'T** invent a consumer nested flyout / absolute submenu for Menu
+  rows — use keep-set `DropdownMenuSub` (hover / ArrowRight; panel docks end
+  via floatingBox). Live `#sandbox-menu-submenu`. Failure: CONSUMER_TREATY
+  DropdownMenu missing nested submenu.
 - **DON'T** leave Menu / Button icons riding the inline SVG baseline strut
   (chevron looks 高 / 歪) — core icons default `.fynns-icon { display: block }`
   (≥ **0.5.254**); Menu chevron lives in `.fynns-menu-trigger-trailing`. Do
@@ -419,6 +403,25 @@
   consumer `align-items` / `translateY` on `.fynns-menu-trigger-label`. Live
   `#sandbox-menu-leading-icon` / `#menu`. Failure: CONSUMER_TREATY Menu trigger
   leading icon misaligned.
+- **DON'T** let `ChatComposer` **leading** / `endActions` labeled
+  `DropdownMenu` triggers mid-glyph hard-clip past the capsule (or spill
+  hover/focus paint outside the shell) — pass **string** `trigger` (core wraps
+  OverflowTip); core caps each labeled menu at
+  `--fynns-chat-composer-leading-menu-max` and clips shell overflow
+  (≥ **0.5.285**). Do **not** invent consumer `max-width` / manual `slice` /
+  private chip-label CSS. Live `#sandbox-chat-composer-leading-menus` /
+  `#chat`. Failure: CONSUMER_TREATY ChatComposer leading Menu label hard-clips.
+- **DON'T** park the **model** picker in `ChatComposer` `leading` (stays
+  start-clustered) — put it in `endActions` (end / right, before Send) with
+  `align="end"` (≥ **0.5.286**). Volume / tools stay in `leading`. Do **not**
+  use `trailing` for the model Menu (`trailing` **replaces** Send). Live
+  `#sandbox-chat-composer-leading-menus`. Failure: CONSUMER_TREATY ChatComposer
+  model Menu left-clustered.
+- **DON'T** let labeled volume / model Menus starve the ChatComposer draft
+  on narrow hosts (~365px) — core ≥ **0.5.288** shares menu shrink + field
+  floor (`--fynns-chat-composer-field-min`). Live
+  `#sandbox-chat-composer-leading-menus-narrow`. Failure: CONSUMER_TREATY
+  ChatComposer narrow host crushes draft.
 - **DON'T** park supporting / muted helper copy **flush** under a Select (or
   other form control) at 0–4dp — control → hint uses
   `--fynns-layout-field-hint-gap` (**8dp**). Prefer `FieldBlock` + `FieldHint`

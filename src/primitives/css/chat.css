@@ -1493,6 +1493,11 @@ a.fynns-chat-activity-artifact:hover {
   background: var(--fynns-color-surface-2);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   box-sizing: border-box;
+  /* Keep labeled-menu hover / focus paint inside the capsule (≥ 0.5.285). */
+  overflow: hidden;
+  /* Narrow hosts: tighten labeled-menu caps so field is not starved (≥ 0.5.288). */
+  container-type: inline-size;
+  container-name: fynns-chat-composer;
   transition: border-color var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
@@ -1630,10 +1635,11 @@ a.fynns-chat-activity-artifact:hover {
  */
 .fynns-chat-composer-field {
   position: relative;
-  flex: 1 1 auto;
+  /* Share free space with labeled menus (basis 0); min floor keeps draft (≥ 0.5.288). */
+  flex: 1 1 0;
   align-self: center;
   order: 2;
-  min-width: 0;
+  min-width: var(--fynns-chat-composer-field-min);
   display: flex;
 }
 
@@ -1737,10 +1743,78 @@ a.fynns-chat-activity-artifact:hover {
 
 .fynns-chat-composer-leading,
 .fynns-chat-composer-primary-slot {
-  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+/*
+ * Leading may host labeled Menus (volume / model). Allow shrink so long
+ * labels ellipsize inside the shell — never mid-glyph clip past the capsule
+ * (≥ **0.5.285**). Primary Send/Stop stays content-sized.
+ */
+.fynns-chat-composer-leading {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  gap: var(--fynns-chat-composer-gap);
+}
+
+.fynns-chat-composer-primary-slot {
+  /* Must shrink with labeled endActions — `0 0 auto` kept model at the soft
+   * cap while volume/field starved on ~22rem shells (GSC landing ≤ **0.5.288**). */
+  flex: 0 1 auto;
+  min-width: 0;
+  gap: var(--fynns-chat-composer-gap);
+}
+
+/*
+ * Labeled Menu triggers in leading / endActions prefer content width, then
+ * shrink under a soft cap — never spill past the capsule mid-glyph
+ * (≥ **0.5.285** / endActions ≥ **0.5.286**). `min-width: 0` so both sides
+ * share shrink on narrow shells (≥ **0.5.288**); OverflowTip still owns the
+ * full label. Icon-only menus / IconButtons stay fixed.
+ */
+.fynns-chat-composer-leading .fynns-menu-root:has(.fynns-menu-trigger-label),
+.fynns-chat-composer-primary-slot
+  .fynns-menu-root:has(.fynns-menu-trigger-label) {
+  /* Share row with field (basis 0); soft max still caps long ids. */
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: var(--fynns-chat-composer-leading-menu-max);
+}
+
+/* ~365px landing hosts: tighter menu ceiling so draft stays readable. */
+@container fynns-chat-composer (max-width: 26rem) {
+  .fynns-chat-composer-leading .fynns-menu-root:has(.fynns-menu-trigger-label),
+  .fynns-chat-composer-primary-slot
+    .fynns-menu-root:has(.fynns-menu-trigger-label) {
+    max-width: var(--fynns-chat-composer-leading-menu-max-narrow);
+  }
+}
+
+.fynns-chat-composer-leading
+  .fynns-menu-root:has(.fynns-menu-trigger-label)
+  > .fynns-menu-trigger-btn,
+.fynns-chat-composer-primary-slot
+  .fynns-menu-root:has(.fynns-menu-trigger-label)
+  > .fynns-menu-trigger-btn {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  justify-content: flex-start;
+}
+
+.fynns-chat-composer-leading .fynns-menu-root:has(.fynns-btn--icon),
+.fynns-chat-composer-leading > .fynns-btn--icon,
+.fynns-chat-composer-leading > .fynns-tooltip-trigger,
+.fynns-chat-composer-primary-slot .fynns-menu-root:has(.fynns-btn--icon),
+.fynns-chat-composer-primary-slot > .fynns-btn--icon,
+.fynns-chat-composer-primary-slot > .fynns-tooltip-trigger {
+  flex: 0 0 auto;
+  min-width: auto;
+  max-width: none;
 }
 
 /* Collapsed display:contents order — leading | text | primary. */
@@ -1770,6 +1844,12 @@ a.fynns-chat-activity-artifact:hover {
   order: unset;
   /* space-between owns placement — drop collapsed end-push. */
   margin-inline-start: 0;
+}
+
+/* Expanded: leading takes free start space; labeled menus still cap+ellipsis. */
+.fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-leading {
+  flex: 1 1 auto;
+  justify-content: flex-start;
 }
 
 @media (prefers-reduced-motion: reduce) {

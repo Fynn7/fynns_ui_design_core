@@ -375,6 +375,9 @@
   --fynns-chat-composer-glyph-inset: calc((var(--fynns-chat-composer-control-size) - var(--fynns-size-icon)) / 2);
   --fynns-chat-composer-gap: var(--fynns-space-xs);
   --fynns-chat-composer-expanded-gap: var(--fynns-space-sm);
+  --fynns-chat-composer-leading-menu-max: 10rem;
+  --fynns-chat-composer-leading-menu-max-narrow: 7rem;
+  --fynns-chat-composer-field-min: 4.5rem;
   --fynns-chat-composer-control-size: 2rem;
   --fynns-chat-composer-inset-inline: var(--fynns-chat-thread-pad-inline);
   --fynns-chat-composer-inset-block: var(--fynns-space-md);

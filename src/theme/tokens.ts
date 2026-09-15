@@ -926,6 +926,26 @@ export const CHAT_TOKENS = {
   /** Expanded gap between full-width text and bottom toolbar (~8dp). */
   "composer-expanded-gap": "var(--fynns-space-sm)",
   /**
+   * Cap for each **labeled** DropdownMenu in `.fynns-chat-composer-leading`
+   * / primary-slot endActions (≥ **0.5.285** / **0.5.286**). Long volume /
+   * model ids ellipsize inside the shell — never mid-glyph hard-clip past
+   * the capsule edge. Icon-only menus stay content-sized.
+   */
+  "composer-leading-menu-max": "10rem",
+  /**
+   * Narrow-shell ceiling for the same labeled menus when the composer
+   * container is ≤ **26rem** (≥ **0.5.288**). Keeps draft field readable
+   * beside + / volume / model / Send (GSC landing ~365px lesson).
+   */
+  "composer-leading-menu-max-narrow": "7rem",
+  /**
+   * Collapsed field flex floor so chrome menus cannot crush the draft to a
+   * stub (≥ **0.5.288**). Expanded field is full-width — this only applies
+   * while the field shares the single control row. Keep modest (~4.5rem) so
+   * volume / model still show a few readable glyphs on ~365px shells.
+   */
+  "composer-field-min": "4.5rem",
+  /**
    * Leading/trailing IconButton hit target inside the composer (32dp).
    * Scoped via CSS — does not change global IconButton. Matches
    * `composer-line-height` so controls and text share one midline.

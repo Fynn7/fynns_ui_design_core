@@ -72,6 +72,21 @@
 }
 
 /*
+ * Nested label wrappers (consumer `<span>`, OverflowTip) must shrink under
+ * a capped host — flex `min-width: auto` otherwise refuses to ellipsize and
+ * the capsule hard-clips mid-glyph (≥ **0.5.285**). Prefer string `trigger`
+ * so core wraps OverflowTip; this is the seatbelt for ReactNode labels.
+ */
+.fynns-menu-trigger-label
+  > :not(.fynns-menu-trigger-leading):not(svg):not(.fynns-icon) {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*
  * Trailing flex slot (Select / SearchBar recipe): fixed square + cross-axis
  * center — no optical translate hacks. Chevron SVG is `.fynns-icon` (block).
  */
@@ -269,7 +284,26 @@
   color: var(--fynns-color-danger);
 }
 
-.fynns-menu-item--danger .fynns-menu-item-icon,
+.fynns-menu-item--danger 
+.fynns-menu-item--sub .fynns-menu-item-sub-chevron {
+  margin-inline-start: auto;
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-menu-item--sub-open {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-menu--sub {
+  min-width: 10rem;
+}
+.fynns-menu-item-icon,
 .fynns-menu-item--danger .fynns-menu-item-leading {
   color: var(--fynns-color-danger);
 }

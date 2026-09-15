@@ -225,7 +225,14 @@ export type ChatComposerProps = Omit<
   leading?: ReactNode | null;
   /** Optional attachment previews above the field (caller-owned). */
   attachments?: ReactNode;
-  /** Override trailing primary action. */
+  /**
+   * Optional end-of-toolbar actions **before** Send/Stop (e.g. model Menu).
+   * Renders in `.fynns-chat-composer-primary-slot` — visually **end / right**,
+   * not in `leading`. Ignored when `trailing` overrides the primary slot.
+   * (≥ **0.5.286**)
+   */
+  endActions?: ReactNode;
+  /** Override trailing primary action (replaces Send/Stop entirely). */
   trailing?: ReactNode;
   busy?: boolean;
   onStop?: () => void;
@@ -279,6 +286,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       placeholder = "Message",
       leading,
       attachments,
+      endActions,
       trailing,
       busy = false,
       onStop,
@@ -614,7 +622,12 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
               {showLeading ? (
                 <div className="fynns-chat-composer-leading">{leading}</div>
               ) : null}
-              <div className="fynns-chat-composer-primary-slot">{primary}</div>
+              <div className="fynns-chat-composer-primary-slot">
+                {trailing === undefined && endActions != null
+                  ? endActions
+                  : null}
+                {primary}
+              </div>
             </div>
           </div>
         </div>
