@@ -133,10 +133,12 @@ sandbox `#anchor`。
 - **Pagination overlay / option repeats noun / gaps crushed** — stock Select；options 仅数字；间距 8/16dp。`#pagination`
 - **Select fullWidth / menu width / supporting kisses** — 铺满用 `fullWidth`/`__grow`；菜单 width=live shell；hint 用 `field-hint-gap`。`#select` / `#sandbox-select-wide-short`
 - **DropdownMenu FieldBlock width / chevron / panel shift / chrome clip** — matchTriggerWidth；core 注入 chevron；禁止消费仓 left/transform/translateY。`#menu` / `#sandbox-menu-field-match`
+- **FieldBlock Menu tip-wrap shrinks trigger** — `Tooltip`/`span` 包 Menu 仍须铺满 FieldBlock（≥ **0.5.290**）；长文案用 string `trigger`+OverflowTip，how-to 用 `InfoHint`；禁止消费仓给 tip 壳写 `width:100%`。`#sandbox-menu-field-match`
 - **DropdownMenu nested submenu** — 二级用 `DropdownMenuSub`（hover/ArrowRight）；禁止消费仓绝对定位二级飞层。`#sandbox-menu-submenu`
 - **ChatComposer leading Menu label hard-clips** — 带标签 Menu 须壳内 `…`+OverflowTip；`trigger` 传 string；禁止消费仓 max-width / 手写截断 / 私有 chip-label。`#sandbox-chat-composer-leading-menus`
 - **ChatComposer model Menu left-clustered** — 模型选择放 `endActions`（靠右、Send 前，`align=end`）；卷/工具留 `leading`；勿用 `trailing` 顶掉 Send。`#sandbox-chat-composer-leading-menus`
 - **ChatComposer narrow host crushes draft** — 窄壳两侧 Menu 须可缩 + field 下限；禁止消费仓私有 max-width 挤死草稿。`#sandbox-chat-composer-leading-menus-narrow`
+- **ChatComposer mode toggle buried in + Menu** — Thinking / Vision 等模式用 `ChatComposerToggle` 放 `endActions`（Model → Thinking → Vision → Send）+ Tooltip；禁止埋进 leading `+` 菜单或消费仓自绘 chip。`#sandbox-chat-composer-thinking-toggle`
 - **truncated option / chrome label lacks OverflowTip** — 溢出须 `…`+Tooltip 全文；禁止 `title=`。`#select` / `#card` / `#list`
 - **consumer restyles keep-set chrome / Select Autocomplete deprecated** — 铬改只在 core；新屏用 Menu/SearchBar。`#select` / `#menu`
 - **outcome Chip as status / List path Switch+Chip+danger soup** — 结果标用 `.fynns-list-item-status`；目录 trailing 仅 ghost md 簇。`#list` / `#sandbox-list-repo-path-actions`

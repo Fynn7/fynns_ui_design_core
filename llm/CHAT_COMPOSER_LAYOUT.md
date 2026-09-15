@@ -49,6 +49,12 @@ consumer `max-width` / manual `slice` / private chip-label CSS.
   Do **not** park the model picker in `leading` (stays start-clustered) and
   do **not** use `trailing` for it (`trailing` **replaces** Send).
 
+**Mode toggles (≥ 0.5.289, live `#sandbox-chat-composer-thinking-toggle`):**
+ChatGPT-style Thinking / Vision pills use keep-set `ChatComposerToggle` in
+`endActions` — order **Model Menu → Thinking → Vision → Send/Dictate**.
+Wrap each toggle in `Tooltip` for tip copy. Do **not** bury mode switches in
+the leading `+` Menu, or invent a consumer chip CSS clone.
+
 **Narrow shells (≥ 0.5.288):** labeled menus share shrink (`min-width: 0`)
 under `--fynns-chat-composer-leading-menu-max` (and a tighter
 `*-narrow` cap when the shell container ≤ **26rem**). The draft field keeps

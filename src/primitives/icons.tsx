@@ -366,6 +366,20 @@ export function SparklesIcon(props: IconProps) {
   );
 }
 
+/** Reasoning / thinking mode glyph (ChatComposerToggle recipe). */
+export function BrainIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="M12 5a3 3 0 0 1 3 3c1.7 0 3 1.3 3 3 0 1-.5 1.9-1.2 2.5.7.6 1.2 1.5 1.2 2.5a3 3 0 0 1-3 3H9.5A3.5 3.5 0 0 1 6 15.5c0-1 .4-1.9 1.1-2.5A3 3 0 0 1 6 11c0-1.7 1.3-3 3-3a3 3 0 0 1 3-3Z" />
+      <path d="M12 5v14" />
+      <path d="M9 10h.01" />
+      <path d="M15 10h.01" />
+      <path d="M9.5 14h.01" />
+      <path d="M14.5 14h.01" />
+    </svg>
+  );
+}
+
 export function PlugIcon(props: IconProps) {
   return (
     <svg {...svgProps(props)}>

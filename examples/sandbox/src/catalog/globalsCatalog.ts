@@ -329,6 +329,9 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "leading",
       "sandbox-chat-composer-leading-menus",
       "sandbox-chat-composer-leading-menus-narrow",
+      "sandbox-chat-composer-thinking-toggle",
+      "ChatComposerToggle",
+      "Vision",
     ],
   },
   {

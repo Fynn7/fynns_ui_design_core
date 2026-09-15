@@ -953,6 +953,18 @@ export const CHAT_TOKENS = {
    */
   "composer-control-size": "2rem",
   /**
+   * Compact mode pill in `endActions` (Thinking / Vision — ≥ **0.5.289**).
+   * Slightly shorter than control-size so the pill sits inside the capsule
+   * without competing with the Send disk.
+   */
+  "composer-toggle-height": "1.75rem",
+  "composer-toggle-pad-inline": "0.5rem",
+  "composer-toggle-gap": "0.25rem",
+  "composer-toggle-font-size": "var(--fynns-font-size-xs)",
+  /** Soft max so long localized labels ellipsize on narrow hosts. */
+  "composer-toggle-max": "6.5rem",
+  "composer-toggle-max-narrow": "4.75rem",
+  /**
    * Outer form inset — aliases `--fynns-chat-thread-pad-inline` (→
    * `dialog-inset`) so the composer shell and user-bubble end edges share
    * one vertical line. Do **not** point this at a different layout key.

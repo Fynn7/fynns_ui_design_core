@@ -379,6 +379,12 @@
   --fynns-chat-composer-leading-menu-max-narrow: 7rem;
   --fynns-chat-composer-field-min: 4.5rem;
   --fynns-chat-composer-control-size: 2rem;
+  --fynns-chat-composer-toggle-height: 1.75rem;
+  --fynns-chat-composer-toggle-pad-inline: 0.5rem;
+  --fynns-chat-composer-toggle-gap: 0.25rem;
+  --fynns-chat-composer-toggle-font-size: var(--fynns-font-size-xs);
+  --fynns-chat-composer-toggle-max: 6.5rem;
+  --fynns-chat-composer-toggle-max-narrow: 4.75rem;
   --fynns-chat-composer-inset-inline: var(--fynns-chat-thread-pad-inline);
   --fynns-chat-composer-inset-block: var(--fynns-space-md);
   --fynns-chat-composer-offset: var(--fynns-space-sm);

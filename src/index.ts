@@ -26,6 +26,7 @@ export {
   ArrowUpIcon,
   BarChartIcon,
   BotIcon,
+  BrainIcon,
   BriefcaseIcon,
   CheckCircleIcon,
   CheckIcon,
@@ -373,6 +374,8 @@ export type {
   ChatScrollToBottomProps,
   ChatThreadProps,
 } from "./primitives/Chat";
+export { ChatComposerToggle } from "./primitives/ChatComposerToggle";
+export type { ChatComposerToggleProps } from "./primitives/ChatComposerToggle";
 export { ChatMessage } from "./primitives/ChatMessage";
 export type {
   ChatMessageProps,

@@ -422,6 +422,12 @@
   floor (`--fynns-chat-composer-field-min`). Live
   `#sandbox-chat-composer-leading-menus-narrow`. Failure: CONSUMER_TREATY
   ChatComposer narrow host crushes draft.
+- **DON'T** bury ChatComposer **mode** switches (Thinking / Vision / …) in the
+  leading `+` Menu — use keep-set `ChatComposerToggle` in `endActions`
+  (Model → Thinking → Vision → Send; Tooltip for tip copy — ≥ **0.5.289**).
+  Do **not** invent consumer chip / Switch CSS inside the capsule. Live
+  `#sandbox-chat-composer-thinking-toggle`. Failure: CONSUMER_TREATY
+  ChatComposer mode toggle buried in + Menu.
 - **DON'T** park supporting / muted helper copy **flush** under a Select (or
   other form control) at 0–4dp — control → hint uses
   `--fynns-layout-field-hint-gap` (**8dp**). Prefer `FieldBlock` + `FieldHint`

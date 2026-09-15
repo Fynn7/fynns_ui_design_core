@@ -33,6 +33,8 @@ import {
   ChatCitationChip,
   ChatCitations,
   ChatComposer,
+  ChatComposerToggle,
+  BrainIcon,
   ChatMarkdown,
   ChatMessage,
   ChatScrollToBottom,
@@ -1303,6 +1305,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   );
   const [chatComposerLeadingMenusDraft, setChatComposerLeadingMenusDraft] =
     useState("");
+  const [chatComposerThinkingOn, setChatComposerThinkingOn] = useState(true);
+  const [chatComposerVisionOn, setChatComposerVisionOn] = useState(false);
   const [chatAsideDraft, setChatAsideDraft] = useState("");
   const [thinkingStreaming, setThinkingStreaming] = useState(false);
   const [thinkingDoneMs, setThinkingDoneMs] = useState<number | undefined>(4200);
@@ -2089,6 +2093,49 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </DropdownMenu>
             </FieldBlock>
           </div>
+          <FieldStack>
+            <FieldBlock
+              label={t("globals.menuFieldTipWrapLongLabel")}
+              actions={
+                <InfoHint
+                  size="sm"
+                  ariaLabel={t("globals.menuFieldTipWrapHintAria")}
+                  content={t("globals.menuFieldTipWrapHint")}
+                />
+              }
+            >
+              <Tooltip content={t("globals.selectLongOption")} align="start">
+                <span>
+                  <DropdownMenu
+                    ariaLabel={t("globals.menuFieldTipWrapLongAria")}
+                    trigger={t("globals.selectLongOption")}
+                    matchTriggerWidth
+                  >
+                    <DropdownMenuItem onClick={() => {}}>
+                      {t("globals.autocompleteOptTeal")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {}}>
+                      {t("globals.selectLongOption")}
+                    </DropdownMenuItem>
+                  </DropdownMenu>
+                </span>
+              </Tooltip>
+            </FieldBlock>
+            <FieldBlock label={t("globals.menuFieldTipWrapShortLabel")}>
+              <DropdownMenu
+                ariaLabel={t("globals.menuFieldTipWrapShortAria")}
+                trigger={t("globals.autocompleteOptCyan")}
+                matchTriggerWidth
+              >
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.autocompleteOptTeal")}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.autocompleteOptCyan")}
+                </DropdownMenuItem>
+              </DropdownMenu>
+            </FieldBlock>
+          </FieldStack>
           <FieldBlock label={t("globals.menuFieldRefreshLabel")}>
             <div className="fynns-control-cluster fynns-control-cluster--end-align">
               <DropdownMenu
@@ -3622,6 +3669,72 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         <SandboxHelp text={t("globals.chatComposerLeadingMenusNarrowHelp")} />
         <SandboxHelp text={t("globals.chatComposerLeadingMenusHelp")} />
+
+        <p className="sandbox-chat-aside-label">
+          {t("globals.chatComposerThinkingToggleLabel")}
+        </p>
+        <div
+          id="sandbox-chat-composer-thinking-toggle"
+          className="sandbox-chat-composer-leading-menus-host"
+        >
+          <ChatComposer
+            value={chatComposerLeadingMenusDraft}
+            onChange={setChatComposerLeadingMenusDraft}
+            ariaLabel={t("globals.chatComposerThinkingToggleAria")}
+            placeholder={t("globals.chatComposerPlaceholder")}
+            onSubmit={() => setChatComposerLeadingMenusDraft("")}
+            sendLabel={t("globals.chatSend")}
+            leading={
+              <Tooltip content={t("globals.chatComposerLeadingTip")}>
+                <IconButton
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  aria-label={t("globals.chatComposerLeadingTip")}
+                >
+                  <PlusIcon />
+                </IconButton>
+              </Tooltip>
+            }
+            endActions={
+              <>
+                <DropdownMenu
+                  trigger={t("globals.chatComposerLeadingMenusModel")}
+                  ariaLabel={t("globals.chatComposerLeadingMenusModelAria")}
+                  size="sm"
+                  variant="ghost"
+                  align="end"
+                >
+                  <DropdownMenuItem>
+                    {t("globals.chatComposerLeadingMenusModel")}
+                  </DropdownMenuItem>
+                </DropdownMenu>
+                <Tooltip content={t("globals.chatComposerThinkingTip")}>
+                  <ChatComposerToggle
+                    pressed={chatComposerThinkingOn}
+                    onPressedChange={setChatComposerThinkingOn}
+                    ariaLabel={t("globals.chatComposerThinkingAria")}
+                    leadingIcon={<BrainIcon size={16} />}
+                  >
+                    {t("globals.chatComposerThinking")}
+                  </ChatComposerToggle>
+                </Tooltip>
+                <Tooltip content={t("globals.chatComposerVisionTip")}>
+                  <ChatComposerToggle
+                    pressed={chatComposerVisionOn}
+                    onPressedChange={setChatComposerVisionOn}
+                    ariaLabel={t("globals.chatComposerVisionAria")}
+                    leadingIcon={<EyeIcon size={16} />}
+                  >
+                    {t("globals.chatComposerVision")}
+                  </ChatComposerToggle>
+                </Tooltip>
+              </>
+            }
+          />
+        </div>
+        <SandboxHelp text={t("globals.chatComposerThinkingToggleHelp")} />
+
         <SandboxHelp text={t("globals.chatHelp")} />
         <TokenList group="chat" title={t("globals.tokenListChat")} />
         <TokenList group="chatmessage" title={t("globals.tokenListChatMessage")} />
