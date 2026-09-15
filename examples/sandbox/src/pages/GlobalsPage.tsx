@@ -3596,80 +3596,82 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <p className="sandbox-chat-aside-label">
           {t("globals.chatComposerLeadingMenusLabel")}
         </p>
-        <div id="sandbox-chat-composer-leading-menus" hidden aria-hidden="true" />
         <div
-          id="sandbox-chat-composer-model-sections"
+          id="sandbox-chat-composer-leading-menus"
           className="sandbox-chat-composer-leading-menus-host"
         >
-          <ChatComposer
-            value={chatComposerLeadingMenusDraft}
-            onChange={setChatComposerLeadingMenusDraft}
-            ariaLabel={t("globals.chatComposerLeadingMenusAria")}
-            placeholder={t("globals.chatComposerPlaceholder")}
-            onSubmit={() => setChatComposerLeadingMenusDraft("")}
-            sendLabel={t("globals.chatSend")}
-            leading={
-              <>
-                <Tooltip content={t("globals.chatComposerLeadingTip")}>
-                  <IconButton
-                    type="button"
+          {/* Same host teaches leading labeled Menu + endActions model sections. */}
+          <div id="sandbox-chat-composer-model-sections">
+            <ChatComposer
+              value={chatComposerLeadingMenusDraft}
+              onChange={setChatComposerLeadingMenusDraft}
+              ariaLabel={t("globals.chatComposerLeadingMenusAria")}
+              placeholder={t("globals.chatComposerPlaceholder")}
+              onSubmit={() => setChatComposerLeadingMenusDraft("")}
+              sendLabel={t("globals.chatSend")}
+              leading={
+                <>
+                  <Tooltip content={t("globals.chatComposerLeadingTip")}>
+                    <IconButton
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.chatComposerLeadingTip")}
+                    >
+                      <PlusIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <DropdownMenu
+                    trigger={t("globals.chatComposerLeadingMenusVolume")}
+                    ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
                     size="sm"
                     variant="ghost"
-                    aria-label={t("globals.chatComposerLeadingTip")}
+                    align="start"
                   >
-                    <PlusIcon />
-                  </IconButton>
-                </Tooltip>
-                <DropdownMenu
-                  trigger={t("globals.chatComposerLeadingMenusVolume")}
-                  ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
-                  size="sm"
-                  variant="ghost"
-                  align="start"
-                >
-                  <DropdownMenuItem>
-                    {t("globals.chatComposerLeadingMenusVolume")}
-                  </DropdownMenuItem>
-                </DropdownMenu>
-              </>
-            }
-            endActions={
-              <ChatComposerModelMenuSections
-                trigger={t("globals.chatComposerLeadingMenusModel")}
-                ariaLabel={t("globals.chatComposerLeadingMenusModelAria")}
-                emptyLabel={t("globals.chatComposerModelMenuEmpty")}
-                sections={[
-                  {
-                    id: "local",
-                    label: t("globals.chatComposerModelSectionLocal"),
-                    models: [
-                      t("globals.chatComposerLeadingMenusModel"),
-                      t("globals.chatComposerModelLocalSample"),
-                    ],
-                  },
-                  {
-                    id: "cloud",
-                    label: t("globals.chatComposerModelSectionCloud"),
-                    models: [t("globals.chatComposerModelCloudSample")],
-                  },
-                  {
-                    id: "cli",
-                    label: t("globals.chatComposerModelSectionCli"),
-                    models: [
-                      t("globals.chatComposerModelCliCursor"),
-                      t("globals.chatComposerModelCliCodex"),
-                      t("globals.chatComposerModelCliClaude"),
-                    ],
-                  },
-                ]}
-                footer={
-                  <DropdownMenuItem>
-                    {t("globals.chatComposerModelMenuRefresh")}
-                  </DropdownMenuItem>
-                }
-              />
-            }
-          />
+                    <DropdownMenuItem>
+                      {t("globals.chatComposerLeadingMenusVolume")}
+                    </DropdownMenuItem>
+                  </DropdownMenu>
+                </>
+              }
+              endActions={
+                <ChatComposerModelMenuSections
+                  trigger={t("globals.chatComposerLeadingMenusModel")}
+                  ariaLabel={t("globals.chatComposerLeadingMenusModelAria")}
+                  emptyLabel={t("globals.chatComposerModelMenuEmpty")}
+                  sections={[
+                    {
+                      id: "local",
+                      label: t("globals.chatComposerModelSectionLocal"),
+                      models: [
+                        t("globals.chatComposerLeadingMenusModel"),
+                        t("globals.chatComposerModelLocalSample"),
+                      ],
+                    },
+                    {
+                      id: "cloud",
+                      label: t("globals.chatComposerModelSectionCloud"),
+                      models: [t("globals.chatComposerModelCloudSample")],
+                    },
+                    {
+                      id: "cli",
+                      label: t("globals.chatComposerModelSectionCli"),
+                      models: [
+                        t("globals.chatComposerModelCliCursor"),
+                        t("globals.chatComposerModelCliCodex"),
+                        t("globals.chatComposerModelCliClaude"),
+                      ],
+                    },
+                  ]}
+                  footer={
+                    <DropdownMenuItem>
+                      {t("globals.chatComposerModelMenuRefresh")}
+                    </DropdownMenuItem>
+                  }
+                />
+              }
+            />
+          </div>
         </div>
         <div
           id="sandbox-chat-composer-leading-menus-narrow"
