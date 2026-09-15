@@ -274,6 +274,26 @@
   is for measured tile catalogs (`#code-block` tokens). Live
   `#sandbox-field-stack-grid-select`. Failure: CONSUMER_TREATY FieldStack Grid
   hugs max-content leaving dead gutter in form Surface.
+- **DON'T** invent inline `style={{ gap: "var(--fynns-layout-field-stack-gap)" }}`
+  (or other private gap) on form `Grid` — use the Grid **`gap`** prop
+  (`gap="md"` = `--fynns-space-md` = field-stack / control-stack-form gap). Live
+  `#sandbox-field-stack-grid-select`. Failure: CONSUMER_TREATY FieldStack Grid
+  inline field-stack-gap style.
+- **DON'T** let one FieldBlock `actions` (InfoHint / IconButton) skew a
+  FieldStack→**Grid** row so labels / controls sit on different baselines —
+  core ≥ **0.5.285** equalizes **every** `.fynns-field-header` in a FieldStack
+  that `:has(.fynns-field-header__actions)` (including FieldBlocks nested under
+  `Grid`, not only direct FieldStack children). Do **not** invent consumer
+  min-height / align patches. Live `#sandbox-field-stack-grid-select`. Failure:
+  CONSUMER_TREATY FieldStack Grid FieldHeader action-row skew.
+- **DON'T** twin a Card / Collapsible **`title`** with the **visible label** of a
+  head `actions` labeled `Button` (e.g. title「抓取」+ primary「抓取」) —
+  **information redundancy (hard)** (≥ **0.5.285**). Title already names the
+  strip; head CTA → **`IconButton` + `Tooltip`** (+ `aria-label`), or a **non-
+  echoing** verb. Keep labeled Buttons for Dialog feet / generate when the title
+  does **not** repeat that verb. Live `#sandbox-field-stack-grid-select` (Card
+  title ≠ run IconButton tip). Failure: CONSUMER_TREATY Card title restates
+  actions Button.
 - **DON'T** paint self-evident save / copy / open-folder actions as **labeled**
   `Button`s (ghost **or** tonal / primary) in Card chrome, densified Select
   clusters, **or FieldBlock / form `.fynns-control-cluster--end-align`**

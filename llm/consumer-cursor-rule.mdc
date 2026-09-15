@@ -136,7 +136,8 @@ sandbox `#anchor`。
 - **consumer restyles keep-set chrome / Select Autocomplete deprecated** — 铬改只在 core；新屏用 Menu/SearchBar。`#select` / `#menu`
 - **outcome Chip as status / List path Switch+Chip+danger soup** — 结果标用 `.fynns-list-item-status`；目录 trailing 仅 ghost md 簇。`#list` / `#sandbox-list-repo-path-actions`
 - **List scroll-well meta/rail / spill / underlap / focus ring crack** — 勿私造 end pad/overflow/z-index。`#sandbox-list-repo-path-actions` / `#sandbox-list-status-action`
-- **FieldStack Grid centers / hugs max-content** — Grid `align-items: start`；列铺满父级；勿消费仓改回 center。`#sandbox-field-stack-grid-select` / `#form-recipe`
+- **FieldStack Grid centers / hugs max-content / inline gap / action-row skew** — `align-items: start`；列铺满；`gap="md"` 勿 inline `field-stack-gap`；一侧 `actions` InfoHint 时整栈 header 等高（≥ **0.5.285**）。`#sandbox-field-stack-grid-select` / `#form-recipe`
+- **Card title restates actions Button** — 标题已命名则头 CTA 用 `IconButton`+Tooltip，禁止同词 labeled Button（≥ **0.5.285**）。`#sandbox-field-stack-grid-select`
 - **Card chrome labeled Copy/Save / FieldBlock Save wraps / primary leftmost** — 自明动作用 `IconButton`+Tooltip；Save 与 Input 同行 ghost sm；primary 盘 LTR 末位。`#sandbox-card-chrome-icon-actions` / `#provider-settings` / `#sandbox-card-head-primary-end`
 - **`#rhythm` morph + twin strips** — 禁止 PageScroll 上两条同构 ControlRow 节名+md 簇。`#sandbox-rhythm-catalog`
 - **Chat empty starters as Chip** — 空线程 starter 用满宽可点 `Surface` soft/padded/interactive；勿 Chip / 勿复活 `ChatStarterPrompts`。`#chat`

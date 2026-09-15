@@ -849,7 +849,9 @@ input.fynns-input:focus::-webkit-scrollbar {
  * Label→control inside the stack uses a **max header band**: when any sibling
  * FieldBlock hosts trailing FieldHeader IconButtons, every header in the
  * stack shares `field-header-action-row-min-height` — label→control stays on
- * `field-label-control-gap` alone (live: sandbox `#field-header`, `#form-recipe`).
+ * `field-label-control-gap` alone (live: sandbox `#field-header`, `#form-recipe`,
+ * `#sandbox-field-stack-grid-select`). Includes FieldStack → Grid → FieldBlock
+ * (≥ **0.5.285**) — do **not** require FieldBlock as a direct FieldStack child.
  */
 .fynns-field-stack {
   display: flex;
@@ -860,8 +862,7 @@ input.fynns-input:focus::-webkit-scrollbar {
   box-sizing: border-box;
 }
 
-.fynns-field-stack:has(> .fynns-field-block .fynns-field-header__actions)
-  .fynns-field-header {
+.fynns-field-stack:has(.fynns-field-header__actions) .fynns-field-header {
   min-height: var(--fynns-layout-field-header-action-row-min-height);
 }
 

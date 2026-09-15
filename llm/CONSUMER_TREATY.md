@@ -249,6 +249,9 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Select row-action IconButton drifts when open | DESIGN_SYSTEM forms / FieldStack | `#field-header` |
 | FieldStack Grid vertically centers short FieldBlock beside expanded Select | DESIGN_SYSTEM FieldStack / Grid | `#sandbox-field-stack-grid-select` |
 | FieldStack Grid hugs max-content leaving dead gutter in form Surface | DESIGN_SYSTEM FieldStack / Grid | `#sandbox-field-stack-grid-select` |
+| FieldStack Grid inline field-stack-gap style | DESIGN_SYSTEM Hard rules / FieldStack (≥ **0.5.285**) | `#sandbox-field-stack-grid-select` |
+| FieldStack Grid FieldHeader action-row skew | DESIGN_SYSTEM Hard rules / FieldStack (≥ **0.5.285**) | `#sandbox-field-stack-grid-select` |
+| Card title restates actions Button (information redundancy) | DESIGN_SYSTEM Hard rules (≥ **0.5.285**) | `#sandbox-field-stack-grid-select` |
 | Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip | DESIGN_SYSTEM Card / Hard rules | `#sandbox-card-chrome-icon-actions` |
 | FieldBlock labeled Save key instead of IconButton+Tooltip | DESIGN_SYSTEM Hard rules | `#provider-settings` |
 | FieldBlock Save IconButton wraps under Input | DESIGN_SYSTEM Hard rules | `#provider-settings` |

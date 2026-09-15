@@ -1110,11 +1110,12 @@ const en = {
   "globals.formRecipeLead":
     "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of text FieldBlocks → `FieldStack` of choice FieldBlocks (Radio single-select, Checkbox multi-select, Slider) → `FieldStack` of ControlBlocks (Switch + note) → optional consent Checkbox / InlineAlert / actions. Inside a FieldStack: plain FieldBlocks keep field-stack-gap (12dp); FieldBlock + description/error (no choice cluster) opens the next sibling to unit-stack-gap (16dp); FieldBlocks hosting a `.fynns-control-cluster` open to form-cluster-gap (32dp); ControlBlocks open to unit-stack-gap (16dp). Adjacent FieldStacks use form-cluster-gap (32dp) **plus a horizontal Divider** on kind jumps; other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description use field-hint-gap (8dp); FieldBlock label→control uses field-label-control-gap (12dp). Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
   "globals.formGridSelectHelp":
-    "**FieldStack → Grid FieldBlocks (hard ≥ 0.5.172 / trigger floor ≥ **0.5.210** / fill ≥ **0.5.211**):** multi-column fields use **only** `FieldStack` + `Grid` `x={2}` (or more) — the same tree under Card / Collapsible / Dialog (`#form-recipe`). `.fynns-grid` is **top**-aligned and **fills** the parent with equal `minmax(0, 1fr)` tracks. Select `width: 100%`; measure is a floor only. **Forbidden variants for form FieldBlocks:** `equalCells`, `max-content` hug, consumer `width`/`1fr` patches, `align-items: center`. `equalCells` stays for measured **tile** catalogs only (`#code-block` tokens). Failure: CONSUMER_TREATY FieldStack Grid vertically centers… / FieldStack Grid hugs max-content leaving dead gutter in form Surface. Live `#sandbox-field-stack-grid-select`.",
+    "**FieldStack → Grid FieldBlocks (hard ≥ 0.5.172 / trigger floor ≥ **0.5.210** / fill ≥ **0.5.211**):** multi-column fields use **only** `FieldStack` + `Grid` `x={2}` (or more) — the same tree under Card / Collapsible / Dialog (`#form-recipe`). `.fynns-grid` is **top**-aligned and **fills** the parent with equal `minmax(0, 1fr)` tracks. Select `width: 100%`; measure is a floor only. **Forbidden variants for form FieldBlocks:** `equalCells`, `max-content` hug, consumer `width`/`1fr` patches, `align-items: center`. `equalCells` stays for measured **tile** catalogs only (`#code-block` tokens). Failure: CONSUMER_TREATY FieldStack Grid vertically centers… / FieldStack Grid hugs max-content leaving dead gutter in form Surface. Live `#sandbox-field-stack-grid-select`. Also: Grid gap=md (not inline field-stack-gap); one cell may host FieldHeader actions InfoHint — stack equalizes header band (≥ **0.5.285**). Card title must not twin a labeled head Button — use IconButton + Tooltip.",
   "globals.formGridAgentLabel": "Agent",
   "globals.formGridAgentBuild": "build (built-in)",
   "globals.formGridAgentPlan": "plan (built-in)",
   "globals.formGridProjectLabel": "Project (cwd)",
+  "globals.formGridProjectHelp": "cwd for the sample run — tip on FieldHeader actions. Sibling agent FieldBlock has no actions; FieldStack→Grid equalizes header band (≥ 0.5.285). Do not invent consumer min-height.",
   "globals.formGridProjectA": "sample-workspace",
   "globals.formGridProjectB": "S4",
   "globals.formGridProjectC": "sample-catalog-generator",
@@ -1151,6 +1152,8 @@ const en = {
   "globals.formRecipeDialogImportJson": "Import JSON reply",
   "globals.formRecipeDialogExtract": "Extracting with auto…",
   "globals.formRecipeTitle": "Project preferences",
+  "globals.formRecipeCardRunHelp": "Card title already names the strip — head CTA is IconButton + Tooltip, not a labeled Button that repeats the title (≥ 0.5.285).",
+  "globals.formRecipeCardRunTip": "Run sample check",
   "globals.formRecipeIntro":
     "These preferences apply to the current sandbox project only. They illustrate FieldBlock and ControlBlock rhythm — not a real backend.",
   "globals.formRecipeRegion": "Region",
@@ -3477,7 +3480,7 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeLead":
     "检查器 / 设置表单权威树（同一 body 套在 Card、Collapsible、可关闭 Dialog）：intro FieldHint → `FieldStack`（文本 FieldBlock）→ `FieldStack`（选择 FieldBlock：Radio 单选、Checkbox 多选、Slider）→ `FieldStack`（ControlBlock 开关簇）→ 可选同意 Checkbox / InlineAlert / 底栏。FieldStack 内：普通 FieldBlock 用 field-stack-gap（12dp）；仅有 description/error（无选择簇）→ 下一兄弟 unit-stack-gap（16dp）；含 `.fynns-control-cluster` → 下一兄弟 form-cluster-gap（32dp）；ControlBlock 兄弟 unit-stack-gap（16dp）。相邻 FieldStack 用 form-cluster-gap（32dp）**并在种类切换处加水平 Divider**；其它宿主兄弟用 unit-stack-gap（16dp）。ControlBlock / FieldBlock description 与 FieldBlock 标签→控件用 field-hint-gap（8dp）。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
   "globals.formGridSelectHelp":
-    "**FieldStack → Grid FieldBlock（硬 ≥ 0.5.172 / 触发器地板 ≥ **0.5.210** / 铺满 ≥ **0.5.211**）：** 多列表单**只**用 `FieldStack` + `Grid` `x={2}`（或更多）— 与 Card / Collapsible / Dialog 同一棵树（`#form-recipe`）。`.fynns-grid` **顶对齐**并 **铺满**父级（等分 `minmax(0, 1fr)`）。Select `width: 100%`；measure 仅作地板。**表单 FieldBlock 禁止变式：** `equalCells`、`max-content` 短岛、消费仓 `width`/`1fr`、`align-items: center`。`equalCells` 仅用于测量瓷砖目录（`#code-block` tokens）。失败：CONSUMER_TREATY FieldStack Grid vertically centers… / FieldStack Grid hugs max-content leaving dead gutter in form Surface。对照 `#sandbox-field-stack-grid-select`。",
+    "**FieldStack → Grid FieldBlock（硬 ≥ 0.5.172 / 触发器地板 ≥ **0.5.210** / 铺满 ≥ **0.5.211**）：** 多列表单**只**用 `FieldStack` + `Grid` `x={2}`（或更多）— 与 Card / Collapsible / Dialog 同一棵树（`#form-recipe`）。`.fynns-grid` **顶对齐**并 **铺满**父级（等分 `minmax(0, 1fr)`）。Select `width: 100%`；measure 仅作地板。**表单 FieldBlock 禁止变式：** `equalCells`、`max-content` 短岛、消费仓 `width`/`1fr`、`align-items: center`。`equalCells` 仅用于测量瓷砖目录（`#code-block` tokens）。失败：CONSUMER_TREATY FieldStack Grid vertically centers… / FieldStack Grid hugs max-content leaving dead gutter in form Surface。对照 `#sandbox-field-stack-grid-select`。. 另：Grid 用 gap=md（勿 inline field-stack-gap）；一侧 FieldHeader actions InfoHint 时整栈 header 等高（≥ **0.5.285**）。Card 标题禁止与头 labeled Button 同词 — 用 IconButton + Tooltip。",
   "globals.formGridAgentLabel": "代理",
   "globals.formGridAgentBuild": "build（内置）",
   "globals.formGridAgentPlan": "plan（内置）",

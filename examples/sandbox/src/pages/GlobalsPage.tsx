@@ -637,11 +637,7 @@ function FormRecipeFields({
           fill (core ≥ 0.5.211). Never equalCells / max-content hug / private 1fr.
           Live treaty host: `#sandbox-field-stack-grid-select` (Card below).
         */}
-        <Grid
-          x={2}
-          y="unbounded"
-          style={{ gap: "var(--fynns-layout-field-stack-gap)" }}
-        >
+        <Grid x={2} y="unbounded" gap="md">
           <FieldBlock label={t("globals.formGridAgentLabel")} htmlFor={agentId}>
             <Select
               id={agentId}
@@ -663,6 +659,9 @@ function FormRecipeFields({
           <FieldBlock
             label={t("globals.formGridProjectLabel")}
             htmlFor={projectId}
+            actions={
+              <InfoHint size="sm" content={t("globals.formGridProjectHelp")} />
+            }
           >
             <Select
               id={projectId}
@@ -7698,6 +7697,23 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <Card
                 className="sandbox-globals-form-recipe"
                 title={t("globals.formRecipeTitle")}
+                actions={
+                  <div className="fynns-control-cluster">
+                    <InfoHint
+                      size="sm"
+                      content={t("globals.formRecipeCardRunHelp")}
+                    />
+                    <Tooltip content={t("globals.formRecipeCardRunTip")}>
+                      <IconButton
+                        size="sm"
+                        variant="primary"
+                        aria-label={t("globals.formRecipeCardRunTip")}
+                      >
+                        <RefreshIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
               >
                 <FormRecipeFields idPrefix="sandbox-form-card" {...formRecipeFieldProps} />
               </Card>
