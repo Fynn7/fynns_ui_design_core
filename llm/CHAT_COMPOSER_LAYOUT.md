@@ -30,11 +30,30 @@ form.fynns-chat-composer
         textarea.fynns-chat-composer-input
       .fynns-chat-composer-toolbar[role="toolbar"]
         [?].fynns-chat-composer-leading   ← wraps `leading` automatically
-        .fynns-chat-composer-primary-slot ← Send / Stop / Dictate / `trailing`
+        .fynns-chat-composer-primary-slot ← `endActions` + Send / Stop / Dictate / `trailing`
 ```
 
 Public props stay `leading` / `trailing` / `attachments` / `busy` / … — no
 rename required for consumers.
+
+**Labeled Menus (≥ 0.5.288):** pass **string**
+`DropdownMenu` `trigger` values (core wraps `OverflowTip`). Core caps each
+labeled menu at `--fynns-chat-composer-leading-menu-max` so long ids
+ellipsize inside the shell — never mid-glyph hard-clip, and never invent
+consumer `max-width` / manual `slice` / private chip-label CSS.
+
+**Placement recipe (live `#sandbox-chat-composer-leading-menus`):**
+- **Start / left** — `leading`: + IconButton + volume (or tools) Menu,
+  `align="start"`.
+- **End / right (before Send)** — `endActions`: model Menu, `align="end"`.
+  Do **not** park the model picker in `leading` (stays start-clustered) and
+  do **not** use `trailing` for it (`trailing` **replaces** Send).
+
+**Narrow shells (≥ 0.5.288):** labeled menus share shrink (`min-width: 0`)
+under `--fynns-chat-composer-leading-menu-max` (and a tighter
+`*-narrow` cap when the shell container ≤ **26rem**). The draft field keeps
+`--fynns-chat-composer-field-min` so + / volume / model / Send cannot crush
+it to a stub. Live `#sandbox-chat-composer-leading-menus-narrow`.
 
 ## Compact vs expanded (`data-expanded`)
 

@@ -911,6 +911,26 @@
 }
 
 /* Teach overlay scroll rails stay under Menu/Select (≥ 0.5.249). */
+
+/*
+ * ChatComposer leading labeled Menus (≥ 0.5.285): wide enough for + | two
+ * capped Menus | field | Send, still tight enough that long ids hit
+ * `--fynns-chat-composer-leading-menu-max` and show `…` + OverflowTip.
+ */
+
+/* Narrow landing host (~365px) — field floor + shared menu shrink (≥ 0.5.288). */
+.sandbox-chat-composer-leading-menus-narrow {
+  width: 100%;
+  max-width: 22.8125rem; /* 365px */
+  min-width: 0;
+  box-sizing: border-box;
+}
+.sandbox-chat-composer-leading-menus-host {
+  width: 100%;
+  max-width: 36rem;
+  min-width: 0;
+  box-sizing: border-box;
+}
 .sandbox-scroll-menu-stack {
   max-height: 11rem;
   overflow: auto;

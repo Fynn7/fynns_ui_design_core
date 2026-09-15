@@ -15,13 +15,19 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { Button, type ButtonSize, type ButtonVariant } from "./Button";
-import { CheckIcon, ChevronDownIcon } from "./icons";
+import { CheckIcon, ChevronDownIcon, ChevronRightIcon } from "./icons";
 import { useFloatingBoxPosition, type Align } from "./floatingBox";
 import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 type MenuContextValue = {
+  /** Close this surface (submenu or root). */
   close: () => void;
+  /** Close the outermost DropdownMenu (and nested submenus). */
+  closeRoot: () => void;
+  /** This surface's id. */
   menuId: string;
+  /** Outermost DropdownMenu panel id (outside-click seatbelt). */
+  rootMenuId: string;
 };
 
 const MenuContext = createContext<MenuContextValue | null>(null);
@@ -89,6 +95,7 @@ export function MenuSurface({
   dataSide = "bottom",
   onPanelElement,
 }: MenuSurfaceProps) {
+  const parent = useMenuContext(true);
   const generatedId = useId();
   const menuId = id ?? generatedId;
   const [menuEl, setMenuEl] = useState<HTMLDivElement | null>(null);
@@ -134,7 +141,8 @@ export function MenuSurface({
       items[next]?.focus();
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
-      const next = index < 0 ? items.length - 1 : (index - 1 + items.length) % items.length;
+      const next =
+        index < 0 ? items.length - 1 : (index - 1 + items.length) % items.length;
       items[next]?.focus();
     } else if (event.key === "Home") {
       event.preventDefault();
@@ -142,20 +150,33 @@ export function MenuSurface({
     } else if (event.key === "End") {
       event.preventDefault();
       items[items.length - 1]?.focus();
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      event.stopPropagation();
+      onClose();
+    } else if (event.key === "ArrowLeft" && parent) {
+      // Nested submenu only — close this surface, keep the parent menu open.
+      event.preventDefault();
+      event.stopPropagation();
+      onClose();
     }
   };
 
   if (!mounted || typeof document === "undefined") return null;
 
+  const closeRoot = parent?.closeRoot ?? onClose;
+  const rootMenuId = parent?.rootMenuId ?? menuId;
+
   return createPortal(
-    <MenuContext.Provider value={{ close: onClose, menuId }}>
+    <MenuContext.Provider
+      value={{ close: onClose, closeRoot, menuId, rootMenuId }}
+    >
       <div
         ref={setPanelRef}
         id={menuId}
         role="menu"
         aria-label={ariaLabel}
         aria-hidden={!presenting}
-        // Keep focus out of the panel while the exit animation plays.
         {...(!presenting ? { inert: true } : {})}
         data-side={dataSide}
         data-state={presenting ? "open" : "closing"}
@@ -311,6 +332,13 @@ export function DropdownMenu({
       const target = event.target as Node;
       if (rootRef.current?.contains(target)) return;
       if (menuEl?.contains(target)) return;
+      const ownerId = menuId;
+      const nested = document.querySelectorAll(
+        `[data-fynns-submenu-of="${ownerId}"]`,
+      );
+      for (const el of nested) {
+        if (el.contains(target)) return;
+      }
       close();
     };
     const onKeyDown = (event: KeyboardEvent) => {
@@ -325,7 +353,7 @@ export function DropdownMenu({
       document.removeEventListener("mousedown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [open, menuEl, close]);
+  }, [open, menuEl, close, menuId]);
 
   const onTriggerKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
     if (disabled) return;
@@ -470,7 +498,7 @@ export function DropdownMenuItem({
       )}
       onClick={(event) => {
         onClick?.(event);
-        if (!event.defaultPrevented && closeOnSelect) ctx?.close();
+        if (!event.defaultPrevented && closeOnSelect) ctx?.closeRoot();
       }}
     >
       {icon ? <span className="fynns-menu-item-icon">{icon}</span> : null}
@@ -525,7 +553,7 @@ export function DropdownMenuCheckboxItem({
         onClick?.(event);
         if (event.defaultPrevented || disabled) return;
         onCheckedChange?.(!checked);
-        if (closeOnSelect) ctx?.close();
+        if (closeOnSelect) ctx?.closeRoot();
       }}
     >
       <span className="fynns-menu-item-leading" aria-hidden>
@@ -606,3 +634,163 @@ export function DropdownMenuGroup({
 }
 
 DropdownMenuGroup.displayName = "DropdownMenuGroup";
+
+export type DropdownMenuSubProps = {
+  /** Row label (string preferred — OverflowTip). */
+  trigger: ReactNode;
+  /** Nested menu body (items / groups / separators). */
+  children: ReactNode;
+  icon?: ReactNode;
+  ariaLabel?: string;
+  disabled?: boolean;
+  className?: string;
+};
+
+/**
+ * Nested submenu row inside a `DropdownMenu` / `MenuSurface`.
+ * Opens on hover / focus / ArrowRight; panel docks to the **end** (right in
+ * LTR) of the row via `useFloatingBoxPosition` (≥ **0.5.288**). Live
+ * `#sandbox-menu-submenu`.
+ */
+export function DropdownMenuSub({
+  trigger,
+  children,
+  icon,
+  ariaLabel,
+  disabled = false,
+  className,
+}: DropdownMenuSubProps) {
+  const parent = useMenuContext()!;
+  const [open, setOpen] = useState(false);
+  const itemRef = useRef<HTMLButtonElement>(null);
+  const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
+  const subId = useId();
+  const openTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearTimers = useCallback(() => {
+    if (openTimer.current) clearTimeout(openTimer.current);
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    openTimer.current = null;
+    closeTimer.current = null;
+  }, []);
+
+  const openSoon = useCallback(() => {
+    if (disabled) return;
+    clearTimers();
+    openTimer.current = setTimeout(() => setOpen(true), 80);
+  }, [clearTimers, disabled]);
+
+  const closeSoon = useCallback(() => {
+    clearTimers();
+    closeTimer.current = setTimeout(() => setOpen(false), 180);
+  }, [clearTimers]);
+
+  const stayOpen = useCallback(() => {
+    clearTimers();
+    setOpen(true);
+  }, [clearTimers]);
+
+  useEffect(() => () => clearTimers(), [clearTimers]);
+
+  useEffect(() => {
+    if (!panelEl) return;
+    const onEnter = () => stayOpen();
+    const onLeave = () => closeSoon();
+    panelEl.addEventListener("mouseenter", onEnter);
+    panelEl.addEventListener("mouseleave", onLeave);
+    return () => {
+      panelEl.removeEventListener("mouseenter", onEnter);
+      panelEl.removeEventListener("mouseleave", onLeave);
+    };
+  }, [panelEl, stayOpen, closeSoon]);
+
+  const pos = useFloatingBoxPosition(itemRef.current, panelEl, open, {
+    side: "right",
+    align: "start",
+    offset: 4,
+    sides: ["right", "left"],
+    anchorMode: "element",
+  });
+  const lastPosRef = useRef(pos);
+  if (pos) lastPosRef.current = pos;
+  const displayPos = pos ?? lastPosRef.current;
+
+  const tip = overflowTipText(trigger);
+  const label =
+    tip != null ? <OverflowTip content={tip}>{trigger}</OverflowTip> : trigger;
+
+  const menuStyle: CSSProperties = displayPos
+    ? { top: displayPos.top, left: displayPos.left }
+    : { top: 0, left: 0, visibility: "hidden" as const };
+
+  return (
+    <div
+      className={join("fynns-menu-sub", className)}
+      onMouseEnter={openSoon}
+      onMouseLeave={closeSoon}
+    >
+      <button
+        ref={itemRef}
+        type="button"
+        role="menuitem"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls={open ? subId : undefined}
+        aria-label={ariaLabel}
+        disabled={disabled}
+        className={join("fynns-menu-item", "fynns-menu-item--sub", open && "fynns-menu-item--sub-open")}
+        onClick={(event) => {
+          event.preventDefault();
+          if (disabled) return;
+          setOpen(true);
+        }}
+        onKeyDown={(event) => {
+          if (disabled) return;
+          if (event.key === "ArrowRight" || event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            setOpen(true);
+          }
+        }}
+        onFocus={openSoon}
+      >
+        {icon ? <span className="fynns-menu-item-icon">{icon}</span> : null}
+        <span className="fynns-menu-item-label">{label}</span>
+        <span className="fynns-menu-item-sub-chevron" aria-hidden="true">
+          <ChevronRightIcon size={16} />
+        </span>
+      </button>
+      <MenuSurface
+        open={open}
+        onClose={() => setOpen(false)}
+        id={subId}
+        ariaLabel={ariaLabel ?? (typeof tip === "string" ? tip : "Submenu")}
+        className="fynns-menu--sub"
+        dataSide={displayPos?.side ?? "right"}
+        onPanelElement={setPanelEl}
+        style={menuStyle}
+      >
+        {children}
+      </MenuSurface>
+      <SubmenuOwnerMarker ownerId={parent.rootMenuId} panelEl={panelEl} />
+    </div>
+  );
+}
+
+DropdownMenuSub.displayName = "DropdownMenuSub";
+
+/** Marks a nested panel as owned by `ownerId` for root outside-click. */
+function SubmenuOwnerMarker({
+  ownerId,
+  panelEl,
+}: {
+  ownerId: string;
+  panelEl: HTMLDivElement | null;
+}) {
+  useEffect(() => {
+    if (!panelEl) return;
+    panelEl.setAttribute("data-fynns-submenu-of", ownerId);
+    return () => panelEl.removeAttribute("data-fynns-submenu-of");
+  }, [ownerId, panelEl]);
+  return null;
+}

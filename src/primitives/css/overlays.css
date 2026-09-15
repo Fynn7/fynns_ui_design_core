@@ -72,6 +72,21 @@
 }
 
 /*
+ * Nested label wrappers (consumer `<span>`, OverflowTip) must shrink under
+ * a capped host — flex `min-width: auto` otherwise refuses to ellipsize and
+ * the capsule hard-clips mid-glyph (≥ **0.5.288**). Prefer string `trigger`
+ * so core wraps OverflowTip; this is the seatbelt for ReactNode labels.
+ */
+.fynns-menu-trigger-label
+  > :not(.fynns-menu-trigger-leading):not(svg):not(.fynns-icon) {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*
  * Trailing flex slot (Select / SearchBar recipe): fixed square + cross-axis
  * center — no optical translate hacks. Chevron SVG is `.fynns-icon` (block).
  */
@@ -267,6 +282,25 @@
 
 .fynns-menu-item--danger {
   color: var(--fynns-color-danger);
+}
+
+.fynns-menu-item--sub .fynns-menu-item-sub-chevron {
+  margin-inline-start: auto;
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-menu-item--sub-open {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-menu--sub {
+  min-width: 10rem;
 }
 
 .fynns-menu-item--danger .fynns-menu-item-icon,
@@ -925,9 +959,9 @@
 }
 
 .fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer) > .fynns-dialog-body {
-  /* Block-start matches Card/Collapsible section body; sides/bottom stay content-inset. */
-  padding: var(--fynns-layout-content-pad-block) var(--fynns-layout-content-inset)
-    var(--fynns-layout-content-inset);
+  /* Four-side content-inset (≥ **0.5.281**) — match Card/Surface padded hosts;
+   * was content-pad-block start + content-inset end. */
+  padding: var(--fynns-layout-content-inset);
 }
 
 /* ---------- Bottom sheet (M3) ---------- */
@@ -1007,7 +1041,12 @@
   justify-content: space-between;
   gap: var(--fynns-layout-sheet-header-gap);
   flex: 0 0 auto;
-  padding: var(--fynns-layout-sheet-header-gap) var(--fynns-layout-sheet-pad-inline);
+  /* Outer block-start = actions-pad-bottom (24dp) so title ink top clearance
+   * matches trailing primary action bottom (≥ **0.5.281** — was header-gap
+   * 12dp vs actions 24dp). Internal stack still uses header-gap. */
+  padding-block-start: var(--fynns-layout-sheet-actions-pad-bottom);
+  padding-block-end: var(--fynns-layout-sheet-header-gap);
+  padding-inline: var(--fynns-layout-sheet-pad-inline);
   /* M3 sheet = drag handle + one surface; no header|body hairline (PR #65). */
   border: none;
   border-bottom: none;
@@ -1063,6 +1102,11 @@
 .fynns-sheet-header + .fynns-sheet-body,
 .fynns-sheet-description + .fynns-sheet-body {
   padding-top: var(--fynns-layout-sheet-header-gap);
+}
+
+/* Actions own the outer bottom inset — drop body pad-end (same as Dialog + foot). */
+.fynns-sheet-body:has(+ .fynns-sheet-actions) {
+  padding-block-end: 0;
 }
 
 .fynns-sheet-actions {

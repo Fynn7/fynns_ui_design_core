@@ -122,7 +122,9 @@ function applyEqualTracks(
  * (Hub Inspector agent | cwd). Select `width: 100%` + measure floor still
  * apply. Form FieldBlocks use **only** this recipe — never `equalCells` for
  * multi-column fields (`equalCells` is for measured tile catalogs). Live:
- * `#form-recipe` / `#sandbox-field-stack-grid-select`.
+ * `#form-recipe` / `#sandbox-field-stack-grid-select`. Form column gap →
+ * `gap="md"` (not inline `field-stack-gap` style). FieldHeader `actions` on one
+ * cell: FieldStack equalizes header band (≥ **0.5.285**).
  */
 export function Grid({
   x = "unbounded",

@@ -926,6 +926,26 @@ export const CHAT_TOKENS = {
   /** Expanded gap between full-width text and bottom toolbar (~8dp). */
   "composer-expanded-gap": "var(--fynns-space-sm)",
   /**
+   * Cap for each **labeled** DropdownMenu in `.fynns-chat-composer-leading`
+   * / primary-slot endActions (≥ **0.5.288**). Long volume /
+   * model ids ellipsize inside the shell — never mid-glyph hard-clip past
+   * the capsule edge. Icon-only menus stay content-sized.
+   */
+  "composer-leading-menu-max": "10rem",
+  /**
+   * Narrow-shell ceiling for the same labeled menus when the composer
+   * container is ≤ **26rem** (≥ **0.5.288**). Keeps draft field readable
+   * beside + / volume / model / Send (narrow ~365px host lesson).
+   */
+  "composer-leading-menu-max-narrow": "7rem",
+  /**
+   * Collapsed field flex floor so chrome menus cannot crush the draft to a
+   * stub (≥ **0.5.288**). Expanded field is full-width — this only applies
+   * while the field shares the single control row. Keep modest (~4.5rem) so
+   * volume / model still show a few readable glyphs on ~365px shells.
+   */
+  "composer-field-min": "4.5rem",
+  /**
    * Leading/trailing IconButton hit target inside the composer (32dp).
    * Scoped via CSS — does not change global IconButton. Matches
    * `composer-line-height` so controls and text share one midline.
@@ -1402,7 +1422,8 @@ export const LAYOUT_TOKENS = {
    * Soft mask length for scroll-edge fade (`data-fade-top` / `data-fade-bottom`)
    * on CodeBlock / Textarea / **PageScroll** (≥ **0.5.247**) / **FillColumn
    * header** (≥ **0.5.278**) / NavigationDrawer body (via alias) — not a hard
-   * clip.
+   * clip. Textarea uses a multi-layer mask (≥ **0.5.282**) so the hairline
+   * stroke stays opaque while content fades.
    */
   "scroll-edge-fade-length": "1.5rem",
   /**
@@ -1501,9 +1522,13 @@ export const LAYOUT_TOKENS = {
   /** Content inset (M3 24dp inline / 16dp block). */
   "sheet-pad-inline": "1.5rem",
   "sheet-pad-block": "1rem",
-  /** Gap between header stack elements (M3 12dp). */
+  /** Gap between header stack elements (M3 12dp). Not the outer title clearance. */
   "sheet-header-gap": "0.75rem",
-  /** Actions: top 16dp / bottom 24dp. */
+  /**
+   * Actions: top 16dp / bottom 24dp. Sheet header outer `padding-block-start`
+   * aliases the bottom (24dp) so title ink matches primary action bottom
+   * (≥ **0.5.281**).
+   */
   "sheet-actions-pad-top": "1rem",
   "sheet-actions-pad-bottom": "1.5rem",
   /** Cap to token width and viewport inset (2×8px margin — matches Popover VIEWPORT_MARGIN). */

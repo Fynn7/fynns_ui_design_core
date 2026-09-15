@@ -161,7 +161,10 @@ classes.
   (M3 basic + full-screen only). `ConfirmDialog` = title + supporting + foot
   (no close). `Dialog` optional `showCloseButton` for dismissible forms —
   **form bodies** (`FieldStack` / `FieldBlock` / `Textarea` / `CodeBlock`)
-  stretch to the `size` ceiling (prefer `size="lg"` / M3 560dp). Dismissible
+  stretch to the `size` ceiling (prefer `size="lg"` / M3 560dp). Centered
+  non-confirm head block-start = `--fynns-layout-content-inset` (**18dp**, ≥
+  **0.5.280**) — title ink top equals body-end / trailing primary IconButton
+  bottom clearance (no consumer head-pad patch). Dismissible
   preference rows: `showCloseButton` + full-width `ControlStack` /
   `ControlRow` + track-only `Switch` (`label=""` + `ariaLabel`) — CloseIcon
   **glyph** end aligns with Switch track end. FullscreenDialog:

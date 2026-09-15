@@ -107,9 +107,14 @@ sandbox `#anchor`。
 - **FillColumn guide Surface flush to Chat** — 短 soft Surface / 预览 → `header`；Chat → `children`；禁止 `children` 兄弟 + `paddingBottom:0` 贴死 ChatActivity。`#layouts-demo-fill-column` / `#sandbox-fill-column-guide`
 - **PageScroll mid-scroll hard clip** — 只用 keep-set `PageScroll`（渐隐已封装）；禁止裸 `overflow:auto`。`#page-scroll`
 - **FillColumn header mid-scroll hard clip** — canvas 封顶的 `header` 渐隐已封装（≥ **0.5.278**）；禁止私有 `mask-image`。Header **content-sized**（`flex: 0 0 auto` ≥ **0.5.279**），勿靠 flex-shrink 把短 guide Surface 压出嵌套滚动条。`#sandbox-fill-column-guide`
+- **Textarea scroll-edge fade erases border** — core mask 保留外缘 hairline 框（≥ **0.5.282**）；禁止私有 `mask-image` 再抹掉描边。`#textarea`
 - **overlay scrollbar above / buried under Select/Menu** — 页轨 z 在 modal-flyout 下；飞层轨用 scroll-overlay-flyout。`#sandbox-scroll-menu-stack`
 - **mode drawer tools↔filter crushed / toolbar-end md** — body 直接子间距 8dp；toolbar-end 盘 sm 32dp。`#layouts-demo-navigation-drawer`
 - **Dialog foot Delete leftmost / exit clears title** — Cancel 左、主确认右；`open→false` 同拍勿清空 title/body。`#sandbox-list-recipe-catalog`
+- **Dialog title top ≠ body-end IconButton** — 居中非 Confirm head 顶距 = `content-inset`（18dp，≥ **0.5.280**），与 body 底 / 脚栏 labeled Button 下距齐；勿改 `.fynns-dialog-head` 或半 `dialog-inset`。`#overlays`
+- **Dialog foot IconButton / check-disk** — Dialog/Confirm 脚栏**唯一**样式：`.fynns-control-cluster--end-align` + labeled `Button`（Cancel ghost 左 → primary 右）；禁止 primary `IconButton`/对勾盘/Fab（≥ **0.5.286**）。`#overlays`
+- **BottomSheet title top ≠ actions bottom** — header 外缘顶距 = `sheet-actions-pad-bottom`（24dp，≥ **0.5.281**）；勿把 `sheet-header-gap` 当外缘。`#overlays`
+- **FillColumn header top-only inset** — Destination canvas header 块向等量 `dialog-inset`（≥ **0.5.281**）。`#sandbox-fill-column-guide`
 - **twin loading rings / BusyRegion + chrome loading / Card batch + row twin** — 一簇最多一圈；busy 时 chrome 只 `disabled`；批量只留 Card 主 CTA。`#sandbox-list-repo-path-actions`
 - **IconButton busy swaps CircularProgress** — 用 stock `loading`；禁止嵌套 `CircularProgress`。`#icon-button`
 - **runBusyTask hang / Confirm trap / empty-as-busy** — 须 `timeoutMs`/`signal`/`onError`；Confirm 用 `runLoadingTask`+`onAbort`；ChatComposer `busy` 须 `onStop`。
@@ -118,6 +123,7 @@ sandbox `#anchor`。
 - **ChatActivity tool-icon / artifact default** — 默认 status mark + 连续轨（done = accent；pulse 时 node 洗底挡住轨）；勿默认扳手/文件图标或强制 Artifact。`#activity`
 - **service Chip+label / ControlRow left-packed / label crush** — 状态只在 `label`；簇默认右齐；长 path meta 省略+InfoHint。`#rhythm`
 - **FieldHint restates ToggleGroup / TopAppBar InfoHint / overline restates trailing** — 禁止同源复述。`#rhythm` / `#layouts-demo-shell` / `#sandbox-list-repo-path-actions`
+- **Dialog description how-to essay** — `description` 仅短 caption；方向/路径/勾选说明进 `headActions` `InfoHint` `sm`（≥ **0.5.284**）；禁止多行 how-to 挂在标题下。`#overlays`
 - **private labeled Button cluster gap / Select refresh crammed** — 用 `.fynns-control-cluster`（+ `--end-align`/`__grow`）。`#rhythm`
 - **env key FieldHint / Input trailing md / affix far from edge** — 门户文案用标签行 InfoHint；壳内盘一律 `IconButton` `sm`；禁止负 margin/壳外克隆 eye。`#password` / `#input` / `#env-check`
 - **InlineAlert beside List / Banner icon top-pinned** — 告警全宽兄弟在上；多行 Banner icon/X 垂直居中。`#banner`
@@ -127,6 +133,10 @@ sandbox `#anchor`。
 - **Pagination overlay / option repeats noun / gaps crushed** — stock Select；options 仅数字；间距 8/16dp。`#pagination`
 - **Select fullWidth / menu width / supporting kisses** — 铺满用 `fullWidth`/`__grow`；菜单 width=live shell；hint 用 `field-hint-gap`。`#select` / `#sandbox-select-wide-short`
 - **DropdownMenu FieldBlock width / chevron / panel shift / chrome clip** — matchTriggerWidth；core 注入 chevron；禁止消费仓 left/transform/translateY。`#menu` / `#sandbox-menu-field-match`
+- **DropdownMenu nested submenu** — 二级用 `DropdownMenuSub`（hover/ArrowRight）；禁止消费仓绝对定位二级飞层。`#sandbox-menu-submenu`
+- **ChatComposer leading Menu label hard-clips** — 带标签 Menu 须壳内 `…`+OverflowTip；`trigger` 传 string；禁止消费仓 max-width / 手写截断 / 私有 chip-label。`#sandbox-chat-composer-leading-menus`
+- **ChatComposer model Menu left-clustered** — 模型选择放 `endActions`（靠右、Send 前，`align=end`）；卷/工具留 `leading`；勿用 `trailing` 顶掉 Send。`#sandbox-chat-composer-leading-menus`
+- **ChatComposer narrow host crushes draft** — 窄壳两侧 Menu 须可缩 + field 下限；禁止消费仓私有 max-width 挤死草稿。`#sandbox-chat-composer-leading-menus-narrow`
 - **truncated option / chrome label lacks OverflowTip** — 溢出须 `…`+Tooltip 全文；禁止 `title=`。`#select` / `#card` / `#list`
 - **consumer restyles keep-set chrome / Select Autocomplete deprecated** — 铬改只在 core；新屏用 Menu/SearchBar。`#select` / `#menu`
 - **outcome Chip as status / List path Switch+Chip+danger soup** — 结果标用 `.fynns-list-item-status`；目录 trailing 仅 ghost md 簇。`#list` / `#sandbox-list-repo-path-actions`

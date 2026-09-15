@@ -123,6 +123,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | page-scroll host flush with Card | DESIGN_SYSTEM Card / Collapsible | `#page-scroll` |
 | PageScroll mid-scroll hard clip (no edge fade) | DESIGN_SYSTEM Hard rules / Scrollbar | `#page-scroll` |
 | FillColumn header mid-scroll hard clip (no edge fade) | DESIGN_SYSTEM Hard rules / Scrollbar | `#sandbox-fill-column-guide` |
+| Textarea / bordered scroll-edge fade erases stroke | DESIGN_SYSTEM philosophy / Scrollbar (≥ **0.5.282**) | `#textarea` |
 | PageScroll Card sheet-max-width under ControlRow | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
 | PageScroll form Card chat-max-width column | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
 | PageScroll content-column soft reading-width gutters | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
@@ -164,6 +165,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | ControlStack probe meta end-hug / kind mix (Available+Backend; path/chips/hint cluster) | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` |
 | FieldHint restates ToggleGroup / Tabs labels (information redundancy) | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` |
 | section FieldHint restates TopAppBar InfoHint | DESIGN_SYSTEM Hard rules / Content density | `#layouts-demo-shell` |
+| Dialog description how-to essay (information redundancy) | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.284**) | `#overlays` |
 | ListItem overline restates trailing status | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-repo-path-actions` |
 | ControlRow IconButton crushed to ellipse | DESIGN_SYSTEM form-rhythm | `#rhythm` |
 | end-align IconButton strip crushed | DESIGN_SYSTEM form-rhythm | `#rhythm` |
@@ -177,9 +179,13 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | truncated chrome / list / snack label lacks ellipsis Tooltip | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.243**) | `#card` / `#list` / `#select` / `#layouts-demo-shell` / `#toggle-group` / `#activity` / `#rhythm` end-align |
 | DropdownMenu wider than FieldBlock trigger | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.239**) | `#sandbox-menu-field-match` / `#menu` |
 | labeled DropdownMenu missing chevron | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.253**) | `#menu` / `#sandbox-menu-field-match` |
+| DropdownMenu missing nested submenu | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-menu-submenu` / `#menu` |
 | DropdownMenu panel left-shifted vs trigger | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.254**) | `#sandbox-menu-field-match` / `#menu` |
 | Menu chevron optically high | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.254**) | `#menu` / `#sandbox-menu-field-match` |
 | Menu trigger clips descenders | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.255**) | `#sandbox-menu-field-match` / `#menu` |
+| ChatComposer leading Menu label hard-clips | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus` / `#chat` |
+| ChatComposer model Menu left-clustered | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus` / `#chat` |
+| ChatComposer narrow host crushes draft | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus-narrow` / `#chat` |
 | Menu trigger leading icon misaligned | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.258**) | `#sandbox-menu-leading-icon` / `#menu` |
 | Select supporting copy kisses trigger | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-select-wide-short` |
 | Card teaching help kisses shell | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-card-draft-actions` / `#sandbox-card-chrome-icon-actions` / `#sandbox-card-head-primary-end` |
@@ -278,6 +284,11 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Textarea autoGrow soft-capped like ChatComposer (13rem) | DESIGN_SYSTEM catalog / llm/CHAT_* | `#textarea` |
 | skinny form Dialog (tall FieldStack / CodeBlock) | DESIGN_SYSTEM catalog | `#form-recipe` |
 | Dialog body end-align footer clipped | DESIGN_SYSTEM hard-rules | `#form-recipe` |
+| Dialog title top ≠ body-end IconButton | DESIGN_SYSTEM hard-rules / Dialog | `#overlays` |
+| Dialog title top ≠ body-end foot | DESIGN_SYSTEM Hard rules / overlays (≥ **0.5.286**) | `#overlays` |
+| Dialog foot IconButton / check-disk | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.286**) | `#overlays` |
+| BottomSheet title top ≠ actions bottom | DESIGN_SYSTEM hard-rules / overlays | `#overlays` |
+| FillColumn header top-only inset | DESIGN_SYSTEM hard-rules / FillColumn | `#sandbox-fill-column-guide` |
 | vacant band under FullscreenDialog title | DESIGN_SYSTEM Dialog / overlays | `#fullscreen-flush` |
 | BusyRegion colored loading wash (consumer surface-*) | DESIGN_SYSTEM hard-rules | `#busy-region` |
 | BusyRegion empty cold-start mask island (贴图色块) | DESIGN_SYSTEM hard-rules | `#sandbox-busy-region-empty-no-mask` |

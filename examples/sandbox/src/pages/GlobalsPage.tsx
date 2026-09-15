@@ -11,7 +11,7 @@ import {
   BusyRegion,
   BusyScrim,
   Button,
-  BotIcon,
+  MessageSquareIcon,
   useBusyTask,
   useLoadingTask,
   afterNextPaint,
@@ -70,6 +70,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
   Dropzone,
   EmptyState,
   EyeIcon,
@@ -636,11 +637,7 @@ function FormRecipeFields({
           fill (core ≥ 0.5.211). Never equalCells / max-content hug / private 1fr.
           Live treaty host: `#sandbox-field-stack-grid-select` (Card below).
         */}
-        <Grid
-          x={2}
-          y="unbounded"
-          style={{ gap: "var(--fynns-layout-field-stack-gap)" }}
-        >
+        <Grid x={2} y="unbounded" gap="md">
           <FieldBlock label={t("globals.formGridAgentLabel")} htmlFor={agentId}>
             <Select
               id={agentId}
@@ -662,6 +659,9 @@ function FormRecipeFields({
           <FieldBlock
             label={t("globals.formGridProjectLabel")}
             htmlFor={projectId}
+            actions={
+              <InfoHint size="sm" content={t("globals.formGridProjectHelp")} />
+            }
           >
             <Select
               id={projectId}
@@ -1301,6 +1301,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [chatComposerMultiDraft, setChatComposerMultiDraft] = useState(
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
+  const [chatComposerLeadingMenusDraft, setChatComposerLeadingMenusDraft] =
+    useState("");
   const [chatAsideDraft, setChatAsideDraft] = useState("");
   const [thinkingStreaming, setThinkingStreaming] = useState(false);
   const [thinkingDoneMs, setThinkingDoneMs] = useState<number | undefined>(4200);
@@ -2117,6 +2119,23 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </div>
           </FieldBlock>
           <SandboxHelp text={t("globals.menuFieldMatchHelp")} />
+        </div>
+        <div id="sandbox-menu-submenu" className="sandbox-globals-row sandbox-globals-row--stack">
+          <DropdownMenu trigger={t("globals.menuTrigger")} ariaLabel={t("globals.menuAria")}>
+            <DropdownMenuItem icon={<FileIcon />}>{t("globals.menuNew")}</DropdownMenuItem>
+            <DropdownMenuSub
+              trigger={t("globals.menuSubTrigger")}
+              ariaLabel={t("globals.menuSubAria")}
+              icon={<FolderOpenIcon />}
+            >
+              <DropdownMenuItem>{t("globals.menuSubItemA")}</DropdownMenuItem>
+              <DropdownMenuItem>{t("globals.menuSubItemB")}</DropdownMenuItem>
+              <DropdownMenuItem>{t("globals.menuSubItemC")}</DropdownMenuItem>
+            </DropdownMenuSub>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem icon={<PencilIcon />}>{t("globals.menuRename")}</DropdownMenuItem>
+          </DropdownMenu>
+          <SandboxHelp text={t("globals.menuSubHelp")} />
         </div>
         <div id="sandbox-scroll-menu-stack">
           <SandboxHelp text={t("globals.scrollMenuStackHelp")} />
@@ -3496,6 +3515,113 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           }
         />
         <SandboxHelp text={t("globals.chatComposerMultiHelp")} />
+        <p className="sandbox-chat-aside-label">
+          {t("globals.chatComposerLeadingMenusLabel")}
+        </p>
+        <div
+          id="sandbox-chat-composer-leading-menus"
+          className="sandbox-chat-composer-leading-menus-host"
+        >
+          <ChatComposer
+            value={chatComposerLeadingMenusDraft}
+            onChange={setChatComposerLeadingMenusDraft}
+            ariaLabel={t("globals.chatComposerLeadingMenusAria")}
+            placeholder={t("globals.chatComposerPlaceholder")}
+            onSubmit={() => setChatComposerLeadingMenusDraft("")}
+            sendLabel={t("globals.chatSend")}
+            leading={
+              <>
+                <Tooltip content={t("globals.chatComposerLeadingTip")}>
+                  <IconButton
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.chatComposerLeadingTip")}
+                  >
+                    <PlusIcon />
+                  </IconButton>
+                </Tooltip>
+                <DropdownMenu
+                  trigger={t("globals.chatComposerLeadingMenusVolume")}
+                  ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
+                  size="sm"
+                  variant="ghost"
+                  align="start"
+                >
+                  <DropdownMenuItem>
+                    {t("globals.chatComposerLeadingMenusVolume")}
+                  </DropdownMenuItem>
+                </DropdownMenu>
+              </>
+            }
+            endActions={
+              <DropdownMenu
+                trigger={t("globals.chatComposerLeadingMenusModel")}
+                ariaLabel={t("globals.chatComposerLeadingMenusModelAria")}
+                size="sm"
+                variant="ghost"
+                align="end"
+              >
+                <DropdownMenuItem>
+                  {t("globals.chatComposerLeadingMenusModel")}
+                </DropdownMenuItem>
+              </DropdownMenu>
+            }
+          />
+        </div>
+        <div
+          id="sandbox-chat-composer-leading-menus-narrow"
+          className="sandbox-chat-composer-leading-menus-narrow"
+        >
+          <ChatComposer
+            value={chatComposerLeadingMenusDraft}
+            onChange={setChatComposerLeadingMenusDraft}
+            ariaLabel={t("globals.chatComposerLeadingMenusAria")}
+            placeholder={t("globals.chatComposerPlaceholder")}
+            onSubmit={() => setChatComposerLeadingMenusDraft("")}
+            sendLabel={t("globals.chatSend")}
+            leading={
+              <>
+                <Tooltip content={t("globals.chatComposerLeadingTip")}>
+                  <IconButton
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.chatComposerLeadingTip")}
+                  >
+                    <PlusIcon />
+                  </IconButton>
+                </Tooltip>
+                <DropdownMenu
+                  trigger={t("globals.chatComposerLeadingMenusVolume")}
+                  ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
+                  size="sm"
+                  variant="ghost"
+                  align="start"
+                >
+                  <DropdownMenuItem>
+                    {t("globals.chatComposerLeadingMenusVolume")}
+                  </DropdownMenuItem>
+                </DropdownMenu>
+              </>
+            }
+            endActions={
+              <DropdownMenu
+                trigger={t("globals.chatComposerLeadingMenusModel")}
+                ariaLabel={t("globals.chatComposerLeadingMenusModelAria")}
+                size="sm"
+                variant="ghost"
+                align="end"
+              >
+                <DropdownMenuItem>
+                  {t("globals.chatComposerLeadingMenusModel")}
+                </DropdownMenuItem>
+              </DropdownMenu>
+            }
+          />
+        </div>
+        <SandboxHelp text={t("globals.chatComposerLeadingMenusNarrowHelp")} />
+        <SandboxHelp text={t("globals.chatComposerLeadingMenusHelp")} />
         <SandboxHelp text={t("globals.chatHelp")} />
         <TokenList group="chat" title={t("globals.tokenListChat")} />
         <TokenList group="chatmessage" title={t("globals.tokenListChatMessage")} />
@@ -4784,7 +4910,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                           variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
-                    <BotIcon />
+                    <MessageSquareIcon />
                   </IconButton>
                 </Tooltip>
               }
@@ -4808,7 +4934,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                           variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
-                    <BotIcon />
+                    <MessageSquareIcon />
                   </IconButton>
                 </Tooltip>
               }
@@ -4832,7 +4958,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                           variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
-                    <BotIcon />
+                    <MessageSquareIcon />
                   </IconButton>
                 </Tooltip>
               }
@@ -4918,7 +5044,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </Tooltip>
                   <Tooltip content={t("globals.listTreeOpen")}>
                     <IconButton variant="ghost" aria-label={t("globals.listTreeOpen")}>
-                      <BotIcon />
+                      <MessageSquareIcon />
                     </IconButton>
                   </Tooltip>
                 </div>
@@ -5744,7 +5870,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           onClose={() => setDialogShellOpen(false)}
           ariaLabel={t("globals.dialogShellTitle")}
         >
-          <div className="sandbox-stack" style={{ padding: "var(--fynns-space-lg)" }}>
+          <div className="sandbox-stack" style={{ padding: "var(--fynns-layout-content-inset)" }}>
             <strong>{t("globals.dialogShellTitle")}</strong>
             <p style={{ margin: 0 }}>{t("globals.dialogShellBody")}</p>
             <Button size="sm" onClick={() => setDialogShellOpen(false)}>
@@ -5756,12 +5882,38 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           open={centeredDialogOpen}
           onOpenChange={setCenteredDialogOpen}
           title={t("globals.dialogTitle")}
-          description={t("globals.dialogDescription")}
+          headActions={
+            <InfoHint size="sm" content={t("globals.dialogCreateHelp")} />
+          }
           size="sm"
           closeAriaLabel={t("globals.dialogClose")}
         >
-          <p style={{ margin: 0 }}>{t("globals.dialogBody")}</p>
+          <FieldStack>
+            <FieldBlock label={t("globals.dialogCreateNameLabel")} htmlFor="sandbox-dialog-create-name">
+              <Input
+                id="sandbox-dialog-create-name"
+                placeholder={t("globals.dialogCreateNamePlaceholder")}
+              />
+            </FieldBlock>
+            <div className="fynns-control-cluster fynns-control-cluster--end-align">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setCenteredDialogOpen(false)}
+              >
+                {t("globals.dialogCreateCancel")}
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => setCenteredDialogOpen(false)}
+              >
+                {t("globals.dialogCreateAction")}
+              </Button>
+            </div>
+          </FieldStack>
         </Dialog>
+        <SandboxHelp text={t("globals.dialogFootCanonicalHelp")} />
+        <SandboxHelp text={t("globals.dialogTitleBodyInsetHelp")} />
         <Dialog
           open={labeledDialogOpen}
           onOpenChange={setLabeledDialogOpen}
@@ -7676,6 +7828,23 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <Card
                 className="sandbox-globals-form-recipe"
                 title={t("globals.formRecipeTitle")}
+                actions={
+                  <div className="fynns-control-cluster">
+                    <InfoHint
+                      size="sm"
+                      content={t("globals.formRecipeCardRunHelp")}
+                    />
+                    <Tooltip content={t("globals.formRecipeCardRunTip")}>
+                      <IconButton
+                        size="sm"
+                        variant="primary"
+                        aria-label={t("globals.formRecipeCardRunTip")}
+                      >
+                        <RefreshIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
               >
                 <FormRecipeFields idPrefix="sandbox-form-card" {...formRecipeFieldProps} />
               </Card>

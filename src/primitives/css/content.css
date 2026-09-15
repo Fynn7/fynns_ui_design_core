@@ -3060,8 +3060,8 @@ a.fynns-breadcrumb-link:visited {
   display: flex;
   flex: 0 0 auto;
   justify-content: center;
-  /* Light outer breath; calendar keeps its own pad-* tokens. */
-  padding: var(--fynns-space-sm) var(--fynns-space-md) var(--fynns-space-md);
+  /* Equal outer breath (≥ **0.5.281** — was sm top / md bottom). */
+  padding: var(--fynns-space-md);
   overflow: hidden;
 }
 

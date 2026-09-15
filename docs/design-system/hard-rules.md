@@ -381,6 +381,10 @@
   open; `iconOnly` stays glyph-only. Do **not** invent consumer chevron markup /
   CSS. Live `#menu` / `#sandbox-menu-field-match`. Failure: CONSUMER_TREATY
   labeled DropdownMenu missing chevron.
+- **DON'T** invent a consumer nested flyout / absolute submenu for Menu
+  rows — use keep-set `DropdownMenuSub` (hover / ArrowRight; panel docks end
+  via floatingBox). Live `#sandbox-menu-submenu`. Failure: CONSUMER_TREATY
+  DropdownMenu missing nested submenu.
 - **DON'T** leave Menu / Button icons riding the inline SVG baseline strut
   (chevron looks 高 / 歪) — core icons default `.fynns-icon { display: block }`
   (≥ **0.5.254**); Menu chevron lives in `.fynns-menu-trigger-trailing`. Do
@@ -399,6 +403,25 @@
   consumer `align-items` / `translateY` on `.fynns-menu-trigger-label`. Live
   `#sandbox-menu-leading-icon` / `#menu`. Failure: CONSUMER_TREATY Menu trigger
   leading icon misaligned.
+- **DON'T** let `ChatComposer` **leading** / `endActions` labeled
+  `DropdownMenu` triggers mid-glyph hard-clip past the capsule (or spill
+  hover/focus paint outside the shell) — pass **string** `trigger` (core wraps
+  OverflowTip); core caps each labeled menu at
+  `--fynns-chat-composer-leading-menu-max` and clips shell overflow
+  (≥ **0.5.288**). Do **not** invent consumer `max-width` / manual `slice` /
+  private chip-label CSS. Live `#sandbox-chat-composer-leading-menus` /
+  `#chat`. Failure: CONSUMER_TREATY ChatComposer leading Menu label hard-clips.
+- **DON'T** park the **model** picker in `ChatComposer` `leading` (stays
+  start-clustered) — put it in `endActions` (end / right, before Send) with
+  `align="end"` (≥ **0.5.288**). Volume / tools stay in `leading`. Do **not**
+  use `trailing` for the model Menu (`trailing` **replaces** Send). Live
+  `#sandbox-chat-composer-leading-menus`. Failure: CONSUMER_TREATY ChatComposer
+  model Menu left-clustered.
+- **DON'T** let labeled volume / model Menus starve the ChatComposer draft
+  on narrow hosts (~365px) — core ≥ **0.5.288** shares menu shrink + field
+  floor (`--fynns-chat-composer-field-min`). Live
+  `#sandbox-chat-composer-leading-menus-narrow`. Failure: CONSUMER_TREATY
+  ChatComposer narrow host crushes draft.
 - **DON'T** park supporting / muted helper copy **flush** under a Select (or
   other form control) at 0–4dp — control → hint uses
   `--fynns-layout-field-hint-gap` (**8dp**). Prefer `FieldBlock` + `FieldHint`
@@ -558,6 +581,15 @@
   Live `#layouts-demo-shell` (TopAppBar InfoHint; main canvas has **no** sibling
   lead / FieldBlock description restating that tip). Failure: CONSUMER_TREATY
   section FieldHint restates TopAppBar InfoHint.
+- **DON'T** park a **how-to / direction / path essay** in Dialog / Drawer /
+  BottomSheet **`description`** (or a multi-line caption under the title) —
+  **information redundancy (hard)** (≥ **0.5.284**). `description` is optional
+  **short caption** only (≤ ~one sentence). Ops / scan / overwrite / path help
+  → **one** `headActions` **`InfoHint`** `sm` (Tooltip on the “i”); do **not**
+  dump the same paragraph as body lead. ConfirmDialog may keep a short
+  **confirm-intent** line (what will happen). Live `#overlays` (create Dialog:
+  no essay `description`; tip on head `InfoHint`). Failure: CONSUMER_TREATY
+  Dialog description how-to essay.
 - **DON'T** twin the same empty/status signal on a `ListItem` in both `overline`
   **and** `trailingSupportingText` (e.g. overline “尚无构建记录” + trailing
   “未构建”) — **information redundancy (hard)**. Status / empty → **`overline`
@@ -674,6 +706,32 @@
   keep content until the next open. Never reuse a Confirm title as a Dialog
   title fallback (exit flash / wrong head). Live `#sandbox-list-recipe-catalog`.
   Failure: CONSUMER_TREATY Dialog exit clears title/body (flash).
+- **DON'T** crush centered `Dialog` title top clearance below body end —
+  non-confirm `.fynns-dialog-head` `padding-block-start` is
+  `--fynns-layout-content-inset` (**18dp**, ≥ **0.5.280**) so title ink top
+  matches body `padding-block-end` / labeled Dialog-foot Button bottom inset.
+  Do **not** patch consumer `.fynns-dialog-head` pad or revive `dialog-inset/2`.
+  Confirm heads keep full `dialog-inset`. Live `#overlays`. Failure:
+  CONSUMER_TREATY Dialog title top ≠ body-end foot.
+- **DON'T** park **`IconButton` / check-disk / Fab** (or any icon-only primary)
+  as the confirm / dismiss control inside a centered `Dialog` /
+  `ConfirmDialog` **body or foot** — **one Dialog foot style only** (≥
+  **0.5.286**). Canonical foot = `.fynns-control-cluster--end-align` with
+  **labeled** `Button`s only: LTR **Cancel** `ghost` `sm` leftmost → optional
+  secondary tonal → **primary** confirm **rightmost** (Wave1 OverflowTip on
+  long labels). `ConfirmDialog` stock foot counts. How-to stays on
+  `headActions` `InfoHint` `sm` — not a `description` essay that restates the
+  FieldBlock label. Live `#overlays` (create Dialog). Failure: CONSUMER_TREATY
+  Dialog foot IconButton / check-disk.
+- **DON'T** crush BottomSheet title top below actions bottom — header outer
+  `padding-block-start` aliases `--fynns-layout-sheet-actions-pad-bottom`
+  (**24dp**, ≥ **0.5.281**). Do not revive `sheet-header-gap` as the outer
+  title clearance. Live `#overlays`. Failure: CONSUMER_TREATY BottomSheet
+  title top ≠ actions bottom.
+- **DON'T** omit Destination FillColumn header `padding-block-end` on the
+  canvas host — use equal `dialog-inset` block (≥ **0.5.281**). Live
+  `#sandbox-fill-column-guide`. Failure: CONSUMER_TREATY FillColumn header
+  top-only inset.
 - **DON'T** (EndAside*): conditionally mount `{asideOpen && <EndAside>}` —
   toggle **`open` only** so width morph can run (core ≥ **0.5.86** morph track
   stays mounted in DestinationAppShell — never unmount on close). Don't remount

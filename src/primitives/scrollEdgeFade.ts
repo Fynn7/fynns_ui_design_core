@@ -6,7 +6,8 @@
  * fade is a CSS `mask-image` driven by `data-fade-top` / `data-fade-bottom`
  * so hard clips read as soft gradient into the well (Cursor-style).
  * PageScroll hosts sync this mid-scroll (≥ **0.5.247**); canvas-capped
- * FillColumn `header` ≥ **0.5.278**.
+ * FillColumn `header` ≥ **0.5.278**. Masks keep the outer hairline opaque
+ * (≥ **0.5.282**) so Textarea borders are not erased with the fade.
  */
 
 export function syncScrollEdgeFade(el: HTMLElement): void {

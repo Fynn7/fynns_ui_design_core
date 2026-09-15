@@ -209,12 +209,17 @@ function resolveCloneUrlCandidates(gitRoot) {
 }
 
 /**
- * True when there are no *tracked* changes vs HEAD.
+ * True when there are no *tracked* content changes vs HEAD.
  * Untracked files (.tmp-*, local notes) must NOT block auto-sync — they used to
  * make every core checkout with verify artifacts soft-skip forever.
+ *
+ * Use `git diff` (content) — not `diff-index` (stat cache). On Windows with
+ * core.autocrlf, editors / GitHub Desktop often leave files "modified" with
+ * identical blobs ("No content changes found"); diff-index soft-skips forever.
  */
 function isGitWorkTreeClean(dir) {
-  const r = run("git", ["diff-index", "--quiet", "HEAD", "--"], dir, {
+  run("git", ["update-index", "--refresh", "-q"], dir, { allowFail: true, quiet: true });
+  const r = run("git", ["diff", "--quiet", "HEAD", "--"], dir, {
     allowFail: true,
     quiet: true,
   });
@@ -222,7 +227,8 @@ function isGitWorkTreeClean(dir) {
 }
 
 function listTrackedDirtyPaths(dir, limit = 8) {
-  const r = run("git", ["diff-index", "--name-only", "HEAD", "--"], dir, {
+  run("git", ["update-index", "--refresh", "-q"], dir, { allowFail: true, quiet: true });
+  const r = run("git", ["diff", "--name-only", "HEAD", "--"], dir, {
     allowFail: true,
     quiet: true,
   });
