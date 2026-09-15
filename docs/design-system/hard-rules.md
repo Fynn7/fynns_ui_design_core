@@ -369,6 +369,14 @@
   Toolbar / `iconOnly` menus stay content-fit. Do **not** invent consumer
   `width` / `min-width` on `.fynns-menu`. Live `#sandbox-menu-field-match`.
   Failure: CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger.
+- **DON'T** wrap a FieldBlock match-width `DropdownMenu` in `Tooltip` (or a
+  bare `span`) and leave it **content-sized** while a sibling bare Menu
+  stretches — tip hosts default `inline-flex` shrink-wrap. Core ≥ **0.5.290**
+  stretches `.fynns-field-block__main > .fynns-tooltip-trigger:has(.fynns-menu-root)`
+  (+ nested `span:has(.fynns-menu-root)`). Prefer string `trigger` (built-in
+  OverflowTip) + FieldHeader `InfoHint` for how-to; do **not** invent consumer
+  `width: 100%` on tip wrappers. Live `#sandbox-menu-field-match`. Failure:
+  CONSUMER_TREATY FieldBlock Menu tip-wrap shrinks trigger.
 - **DON'T** leave a FieldBlock / match-width `DropdownMenu` panel **left-shifted**
   vs the trigger — floating default is `anchorMode: "element"` (≥ **0.5.254**);
   `anchorTargetRect` seatbelt measures `button` / `[aria-haspopup]` as **self**,

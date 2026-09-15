@@ -30,6 +30,31 @@
 }
 
 /*
+ * FieldBlock Menu fill (≥ **0.5.290**): Tooltip defaults to `inline-flex`
+ * shrink-wrap. Wrapping a match-width Menu (or a bare span around it) used to
+ * leave the trigger content-sized while a sibling bare Menu stretched.
+ * Scope ONLY tip hosts that contain a menu root; do NOT set every
+ * `.fynns-tooltip-trigger` to 100% (breaks IconButton toolbars).
+ */
+.fynns-field-block__main > .fynns-tooltip-trigger:has(.fynns-menu-root),
+.fynns-field-block__main > .fynns-tooltip-trigger:has(.fynns-menu-root--match-trigger) {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.fynns-field-block__main > .fynns-tooltip-trigger:has(.fynns-menu-root) > span:has(.fynns-menu-root),
+.fynns-field-block__main > .fynns-tooltip-trigger:has(.fynns-menu-root--match-trigger) > span:has(.fynns-menu-root) {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/*
  * Labeled Menu trigger (≥ **0.5.253**): same stadium Button chrome, plus a
  * trailing chevron so the control reads as a menu (not a dead label).
  * Leading glyph + label (≥ **0.5.258**): label is a flex row so icon+text
