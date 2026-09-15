@@ -33,7 +33,6 @@ import {
   ChatCitationChip,
   ChatCitations,
   ChatComposer,
-  ChatComposerToggle,
   ChatMarkdown,
   ChatMessage,
   ChatScrollToBottom,
