@@ -160,7 +160,9 @@ sandbox `#anchor`。
 - 工具条：`ControlStack` / `ControlRow` / `.fynns-control-cluster` /
   `ControlBlock` `description`。对照 `#rhythm`。
 - List 目录 kind → leading 图标 + meta；禁止 start tick / Chip 当状态。结果标 →
-  `.fynns-list-item-status`。多指标 trailing → `.fynns-list-item-trailing-stats`。
+  `.fynns-list-item-status`（run-summary 标题簇由 core ≥ **0.5.295** 做成固定
+  状态列 CSS grid，勿再用消费仓 flex 私造对齐）。多指标 trailing →
+  `.fynns-list-item-trailing-stats`。
 - Card/Collapsible 嵌套表面子级 → `chrome="plain"`（plain ≠ flush）。
 - PageScroll 分区 Card：勿用 sheet/chat/dialog-max 收窄；内容列铺满页滚；与上方
   ControlRow 同列宽。FullscreenDialog 设置栈亦横向铺满。

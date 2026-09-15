@@ -129,8 +129,10 @@
   `.fynns-list-item-trailing-stats` (fixed grid; `--pair` for two metrics).
   One metric per `.fynns-table-meta` cell (wrap label in `<span>` for ellipsis);
   second metric → sibling meta or trailing-stats. Run/job rows → single-line
-  cluster with `.fynns-list-item-status` — never nest `InlineAlert`/`Banner`/
-  `Chip` in ListItem headline. Live `#list` run-summary.
+  headline cluster with `.fynns-list-item-status` (core turns that cluster into
+  a **CSS grid** with fixed `--fynns-list-stats-col-status` ≥ **0.5.295** so
+  Success / Failed / Cancelled do not shift the model column) — never nest
+  `InlineAlert`/`Banner`/`Chip` in ListItem headline. Live `#list` run-summary.
 - **DON'T** park Timeline edit/delete as `--with-end` hover IconButtons —
   flat row `onClick` → `Dialog` `size="lg"` + `showCloseButton`; foot LTR
   **Cancel → Delete → Save** (never Delete leftmost of Cancel); prefer omit
