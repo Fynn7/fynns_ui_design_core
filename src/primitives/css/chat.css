@@ -1779,9 +1779,11 @@ a.fynns-chat-activity-artifact:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 1 auto;
+  /* Never flex-shrink labeled pills into “T.” / one-glyph crumbs — either
+   * full label or icon-only via the ≤36rem container query (≥ **0.5.293**). */
+  flex: 0 0 auto;
   gap: var(--fynns-chat-composer-toggle-gap);
-  min-width: 0;
+  min-width: auto;
   max-width: var(--fynns-chat-composer-toggle-max);
   height: var(--fynns-chat-composer-toggle-height);
   padding-inline: var(--fynns-chat-composer-toggle-pad-inline);
@@ -1804,9 +1806,10 @@ a.fynns-chat-activity-artifact:hover {
     color var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
-@container fynns-chat-composer (max-width: 26rem) {
+@container fynns-chat-composer (max-width: 36rem) {
   /*
-   * Icon-only mode pills on landing / EndAside widths (≥ **0.5.291**).
+   * Icon-only mode pills on compressed landing / EndAside shells
+   * (≥ **0.5.293**; was 26rem in 0.5.291 — mid widths still ellipsized).
    * Tooltip + aria-label keep the name; frees space for model Menu floor.
    */
   .fynns-chat-composer-toggle {
@@ -1871,12 +1874,12 @@ a.fynns-chat-activity-artifact:hover {
 }
 
 .fynns-chat-composer-primary-slot > .fynns-tooltip-trigger:has(.fynns-chat-composer-toggle) {
-  flex: 0 1 auto;
-  min-width: 0;
+  flex: 0 0 auto;
+  min-width: auto;
   max-width: var(--fynns-chat-composer-toggle-max);
 }
 
-@container fynns-chat-composer (max-width: 26rem) {
+@container fynns-chat-composer (max-width: 36rem) {
   .fynns-chat-composer-primary-slot
     > .fynns-tooltip-trigger:has(.fynns-chat-composer-toggle) {
     flex: 0 0 auto;

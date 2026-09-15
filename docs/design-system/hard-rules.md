@@ -440,8 +440,9 @@
   ChatComposer narrow host crushes draft.
 - **DON'T** let `endActions` model Menu crush to chevron-only beside
   Thinking / Vision / Send — core ≥ **0.5.291** uses content-first model flex
-  + `--fynns-chat-composer-leading-menu-min`, and icon-only mode pills on
-  ≤ **26rem** containers. Do **not** invent consumer min-width / icon-only
+  + `--fynns-chat-composer-leading-menu-min`; mode pills go icon-only on
+  ≤ **36rem** containers (≥ **0.5.293**, was 26rem — mid widths must not
+  ellipsize to “T.”). Do **not** invent consumer min-width / icon-only
   chip CSS. Live `#sandbox-chat-composer-thinking-toggle` /
   `#sandbox-chat-composer-thinking-toggle-narrow`. Failure:
   CONSUMER_TREATY ChatComposer endActions model crushed by toggles.
@@ -450,7 +451,7 @@
   (Model → Thinking → Vision → Send; Tooltip for tip copy — ≥ **0.5.289**).
   Do **not** invent consumer chip / Switch CSS inside the capsule. Live
   `#sandbox-chat-composer-thinking-toggle` (wide / labeled) /
-  `#sandbox-chat-composer-thinking-toggle-narrow` (≤ **26rem** icon-only +
+  `#sandbox-chat-composer-thinking-toggle-narrow` (≤ **36rem** icon-only +
   Tooltip). Failure: CONSUMER_TREATY ChatComposer mode toggle buried in + Menu.
 - **DON'T** flatten every LLM source into one ChatComposer model Menu — use
   `DropdownMenuGroup` sections **Local** / **Cloud** / **CLI** with

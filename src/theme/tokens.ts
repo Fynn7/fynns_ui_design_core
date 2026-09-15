@@ -969,12 +969,16 @@ export const CHAT_TOKENS = {
   "composer-toggle-pad-inline": "0.5rem",
   "composer-toggle-gap": "0.25rem",
   "composer-toggle-font-size": "var(--fynns-font-size-xs)",
-  /** Soft max so long localized labels ellipsize on narrow hosts. */
+  /**
+   * Soft max for very long localized labels on wide shells. Mode pills do
+   * **not** flex-shrink below content — ≤ **36rem** hosts drop the text and
+   * keep icon-only pills (≥ **0.5.293**; was 26rem in 0.5.291) so mid-width
+   * landing composers never show “T.” / one-glyph crumbs.
+   */
   "composer-toggle-max": "6.5rem",
   /**
-   * ≤ **26rem** hosts drop the text and keep icon-only pills (≥ **0.5.291**)
-   * so model Menu keeps a readable floor. Wider shells still use the soft
-   * max above for labeled pills.
+   * Reserved narrow token (menu caps still use ≤ **26rem**). Toggle
+   * icon-only threshold is **36rem** on the composer container (≥ **0.5.293**).
    */
   "composer-toggle-max-narrow": "4.75rem",
   /**

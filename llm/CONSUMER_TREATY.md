@@ -188,7 +188,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | ChatComposer leading Menu label hard-clips | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus` / `#chat` |
 | ChatComposer model Menu left-clustered | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus` / `#chat` |
 | ChatComposer narrow host crushes draft | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus-narrow` / `#chat` |
-| ChatComposer endActions model crushed by toggles | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.291**) | `#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-thinking-toggle-narrow` / `#chat` |
+| ChatComposer endActions model crushed by toggles | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.291** / icon-only ≤ **36rem** ≥ **0.5.293**) | `#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-thinking-toggle-narrow` / `#chat` |
 | ChatComposer mode toggle buried in + Menu | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.289**) | `#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-thinking-toggle-narrow` / `#chat` |
 | ChatComposer model Menu flat without source sections | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.290**) | `#sandbox-chat-composer-model-sections` / `#sandbox-chat-composer-model-empty` / `#chat` |
 | Menu trigger leading icon misaligned | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.258**) | `#sandbox-menu-leading-icon` / `#menu` |

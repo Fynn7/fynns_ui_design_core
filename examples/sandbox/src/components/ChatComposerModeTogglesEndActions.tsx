@@ -29,9 +29,10 @@ export type ChatComposerModeTogglesEndActionsProps = {
 /**
  * Sandbox / consumer recipe for ChatComposer `endActions` mode chrome:
  * Model Menu → Thinking → Vision (Tooltip on each pill).
- * Core ≤ **26rem** composer container hides pill labels (icon-only; tip +
- * `aria-label` remain) — live `#sandbox-chat-composer-thinking-toggle` (wide)
- * / `#sandbox-chat-composer-thinking-toggle-narrow`.
+ * Core ≤ **36rem** composer container hides pill labels (icon-only; tip +
+ * `aria-label` remain — ≥ **0.5.293**) — live
+ * `#sandbox-chat-composer-thinking-toggle` (wide) /
+ * `#sandbox-chat-composer-thinking-toggle-narrow`.
  */
 export function ChatComposerModeTogglesEndActions({
   modelTrigger,
