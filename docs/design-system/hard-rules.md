@@ -196,6 +196,14 @@
   paint over the status label (looks like a crushed “就绪” even when the
   track is 120px). Full path → `InfoHint` / Tooltip when users need the
   untruncated string. Rules in Hard rules / Content density (no live anti-demo).
+- **DON'T** stack `InfoHint` **above** a `Switch` in a ControlRow controls
+  cluster (narrow NavigationDrawer / mode-sidebar lesson) — preference how-to
+  lives as trailing **`InfoHint` on the ControlRow `label`** (core styles
+  `:has(.fynns-info-hint-trigger)`); `__controls` keeps the track-only Switch.
+  Core ≥ **0.5.292** also nowraps tip+Switch when both remain in `__controls`
+  / a tip-only cluster. Do **not** invent consumer `flex-direction: column` /
+  private wrap overrides. Live `#info-hint`. Failure: CONSUMER_TREATY
+  ControlRow InfoHint stacks above Switch.
 - **DON'T** let `.fynns-table-meta` hard-clip past a Card / unit-stack /
   narrow host **without** `…` — core ≥ **0.5.231** applies
   `overflow: hidden` + `text-overflow: ellipsis` + `min-width: 0` /
@@ -434,14 +442,16 @@
   Thinking / Vision / Send — core ≥ **0.5.291** uses content-first model flex
   + `--fynns-chat-composer-leading-menu-min`, and icon-only mode pills on
   ≤ **26rem** containers. Do **not** invent consumer min-width / icon-only
-  chip CSS. Live `#sandbox-chat-composer-thinking-toggle`. Failure:
+  chip CSS. Live `#sandbox-chat-composer-thinking-toggle` /
+  `#sandbox-chat-composer-thinking-toggle-narrow`. Failure:
   CONSUMER_TREATY ChatComposer endActions model crushed by toggles.
 - **DON'T** bury ChatComposer **mode** switches (Thinking / Vision / …) in the
   leading `+` Menu — use keep-set `ChatComposerToggle` in `endActions`
   (Model → Thinking → Vision → Send; Tooltip for tip copy — ≥ **0.5.289**).
   Do **not** invent consumer chip / Switch CSS inside the capsule. Live
-  `#sandbox-chat-composer-thinking-toggle`. Failure: CONSUMER_TREATY
-  ChatComposer mode toggle buried in + Menu.
+  `#sandbox-chat-composer-thinking-toggle` (wide / labeled) /
+  `#sandbox-chat-composer-thinking-toggle-narrow` (≤ **26rem** icon-only +
+  Tooltip). Failure: CONSUMER_TREATY ChatComposer mode toggle buried in + Menu.
 - **DON'T** flatten every LLM source into one ChatComposer model Menu — use
   `DropdownMenuGroup` sections **Local** / **Cloud** / **CLI** with
   separators (≥ **0.5.290**). Show a section **only** when that source is

@@ -33,8 +33,6 @@ import {
   ChatCitationChip,
   ChatCitations,
   ChatComposer,
-  ChatComposerToggle,
-  BrainIcon,
   ChatMarkdown,
   ChatMessage,
   ChatScrollToBottom,
@@ -1911,19 +1909,50 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             ariaLabel={t("globals.infoHintLabeledAria")}
           />
           <ControlStack columns={2}>
-            <ControlRow label={t("globals.infoHintRowLabel")}>
+            <ControlRow
+              label={
+                <>
+                  {t("globals.infoHintRowLabel")}
+                  <InfoHint
+                    size="sm"
+                    content={t("globals.infoHintRowBody")}
+                    ariaLabel={t("globals.infoHintRowAria")}
+                  />
+                </>
+              }
+            >
               <Switch
-                labelSide="end"
-                label={t("globals.infoHintRowSwitch")}
+                label=""
+                ariaLabel={t("globals.infoHintRowSwitch")}
                 checked={switchOn}
                 onCheckedChange={setSwitchOn}
               />
-              <InfoHint
-                content={t("globals.infoHintRowBody")}
-                ariaLabel={t("globals.infoHintRowAria")}
-              />
             </ControlRow>
           </ControlStack>
+          <div
+            id="sandbox-control-row-tip-switch-narrow"
+            className="sandbox-select-narrow-host"
+          >
+            <ControlRow
+              label={
+                <>
+                  {t("globals.infoHintNarrowLabel")}
+                  <InfoHint
+                    size="sm"
+                    content={t("globals.infoHintNarrowBody")}
+                    ariaLabel={t("globals.infoHintNarrowAria")}
+                  />
+                </>
+              }
+            >
+              <Switch
+                label=""
+                ariaLabel={t("globals.infoHintNarrowSwitch")}
+                checked={switchOn}
+                onCheckedChange={setSwitchOn}
+              />
+            </ControlRow>
+          </div>
         </div>
         <SandboxHelp text={t("globals.infoHintHelp")} />
         </GlobalsDemo>

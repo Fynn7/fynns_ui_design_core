@@ -18,6 +18,9 @@ export type ControlRowProps = HTMLAttributes<HTMLDivElement> & {
  * Card / Dialog rows. Prefer one `.fynns-control-cluster` for the action
  * strip — clusters **default end-pack** (≥ **0.5.158**); start only when the
  * product explicitly opts in (`controlsAlign="start"` / `--start-align`).
+ * Preference how-to → trailing `InfoHint` on `label` (core styles
+ * `:has(.fynns-info-hint-trigger)`); keep `__controls` to the Switch /
+ * actions only — do not wrap tip+Switch in a wrapping cluster (≥ **0.5.292**).
  * String `label` uses `OverflowTip` when clipped (≥ **0.5.241**).
  */
 export function ControlRow({ label, children, className, ...rest }: ControlRowProps) {
