@@ -75,7 +75,8 @@ Anything else must be deleted or kept as a non-exported internal.
 
 | Removed | Consumer fix |
 | --- | --- |
-| `Badge` / `BadgeProps` / `BadgeSize` / `BadgeVariant` / `.fynns-badge` / `.fynns-badge--*` | Non-M3 outlined pill labels (clashed with InfoHint / inline chrome). Use `Chip` (interactive), `InlineAlert` / `Banner` (status), or `BadgedBox` + `NavigationRailBadge` (notification overlay). Do not revive pill `Badge`. |
+| `Badge` / `BadgeProps` / `BadgeSize` / `BadgeVariant` / `.fynns-badge` / `.fynns-badge--*` | Non-M3 outlined pill labels (clashed with InfoHint / inline chrome). Use `Chip` (interactive), `InlineAlert` / `Banner` (status), or the navigation bar's built-in indicator for counts. Do not revive pill `Badge`. |
+| `BadgedBox` / `BadgedBoxProps` / `.fynns-badged-box` | Notification badge overlay — fully removed. Use the nav rail's own indicator, or rely on `IconButton` `loading` + Tooltip to convey activity count and status (e.g., ActivityIndicator). Do not stack arbitrary badges over buttons. |
 | `toast` / `Toaster` / `Toast` / `ToastProvider` / `useToast` | Use `snackbar` + `SnackbarHost`. Do not revive toast/sonner names. |
 | `Popover` | Build a local anchored panel, or use `DropdownMenu` / `Tooltip` where they fit. |
 | `SearchInput` | Use `SearchBar` (chrome) or `Input` (dense forms). |

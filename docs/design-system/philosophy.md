@@ -129,7 +129,7 @@ belong in a consumer’s own doc.
    floating surface island on bare `app-bg` — ≥ **0.5.191**; **pane
    cold-start uses `fill`**, never `EmptyState` + a
    ring, never a ring stacked on a bar), `EmptyState` (**zero-result catalogs
-   only**), `Banner` / `InlineAlert` / `BadgedBox`, and imperative `snackbar`
+   only**), `Banner` / `InlineAlert`, and imperative `snackbar`
    (+ root `<SnackbarHost />`). Do **not** use deleted Toast APIs or the removed
    pill `Badge` (see `llm/BREAKING_PURGE.md`). Color status as `danger` /
    `warning` / `info` / `success`.

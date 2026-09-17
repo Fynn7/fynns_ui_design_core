@@ -3511,20 +3511,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 
-/* ---------- BadgedBox / AvatarGroup ---------- */
-.fynns-badged-box {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
 
-.fynns-badged-box > .fynns-nav-rail-badge {
-  /* Anchor to the box top-end (same chrome as rail icon wrap). */
-  pointer-events: none;
-}
-
+/* ---------- AvatarGroup ---------- */
 .fynns-avatar-group {
   display: inline-flex;
   align-items: center;

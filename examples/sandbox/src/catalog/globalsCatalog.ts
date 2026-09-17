@@ -391,12 +391,6 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["头像", "avatar", "avatargroup"],
   },
   {
-    id: "badged-box",
-    categoryId: "containment",
-    label: "BadgedBox",
-    keywords: ["角标", "badge", "badged"],
-  },
-  {
     id: "list",
     categoryId: "containment",
     label: "List",

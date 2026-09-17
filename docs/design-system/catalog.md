@@ -25,7 +25,7 @@ classes.
   ChipSet (`assist`|`filter`|`input`|`suggestion` — never table-cell status),
   Slider, ToggleGroup, Tabs (M3 Primary underline)
 - **Feedback:** Banner, InlineAlert (phrasing copy only — never nest List /
-  FieldStack / CodeBlock inside), BadgedBox, LinearProgress / CircularProgress,
+  FieldStack / CodeBlock inside), LinearProgress / CircularProgress,
   BusyScrim `{ open, label, message?, value?, size?, indicator? }` /
   BusyRegion `{ busy, label, children?, message?, value?, size?, fill?,
   indicator? }` (soft frosted blur + `--fynns-color-busy-region-mask` when

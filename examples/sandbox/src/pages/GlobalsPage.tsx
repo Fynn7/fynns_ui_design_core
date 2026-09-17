@@ -3,7 +3,6 @@ import {
   ArchiveIcon,
   Avatar,
   AvatarGroup,
-  BadgedBox,
   Banner,
   BarChartIcon,
   BottomSheet,
@@ -4387,20 +4386,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         <SandboxHelp text={t("globals.avatarInitialsHelp")} />
         </GlobalsDemo>
-        <GlobalsDemo id="badged-box">
+        <GlobalsDemo id="avatar-group">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
-          <BadgedBox badge={3}>
-            <Tooltip content={t("globals.badgedBoxIconTip")}>
-              <IconButton
-                aria-label={`${t("globals.badgedBoxIconTip")}, 3`}
-              >
-                <InfoIcon />
-              </IconButton>
-            </Tooltip>
-          </BadgedBox>
-          <BadgedBox badge>
-            <Avatar name="Ada Lovelace" alt={t("globals.avatarAda")} />
-          </BadgedBox>
           <AvatarGroup max={3} size="sm" aria-label={t("globals.avatarGroupHelp")}>
             <Avatar name="Ada Lovelace" alt="Ada" />
             <Avatar name="Grace Hopper" alt="Grace" />
@@ -4409,7 +4396,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <Avatar name="Mary Jackson" alt="Mary" />
           </AvatarGroup>
         </div>
-        <SandboxHelp text={t("globals.badgedBoxHelp")} />
         <SandboxHelp text={t("globals.avatarGroupHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="list">
