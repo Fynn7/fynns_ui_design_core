@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 /** Table / dense-row catalog defaults (≥ 0.5.144). */
 export const REVEAL_MORE_DEFAULT_INITIAL = 10;
@@ -64,32 +64,28 @@ export function useRevealMore({
   const totalCount = floorNonNeg(total);
   const initialCount = floorNonNeg(initial);
   const stepCount = floorPos(step, REVEAL_MORE_DEFAULT_STEP);
-  const totalRef = useRef(totalCount);
-  totalRef.current = totalCount;
 
-  const [visible, setVisible] = useState(() =>
-    Math.min(initialCount, totalCount),
-  );
+  const [requested, setRequested] = useState(initialCount);
 
   // Filter / source identity (or initial) change → back to the first window.
-  // Read `total` via ref so polling growth does not re-fire this reset.
   useEffect(() => {
-    setVisible(Math.min(initialCount, totalRef.current));
+    setRequested(initialCount);
   }, [resetKey, initialCount]);
 
-  useEffect(() => {
-    setVisible((v) => Math.min(v, totalCount));
-  }, [totalCount]);
-
   const revealMore = useCallback(() => {
-    setVisible((v) => Math.min(totalCount, v + stepCount));
-  }, [stepCount, totalCount]);
+    setRequested((prev) => {
+      const current = Math.min(Math.max(prev, initialCount), totalCount);
+      const next = Math.min(totalCount, current + stepCount);
+      return Math.max(next, initialCount);
+    });
+  }, [initialCount, stepCount, totalCount]);
 
   const reset = useCallback(() => {
-    setVisible(Math.min(initialCount, totalCount));
-  }, [initialCount, totalCount]);
+    setRequested(initialCount);
+  }, [initialCount]);
 
-  const clampedVisible = Math.min(visible, totalCount);
+  const effectiveWindow = Math.max(requested, initialCount);
+  const clampedVisible = Math.min(effectiveWindow, totalCount);
   const remaining = Math.max(0, totalCount - clampedVisible);
 
   return {

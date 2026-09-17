@@ -129,4 +129,51 @@ describe("useRevealMore", () => {
     expect(api.current!.canRevealMore).toBe(false);
     unmount();
   });
+
+  it("handles async initial load: starts at total 0, then loads data to show initial count", () => {
+    const { api, unmount } = mountHook({ total: 0, initial: 5, step: 5 });
+    expect(api.current!.visible).toBe(0);
+    expect(api.current!.remaining).toBe(0);
+    expect(api.current!.canRevealMore).toBe(false);
+
+    api.setProps({ total: 9, initial: 5, step: 5 });
+    expect(api.current!.visible).toBe(5);
+    expect(api.current!.remaining).toBe(4);
+    expect(api.current!.canRevealMore).toBe(true);
+    unmount();
+  });
+
+  it("recovers initial count after cache reload (N -> 0 -> N') without being trapped at 0", () => {
+    const { api, unmount } = mountHook({ total: 14, initial: 5, step: 5 });
+    expect(api.current!.visible).toBe(5);
+    expect(api.current!.remaining).toBe(9);
+    expect(api.current!.canRevealMore).toBe(true);
+
+    // Consumer reload sets data=null -> total drops to 0
+    api.setProps({ total: 0, initial: 5, step: 5 });
+    expect(api.current!.visible).toBe(0);
+    expect(api.current!.remaining).toBe(0);
+    expect(api.current!.canRevealMore).toBe(false);
+
+    // New data returns with 8 items remaining
+    api.setProps({ total: 8, initial: 5, step: 5 });
+    expect(api.current!.visible).toBe(5);
+    expect(api.current!.remaining).toBe(3);
+    expect(api.current!.canRevealMore).toBe(true);
+    unmount();
+  });
+
+  it("expands up to initial count when total grows from below initial (2 -> 8)", () => {
+    const { api, unmount } = mountHook({ total: 2, initial: 5, step: 5 });
+    expect(api.current!.visible).toBe(2);
+    expect(api.current!.remaining).toBe(0);
+    expect(api.current!.canRevealMore).toBe(false);
+
+    api.setProps({ total: 8, initial: 5, step: 5 });
+    expect(api.current!.visible).toBe(5);
+    expect(api.current!.remaining).toBe(3);
+    expect(api.current!.canRevealMore).toBe(true);
+    unmount();
+  });
 });
+
