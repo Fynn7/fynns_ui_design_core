@@ -138,6 +138,10 @@ sandbox `#anchor`。
 - **EndAside instant open / dense labeled / Card flush bottom** — 切 `open`；`label=""`+一主 CTA；PageScroll 内 Card 勿贴窗格底。`#layouts-demo-shell`
 - **PageScroll Collapsible / Textarea file body / FillColumn megacard / Card sheet-max** — 短表单走 `#form-recipe`；有扩展名用 `CodeBlock`；内容列铺满页滚，禁止 sheet/chat/dialog-max。`#page-scroll`
 - **long Table/List dumps all rows** — Table `RevealMore` 10/10；List 5/5。`#table` / `#list`
+- **RevealMore foot kisses a following CTA** — `RevealMore` 直接作为 List 后的
+  `.fynns-unit-stack` sibling；后续 CTA 仍放同一 stack，使用
+  `--fynns-layout-unit-stack-gap`，禁止消费侧 margin、负定位或多余
+  `.fynns-control-cluster` 包装。`#list`
 - **Pagination overlay / option repeats noun / gaps crushed** — stock Select；options 仅数字；间距 8/16dp。`#pagination`
 - **Select fullWidth / menu width / supporting kisses** — 铺满用 `fullWidth`/`__grow`；菜单 width=live shell；hint 用 `field-hint-gap`。`#select` / `#sandbox-select-wide-short`
 - **DropdownMenu FieldBlock width / chevron / panel shift / chrome clip** — matchTriggerWidth；core 注入 chevron；禁止消费仓 left/transform/translateY。`#menu` / `#sandbox-menu-field-match`

@@ -1842,8 +1842,10 @@ const en = {
   "globals.listRevealMap": "Map",
   "globals.listRevealMapSnack": "Map action (sample)",
   "globals.listRevealMore": "Show more",
+  "globals.listRevealContinue": "Continue",
+  "globals.listRevealContinueSnack": "Continue action (sample)",
   "globals.listRevealHelp":
-    "Long Card / PageScroll Lists (≥ **0.5.145**): `useRevealMore` (**5** / step **5**) + `RevealMore` **after** the List (unit-stack sibling) — taller ListItems need a lower window than Tables (10/10). Slice in the app; pass locale (`更多` / `Show more`). Short lists / Dialog / true `Pagination` exempt. Live below.",
+    "Long Card / PageScroll Lists (≥ **0.5.145**): `useRevealMore` (**5** / step **5**) + `RevealMore` **after** the List (unit-stack sibling) — taller ListItems need a lower window than Tables (10/10). A following action stays in the same unit stack so the standard gap remains. Slice in the app; pass locale (`更多` / `Show more`). Short lists / Dialog / true `Pagination` exempt. Live below.",
   "globals.listHostToneHelp":
     "Catalog kind = leading icon + trailingSupportingText (or .fynns-table-meta). No start tick, inset rail, or extra host wash — selected is the radius-3xl pill only. Never wrap ListItem in a div. Headline uses UI font (not mono).",
   "globals.listHostToneAria": "Sample list with kind via icon and trailing meta",
@@ -4263,8 +4265,10 @@ const zh: Record<MessageKey, string> = {
   "globals.listRevealMap": "映射",
   "globals.listRevealMapSnack": "映射操作（示例）",
   "globals.listRevealMore": "更多",
+  "globals.listRevealContinue": "继续",
+  "globals.listRevealContinueSnack": "继续操作（示例）",
   "globals.listRevealHelp":
-    "Card / PageScroll 内长 List（≥ **0.5.145**）：`useRevealMore`（**5** / 每次 **5**）+ 脚 `RevealMore` 放在 List **后**（unit-stack 兄弟）— ListItem 更高，窗口低于 Table（10/10）。行由 app `slice`；文案本地化（`更多` / `Show more`）。短列表 / Dialog / 真 `Pagination` 豁免。见下方样例。",
+    "Card / PageScroll 内长 List（≥ **0.5.145**）：`useRevealMore`（**5** / 每次 **5**）+ 脚 `RevealMore` 放在 List **后**（unit-stack 兄弟）— ListItem 更高，窗口低于 Table（10/10）。后续操作继续放在同一 unit stack，保留标准间距。行由 app `slice`；文案本地化（`更多` / `Show more`）。短列表 / Dialog / 真 `Pagination` 豁免。见下方样例。",
   "globals.listHostToneHelp":
     "目录种类 = leading 图标 + trailingSupportingText（或 .fynns-table-meta）。不要左边竖标、inset 轨或额外 host 洗底——选中只靠 radius-3xl pill。禁止用 div 包 ListItem。headline 用 UI 字族（勿 mono）。",
   "globals.listHostToneAria": "用图标和尾部文案表达种类的列表示例",

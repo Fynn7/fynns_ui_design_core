@@ -591,7 +591,11 @@
   grow past ~5 rows — same `useRevealMore` + `RevealMore`, but pass
   `REVEAL_MORE_LIST_DEFAULT_INITIAL` / `_STEP` (**5** / **5**, ≥ **0.5.145**)
   because ListItems are taller: foot **after** the List (unit-stack sibling);
-  short lists / Dialog / `Pagination` exempt. Live `#list`.
+  short lists / Dialog / `Pagination` exempt. Live `#list`. If a follow-up CTA
+  comes after the foot, keep the foot and CTA in the same `.fynns-unit-stack`
+  so the existing `--fynns-layout-unit-stack-gap` remains between them; do not
+  add consumer margin, negative positioning, or a redundant control-cluster
+  wrapper around `RevealMore`. Live `#list`.
 - **DON'T** open a **DropdownMenu** that paints a near-viewport item tower —
   panel caps `max-height: min(70dvh, 20rem)` + `fynns-scroll` (≥ **0.5.250**);
   overlay thumbs for the menu itself use `--fynns-z-scroll-overlay-flyout`

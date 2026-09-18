@@ -1151,6 +1151,14 @@ function ListRevealMoreDemo() {
           onRevealMore={revealMore}
           label={t("globals.listRevealMore")}
         />
+        <div className="fynns-control-cluster">
+          <Button
+            variant="primary"
+            onClick={() => snackbar(t("globals.listRevealContinueSnack"))}
+          >
+            {t("globals.listRevealContinue")}
+          </Button>
+        </div>
       </div>
     </Card>
   );
