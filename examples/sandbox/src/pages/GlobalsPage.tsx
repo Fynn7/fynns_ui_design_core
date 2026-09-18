@@ -3537,6 +3537,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 >
                   {chatFailed ? undefined : t("globals.chatRetrySuccess")}
                 </ChatMessage>
+                <ChatMessage
+                  role="user"
+                  expandLabel={t("globals.chatExpand")}
+                  collapseLabel={t("globals.chatCollapse")}
+                  markdown={Array(12)
+                    .fill(t("globals.chatUserBody"))
+                    .join("\n\n")}
+                />
+                <ChatMessage
+                  role="assistant"
+                  expandLabel={t("globals.chatExpand")}
+                  collapseLabel={t("globals.chatCollapse")}
+                  markdown={Array(6)
+                    .fill(t("globals.chatAssistantMarkdown"))
+                    .join("\n\n")}
+                />
+                <ChatMessage role="system">
+                  {Array(12).fill(t("globals.chatSystem")).join(" ")}
+                </ChatMessage>
                   </>
                 ) : null}
               </ChatThread>
@@ -4037,6 +4056,44 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <SandboxHelp text={t("globals.chatHelp")} />
         <TokenList group="chat" title={t("globals.tokenListChat")} />
         <TokenList group="chatmessage" title={t("globals.tokenListChatMessage")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="chat-collapse">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <SandboxHelp text={t("globals.chatCollapseHelp")} />
+          <ChatMessage
+            role="user"
+            expandLabel={t("globals.chatExpand")}
+            collapseLabel={t("globals.chatCollapse")}
+            markdown={t("globals.chatUserBody")}
+          />
+          <ChatMessage
+            role="user"
+            expandLabel={t("globals.chatExpand")}
+            collapseLabel={t("globals.chatCollapse")}
+            markdown={Array(24).fill(t("globals.chatUserBody")).join("\n\n")}
+          />
+          <ChatMessage
+            role="assistant"
+            expandLabel={t("globals.chatExpand")}
+            collapseLabel={t("globals.chatCollapse")}
+            markdown={Array(6)
+              .fill(t("globals.chatAssistantMarkdown"))
+              .join("\n\n")}
+          />
+          <ChatMessage
+            role="assistant"
+            streaming
+            streamingLabel={t("globals.chatStreamingLabel")}
+            expandLabel={t("globals.chatExpand")}
+            collapseLabel={t("globals.chatCollapse")}
+            markdown={Array(6)
+              .fill(t("globals.chatAssistantMarkdown"))
+              .join("\n\n")}
+          />
+          <ChatMessage role="system">
+            {Array(40).fill(t("globals.chatSystem")).join(" ")}
+          </ChatMessage>
+        </div>
         </GlobalsDemo>
         <GlobalsDemo id="thinking">
         <div className="sandbox-globals-row sandbox-globals-row--stack">

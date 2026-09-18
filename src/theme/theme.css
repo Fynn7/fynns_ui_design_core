@@ -348,6 +348,8 @@
   --fynns-chatmessage-citation-card-gap: 0.625rem;
   --fynns-chatmessage-thinking-gap: 0.375rem;
   --fynns-chatmessage-thinking-trigger-gap: 0.375rem;
+  --fynns-chatmessage-collapse-preview-height: 12rem;
+  --fynns-chatmessage-collapse-fade-height: 3rem;
   --fynns-chatmessage-thinking-body-pad-block: var(--fynns-layout-field-stack-gap);
   --fynns-chatmessage-thinking-body-pad-inline: 0;
   --fynns-chatmessage-activity-gap: 0.375rem;

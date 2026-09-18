@@ -795,6 +795,16 @@ export const CHATMESSAGE_TOKENS = {
   /** Gap between optional icon / label / chevron in the thinking trigger row. */
   "thinking-trigger-gap": "0.375rem",
   /**
+   * Collapsed long-message preview ceiling (~12rem). `ChatMessage` clamps the
+   * body to this height and fades content into the expand trigger.
+   */
+  "collapse-preview-height": "12rem",
+  /**
+   * Fade band at the bottom of a collapsed body (mask, not an overlay wash,
+   * so user-bubble fill and bare assistant rows share one rule).
+   */
+  "collapse-fade-height": "3rem",
+  /**
    * Thought body inset under the trigger (and ChatActivity steps under
    * the header). Aliases field-stack-gap so label ↔ body is not flush.
    */

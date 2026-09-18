@@ -2,6 +2,10 @@ import {
   Children,
   cloneElement,
   isValidElement,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
   type HTMLAttributes,
   type ReactElement,
   type ReactNode,
@@ -13,6 +17,11 @@ import {
   type ChatCitationsProps,
 } from "./ChatCitation";
 import { ChatMarkdown } from "./ChatMarkdown";
+import { ChevronDownIcon } from "./icons";
+import {
+  CHAT_MESSAGE_COLLAPSE_AFTER_CHARS,
+  resolveChatCollapse,
+} from "./chatMessageCollapse";
 import { applyStreamingTail } from "./chatStreamingTail";
 import { isChatStackBlock } from "./chatBlockHost";
 import { RefreshIcon } from "./icons";
@@ -100,6 +109,18 @@ export type ChatMessageProps = Omit<
    * `error` — the app decides whether to pass it. Ignored for `system`.
    */
   thinking?: ReactNode;
+  /**
+   * Long-message collapse. Defaults on for `user` / `assistant`; `system`
+   * never shows the toggle. Length is visible text (markup excluded) across
+   * `markdown` or React children. @default true
+   */
+  collapsible?: boolean;
+  /** Visible-text threshold before the toggle appears. @default 1200 */
+  collapseAfterChars?: number;
+  /** Toggle copy when collapsed. @default "Show more" */
+  expandLabel?: string;
+  /** Toggle copy when expanded. @default "Show less" */
+  collapseLabel?: string;
 };
 
 const DEFAULT_ERROR = "There was an error generating a response.";
@@ -254,6 +275,10 @@ export function ChatMessage({
   citationsVisibleCount,
   onCitationOpen,
   thinking,
+  collapsible = true,
+  collapseAfterChars = CHAT_MESSAGE_COLLAPSE_AFTER_CHARS,
+  expandLabel = "Show more",
+  collapseLabel = "Show less",
   className,
   ...rest
 }: ChatMessageProps) {
@@ -283,6 +308,28 @@ export function ChatMessage({
     !isStreaming &&
     citations != null &&
     citations.length > 0;
+  const { canCollapse } = useMemo(
+    () =>
+      resolveChatCollapse({
+        role,
+        collapsible,
+        markdown,
+        children,
+        collapseAfterChars,
+      }),
+    [role, collapsible, markdown, children, collapseAfterChars],
+  );
+  const [expanded, setExpanded] = useState(false);
+  const rawBodyId = useId();
+  const bodyId = `fynns-chat-message-body-${rawBodyId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
+  useEffect(() => {
+    if (isStreaming) setExpanded(false);
+  }, [isStreaming]);
+  useEffect(() => {
+    setExpanded(false);
+  }, [markdown, collapseAfterChars]);
+  const showCollapseToggle = canCollapse && !isStreaming;
+  const isCollapsed = canCollapse && !isStreaming && !expanded;
 
   return (
     <article
@@ -314,9 +361,33 @@ export function ChatMessage({
         {showThinking ? thinking : null}
         {showBubble ? (
           <div className="fynns-chat-message-bubble">
-            <div className="fynns-chat-message-body">
+            <div
+              id={canCollapse ? bodyId : undefined}
+              className={join(
+                "fynns-chat-message-body",
+                isCollapsed && "fynns-chat-message-body--collapsed",
+              )}
+            >
               {renderBodyChildren(bodyChildren, showCursor)}
             </div>
+            {showCollapseToggle ? (
+              <div className="fynns-chat-message-collapse">
+                <button
+                  type="button"
+                  className="fynns-chat-message-collapse-toggle"
+                  aria-expanded={expanded}
+                  aria-controls={bodyId}
+                  onClick={() => setExpanded((v) => !v)}
+                >
+                  {expanded ? collapseLabel : expandLabel}
+                  <ChevronDownIcon
+                    size={14}
+                    aria-hidden
+                    className="fynns-chat-message-collapse-chevron"
+                  />
+                </button>
+              </div>
+            ) : null}
           </div>
         ) : null}
         {showCitations ? (

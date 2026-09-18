@@ -1686,6 +1686,10 @@ const en = {
   "globals.chatRetrySuccess":
     "Regenerated — the failed-generation footer is gone and normal actions return.",
   "globals.chatFailDemo": "Show failed turn",
+  "globals.chatExpand": "Show more",
+  "globals.chatCollapse": "Show less",
+  "globals.chatCollapseHelp":
+    "Long-message collapse lives inside the bubble: over 1200 visible chars (markup excluded) a user / assistant turn clamps to 12rem with a mask fade into a plain-text toggle + chevron (bottom-start, in-bubble). Short turns show no toggle, system never collapses, and streaming stays expanded until tokens finish.",
   "globals.chatCitationsLabel": "Sources",
   "globals.chatCiteReuters": "Reuters",
   "globals.chatCiteReutersTitle": "Markets open mixed after overnight futures swing",
@@ -4112,6 +4116,10 @@ const zh: Record<MessageKey, string> = {
   "globals.chatRetry": "重新生成",
   "globals.chatRetrySuccess": "已重新生成 — 失败态页脚消失，常规操作按钮恢复。",
   "globals.chatFailDemo": "显示失败回合",
+  "globals.chatExpand": "展开",
+  "globals.chatCollapse": "收起",
+  "globals.chatCollapseHelp":
+    "长消息折叠收进气泡内部：可见文本超 1200 字（不计 markup）时，用户/助手消息收起为 12rem 预览，底部渐隐接到纯文字触发器 + chevron（气泡内左下）。短消息无控件，system 永不折叠，流式期间始终展开。",
   "globals.chatCitationsLabel": "来源",
   "globals.chatCiteReuters": "Reuters",
   "globals.chatCiteReutersTitle": "隔夜期货波动后市场开盘分化",
