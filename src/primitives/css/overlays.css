@@ -164,15 +164,24 @@
   max-height: min(70dvh, 20rem);
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-2xs);
-  padding: var(--fynns-space-sm);
-  overflow-x: clip;
-  overflow-y: auto;
   border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   border-radius: var(--fynns-radius-xl);
   background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-flyout);
   transform-origin: top center;
+}
+
+/* Fade only the scrolling menu content. Keep the flyout surface opaque over
+ * text and controls beneath it. */
+.fynns-menu-scroll {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: var(--fynns-space-2xs);
+  padding: var(--fynns-space-sm);
+  overflow-x: clip;
+  overflow-y: auto;
 }
 
 /*

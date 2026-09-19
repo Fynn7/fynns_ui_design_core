@@ -281,10 +281,7 @@ export function Select({
             {...(!presenting ? { inert: true } : {})}
             data-side={menuSide}
             data-state={presenting ? "open" : "closing"}
-            className={join(
-              "fynns-select-menu",
-              mergeScrollSurfaceClass("fynns-select-list"),
-            )}
+            className="fynns-select-menu"
             style={
               displayPos
                 ? ({
@@ -303,36 +300,41 @@ export function Select({
                 : undefined
             }
           >
-            {normalized.map((option, index) => {
-              const selected = option.value === value;
-              const active = index === activeIndex;
-              const label = option.label ?? option.value;
-              const tip = overflowTipText(label, option.value);
-              return (
-                <button
-                  key={option.value}
-                  type="button"
-                  role="option"
-                  aria-selected={selected}
-                  disabled={option.disabled}
-                  tabIndex={presenting ? undefined : -1}
-                  className={join(
-                    "fynns-search-bar-result",
-                    "fynns-select-option",
-                    (active || selected) && "fynns-search-bar-result--active",
-                  )}
-                  onMouseDown={(event) => event.preventDefault()}
-                  onMouseEnter={() => setActiveIndex(index)}
-                  onClick={() => !option.disabled && pick(option.value)}
-                >
-                  {tip != null ? (
-                    <OverflowTip content={tip}>{label}</OverflowTip>
-                  ) : (
-                    label
-                  )}
-                </button>
-              );
-            })}
+            <div
+              className={mergeScrollSurfaceClass("fynns-select-list")}
+              role="presentation"
+            >
+              {normalized.map((option, index) => {
+                const selected = option.value === value;
+                const active = index === activeIndex;
+                const label = option.label ?? option.value;
+                const tip = overflowTipText(label, option.value);
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    role="option"
+                    aria-selected={selected}
+                    disabled={option.disabled}
+                    tabIndex={presenting ? undefined : -1}
+                    className={join(
+                      "fynns-search-bar-result",
+                      "fynns-select-option",
+                      (active || selected) && "fynns-search-bar-result--active",
+                    )}
+                    onMouseDown={(event) => event.preventDefault()}
+                    onMouseEnter={() => setActiveIndex(index)}
+                    onClick={() => !option.disabled && pick(option.value)}
+                  >
+                    {tip != null ? (
+                      <OverflowTip content={tip}>{label}</OverflowTip>
+                    ) : (
+                      label
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>,
           document.body,
         )

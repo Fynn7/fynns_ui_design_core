@@ -3617,23 +3617,31 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-searchbar-results-gap);
   /* JS sets `width` to shell — leave auto until measured. */
   width: auto;
   max-width: 100vw;
   max-height: var(--fynns-searchbar-results-max-height);
-  /* Equal block inset (≥ **0.5.229**) — former 0.75rem end left a thicker
-   * gap under the last option than above the first. */
-  padding-block: var(--fynns-searchbar-results-pad-block-start)
-    var(--fynns-searchbar-results-pad-block-end);
-  padding-inline: var(--fynns-searchbar-results-pad-inline);
-  overflow-x: clip;
-  overflow-y: auto;
   border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-flyout);
   transform-origin: top center;
+}
+
+/* The scroll mask belongs to option content; the flyout surface stays opaque
+ * when it crosses text in a composer or another scroll well. */
+.fynns-select-menu > .fynns-select-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: var(--fynns-searchbar-results-gap);
+  /* Equal block inset (≥ **0.5.229**). */
+  padding-block: var(--fynns-searchbar-results-pad-block-start)
+    var(--fynns-searchbar-results-pad-block-end);
+  padding-inline: var(--fynns-searchbar-results-pad-inline);
+  overflow-x: clip;
+  overflow-y: auto;
 }
 
 .fynns-select-menu .fynns-select-option {

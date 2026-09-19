@@ -103,3 +103,62 @@ test("ChatComposer fades capped text without masking the caret", async ({ page }
   await expect(field).not.toHaveAttribute("data-fade-top");
   await expect(field).not.toHaveAttribute("data-fade-bottom");
 });
+
+test("Select flyout keeps its surface opaque while options fade at the scroll edge", async ({
+  page,
+}) => {
+  await resetSandboxSession(page);
+  await openGlobalsDemo(page, "select", "select");
+  const trigger = globalsDemo(page, "select")
+    .locator(".sandbox-select-narrow-host button.fynns-select-trigger")
+    .first();
+  await trigger.scrollIntoViewIfNeeded();
+  await trigger.click();
+
+  const surface = page.locator(".fynns-select-menu[role='listbox']");
+  const options = surface.locator(".fynns-select-list.fynns-scroll");
+  await expect(surface).toBeVisible();
+  await surface.evaluate((el) => {
+    (el as HTMLElement).style.maxHeight = "96px";
+  });
+  await expect(options).toHaveAttribute("data-fade-bottom", "");
+  expect(await options.evaluate((el) => getComputedStyle(el).maskImage)).toContain(
+    "linear-gradient",
+  );
+  expect(await surface.evaluate((el) => getComputedStyle(el).maskImage)).toBe(
+    "none",
+  );
+  expect(
+    await surface.evaluate((el) => getComputedStyle(el).backgroundColor),
+  ).not.toBe("rgba(0, 0, 0, 0)");
+});
+
+test("DropdownMenu flyout keeps its surface opaque while long catalogs scroll", async ({
+  page,
+}) => {
+  await resetSandboxSession(page);
+  await openGlobalsDemo(page, "menu", "menu");
+  const trigger = globalsDemo(page, "menu")
+    .locator("#sandbox-scroll-menu-stack .fynns-menu-trigger-btn")
+    .first();
+  await trigger.scrollIntoViewIfNeeded();
+  await trigger.click();
+
+  const surface = page.locator(".fynns-menu[role='menu']");
+  const items = surface.locator(".fynns-menu-scroll.fynns-scroll");
+  await expect(surface).toBeVisible();
+  await expect(items).toHaveAttribute("data-fade-bottom", "");
+  expect(await items.evaluate((el) => getComputedStyle(el).maskImage)).toContain(
+    "linear-gradient",
+  );
+  expect(await surface.evaluate((el) => getComputedStyle(el).maskImage)).toBe(
+    "none",
+  );
+  const hostId = await items.getAttribute("data-fynns-scroll-host");
+  expect(hostId).toBeTruthy();
+  await expect(
+    page.locator(
+      `.fynns-scroll-overlay-portal--flyout .fynns-scroll-rail[data-axis='y'][data-fynns-scroll-host='${hostId}']`,
+    ),
+  ).toHaveCount(1);
+});

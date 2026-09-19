@@ -475,6 +475,7 @@ function handleWheelAxisX(
 function isFlyoutScrollHost(host: HTMLElement): boolean {
   return (
     host.classList.contains("fynns-menu") ||
+    host.classList.contains("fynns-menu-scroll") ||
     host.classList.contains("fynns-select-list") ||
     host.classList.contains("fynns-select-menu") ||
     host.classList.contains("fynns-command-list")

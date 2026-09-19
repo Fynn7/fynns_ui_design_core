@@ -180,11 +180,13 @@ export function MenuSurface({
         {...(!presenting ? { inert: true } : {})}
         data-side={dataSide}
         data-state={presenting ? "open" : "closing"}
-        className={join("fynns-menu", "fynns-scroll", className)}
+        className={join("fynns-menu", className)}
         style={style}
         onKeyDown={onMenuKeyDown}
       >
-        {children}
+        <div className="fynns-menu-scroll fynns-scroll" role="presentation">
+          {children}
+        </div>
       </div>
     </MenuContext.Provider>,
     document.body,
