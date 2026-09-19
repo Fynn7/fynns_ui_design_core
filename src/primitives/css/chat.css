@@ -1749,6 +1749,28 @@ a.fynns-chat-activity-artifact:hover {
   display: flex;
 }
 
+/* The textarea owns caret/selection; the field paints only its clipped text
+ * edge so a mask never displaces Chromium selection while scrolling. */
+.fynns-chat-composer-field[data-fade-top]::before,
+.fynns-chat-composer-field[data-fade-bottom]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: min(var(--fynns-layout-scroll-edge-fade-length), 50%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.fynns-chat-composer-field[data-fade-top]::before {
+  inset-block-start: 0;
+  background: linear-gradient(to bottom, var(--fynns-color-surface-2), transparent);
+}
+
+.fynns-chat-composer-field[data-fade-bottom]::after {
+  inset-block-end: 0;
+  background: linear-gradient(to top, var(--fynns-color-surface-2), transparent);
+}
+
 .fynns-chat-composer-input[data-scrollable] {
   overflow-y: auto;
 }

@@ -276,7 +276,7 @@ export function SplitPane({
       data-orientation={orientation}
       data-resizing={dragging ? "true" : undefined}
     >
-      <div className="fynns-split-pane fynns-split-pane--start">{start}</div>
+      <div className="fynns-split-pane fynns-split-pane--start fynns-scroll">{start}</div>
       {!disableResize ? (
         <div
           className="fynns-split-handle"
@@ -293,7 +293,7 @@ export function SplitPane({
           onKeyDown={onResizeKeyDown}
         />
       ) : null}
-      <div className="fynns-split-pane fynns-split-pane--end">{end}</div>
+      <div className="fynns-split-pane fynns-split-pane--end fynns-scroll">{end}</div>
     </div>
   );
 }

@@ -40,6 +40,7 @@ const HOST_ATTR = "data-fynns-overlay-scroll";
 const HOST_ID_ATTR = "data-fynns-scroll-host";
 /** Opt out of vertical-wheel → horizontal pan (`"off"`). Default enabled. */
 const WHEEL_X_ATTR = "data-fynns-wheel-x";
+const BORDER_ATTR = "data-fynns-scroll-border";
 const RAIL_CLASS = "fynns-scroll-rail";
 const THUMB_CLASS = "fynns-scroll-thumb";
 const MIN_THUMB_PX = 24;
@@ -811,8 +812,21 @@ function updateHost(host: HTMLElement, state: HostState) {
   }
 
   syncThumbVisibility(state, host);
-  /* Soft edge fade (V + H). Table wraps pick up `data-fade-left/right` CSS
-   * masks in theme.css — live `#table` / consumer Card + `.fynns-table-wrap`. */
+  const cs = getComputedStyle(host);
+  const hasBorder = [
+    cs.borderTopWidth,
+    cs.borderRightWidth,
+    cs.borderBottomWidth,
+    cs.borderLeftWidth,
+  ].some((width) => Number.parseFloat(width) > 0);
+  if (hasBorder && !host.hasAttribute(BORDER_ATTR)) {
+    host.setAttribute(BORDER_ATTR, "");
+  } else if (!hasBorder && host.hasAttribute(BORDER_ATTR)) {
+    host.removeAttribute(BORDER_ATTR);
+  }
+  /* Every overlay host gets vertical soft-edge CSS from these attributes;
+   * table wraps also get inline-edge CSS. Editable CodeBlock uses its
+   * separate glyph twin, because masking the caret host breaks selection. */
   syncScrollEdgeFade(host);
 }
 
@@ -930,7 +944,7 @@ function attach(host: HTMLElement) {
 
   if (typeof MutationObserver !== "undefined") {
     state.mo = new MutationObserver(() => scheduleUpdate(host, state));
-    state.mo.observe(host, { childList: true, subtree: true });
+    state.mo.observe(host, { childList: true, characterData: true, subtree: true });
   }
 
   states.set(host, state);
@@ -969,6 +983,7 @@ function detach(host: HTMLElement) {
   if (hostId) removeRailsForHostId(hostId);
   host.removeAttribute(HOST_ATTR);
   host.removeAttribute(HOST_ID_ATTR);
+  host.removeAttribute(BORDER_ATTR);
   host.classList.remove("fynns-scroll--overlay-host");
   clearScrollEdgeFade(host);
   states.delete(host);

@@ -124,6 +124,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | ListItem trailing IconButtons stacked vertically | DESIGN_SYSTEM hard-rules | `#list` |
 | page-scroll host flush with Card | DESIGN_SYSTEM Card / Collapsible | `#page-scroll` |
 | PageScroll mid-scroll hard clip (no edge fade) | DESIGN_SYSTEM Hard rules / Scrollbar | `#page-scroll` |
+| Dialog / Drawer / Sheet body or other core scroll container hard-clips overflowing content (including a full-height CodeBlock inside a Dialog) | DESIGN_SYSTEM philosophy / Scrollbar: core `.fynns-scroll` automatically detects overflow and fades its vertical edges; render the core component without private scroll wrappers or mask CSS | `#dialog-nested-scroll` / `#drawer-nested-scroll` |
 | FillColumn header mid-scroll hard clip (no edge fade) | DESIGN_SYSTEM Hard rules / Scrollbar | `#sandbox-fill-column-guide` |
 | Textarea / bordered scroll-edge fade erases stroke | DESIGN_SYSTEM philosophy / Scrollbar (≥ **0.5.282**) | `#textarea` |
 | PageScroll Card sheet-max-width under ControlRow | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |

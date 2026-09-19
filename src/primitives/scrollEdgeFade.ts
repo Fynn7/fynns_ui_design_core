@@ -1,13 +1,14 @@
 /**
- * Soft scroll-edge fade (NavigationDrawer / CodeBlock / Textarea / PageScroll /
- * FillColumn header / Table wrap).
+ * Soft scroll-edge fade for every core scroll host, with caret-safe paths for
+ * Textarea, ChatComposer and editable CodeBlock.
  *
  * Fixed overlay scrollbars live in a portal and ignore host overflow. Edge
  * fade is a CSS `mask-image` driven by `data-fade-top` / `data-fade-bottom`
  * (block axis) and `data-fade-left` / `data-fade-right` (inline axis) so hard
  * clips read as soft gradients into the well (Cursor-style).
- * PageScroll hosts sync mid-scroll (≥ **0.5.247**); canvas-capped FillColumn
- * `header` ≥ **0.5.278**. `.fynns-table-wrap` gets inline-axis fade when
+ * The overlay scrollbar manager syncs all non-replaced `.fynns-scroll` hosts;
+ * canvas-capped FillColumn `header` also syncs directly. `.fynns-table-wrap`
+ * gets inline-axis fade when
  * columns overflow (≥ **0.5.296** — live `#table`). Masks keep the outer
  * hairline opaque on Textarea (≥ **0.5.282**) so borders are not erased with
  * the fade. Editable CodeBlock: never mask `.fynns-code-block-input` — fade
@@ -32,8 +33,9 @@ function writeScrollEdgeFadeAttrs(
     clientHeight: number;
     clientWidth: number;
   },
+  axes: { y: boolean; x: boolean },
 ): void {
-  const maxY = Math.max(0, metrics.scrollHeight - metrics.clientHeight);
+  const maxY = axes.y ? Math.max(0, metrics.scrollHeight - metrics.clientHeight) : 0;
   const canDown = maxY > 1 && metrics.scrollTop < maxY - 1;
   const canUp = maxY > 1 && metrics.scrollTop > 1;
   if (canDown) target.setAttribute("data-fade-bottom", "");
@@ -41,7 +43,7 @@ function writeScrollEdgeFadeAttrs(
   if (canUp) target.setAttribute("data-fade-top", "");
   else target.removeAttribute("data-fade-top");
 
-  const maxX = Math.max(0, metrics.scrollWidth - metrics.clientWidth);
+  const maxX = axes.x ? Math.max(0, metrics.scrollWidth - metrics.clientWidth) : 0;
   /* Use absolute scrollLeft so RTL / negative-scroll engines still gate. */
   const left = Math.abs(metrics.scrollLeft);
   const canRight = maxX > 1 && left < maxX - 1;
@@ -53,7 +55,14 @@ function writeScrollEdgeFadeAttrs(
 }
 
 export function syncScrollEdgeFade(el: HTMLElement): void {
-  writeScrollEdgeFadeAttrs(el, el);
+  writeScrollEdgeFadeAttrs(el, el, scrollableAxes(el));
+}
+
+function scrollableAxes(el: HTMLElement): { y: boolean; x: boolean } {
+  const css = getComputedStyle(el);
+  const canScroll = (overflow: string) =>
+    overflow === "auto" || overflow === "scroll" || overflow === "overlay";
+  return { y: canScroll(css.overflowY), x: canScroll(css.overflowX) };
 }
 
 /**
@@ -66,7 +75,7 @@ export function syncScrollEdgeFadeOnto(
   metricsEl: HTMLElement,
   target: HTMLElement,
 ): void {
-  writeScrollEdgeFadeAttrs(target, metricsEl);
+  writeScrollEdgeFadeAttrs(target, metricsEl, scrollableAxes(metricsEl));
 }
 
 /** Mirror fade attrs onto a scroll-synced twin (editable CodeBlock highlight). */

@@ -100,9 +100,13 @@ belong in a consumer’s own doc.
    hover — avoids thumb jump when sliding back). Live `#table`. **Scroll-edge
    fade (≥ 0.5.135; PageScroll ≥ **0.5.247**; FillColumn header ≥ **0.5.278**;
    Table wrap inline ≥ **0.5.296**):**
-   capped CodeBlock / Textarea / NavigationDrawer body / **`PageScroll`** /
-   canvas-capped **`FillColumn` `header`** soft-mask top+bottom when content
-   overflows mid-scroll (`data-fade-top` / `data-fade-bottom`); wide
+   **Every core `.fynns-scroll` container** (including Dialog / Drawer / Sheet
+   bodies, menus, Chat, SplitPane, CodeBlock and `PageScroll`) soft-masks the
+   top/bottom edge whenever content continues beyond that edge. The core
+   measures overflow and updates `data-fade-top` / `data-fade-bottom` after
+   scrolling, resizing and content changes; callers only render the component.
+   Textarea, ChatComposer input and editable CodeBlock use their dedicated
+   caret-safe paths. Wide
    **`.fynns-table-wrap`** soft-masks left+right mid-scroll (`data-fade-left` /
    `data-fade-right`, same length `--fynns-layout-scroll-edge-fade-length`) —
    **built into overlay `.fynns-scroll` hosts** (≥ **0.5.296** for tables;

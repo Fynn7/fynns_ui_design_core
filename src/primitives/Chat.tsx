@@ -21,6 +21,7 @@ import {
 import { ArrowUpIcon, ChevronDownIcon, MicIcon, StopSquareIcon } from "./icons";
 import { IconButton } from "./IconButton";
 import { Tooltip } from "./Tooltip";
+import { clearScrollEdgeFade, syncScrollEdgeFadeOnto } from "./scrollEdgeFade";
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -330,6 +331,19 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
     const canSubmit = value.trim().length > 0 && !busy && !disabled;
     const hasAttachments = attachments != null;
 
+    const syncComposerFade = useCallback(() => {
+      const input = localRef.current;
+      const field = input?.parentElement;
+      if (!(field instanceof HTMLElement) || !input) return;
+      // Masking an editable textarea displaces Chromium's selection painting.
+      // Paint the fades on its fixed field instead, using the input's metrics.
+      if (input.hasAttribute("data-scrollable")) {
+        syncScrollEdgeFadeOnto(input, field);
+      } else {
+        clearScrollEdgeFade(field);
+      }
+    }, []);
+
     useEffect(() => {
       return () => {
         if (skipEnterClearRafRef.current != null) {
@@ -386,6 +400,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       if (!el.value) {
         el.style.height = `${controlLine}px`;
         el.removeAttribute("data-scrollable");
+        syncComposerFade();
         setExpanded(hasAttachments);
         return;
       }
@@ -408,6 +423,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       if (shouldExpand && !expanded) {
         el.style.height = `${textLine}px`;
         el.removeAttribute("data-scrollable");
+        syncComposerFade();
         setExpanded(true);
         return;
       }
@@ -421,11 +437,28 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       } else {
         el.removeAttribute("data-scrollable");
       }
-    }, [hasAttachments, expanded]);
+      syncComposerFade();
+    }, [hasAttachments, expanded, syncComposerFade]);
 
     useLayoutEffect(() => {
       resize();
     }, [value, hasAttachments, expanded, resize]);
+
+    useLayoutEffect(() => {
+      const el = localRef.current;
+      if (!el) return;
+      el.addEventListener("scroll", syncComposerFade, { passive: true });
+      const ro = typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(syncComposerFade)
+        : null;
+      ro?.observe(el);
+      return () => {
+        el.removeEventListener("scroll", syncComposerFade);
+        ro?.disconnect();
+        const field = el.parentElement;
+        if (field instanceof HTMLElement) clearScrollEdgeFade(field);
+      };
+    }, [syncComposerFade]);
 
     const handleSubmit = (e?: FormEvent) => {
       e?.preventDefault();
