@@ -49,6 +49,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["按钮", "btn", "primary", "tonal", "ghost"],
   },
   {
+    id: "button-icon-label",
+    categoryId: "actions",
+    label: "Button · icon + label",
+    keywords: ["图标文字按钮", "icon and text", "icon label"],
+  },
+  {
     id: "split-button",
     categoryId: "actions",
     label: "SplitButton",

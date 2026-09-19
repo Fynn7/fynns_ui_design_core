@@ -1711,6 +1711,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </Button>
         </div>
         </GlobalsDemo>
+        <GlobalsDemo id="button-icon-label">
+        <div className="sandbox-globals-row">
+          <Button variant="tonal" size="sm">
+            <>
+              <EyeIcon size={16} aria-hidden />
+              {t("globals.btnViewDetails")}
+            </>
+          </Button>
+          <Button variant="ghost" size="sm">
+            <ClipboardIcon size={16} aria-hidden />
+            {t("globals.btnCopyText")}
+          </Button>
+        </div>
+        </GlobalsDemo>
         <GlobalsDemo id="split-button">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <SplitButton

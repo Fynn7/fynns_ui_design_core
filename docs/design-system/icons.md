@@ -29,6 +29,15 @@ Pick by meaning, not nearest shape:
 | Copy to clipboard | `ClipboardIcon` (+ Tooltip) | Labeled ghost `Button` “Copy …” in Card chrome |
 | Save defaults / draft save (icon chrome) | `SaveIcon` (+ Tooltip) | Labeled ghost `Button` “Save defaults” mid Select cluster |
 
+## Icon with a visible label
+
+Use a regular `Button` with an icon followed by text; reserve `IconButton` for
+icon-only actions. The Button label centers the glyph and text together, with
+the shared control gap. Live example: Components
+`#globals-demo-button-icon-label` ([source](../../examples/sandbox/src/pages/GlobalsPage.tsx))
+with `EyeIcon` + label and `ClipboardIcon` + label. The icon is decorative when
+the text already names the action, so pass `aria-hidden`.
+
 ## Bulk row check
 
 Hard ≥ 0.5.65: multi-select uses leading/icon **`Checkbox`** only — never map

@@ -1206,6 +1206,8 @@ const en = {
   "globals.formRecipeHelp":
     "Recipe hosts: `Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` intro → `FieldStack`(`FieldBlock` text…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → feedback / foot. Dialog foot: **one** `loading` (Extract); siblings `disabled` without rings. See AGENTS.md Toolbar / unit rhythm.",
   "globals.btnSmall": "Small",
+  "globals.btnViewDetails": "View details",
+  "globals.btnCopyText": "Copy text",
   "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
   "globals.btnTonal": "Tonal",
@@ -3644,6 +3646,8 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeHelp":
     "配方宿主：`Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` 引言 → `FieldStack`(`FieldBlock` 文本…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → 反馈 / 底栏。Dialog 底栏：**一颗** `loading`（Extract）；兄弟只 `disabled`、不画圈。见 AGENTS.md Toolbar / unit rhythm。",
   "globals.btnSmall": "小号",
+  "globals.btnViewDetails": "查看详情",
+  "globals.btnCopyText": "复制文本",
   "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",
   "globals.btnTonal": "色调",

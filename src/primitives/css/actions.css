@@ -52,6 +52,22 @@
   line-height: var(--fynns-line-height-body);
 }
 
+/* Labeled buttons may place an icon before text (including through a React
+ * Fragment). Center each box on the same cross axis instead of letting the
+ * inline SVG enlarge the line box and push the text below the icon. */
+.fynns-btn-label:has(> svg) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-2);
+}
+
+.fynns-btn-label:has(> svg) > svg {
+  display: block;
+  flex-shrink: 0;
+  margin-inline-end: 0;
+  vertical-align: initial;
+}
+
 /* OverflowTip inside the label (≥ **0.5.241**): cancel global flex width:0
  * so idle content-sized Buttons keep intrinsic width; capped hosts still
  * ellipsize via `.fynns-btn-label` / tip-label. */
