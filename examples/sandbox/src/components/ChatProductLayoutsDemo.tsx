@@ -12,6 +12,7 @@ import {
   NavigationDrawerItem,
   NavigationDrawerNewChat,
   PencilIcon,
+  RevealMore,
   Switch,
   TrashIcon,
   snackbar,
@@ -38,6 +39,7 @@ export function ChatProductLayoutsDemo() {
   const { t } = useLocale();
   const [navOpen, setNavOpen] = useState(true);
   const [sessionsEmpty, setSessionsEmpty] = useState(true);
+  const [sessionsExpanded, setSessionsExpanded] = useState(false);
   const [draft, setDraft] = useState("");
   const [activeSession, setActiveSession] = useState<"alpha" | "beta" | null>(
     null,
@@ -78,6 +80,7 @@ export function ChatProductLayoutsDemo() {
 
   const resetToNewChatLanding = () => {
     setSessionsEmpty(true);
+    setSessionsExpanded(false);
     setActiveSession(null);
     setDraft("");
   };
@@ -111,6 +114,7 @@ export function ChatProductLayoutsDemo() {
           checked={sessionsEmpty}
           onCheckedChange={(empty) => {
             setSessionsEmpty(empty);
+            setSessionsExpanded(false);
             if (empty) {
               setActiveSession(null);
             } else {
@@ -228,6 +232,17 @@ export function ChatProductLayoutsDemo() {
                       </DropdownMenu>
                     }
                   />
+                  <RevealMore
+                    canRevealMore={!sessionsExpanded}
+                    onRevealMore={() => setSessionsExpanded(true)}
+                    label={t("globals.listRevealMore")}
+                  />
+                  {sessionsExpanded ? (
+                    <NavigationDrawerItem
+                      label={t("globals.navDrawerSessionEntry")}
+                      onClick={() => snackbar(t("layouts.chatProductNewToast"))}
+                    />
+                  ) : null}
                 </>
               )}
             </NavigationDrawer>

@@ -584,6 +584,10 @@
   **10** / step **10**, ≥ **0.5.144**): slice in the app; foot = **tonal**
   **md** labeled Button (≥ **0.5.147** tonal; size back to **md** ≥ **0.5.149**),
   centered **outside** `.fynns-table-wrap`; pass locale (`更多` / `Show more`).
+  `RevealMore` owns an extra `--fynns-layout-reveal-more-clearance` on **both**
+  block sides, in addition to the host's normal sibling gap. This keeps the
+  expand action visually separate from any adjacent item or CTA; do not
+  replace it with a bare Button or tune consumer margins.
   Short tables, Dialog-hosted tables, and true page `Pagination` are exempt. Do
   not bounce an expanded window when polling only grows `total` — use `resetKey`
   for filter / source identity. Live `#table`.
@@ -593,9 +597,11 @@
   because ListItems are taller: foot **after** the List (unit-stack sibling);
   short lists / Dialog / `Pagination` exempt. Live `#list`. If a follow-up CTA
   comes after the foot, keep the foot and CTA in the same `.fynns-unit-stack`
-  so the existing `--fynns-layout-unit-stack-gap` remains between them; do not
-  add consumer margin, negative positioning, or a redundant control-cluster
-  wrapper around `RevealMore`. Live `#list`.
+  so the existing `--fynns-layout-unit-stack-gap` composes with the core
+  clearance on both sides; do not add consumer margin, negative positioning,
+  or a redundant control-cluster wrapper around `RevealMore`. In a
+  `NavigationDrawer`, render it directly after the last Item so the 4dp row
+  gap composes with the same clearance. Live `#list` / `#layouts-demo-chat-product`.
 - **DON'T** open a **DropdownMenu** that paints a near-viewport item tower —
   panel caps `max-height: min(70dvh, 20rem)` + `fynns-scroll` (≥ **0.5.250**);
   overlay thumbs for the menu itself use `--fynns-z-scroll-overlay-flyout`

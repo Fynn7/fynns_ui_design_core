@@ -237,7 +237,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Table H-scroll hard clip (no left/right edge fade) | DESIGN_SYSTEM philosophy / Content density (≥ **0.5.296**) | `#table` |
 | long Table dumps all rows | DESIGN_SYSTEM Hard rules / Content density | `#table` |
 | long List dumps all rows | DESIGN_SYSTEM Hard rules / Content density | `#list` |
-| RevealMore foot kisses a following CTA | DESIGN_SYSTEM Hard rules / Content density | `#list` |
+| RevealMore foot kisses preceding item or following CTA; consumer wraps it in a control cluster | DESIGN_SYSTEM Hard rules / Content density (`--fynns-layout-reveal-more-clearance` on both sides; direct sibling) | `#list` / `#layouts-demo-chat-product` |
 | List tree wrapped in divs / buttons in leading | DESIGN_SYSTEM content-density / List | `#list` |
 | ListItem kind via wrapping div / start rail | DESIGN_SYSTEM hard-rules | `#list` |
 | builtin ListItem looks like a square / chip island | DESIGN_SYSTEM content-density / List | `#list` |

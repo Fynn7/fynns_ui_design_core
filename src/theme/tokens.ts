@@ -1641,6 +1641,12 @@ export const LAYOUT_TOKENS = {
    * (Card body gap still contributes `unit-stack-gap`).
    */
   "form-cluster-gap": "2rem",
+  /**
+   * Extra breathing room around a progressive `RevealMore` foot (16dp).
+   * Adds to the host's own sibling rhythm: 20dp after a NavigationDrawerItem
+   * (4 + 16), 32dp after a List/Table in a Card or unit stack (16 + 16).
+   */
+  "reveal-more-clearance": "var(--fynns-space-lg)",
   /** Label → controls when the row stacks vertically (narrow). */
   "control-row-gap": "0.25rem",
   /** Label | controls when the row is horizontal. */

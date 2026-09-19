@@ -581,7 +581,9 @@ a.fynns-breadcrumb-link:visited {
 /*
  * Place as a Card / `.fynns-unit-stack` sibling **outside** `.fynns-table-wrap`
  * (not inside the horizontal scroll host). Default tonal + md Button, centered;
- * core hides the host when `canRevealMore` is false. Live: `#table` / `#list`.
+ * Core adds clearance on both block sides beyond the host's sibling rhythm;
+ * consumers must not wrap this in a control cluster to tune spacing.
+ * Core hides the host when `canRevealMore` is false. Live: `#table` / `#list`.
  */
 .fynns-reveal-more {
   box-sizing: border-box;
@@ -591,6 +593,7 @@ a.fynns-breadcrumb-link:visited {
   justify-content: center;
   width: 100%;
   min-width: 0;
+  margin-block: var(--fynns-layout-reveal-more-clearance);
 }
 
 /* ---------- Pagination ---------- */

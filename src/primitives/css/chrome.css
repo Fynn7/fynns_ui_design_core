@@ -2223,6 +2223,16 @@
   margin-block-start: var(--fynns-navdrawer-section-gap);
 }
 
+/* The drawer's 4dp sibling rule otherwise replaces RevealMore's own start
+ * margin (content.css loads before chrome.css). Compose both steps so a
+ * progressive action does not read as another destination row. */
+.fynns-nav-drawer-body > * + .fynns-reveal-more {
+  margin-block-start: calc(
+    var(--fynns-navdrawer-section-gap) +
+      var(--fynns-layout-reveal-more-clearance)
+  );
+}
+
 /*
  * Mode / destination **chrome band** ↔ adjacent body sibling. Uses
  * `--fynns-navdrawer-search-gap` (= layout `control-stack-gap` / 8dp) so
