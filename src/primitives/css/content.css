@@ -4125,7 +4125,8 @@ a.fynns-breadcrumb-link:visited {
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
-.fynns-code-block:hover .fynns-code-block-copy,
+.fynns-code-block:not(.fynns-code-block--copy-float):hover .fynns-code-block-copy,
+.fynns-code-block--copy-float > .fynns-code-block-copy:hover,
 .fynns-code-block-copy:has(:focus-visible) {
   opacity: 1;
   pointer-events: auto;
@@ -4146,6 +4147,12 @@ a.fynns-breadcrumb-link:visited {
   top: var(--fynns-space-sm);
   inset-inline-end: var(--fynns-space-sm);
   z-index: 2;
+}
+
+/* The headless copy target owns only its reserved corner. Keep that corner
+   hoverable while transparent; hovering the code or scroll rail stays clear. */
+.fynns-code-block--copy-float > .fynns-code-block-copy {
+  pointer-events: auto;
 }
 
 .fynns-code-block--copy-float > .fynns-code-block-pre,

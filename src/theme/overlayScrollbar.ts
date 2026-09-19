@@ -621,23 +621,25 @@ function scheduleUpdate(host: HTMLElement, state: HostState) {
   });
 }
 
-function axisMetrics(host: HTMLElement, axis: Axis) {
+function axisMetrics(host: HTMLElement, axis: Axis, rail: HTMLDivElement) {
   if (axis === "y") {
     const { scrollHeight, clientHeight, scrollTop } = host;
+    const railHeight = rail.getBoundingClientRect().height;
     const thumbSize = Math.max(
       MIN_THUMB_PX,
-      (clientHeight / Math.max(1, scrollHeight)) * clientHeight,
+      Math.min(railHeight, (clientHeight / Math.max(1, scrollHeight)) * railHeight),
     );
-    const thumbTravel = Math.max(0, clientHeight - thumbSize);
+    const thumbTravel = Math.max(0, railHeight - thumbSize);
     const scrollRange = Math.max(1, scrollHeight - clientHeight);
     return { thumbSize, thumbTravel, scrollRange, scrollPos: scrollTop };
   }
   const { scrollWidth, clientWidth, scrollLeft } = host;
+  const railWidth = rail.getBoundingClientRect().width;
   const thumbSize = Math.max(
     MIN_THUMB_PX,
-    (clientWidth / Math.max(1, scrollWidth)) * clientWidth,
+    Math.min(railWidth, (clientWidth / Math.max(1, scrollWidth)) * railWidth),
   );
-  const thumbTravel = Math.max(0, clientWidth - thumbSize);
+  const thumbTravel = Math.max(0, railWidth - thumbSize);
   const scrollRange = Math.max(1, scrollWidth - clientWidth);
   return { thumbSize, thumbTravel, scrollRange, scrollPos: scrollLeft };
 }
@@ -660,7 +662,7 @@ function beginDrag(
   e.stopPropagation();
 
   const onThumb = e.target === thumb || thumb.contains(e.target as Node);
-  let metrics = axisMetrics(host, axis);
+  let metrics = axisMetrics(host, axis, rail);
 
   if (!onThumb) {
     const railRect = rail.getBoundingClientRect();
@@ -672,7 +674,7 @@ function beginDrag(
         ? Math.min(1, Math.max(0, offset / metrics.thumbTravel))
         : 0;
     setScrollPos(host, axis, ratio * metrics.scrollRange);
-    metrics = axisMetrics(host, axis);
+    metrics = axisMetrics(host, axis, rail);
     updateHost(host, state);
   }
 
