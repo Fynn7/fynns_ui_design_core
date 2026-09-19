@@ -459,10 +459,12 @@
 
 /*
  * Shared disclosure motion: reveal ink with a true fade, never by dragging
- * an overflow edge through visible copy. Opening releases the layout row
- * immediately and fades content in over base. Closing runs shorter than
- * opening (M3 exit < enter): fades content out over fast, then settles
- * the now-invisible row to zero after the same fast delay.
+ * an overflow edge through visible copy. Opening snaps the layout row
+ * open immediately and fades content in over base — morphing 0fr→1fr
+ * under an overflow clip would wipe top-to-bottom and read as a bounce.
+ * Closing runs shorter than opening (M3 exit < enter): the row shrinks
+ * 1fr→0fr while the ink fades out, both over fast, so collapse glides
+ * shut instead of fading in place and snapping at the end.
  * Keeping this on the direct inner makes Collapsible, chat disclosures,
  * List detail, Tree, SearchBar/Autocomplete, and NavigationDrawer agree.
  */
@@ -471,12 +473,12 @@
   grid-template-rows: 0fr;
   min-width: 0;
   max-width: 100%;
-  transition: grid-template-rows 0s linear var(--fynns-duration-fast);
+  transition: grid-template-rows var(--fynns-duration-fast) var(--fynns-ease-out);
 }
 
 .fynns-expand[data-state="open"] {
   grid-template-rows: 1fr;
-  transition-delay: 0s;
+  transition: none;
 }
 
 .fynns-expand-inner {
