@@ -47,7 +47,7 @@ export type ListProps = HTMLAttributes<HTMLUListElement> & {
  * **never** a `Collapsible` / `Card` as a List child (`ul > div` + flex-shrink
  * crushes bordered shells to skeleton pills). Expand via the row `onClick`;
  * keep the leading chevron decorative (`aria-hidden`; `ChevronRight` rotates
- * when `aria-expanded` is set). Keep `detail` mounted — core morphs with
+ * when `aria-expanded` is set). Keep `detail` mounted — core fades with
  * `.fynns-expand`; do not `detail={open ? … : null}`.
  * @see https://m3.material.io/components/lists/overview
  */
@@ -167,7 +167,7 @@ function resolveLines(
  * are not a floating island. Path / link catalogs: headline + supporting
  * path + trailing ghost actions — not a padded `Surface` per row.
  * Expandable trees: `detail` stays in this `<li>`; set `aria-expanded` on
- * the row and **keep `detail` mounted** (core morphs via `.fynns-expand` —
+ * the row and **keep `detail` mounted** (core fades via `.fynns-expand` —
  * do not `detail={open ? … : null}`). Leading chevron stays `ChevronRight`;
  * open state rotates via `aria-expanded`. String `headline` /
  * `supportingText` / `trailingSupportingText` / `overline` use `OverflowTip`

@@ -457,26 +457,25 @@
   min-height: 0;
 }
 
-.fynns-collapsible-body {
-  opacity: 0;
-  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
-}
-
-/* Bidirectional height morph: body stays mounted; `open` ↔ `closed` both animate. */
+/*
+ * Shared disclosure motion: reveal ink with a true fade, never by dragging
+ * an overflow edge through visible copy. Opening releases the layout row
+ * immediately and fades content in. Closing fades content out first, then
+ * settles the now-invisible row to zero after the same base duration.
+ * Keeping this on the direct inner makes Collapsible, chat disclosures,
+ * List detail, Tree, SearchBar/Autocomplete, and NavigationDrawer agree.
+ */
 .fynns-expand {
   display: grid;
   grid-template-rows: 0fr;
   min-width: 0;
   max-width: 100%;
-  transition: grid-template-rows var(--fynns-duration-base) var(--fynns-ease-emphasized);
+  transition: grid-template-rows 0s linear var(--fynns-duration-base);
 }
 
 .fynns-expand[data-state="open"] {
   grid-template-rows: 1fr;
-}
-
-.fynns-expand[data-state="open"] .fynns-collapsible-body {
-  opacity: 1;
+  transition-delay: 0s;
 }
 
 .fynns-expand-inner {
@@ -485,9 +484,18 @@
   overflow: hidden;
 }
 
+.fynns-expand > .fynns-expand-inner {
+  opacity: 0;
+  transition: opacity var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-expand[data-state="open"] > .fynns-expand-inner {
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fynns-expand,
-  .fynns-collapsible-body,
+  .fynns-expand > .fynns-expand-inner,
   .fynns-collapsible-chevron,
   .fynns-collapsible-icon,
   .fynns-collapsible-head::before {

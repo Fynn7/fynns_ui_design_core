@@ -3914,7 +3914,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 /* Results share the expanded shell. Row highlight matches DropdownMenu items
    (`radius-3xl` long-strip) — one hover language for all dropdown lists.
    Inset from the shell edge so hover does not kiss the outer curve.
-   Height morph via shared `.fynns-expand` (open ↔ closed). */
+   Shared `.fynns-expand` supplies the soft ink fade + delayed close settle. */
 
 .fynns-search-bar-results {
   box-sizing: border-box;
@@ -3931,13 +3931,6 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   background: transparent;
   box-shadow: none;
 }
-
-/*
- * No opacity fade on docked results — height morph via `.fynns-expand` only.
- * A results fade made the field↔list hairline feel late (empty panel grows,
- * then content appears). Hairline stays on
- * `.fynns-search-bar--expanded > .fynns-search-bar-field`.
- */
 
 .fynns-search-bar-result {
   box-sizing: border-box;

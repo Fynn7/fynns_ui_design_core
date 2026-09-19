@@ -226,7 +226,7 @@
 
 .fynns-chat-message-collapse-chevron {
   flex-shrink: 0;
-  transition: transform var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-out);
 }
 
 .fynns-chat-message-collapse-toggle[aria-expanded="true"]
@@ -545,7 +545,7 @@
 .fynns-chat-thinking-chevron {
   flex-shrink: 0;
   color: inherit;
-  transition: transform var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-out);
 }
 
 .fynns-chat-thinking--open .fynns-chat-thinking-chevron,
@@ -561,12 +561,6 @@
   color: var(--fynns-color-text-muted);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  opacity: 0;
-  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
-}
-
-.fynns-expand[data-state="open"] > .fynns-expand-inner > .fynns-chat-thinking-body {
-  opacity: 1;
 }
 
 @keyframes fynns-chat-thinking-mark-pulse {
@@ -611,10 +605,6 @@
   }
 
   .fynns-chat-thinking-chevron {
-    transition: none;
-  }
-
-  .fynns-chat-thinking-body {
     transition: none;
   }
 }
@@ -712,7 +702,7 @@
 .fynns-chat-activity-chevron {
   flex-shrink: 0;
   color: inherit;
-  transition: transform var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-out);
 }
 
 .fynns-chat-activity--open .fynns-chat-activity-chevron,
@@ -726,15 +716,7 @@
   flex-direction: column;
   gap: 0;
   padding-block: var(--fynns-chatmessage-thinking-body-pad-block);
-  opacity: 0;
   overflow: visible;
-  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
-}
-
-.fynns-expand[data-state="open"]
-  > .fynns-expand-inner
-  > .fynns-chat-activity-steps {
-  opacity: 1;
 }
 
 /* Snap 0fr/1fr — never morph height. Grid-row easing + overflow clip
@@ -744,6 +726,12 @@
   width: 100%;
   transition: none;
   overflow: visible;
+}
+
+/* Streaming step sequencing owns its opacity; avoid a compounded disclosure fade. */
+.fynns-chat-activity-step-shell > .fynns-expand-inner {
+  opacity: 1;
+  transition: none;
 }
 
 /* Open shells must not clip the center→center rail into the next row. */
@@ -1008,6 +996,47 @@
   line-height: var(--fynns-line-height-snug);
 }
 
+.fynns-chat-activity-desc-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-chatmessage-activity-trigger-gap);
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.fynns-chat-activity-desc-trigger:focus {
+  outline: none;
+}
+
+.fynns-chat-activity-desc-trigger:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+  border-radius: var(--fynns-radius-sm);
+}
+
+.fynns-chat-activity-desc-trigger:hover .fynns-chat-activity-step-label {
+  color: var(--fynns-chat-secondary-hover);
+}
+
+.fynns-chat-activity-desc-chevron {
+  flex-shrink: 0;
+  color: inherit;
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-chat-activity-desc-trigger[aria-expanded="true"]
+  .fynns-chat-activity-desc-chevron {
+  transform: rotate(90deg);
+}
+
 .fynns-chat-activity-step--done .fynns-chat-activity-step-label {
   /* Completed copy stays readable — accent lives on the node (Timeline parity). */
   color: var(--fynns-color-text);
@@ -1154,7 +1183,8 @@ a.fynns-chat-activity-artifact:hover {
     visibility: visible;
   }
 
-  .fynns-chat-activity-chevron {
+  .fynns-chat-activity-chevron,
+  .fynns-chat-activity-desc-chevron {
     transition: none;
   }
 
