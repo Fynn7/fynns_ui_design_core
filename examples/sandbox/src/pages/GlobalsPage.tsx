@@ -34,6 +34,7 @@ import {
   ChatComposer,
   ChatMarkdown,
   ChatMessage,
+  ChatReveal,
   ChatScrollToBottom,
   ChatActivity,
   ChatActivityArtifact,
@@ -3501,6 +3502,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 >
                   <ChatMarkdown source={t("globals.chatAssistantMarkdown")} />
                 </ChatMessage>
+                <ChatReveal>
+                  <Surface variant="soft" padded>
+                    {t("globals.chatRevealCard")}
+                  </Surface>
+                </ChatReveal>
                 <ChatStreamingAssistant
                   key={chatStreamEpoch}
                   streaming={chatStreaming}

@@ -25,6 +25,7 @@ import {
 import { applyStreamingTail } from "./chatStreamingTail";
 import { isChatStackBlock } from "./chatBlockHost";
 import { RefreshIcon } from "./icons";
+import { ChatEntranceContext, useChatEntrance } from "./chatEntrance";
 
 export type ChatMessageRole = "user" | "assistant" | "system";
 
@@ -283,6 +284,11 @@ export function ChatMessage({
   ...rest
 }: ChatMessageProps) {
   const isSystem = role === "system";
+  const enter = useChatEntrance();
+  const [nestedReady, setNestedReady] = useState(false);
+  useEffect(() => {
+    setNestedReady(true);
+  }, []);
   const isAssistant = role === "assistant";
   const hasError =
     isAssistant && error != null && error !== false && error !== "";
@@ -331,11 +337,12 @@ export function ChatMessage({
   const showCollapseToggle = canCollapse && !isStreaming;
   const isCollapsed = canCollapse && !isStreaming && !expanded;
 
-  return (
+  const message = (
     <article
       {...rest}
       className={join(
         "fynns-chat-message",
+        enter && "fynns-chat-message--enter",
         `fynns-chat-message--${role}`,
         isStreaming && "fynns-chat-message--streaming",
         hasError && "fynns-chat-message--error",
@@ -420,5 +427,10 @@ export function ChatMessage({
         ) : null}
       </div>
     </article>
+  );
+  return (
+    <ChatEntranceContext.Provider value={nestedReady}>
+      {message}
+    </ChatEntranceContext.Provider>
   );
 }

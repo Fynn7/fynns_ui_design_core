@@ -364,6 +364,8 @@
   --fynns-chatmessage-activity-step-min-busy: var(--fynns-duration-presentation-hint);
   --fynns-chatmessage-activity-enter: var(--fynns-duration-activity);
   --fynns-chatmessage-activity-complete: var(--fynns-duration-activity);
+  --fynns-chat-entry-offset: 0.75rem;
+  --fynns-chat-entry-duration: var(--fynns-duration-slow);
   --fynns-chat-thread-gap: 2rem;
   --fynns-chat-thread-pad-inline: var(--fynns-layout-dialog-inset);
   --fynns-chat-thread-pad-block: var(--fynns-layout-content-pad-block);

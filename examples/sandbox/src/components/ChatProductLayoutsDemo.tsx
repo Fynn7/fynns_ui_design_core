@@ -1,7 +1,4 @@
 import {
-  Chat,
-  ChatComposer,
-  ChatThread,
   ClippedNavShell,
   DropdownMenu,
   DropdownMenuItem,
@@ -21,8 +18,7 @@ import { useState } from "react";
 import { useLocale } from "../i18n";
 import { SandboxHelp } from "./SandboxHelp";
 import { NavDrawerFooterAccount } from "./NavDrawerFooterAccount";
-import { ChatEmptySurfaceStarters } from "./ChatEmptySurfaceStarters";
-import { ChatNewChatLandingEmpty } from "./ChatNewChatLandingEmpty";
+import { ChatConversationDemo } from "./ChatConversationDemo";
 
 /**
  * Chat product / session host recipe — composite of recent session chrome +
@@ -40,7 +36,7 @@ export function ChatProductLayoutsDemo() {
   const [navOpen, setNavOpen] = useState(true);
   const [sessionsEmpty, setSessionsEmpty] = useState(true);
   const [sessionsExpanded, setSessionsExpanded] = useState(false);
-  const [draft, setDraft] = useState("");
+  const [demoEpoch, setDemoEpoch] = useState(0);
   const [activeSession, setActiveSession] = useState<"alpha" | "beta" | null>(
     null,
   );
@@ -82,22 +78,11 @@ export function ChatProductLayoutsDemo() {
     setSessionsEmpty(true);
     setSessionsExpanded(false);
     setActiveSession(null);
-    setDraft("");
+    setDemoEpoch((value) => value + 1);
   };
 
   /** New-chat landing: centered greeting + starter; composer pinned bottom. */
   const isNewChatLanding = sessionsEmpty;
-
-  const composer = (
-    <ChatComposer
-      value={draft}
-      onChange={setDraft}
-      ariaLabel={t("layouts.fillColumnComposerAria")}
-      placeholder={t("layouts.chatProductComposerPlaceholder")}
-      sendLabel={t("layouts.fillColumnSend")}
-      onSubmit={() => setDraft("")}
-    />
-  );
 
   return (
     <>
@@ -115,6 +100,7 @@ export function ChatProductLayoutsDemo() {
           onCheckedChange={(empty) => {
             setSessionsEmpty(empty);
             setSessionsExpanded(false);
+            setDemoEpoch((value) => value + 1);
             if (empty) {
               setActiveSession(null);
             } else {
@@ -250,48 +236,19 @@ export function ChatProductLayoutsDemo() {
         >
           <div className="fynns-destination-app-shell-canvas">
             <FillColumn>
-              <Chat
+              <ChatConversationDemo
+                key={demoEpoch}
                 label={t("layouts.chatProductChatLabel")}
-                className={
-                  isNewChatLanding ? "sandbox-chat--landing" : undefined
-                }
-              >
-                <ChatThread
-                  empty={
-                    isNewChatLanding ? (
-                      <ChatNewChatLandingEmpty
-                        items={starterItems}
-                        composer={composer}
-                        onSelect={(prompt) => {
-                          snackbar(
-                            t("globals.chatStarterSent", { prompt }),
-                            {
-                              dismissAriaLabel: t("globals.snackbarDismiss"),
-                            },
-                          );
-                        }}
-                      />
-                    ) : (
-                      <div className="fynns-unit-stack sandbox-chat-empty">
-                        <EmptyState title={t("globals.chatEmpty")} />
-                        <ChatEmptySurfaceStarters
-                          ariaLabel={t("globals.chatStarterAria")}
-                          items={starterItems}
-                          onSelect={(prompt) => {
-                            snackbar(
-                              t("globals.chatStarterSent", { prompt }),
-                              {
-                                dismissAriaLabel: t("globals.snackbarDismiss"),
-                              },
-                            );
-                          }}
-                        />
-                      </div>
-                    )
-                  }
-                />
-                {isNewChatLanding ? null : composer}
-              </Chat>
+                ariaLabel={t("layouts.fillColumnComposerAria")}
+                placeholder={t("layouts.chatProductComposerPlaceholder")}
+                sendLabel={t("layouts.fillColumnSend")}
+                starterItems={starterItems}
+                landing={isNewChatLanding}
+                onFirstSend={() => {
+                  setSessionsEmpty(false);
+                  setActiveSession("alpha");
+                }}
+              />
             </FillColumn>
           </div>
         </ClippedNavShell>

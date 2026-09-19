@@ -10,6 +10,31 @@
   box-sizing: border-box;
 }
 
+/* Only newly mounted content enters. ChatThread skips the initial history. */
+@keyframes fynns-chat-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--fynns-chat-entry-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fynns-chat-message--enter,
+.fynns-chat-reveal--enter {
+  animation: fynns-chat-content-enter var(--fynns-chat-entry-duration)
+    var(--fynns-ease-out) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-chat-message--enter,
+  .fynns-chat-reveal--enter {
+    animation: none;
+  }
+}
+
 /*
  * Dual placement — left/right resizable asides:
  * Host = aside **content** width (not viewport / full main). Composer = 100%.
@@ -2122,7 +2147,7 @@ a.fynns-chat-activity-artifact:hover {
 
 .fynns-chat-composer-primary-slot {
   order: 3;
-  /* Keep Send at the end when there is no leading (collapsed or expanded). */
+  /* Keep Send at the end, including expanded toolbars with no leading item. */
   margin-inline-start: auto;
 }
 
@@ -2140,8 +2165,6 @@ a.fynns-chat-activity-artifact:hover {
 .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-leading,
 .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-primary-slot {
   order: unset;
-  /* space-between owns placement — drop collapsed end-push. */
-  margin-inline-start: 0;
 }
 
 /* Expanded: leading takes free start space; labeled menus still cap+ellipsis. */

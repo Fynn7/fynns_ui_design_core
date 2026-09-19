@@ -876,6 +876,9 @@ export const CHATMESSAGE_TOKENS = {
  * Spec: `llm/CHAT_COMPOSER_LAYOUT.md`. `--fynns-chat-<key>`.
  */
 export const CHAT_TOKENS = {
+  /** New turns and caller-owned blocks rise gently into the conversation. */
+  "entry-offset": "0.75rem",
+  "entry-duration": "var(--fynns-duration-slow)",
   /**
    * Vertical gap between turns. ChatGPT clones use `gap-8` (2rem); live
    * turn shells also use `pb-10` (2.5rem) — lock the denser clone gap.

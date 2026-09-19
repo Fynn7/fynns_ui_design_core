@@ -375,6 +375,8 @@ export type {
 export { ChatComposerToggle } from "./primitives/ChatComposerToggle";
 export type { ChatComposerToggleProps } from "./primitives/ChatComposerToggle";
 export { ChatMessage } from "./primitives/ChatMessage";
+export { ChatReveal } from "./primitives/ChatReveal";
+export type { ChatRevealProps } from "./primitives/ChatReveal";
 export type {
   ChatMessageProps,
   ChatMessageRole,

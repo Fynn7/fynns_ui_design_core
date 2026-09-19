@@ -143,7 +143,13 @@ classes.
     (narrow hosts can hit update-depth loops). Cap:
     `--fynns-chat-composer-max-height` (13rem). Layout authority:
     [`llm/CHAT_COMPOSER_LAYOUT.md`](../../llm/CHAT_COMPOSER_LAYOUT.md).
-  - **Message extras:** `streaming` = last-glyph color pulse only while answer
+  - **Message entrance:** newly mounted `ChatMessage` rows enter with a
+    tokenized rise/fade after `ChatThread`'s first paint. Wrap keyed non-message
+    results in `ChatReveal` (including blocks added inside an existing answer);
+    initial history stays still, and reduced motion paints immediately. Main
+    and EndAside use the same behavior. Live `#layouts-demo-chat-product` /
+    `#layouts-demo-chat-aside`. See [`CHAT_MOTION.md`](../../llm/CHAT_MOTION.md).
+  - **Message lifecycle:** `streaming` = last-glyph color pulse only while answer
     text exists + `aria-busy`; `error`/`onRetry` = failed-generation footer;
     `thinking`/`ChatThinking` = single-block reasoning (Wave 1); `ChatActivity`/
     Step = multi-step tool tree (Wave 2 — **minimal** ≥ **0.5.272**: default

@@ -1681,6 +1681,8 @@ const en = {
   "globals.chatStreamingLabel": "Generating response",
   "globals.chatStreamFull":
     "Streaming is a UI flag: last-glyph color pulse while incomplete, then clear it when the reply finishes.",
+  "globals.chatRevealCard":
+    "This separate component enters the conversation through ChatReveal.",
   "globals.chatStreamStart": "Simulate stream",
   "globals.chatStreamReset": "Reset",
   "globals.chatError": "There was an error generating a response.",
@@ -4114,6 +4116,7 @@ const zh: Record<MessageKey, string> = {
   "globals.chatStreamingLabel": "正在生成回复",
   "globals.chatStreamFull":
     "streaming 是 UI 标志：未完成时末字换色脉冲，回复结束后关闭即可。",
+  "globals.chatRevealCard": "这个独立组件通过 ChatReveal 滑入对话。",
   "globals.chatStreamStart": "模拟流式输出",
   "globals.chatStreamReset": "重置",
   "globals.chatError": "生成回复时出错。",
