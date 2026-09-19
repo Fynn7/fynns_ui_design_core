@@ -1405,6 +1405,8 @@ export const FOCUS_TOKENS = {
 
 /** Generic layout sizes for modals / sheets / tooltips / chrome. `--fynns-layout-<key>`. */
 export const LAYOUT_TOKENS = {
+  /** Plain Table text caps at a share of the viewport, with a desktop ceiling. */
+  "table-text-max-width": "min(40vw, 32rem)",
   "dialog-max-width": "32rem",
   /** Within M3 basic dialog max (560dp). Ceiling only — panel is content-fit. */
   "dialog-max-width-sm": "24rem",

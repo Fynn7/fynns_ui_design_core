@@ -1064,36 +1064,34 @@ function TableRevealMoreDemo() {
 
   return (
     <Card title={t("globals.tableRevealCaption")} chrome="plain">
-      <div className="fynns-table-wrap fynns-scroll">
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableHeaderCell>{t("globals.tableColName")}</TableHeaderCell>
-              <TableHeaderCell>{t("globals.tableColStatus")}</TableHeaderCell>
-              <TableHeaderCell align="end">
-                {t("globals.tableColQty")}
-              </TableHeaderCell>
-              <TableHeaderCell align="end">
-                {t("globals.tableColCache")}
-              </TableHeaderCell>
-              <TableHeaderCell align="end">
-                {t("globals.tableColTotal")}
-              </TableHeaderCell>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeaderCell>{t("globals.tableColName")}</TableHeaderCell>
+            <TableHeaderCell>{t("globals.tableColStatus")}</TableHeaderCell>
+            <TableHeaderCell align="end">
+              {t("globals.tableColQty")}
+            </TableHeaderCell>
+            <TableHeaderCell align="end">
+              {t("globals.tableColCache")}
+            </TableHeaderCell>
+            <TableHeaderCell align="end">
+              {t("globals.tableColTotal")}
+            </TableHeaderCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.status}</TableCell>
+              <TableCell align="end">{row.qty}</TableCell>
+              <TableCell align="end">{row.cache}</TableCell>
+              <TableCell align="end">{row.total}</TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.status}</TableCell>
-                <TableCell align="end">{row.qty}</TableCell>
-                <TableCell align="end">{row.cache}</TableCell>
-                <TableCell align="end">{row.total}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+          ))}
+        </TableBody>
+      </Table>
       <RevealMore
         canRevealMore={canRevealMore}
         onRevealMore={revealMore}
@@ -7613,6 +7611,17 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 </TableRow>
               </TableHead>
               <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <div>sample/catalog-item-with-an-extremely-long-identifier-for-table-overflow-and-a-second-descriptive-segment</div>
+                    <FieldHint>{t("globals.tableMapManual")}</FieldHint>
+                  </TableCell>
+                  <TableCell>Ready</TableCell>
+                  <TableCell align="end">8</TableCell>
+                  <TableCell align="end">16M</TableCell>
+                  <TableCell align="end">24M</TableCell>
+                  <TableCell>sample/ink-35b</TableCell>
+                </TableRow>
                 <TableRow>
                   <TableCell>sample/ink-bench-16k</TableCell>
                   <TableCell>Ready</TableCell>

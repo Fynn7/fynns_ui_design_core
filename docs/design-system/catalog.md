@@ -227,7 +227,8 @@ classes.
   `outlined`|`filled`|`elevated`|`soft` — soft = surface-2, same paint as Banner
   default; `interactive` = M3 state-layer large-button hover/press ≥ **0.5.167**
   (inset focus ring ≥ **0.5.168**); `fill` only when parent height-resolved), Carousel, Divider, Table (host
-  `.fynns-table-wrap.fynns-scroll`; nowrap + max-content; cell status =
+  built-in `.fynns-table-wrap.fynns-scroll`; nowrap + max-content, with
+  clipped plain-text cells capped and tipped by core; cell status =
   `.fynns-table-meta` never Chip), **`RevealMore` + `useRevealMore`** (long
   Card / PageScroll catalogs — Table default **10**/step **10** ≥ **0.5.144**;
   List pass **5**/step **5** via `REVEAL_MORE_LIST_DEFAULT_*` ≥ **0.5.145**;

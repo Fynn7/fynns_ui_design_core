@@ -1,8 +1,17 @@
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  type ReactNode,
+  type ReactElement,
+} from "react";
 import type {
   HTMLAttributes,
   TdHTMLAttributes,
   ThHTMLAttributes,
 } from "react";
+import { FieldHint } from "./FieldHint";
+import { OverflowTip } from "./OverflowTip";
 
 export type TableAlign = "start" | "center" | "end";
 
@@ -19,10 +28,11 @@ export type TableProps = HTMLAttributes<HTMLTableElement> & {
  * Native `<table>` with `fynns-table` chrome. Compose with `TableHead` /
  * `TableBody` / `TableRow` / `TableHeaderCell` / `TableCell` / `TableCaption`.
  *
- * Host inside `.fynns-table-wrap.fynns-scroll`: cells stay `nowrap` and the
- * table grows past the wrap (`width: max-content; min-width: 100%`) so dense
- * columns scroll horizontally instead of crushing / CJK-shattering. Overlay
- * scrollbars map vertical wheel → `scrollLeft` when the wrap has H overflow
+ * Includes a `.fynns-table-wrap.fynns-scroll` host. Cells stay `nowrap` and
+ * the table grows past the host when dense columns need horizontal scrolling.
+ * Plain text cells cap their width and show an ellipsis with a Tooltip only
+ * when clipped. Existing external `.fynns-table-wrap` hosts remain supported.
+ * Overlay scrollbars map vertical wheel → `scrollLeft` when the wrap has H overflow
  * and cannot scroll further on Y (edge trap; opt out: `data-fynns-wheel-x="off"`).
  * Mid-scroll inline edges soft-mask via `data-fade-left` / `data-fade-right`
  * (≥ **0.5.296** — same family as PageScroll block fades). Live `#table`.
@@ -33,15 +43,47 @@ export function Table({
   ...rest
 }: TableProps) {
   return (
-    <table
-      {...rest}
-      className={join(
-        "fynns-table",
-        stickyHeader && "fynns-table--sticky-header",
-        className,
-      )}
-    />
+    <div className="fynns-table-wrap fynns-scroll">
+      <table
+        {...rest}
+        className={join(
+          "fynns-table",
+          stickyHeader && "fynns-table--sticky-header",
+          className,
+        )}
+      />
+    </div>
   );
+}
+
+/** Keep rich/interactive cell content intact; tip only text-only blocks. */
+function tableCellText(children: ReactNode): ReactNode {
+  if (typeof children === "string" || typeof children === "number") {
+    return (
+      <OverflowTip content={String(children)} tipClassName="fynns-table-text">
+        {children}
+      </OverflowTip>
+    );
+  }
+  return Children.map(children, (child) => {
+    if (!isValidElement<{ children?: ReactNode }>(child)) return child;
+    const text = child.props.children;
+    const isTextBlock =
+      child.type === "div" ||
+      child.type === "span" ||
+      child.type === "p" ||
+      child.type === FieldHint;
+    if (!isTextBlock || (typeof text !== "string" && typeof text !== "number")) {
+      return child;
+    }
+    return cloneElement(child as ReactElement<{ children?: ReactNode }>, {
+      children: (
+        <OverflowTip content={String(text)} tipClassName="fynns-table-text">
+          {text}
+        </OverflowTip>
+      ),
+    });
+  });
 }
 
 export type TableHeadProps = HTMLAttributes<HTMLTableSectionElement>;
@@ -76,6 +118,7 @@ export type TableHeaderCellProps = Omit<
 export function TableHeaderCell({
   align = "start",
   className,
+  children,
   ...rest
 }: TableHeaderCellProps) {
   return (
@@ -86,7 +129,9 @@ export function TableHeaderCell({
         `fynns-table-cell--align-${align}`,
         className,
       )}
-    />
+    >
+      {tableCellText(children)}
+    </th>
   );
 }
 
@@ -100,6 +145,7 @@ export type TableCellProps = Omit<
 export function TableCell({
   align = "start",
   className,
+  children,
   ...rest
 }: TableCellProps) {
   return (
@@ -110,7 +156,9 @@ export function TableCell({
         `fynns-table-cell--align-${align}`,
         className,
       )}
-    />
+    >
+      {tableCellText(children)}
+    </td>
   );
 }
 

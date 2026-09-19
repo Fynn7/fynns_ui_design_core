@@ -3907,6 +3907,12 @@ a.fynns-breadcrumb-link:visited {
   min-width: 0;
 }
 
+/* When an older caller supplies a scroll host, preserve that host's size and
+ * wheel behavior while the built-in host contributes no second scroll area. */
+.fynns-table-wrap > .fynns-table-wrap {
+  display: contents;
+}
+
 .fynns-table {
   /* Fill when short; grow past the wrap when columns need width → H-scroll. */
   width: max-content;
@@ -3932,6 +3938,20 @@ a.fynns-breadcrumb-link:visited {
   /* Prevent CJK character-stack when the host is narrow. */
   white-space: nowrap;
   word-break: keep-all;
+}
+
+/* Plain text labels, including text-only div / FieldHint cell children. */
+.fynns-table-text.fynns-overflow-tip.fynns-tooltip-trigger {
+  width: max-content;
+  max-width: var(--fynns-layout-table-text-max-width);
+}
+
+.fynns-table-cell--align-center .fynns-table-text {
+  margin-inline: auto;
+}
+
+.fynns-table-cell--align-end .fynns-table-text {
+  margin-inline-start: auto;
 }
 
 /* Table-cell status / mapping kind — muted caption, not Chip.

@@ -561,6 +561,7 @@
   --fynns-focus-ring-offset-control: 2px;
   --fynns-focus-ring-offset-input: 1px;
   --fynns-focus-border-mix: 12%;
+  --fynns-layout-table-text-max-width: min(40vw, 32rem);
   --fynns-layout-dialog-max-width: 32rem;
   --fynns-layout-dialog-max-width-sm: 24rem;
   --fynns-layout-dialog-max-width-md: 32rem;
