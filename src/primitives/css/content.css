@@ -460,8 +460,9 @@
 /*
  * Shared disclosure motion: reveal ink with a true fade, never by dragging
  * an overflow edge through visible copy. Opening releases the layout row
- * immediately and fades content in. Closing fades content out first, then
- * settles the now-invisible row to zero after the same base duration.
+ * immediately and fades content in over base. Closing runs shorter than
+ * opening (M3 exit < enter): fades content out over fast, then settles
+ * the now-invisible row to zero after the same fast delay.
  * Keeping this on the direct inner makes Collapsible, chat disclosures,
  * List detail, Tree, SearchBar/Autocomplete, and NavigationDrawer agree.
  */
@@ -470,7 +471,7 @@
   grid-template-rows: 0fr;
   min-width: 0;
   max-width: 100%;
-  transition: grid-template-rows 0s linear var(--fynns-duration-base);
+  transition: grid-template-rows 0s linear var(--fynns-duration-fast);
 }
 
 .fynns-expand[data-state="open"] {
@@ -493,9 +494,15 @@
   opacity: 1;
 }
 
+/* Exit fade matches the fast close settle above. */
+.fynns-expand:not([data-state="open"]) > .fynns-expand-inner {
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-out);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fynns-expand,
   .fynns-expand > .fynns-expand-inner,
+  .fynns-expand:not([data-state="open"]) > .fynns-expand-inner,
   .fynns-collapsible-chevron,
   .fynns-collapsible-icon,
   .fynns-collapsible-head::before {
