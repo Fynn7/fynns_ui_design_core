@@ -72,7 +72,9 @@ export function ensureNoStoreDevHeader(source) {
     if (!headers) {
       // Do not add a duplicate property when headers is computed elsewhere.
       if (/(?:^|[,\n])\s*headers\s*:/.test(source.slice(server.open + 1, server.close))) return null;
-      return source.slice(0, server.open + 1) + `\n    ${NO_STORE_HEADER}` + source.slice(server.open + 1);
+      const lineStart = source.lastIndexOf("\n", server.open) + 1;
+      const indent = source.slice(lineStart, server.open).match(/^\s*/)?.[0] ?? "";
+      return source.slice(0, server.open + 1) + `\n${indent}  ${NO_STORE_HEADER}` + source.slice(server.open + 1);
     }
     const existing = cacheControl(source, headers);
     if (existing) {
@@ -88,5 +90,5 @@ export function ensureNoStoreDevHeader(source) {
   const root = /\bdefineConfig\s*\(\s*\{|\bexport\s+default\s*\{/.exec(source);
   if (!root) return null;
   const open = root.index + root[0].lastIndexOf("{");
-  return source.slice(0, open + 1) + `\n  server: { ${NO_STORE_HEADER} },` + source.slice(open + 1);
+  return source.slice(0, open + 1) + '\n  server: { headers: { "Cache-Control": "no-store" } },' + source.slice(open + 1);
 }

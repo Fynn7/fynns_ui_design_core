@@ -62,6 +62,9 @@ Vite-green / browser-red blank page.
 
 **Monorepo:** bump / link in the **app package** that owns `predev` (e.g.
 `apps/web`), not only at the git root — nested `node_modules` wins for Vite.
+`install-as-npm.mjs` redirects a root target to the sole UI app package and
+removes only its own mistaken hooks from a parent package without the UI
+dependency. With multiple UI apps, pass each package explicitly.
 See [`llm/CONSUME.md`](../llm/CONSUME.md) **Monorepo bump**.
 
 ## Local core development
@@ -84,6 +87,9 @@ consumer-visible changes:
 consumer Vite configs. A browser with a previously cached response can require
 one hard reload or cache clear during this migration. Future responses carry
 `no-store`, so subsequent linked-core updates do not reuse that stale module.
+For an already wired consumer with custom app scripts, use
+`node ../fynns_ui_design_core/scripts/install-as-npm.mjs --target <app> --dev-cache-only`
+to change only the Vite header.
 
 ## Legacy submodule bump workflows (removed)
 

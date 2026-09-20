@@ -52,6 +52,10 @@
       "description": "Dependency already present; only patch .npmrc / Vite / tsconfig / hooks / rule files.",
       "argv": ["node", "scripts/install-as-npm.mjs", "--target", "<CONSUMER_ROOT>", "--wire-only", "--json"]
     },
+    "repairDevCache": {
+      "description": "Existing consumer: patch only the Vite dev Cache-Control: no-store header; preserve custom scripts and rule files.",
+      "argv": ["node", "scripts/install-as-npm.mjs", "--target", "<CONSUMER_ROOT>", "--dev-cache-only", "--json"]
+    },
     "checkExports": {
       "description": "Hard gate: every named @fynns/ui import must exist on the linked barrel.",
       "argv": ["node", "scripts/check-ui-exports.mjs", "--target", "<CONSUMER_ROOT>", "--json"]

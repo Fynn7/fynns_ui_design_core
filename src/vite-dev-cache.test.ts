@@ -35,7 +35,9 @@ describe("Vite dev cache contract", () => {
     const next = ensureNoStoreDevHeader(stale);
     expect(hasNoStoreDevHeader(next!)).toBe(true);
     expect(next).not.toContain("max-age=31536000");
-    expect(hasNoStoreDevHeader(ensureNoStoreDevHeader("export default defineConfig({ plugins: [] });")!)).toBe(true);
+    const added = ensureNoStoreDevHeader("export default defineConfig({ plugins: [] });");
+    expect(hasNoStoreDevHeader(added!)).toBe(true);
+    expect(added).not.toContain("}, },");
   });
 
   it("leaves computed headers for manual review", () => {

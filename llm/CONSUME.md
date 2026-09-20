@@ -225,11 +225,16 @@ semver is newer and FF is impossible); a **dirty** or **ahead** sibling is
 soft-skipped with a notice (`FYNNS_UI_STRICT_SIBLING_SYNC=1` hard-fails;
 `FYNNS_UI_SKIP_SIBLING_SYNC=1` skips while editing core).
 
-**`scripts/install-as-npm.mjs --target <app>`** — resolves the nearest
-`package.json` above `--target` (monorepo apps) and the git root (for the Cursor
-rule / `AGENTS.md`). Flags: `--sibling` (default: safe `.npmrc` + `file:`),
+**`scripts/install-as-npm.mjs --target <app>`** — resolves the Vite app package
+that owns the UI dependency and the git root (for the Cursor rule / `AGENTS.md`).
+From a monorepo root it selects the sole UI app; if multiple UI apps exist,
+pass `--target` for one app. It also removes installer-generated hooks left on
+a parent package without the UI dependency, even when targeting the app directly.
+Existing app-owned gate wrappers
+are preserved. Flags: `--sibling` (default: safe `.npmrc` + `file:`),
 `--packages` (GitHub Packages, publishers only — needs a token), `--check`,
-`--wire-only` / `--skip-install`, `--sync-consumer-rule`, `--dry-run`,
+`--wire-only` / `--skip-install`, `--dev-cache-only` (patch Vite header only),
+`--sync-consumer-rule`, `--dry-run`,
 `--vite <file>`, `--tsconfig <file>`, `--json`. Wires `fynns-ui:gate`
 (`ensure-sibling --update` + `check-ui-exports`) and the soft registry notice
 `fynns-ui:check-update` (`FYNNS_UI_SKIP_UPDATE_CHECK=1` silences; cache
@@ -237,12 +242,12 @@ rule / `AGENTS.md`). Flags: `--sibling` (default: safe `.npmrc` + `file:`),
 `"fynnsUi": { "minVersion": "0.5.x" }`.
 
 **`scripts/check-ui-exports.mjs --target <app>`** — hard gate: every named
-import from `@fynns/ui` must exist on the linked barrel (prevents blank pages
-after a stale sibling).
+import from `@fynns/ui` must exist on the linked barrel, and Vite dev responses
+must use `Cache-Control: no-store` (prevents stale ESM blank pages).
 
-**Monorepo:** run the scripts against the app package that owns `predev`
-(e.g. `apps/web`), not only the git root — Vite resolves the nested
-`node_modules` first.
+**Monorepo:** prefer `--target` at the app package that owns `predev` (e.g.
+`apps/web`); Vite resolves its nested `node_modules` first. A root target is
+accepted when the installer can identify exactly one UI app.
 
 **E401 on install:** a leftover Packages `.npmrc` (`npm.pkg.github.com` /
 empty `${NODE_AUTH_TOKEN}`). Switch back to sibling `file:` + the safe
