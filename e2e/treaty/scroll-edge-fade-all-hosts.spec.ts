@@ -77,6 +77,28 @@ test("Table wrap keeps its horizontal fade when vertically capped", async ({ pag
   expect(mask.composite).toContain("intersect");
 });
 
+test("RTL table fades the physically clipped horizontal edge", async ({ page }) => {
+  await resetSandboxSession(page);
+  await openGlobalsDemo(page, "table", "table");
+  const wrap = globalsDemo(page, "table").locator(
+    ".fynns-table-wrap.sandbox-table-h-scroll",
+  );
+  await wrap.evaluate((el) => {
+    const host = el as HTMLElement;
+    host.style.direction = "rtl";
+    host.scrollLeft = 0;
+  });
+  await expect(wrap).toHaveAttribute("data-fade-left", "");
+  await expect(wrap).not.toHaveAttribute("data-fade-right");
+
+  await wrap.evaluate((el) => {
+    const host = el as HTMLElement;
+    host.scrollLeft = -(host.scrollWidth - host.clientWidth);
+  });
+  await expect(wrap).toHaveAttribute("data-fade-right", "");
+  await expect(wrap).not.toHaveAttribute("data-fade-left");
+});
+
 test("ChatComposer fades capped text without masking the caret", async ({ page }) => {
   await resetSandboxSession(page);
   await openGlobalsDemo(page, "chat", "Chat");

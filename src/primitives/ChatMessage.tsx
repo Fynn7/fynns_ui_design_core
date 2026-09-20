@@ -374,6 +374,7 @@ export function ChatMessage({
                 "fynns-chat-message-body",
                 isCollapsed && "fynns-chat-message-body--collapsed",
               )}
+              onFocusCapture={isCollapsed ? () => setExpanded(true) : undefined}
             >
               {renderBodyChildren(bodyChildren, showCursor)}
             </div>

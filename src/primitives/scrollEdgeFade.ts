@@ -33,7 +33,7 @@ function writeScrollEdgeFadeAttrs(
     clientHeight: number;
     clientWidth: number;
   },
-  axes: { y: boolean; x: boolean },
+  axes: { y: boolean; x: boolean; rtl: boolean },
 ): void {
   const maxY = axes.y ? Math.max(0, metrics.scrollHeight - metrics.clientHeight) : 0;
   const canDown = maxY > 1 && metrics.scrollTop < maxY - 1;
@@ -44,8 +44,11 @@ function writeScrollEdgeFadeAttrs(
   else target.removeAttribute("data-fade-top");
 
   const maxX = axes.x ? Math.max(0, metrics.scrollWidth - metrics.clientWidth) : 0;
-  /* Use absolute scrollLeft so RTL / negative-scroll engines still gate. */
-  const left = Math.abs(metrics.scrollLeft);
+  /* Modern RTL scroll hosts start at the physical right with scrollLeft = 0
+   * and move negative toward the left. Fade the physical clipped edge. */
+  const left = axes.rtl
+    ? maxX - Math.abs(metrics.scrollLeft)
+    : Math.abs(metrics.scrollLeft);
   const canRight = maxX > 1 && left < maxX - 1;
   const canLeft = maxX > 1 && left > 1;
   if (canRight) target.setAttribute("data-fade-right", "");
@@ -58,11 +61,15 @@ export function syncScrollEdgeFade(el: HTMLElement): void {
   writeScrollEdgeFadeAttrs(el, el, scrollableAxes(el));
 }
 
-function scrollableAxes(el: HTMLElement): { y: boolean; x: boolean } {
+function scrollableAxes(el: HTMLElement): { y: boolean; x: boolean; rtl: boolean } {
   const css = getComputedStyle(el);
   const canScroll = (overflow: string) =>
     overflow === "auto" || overflow === "scroll" || overflow === "overlay";
-  return { y: canScroll(css.overflowY), x: canScroll(css.overflowX) };
+  return {
+    y: canScroll(css.overflowY),
+    x: canScroll(css.overflowX),
+    rtl: css.direction === "rtl",
+  };
 }
 
 /**
