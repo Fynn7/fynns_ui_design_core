@@ -80,7 +80,13 @@ export type ChatActivityStepProps = Omit<
    * `status` flips — AGENTS.md **Label tense**.
    */
   label: ReactNode;
-  /** Optional supporting copy under the title (active / narrative steps). */
+  /**
+   * Optional supporting copy under the title (active / narrative steps).
+   * When present, the title becomes a disclosure trigger; copy starts open
+   * and can be collapsed independently from the surrounding activity tree.
+   * The last non-empty copy is retained when this step reaches `done`, so
+   * completion does not remove the disclosure or its context.
+   */
   description?: ReactNode;
   /** Optional trailing artifact chip (`ChatActivityArtifact` or custom node). */
   artifact?: ReactNode;
@@ -217,7 +223,8 @@ export function ChatActivityArtifact({
  * Icon | headline share a dedicated `step-row` band (form-style floor +
  * measured max height across open steps) so glyph, label, and artifact
  * vertically center together. Description sits under that band, indented
- * to the copy column. New streaming rows snap `.fynns-expand` `0fr`/`1fr`
+ * to the copy column, with a title disclosure that starts open. New
+ * streaming rows snap `.fynns-expand` `0fr`/`1fr`
  * (no height transition) and fade the **whole step** (opacity only —
  * no translateY). Animating `0fr`→`1fr` inside `overflow: hidden`
  * clip-wipes the tree top-to-bottom and reads as a bounce. Node + rail
@@ -237,7 +244,15 @@ export function ChatActivityStep({
   ...rest
 }: ChatActivityStepProps) {
   const stream = useContext(ChatActivityStream);
+  const descriptionId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
+  const retainedDescriptionRef = useRef<{
+    cycle: number;
+    value: ReactNode | undefined;
+  }>({
+    cycle: stream.cycle,
+    value: description != null && description !== "" ? description : undefined,
+  });
   const seenActiveRef = useRef(status === "active");
   const prevStatusRef = useRef(status);
   const cycleSeenRef = useRef(stream.cycle);
@@ -256,6 +271,7 @@ export function ChatActivityStep({
   const [queued, setQueued] = useState(initialMotion.queued);
   const [entering, setEntering] = useState(initialMotion.entering);
   const [expandOpen, setExpandOpen] = useState(initialMotion.expandOpen);
+  const [descriptionOpen, setDescriptionOpen] = useState(true);
   const enterPlayedRef = useRef(false);
   const enteringRef = useRef(false);
   enteringRef.current = entering;
@@ -420,6 +436,29 @@ export function ChatActivityStep({
   }, [stream.cycle, status, queued]);
 
   const visualStatus: ChatActivityStepStatus = holding ? "active" : status;
+  const currentDescription =
+    description != null && description !== "" ? description : undefined;
+  if (retainedDescriptionRef.current.cycle !== stream.cycle) {
+    retainedDescriptionRef.current = {
+      cycle: stream.cycle,
+      value: currentDescription,
+    };
+  } else if (currentDescription !== undefined) {
+    retainedDescriptionRef.current.value = currentDescription;
+  }
+  const displayedDescription =
+    currentDescription ??
+    (status === "done" ? retainedDescriptionRef.current.value : undefined);
+  const hasDescription = displayedDescription !== undefined;
+  const labelNode = (
+    <span className="fynns-chat-activity-step-label">
+      {overflowTipText(label) != null ? (
+        <OverflowTip content={String(label)}>{label}</OverflowTip>
+      ) : (
+        label
+      )}
+    </span>
+  );
   const leading =
     icon === null ? null : icon !== undefined ? (
       icon
@@ -475,18 +514,43 @@ export function ChatActivityStep({
               {leading}
             </span>
             <div className="fynns-chat-activity-headline">
-              <span className="fynns-chat-activity-step-label">
-                {overflowTipText(label) != null ? (
-                  <OverflowTip content={String(label)}>{label}</OverflowTip>
-                ) : (
-                  label
-                )}
-              </span>
+              {hasDescription ? (
+                <button
+                  type="button"
+                  className="fynns-chat-activity-desc-trigger"
+                  aria-expanded={descriptionOpen}
+                  aria-controls={descriptionId}
+                  onClick={() => setDescriptionOpen((current) => !current)}
+                >
+                  {labelNode}
+                  <ChevronRightIcon
+                    className="fynns-chat-activity-desc-chevron"
+                    size={ICON_SIZE}
+                    aria-hidden
+                  />
+                </button>
+              ) : (
+                labelNode
+              )}
               {artifact}
             </div>
           </div>
-          {description != null && description !== "" ? (
-            <div className="fynns-chat-activity-desc">{description}</div>
+          {hasDescription ? (
+            <div
+              className="fynns-expand fynns-chat-activity-desc-expand"
+              data-state={descriptionOpen ? "open" : "closed"}
+              aria-hidden={!descriptionOpen}
+            >
+              <div className="fynns-expand-inner">
+                <div
+                  id={descriptionId}
+                  className="fynns-chat-activity-desc"
+                  inert={descriptionOpen ? undefined : true}
+                >
+                  {displayedDescription}
+                </div>
+              </div>
+            </div>
           ) : null}
         </div>
       </div>

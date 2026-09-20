@@ -75,11 +75,12 @@ Anything else must be deleted or kept as a non-exported internal.
 
 | Removed | Consumer fix |
 | --- | --- |
-| `Badge` / `BadgeProps` / `BadgeSize` / `BadgeVariant` / `.fynns-badge` / `.fynns-badge--*` | Non-M3 outlined pill labels (clashed with InfoHint / inline chrome). Use `Chip` (interactive), `InlineAlert` / `Banner` (status), or `BadgedBox` + `NavigationRailBadge` (notification overlay). Do not revive pill `Badge`. |
+| `Badge` / `BadgeProps` / `BadgeSize` / `BadgeVariant` / `.fynns-badge` / `.fynns-badge--*` | Non-M3 outlined pill labels (clashed with InfoHint / inline chrome). Use `Chip` (interactive), `InlineAlert` / `Banner` (status), or the navigation bar's built-in indicator for counts. Do not revive pill `Badge`. |
+| `BadgedBox` / `BadgedBoxProps` / `.fynns-badged-box` | Notification badge overlay — fully removed. Use the nav rail's own indicator, or rely on `IconButton` `loading` + Tooltip to convey activity count and status (e.g., ActivityIndicator). Do not stack arbitrary badges over buttons. |
 | `toast` / `Toaster` / `Toast` / `ToastProvider` / `useToast` | Use `snackbar` + `SnackbarHost`. Do not revive toast/sonner names. |
 | `Popover` | Build a local anchored panel, or use `DropdownMenu` / `Tooltip` where they fit. |
 | `SearchInput` | Use `SearchBar` (chrome) or `Input` (dense forms). |
-| `Counter` | `Input type="number"` (+ steppers if needed in the app). |
+| `Counter` | `NumberInput` (custom steppers). Do **not** use bare `Input type="number"` (UA spinners — not fynns). |
 | `ToggleControl` | Prefer `Checkbox` / `Radio` / `Switch` / `ToggleGroup`. |
 | `SwitchSize` / Switch `size` prop (`md` / `sm`) | Dense track only (former sm ~39×24). Drop the `size` prop; `--fynns-toggle-*-sm` keys removed — use `--fynns-toggle-track-*` etc. Do **not** treat `Switch` itself as removed. |
 | `InfoBanner` / `WarningBanner` / `ErrorBanner` / `SuccessBanner` / `AlertMessageBase` | Use `InlineAlert` for in-panel severity, or chrome `Banner`. Do not revive Alert `*Banner` names. |
@@ -109,7 +110,7 @@ as a hard fail.
 
 | Symbol | Notes |
 | --- | --- |
-| `Dialog` / `DialogShell` / `ConfirmDialog` | Centered modals via `DialogFrame`. M3 shape: `radius-3xl`, no default close X on Dialog/Confirm. Dismissible labeled rows: `Dialog` + `showCloseButton` + full-width `ControlStack` (see Behavioral). |
+| `Dialog` / `DialogShell` / `ConfirmDialog` | Centered modals via `DialogFrame`. M3 shape: `radius-3xl`, no default close X on Dialog/Confirm. Sticky dismiss/confirm → Dialog **`feet`** (`.fynns-dialog-foot`, ≥ **0.5.297**) or Confirm stock foot — not body-end clusters. Dismissible labeled rows: `Dialog` + `showCloseButton` + full-width `ControlStack` (see Behavioral). |
 | `Drawer` | Content side sheet (~25rem / open-edge `radius-xl`); not `NavigationDrawer`. Always modal (no `modal={false}`). Layout token `--fynns-layout-drawer-width` is now `25rem` (was `72vw`). |
 | `Textarea` | Multiline dense field aligned to Input chrome; **not** full M3 floating-label Text Field. |
 | `Tabs` | M3 primary underline tabs — **not** a `ToggleGroup` substitute. |

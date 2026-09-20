@@ -457,26 +457,28 @@
   min-height: 0;
 }
 
-.fynns-collapsible-body {
-  opacity: 0;
-  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
-}
-
-/* Bidirectional height morph: body stays mounted; `open` ↔ `closed` both animate. */
+/*
+ * Shared disclosure motion: reveal ink with a true fade, never by dragging
+ * an overflow edge through visible copy. Opening snaps the layout row
+ * open immediately and fades content in over base — morphing 0fr→1fr
+ * under an overflow clip would wipe top-to-bottom and read as a bounce.
+ * Closing runs shorter than opening (M3 exit < enter): the row shrinks
+ * 1fr→0fr while the ink fades out, both over fast, so collapse glides
+ * shut instead of fading in place and snapping at the end.
+ * Keeping this on the direct inner makes Collapsible, chat disclosures,
+ * List detail, Tree, SearchBar/Autocomplete, and NavigationDrawer agree.
+ */
 .fynns-expand {
   display: grid;
   grid-template-rows: 0fr;
   min-width: 0;
   max-width: 100%;
-  transition: grid-template-rows var(--fynns-duration-base) var(--fynns-ease-emphasized);
+  transition: grid-template-rows var(--fynns-duration-fast) var(--fynns-ease-out);
 }
 
 .fynns-expand[data-state="open"] {
   grid-template-rows: 1fr;
-}
-
-.fynns-expand[data-state="open"] .fynns-collapsible-body {
-  opacity: 1;
+  transition: none;
 }
 
 .fynns-expand-inner {
@@ -485,9 +487,24 @@
   overflow: hidden;
 }
 
+.fynns-expand > .fynns-expand-inner {
+  opacity: 0;
+  transition: opacity var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-expand[data-state="open"] > .fynns-expand-inner {
+  opacity: 1;
+}
+
+/* Exit fade matches the fast close settle above. */
+.fynns-expand:not([data-state="open"]) > .fynns-expand-inner {
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-out);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fynns-expand,
-  .fynns-collapsible-body,
+  .fynns-expand > .fynns-expand-inner,
+  .fynns-expand:not([data-state="open"]) > .fynns-expand-inner,
   .fynns-collapsible-chevron,
   .fynns-collapsible-icon,
   .fynns-collapsible-head::before {
@@ -564,7 +581,9 @@ a.fynns-breadcrumb-link:visited {
 /*
  * Place as a Card / `.fynns-unit-stack` sibling **outside** `.fynns-table-wrap`
  * (not inside the horizontal scroll host). Default tonal + md Button, centered;
- * core hides the host when `canRevealMore` is false. Live: `#table` / `#list`.
+ * Core adds clearance on both block sides beyond the host's sibling rhythm;
+ * consumers must not wrap this in a control cluster to tune spacing.
+ * Core hides the host when `canRevealMore` is false. Live: `#table` / `#list`.
  */
 .fynns-reveal-more {
   box-sizing: border-box;
@@ -574,6 +593,7 @@ a.fynns-breadcrumb-link:visited {
   justify-content: center;
   width: 100%;
   min-width: 0;
+  margin-block: var(--fynns-layout-reveal-more-clearance);
 }
 
 /* ---------- Pagination ---------- */
@@ -1621,8 +1641,11 @@ a.fynns-breadcrumb-link:visited {
 /*
  * Single-line run / job summary: status mark + title + metrics in one
  * `.fynns-control-cluster` as the sole headline child (not InlineAlert —
- * that is width:100% panel chrome and forces wrap). Cluster owns nowrap;
- * `__grow` ellipsizes the identity string. Spec: AGENTS Content density.
+ * that is width:100% panel chrome and forces wrap). **CSS grid** (not flex
+ * content-width) so status / identity / optional meta share column edges
+ * across sibling rows — same lesson as `.fynns-list-item-trailing-stats`.
+ * `__grow` sits in `minmax(0, 1fr)` and ellipsizes. Spec: Content density.
+ * ≥ **0.5.295**. Live: `#list` run-summary.
  */
 .fynns-list-item-headline:has(> .fynns-control-cluster) {
   display: flex;
@@ -1632,25 +1655,45 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-list-item-headline > .fynns-control-cluster {
+  --fynns-list-headline-meta-width: calc(
+    var(--fynns-list-stats-col-elapse) + var(--fynns-size-icon) +
+      var(--fynns-layout-control-cluster-gap)
+  );
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns:
+    var(--fynns-list-stats-col-status)
+    minmax(0, 1fr);
+  column-gap: var(--fynns-layout-control-stack-gap);
+  align-items: center;
+  justify-items: start;
   flex: 1 1 auto;
-  flex-wrap: nowrap;
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  /* Status pill ↔ title / metrics: one step above IconButton cluster 4dp. */
-  gap: var(--fynns-layout-control-stack-gap);
+}
+
+.fynns-list-item-headline > .fynns-control-cluster:has(> .fynns-table-meta) {
+  grid-template-columns:
+    var(--fynns-list-stats-col-status)
+    minmax(0, 1fr)
+    var(--fynns-list-headline-meta-width);
+}
+
+.fynns-list-item-headline > .fynns-control-cluster > .fynns-list-item-status {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  justify-self: start;
+  overflow: hidden;
 }
 
 .fynns-list-item-headline > .fynns-control-cluster > .fynns-control-cluster__grow {
-  flex: 1 1 auto;
   min-width: 0;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.fynns-list-item-headline > .fynns-control-cluster > :not(.fynns-control-cluster__grow) {
-  flex: 0 0 auto;
 }
 
 /*
@@ -1664,18 +1707,14 @@ a.fynns-breadcrumb-link:visited {
  * icons never shrink. Live: `#list` run-summary.
  */
 .fynns-list-item-headline > .fynns-control-cluster > .fynns-table-meta {
-  --fynns-list-headline-meta-width: calc(
-    var(--fynns-list-stats-col-elapse) + var(--fynns-size-icon) +
-      var(--fynns-layout-control-cluster-gap)
-  );
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
   gap: var(--fynns-layout-control-cluster-gap);
-  width: var(--fynns-list-headline-meta-width);
-  min-width: var(--fynns-list-headline-meta-width);
-  max-width: var(--fynns-list-headline-meta-width);
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   overflow: hidden;
   text-align: start;
   white-space: nowrap;
@@ -1684,13 +1723,16 @@ a.fynns-breadcrumb-link:visited {
 
 /* Second headline metric (tokens / count) — sibling cell, not jammed. */
 .fynns-list-item-headline
-  > .fynns-control-cluster
-  > .fynns-table-meta
-  + .fynns-table-meta {
-  --fynns-list-headline-meta-width: calc(
+  > .fynns-control-cluster:has(> .fynns-table-meta + .fynns-table-meta) {
+  --fynns-list-headline-meta-width-2: calc(
     var(--fynns-list-stats-col-tokens) + var(--fynns-size-icon) +
       var(--fynns-layout-control-cluster-gap)
   );
+  grid-template-columns:
+    var(--fynns-list-stats-col-status)
+    minmax(0, 1fr)
+    var(--fynns-list-headline-meta-width)
+    var(--fynns-list-headline-meta-width-2);
 }
 
 .fynns-list-item-headline > .fynns-control-cluster > .fynns-table-meta svg {
@@ -3489,20 +3531,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 
-/* ---------- BadgedBox / AvatarGroup ---------- */
-.fynns-badged-box {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
 
-.fynns-badged-box > .fynns-nav-rail-badge {
-  /* Anchor to the box top-end (same chrome as rail icon wrap). */
-  pointer-events: none;
-}
-
+/* ---------- AvatarGroup ---------- */
 .fynns-avatar-group {
   display: inline-flex;
   align-items: center;
@@ -3871,12 +3901,19 @@ a.fynns-breadcrumb-link:visited {
  * scroll hosts. Pair with `.fynns-scroll` for overlay thumbs. Vertical wheel
  * pans horizontally when H overflows and Y cannot consume (≥ 0.5.184;
  * edge trap ≥ 0.5.186; `data-fynns-wheel-x="off"` to opt out).
+ * Inline soft-edge fade: `data-fade-left` / `data-fade-right` (≥ **0.5.296**).
  */
 .fynns-table-wrap {
   overflow: auto;
   width: 100%;
   max-width: 100%;
   min-width: 0;
+}
+
+/* When an older caller supplies a scroll host, preserve that host's size and
+ * wheel behavior while the built-in host contributes no second scroll area. */
+.fynns-table-wrap > .fynns-table-wrap {
+  display: contents;
 }
 
 .fynns-table {
@@ -3904,6 +3941,20 @@ a.fynns-breadcrumb-link:visited {
   /* Prevent CJK character-stack when the host is narrow. */
   white-space: nowrap;
   word-break: keep-all;
+}
+
+/* Plain text labels, including text-only div / FieldHint cell children. */
+.fynns-table-text.fynns-overflow-tip.fynns-tooltip-trigger {
+  width: max-content;
+  max-width: var(--fynns-layout-table-text-max-width);
+}
+
+.fynns-table-cell--align-center .fynns-table-text {
+  margin-inline: auto;
+}
+
+.fynns-table-cell--align-end .fynns-table-text {
+  margin-inline-start: auto;
 }
 
 /* Table-cell status / mapping kind — muted caption, not Chip.
@@ -3998,6 +4049,8 @@ a.fynns-breadcrumb-link:visited {
   padding-inline: var(--fynns-layout-content-inset);
   min-width: 0;
   max-width: 100%;
+  /* Set on root via CodeBlock `maxHeight` → `--fynns-code-block-max-height`. */
+  max-height: var(--fynns-code-block-max-height);
   /* Default `wrap` (no `--nowrap`): soft-wrap; vertical scroll only when
    * `data-scrollable` (content exceeds host — avoids early thumbs). */
   white-space: pre-wrap;
@@ -4095,7 +4148,8 @@ a.fynns-breadcrumb-link:visited {
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
-.fynns-code-block:hover .fynns-code-block-copy,
+.fynns-code-block:not(.fynns-code-block--copy-float):hover .fynns-code-block-copy,
+.fynns-code-block--copy-float > .fynns-code-block-copy:hover,
 .fynns-code-block-copy:has(:focus-visible) {
   opacity: 1;
   pointer-events: auto;
@@ -4116,6 +4170,12 @@ a.fynns-breadcrumb-link:visited {
   top: var(--fynns-space-sm);
   inset-inline-end: var(--fynns-space-sm);
   z-index: 2;
+}
+
+/* The headless copy target owns only its reserved corner. Keep that corner
+   hoverable while transparent; hovering the code or scroll rail stays clear. */
+.fynns-code-block--copy-float > .fynns-code-block-copy {
+  pointer-events: auto;
 }
 
 .fynns-code-block--copy-float > .fynns-code-block-pre,
@@ -4227,6 +4287,8 @@ a.fynns-breadcrumb-link:visited {
   display: block;
   width: 100%;
   min-height: 0;
+  /* Same cap as `.fynns-code-block-pre` — root CSS var, not inline style. */
+  max-height: var(--fynns-code-block-max-height);
   border: 0;
   border-radius: 0;
   background: transparent;

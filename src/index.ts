@@ -280,8 +280,6 @@ export type {
   UseBusyTaskResult,
   UseLoadingTaskResult,
 } from "./scheduling/busyTask";
-export { BadgedBox } from "./primitives/BadgedBox";
-export type { BadgedBoxProps } from "./primitives/BadgedBox";
 export { Avatar, initialsFromName } from "./primitives/Avatar";
 export type { AvatarProps, AvatarSize } from "./primitives/Avatar";
 export { AvatarGroup } from "./primitives/AvatarGroup";
@@ -374,9 +372,12 @@ export type {
   ChatScrollToBottomProps,
   ChatThreadProps,
 } from "./primitives/Chat";
+export type { ChatComposerTodoItem, ChatComposerTodoListProps } from "./primitives/ChatComposerTodoList";
 export { ChatComposerToggle } from "./primitives/ChatComposerToggle";
 export type { ChatComposerToggleProps } from "./primitives/ChatComposerToggle";
 export { ChatMessage } from "./primitives/ChatMessage";
+export { ChatReveal } from "./primitives/ChatReveal";
+export type { ChatRevealProps } from "./primitives/ChatReveal";
 export type {
   ChatMessageProps,
   ChatMessageRole,

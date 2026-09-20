@@ -122,7 +122,7 @@ const en = {
   "layouts.chatProductDeleteAllToast": "Cleared sample sessions",
   "layouts.chatProductSettingsToast": "Settings (sample)",
   "layouts.chatProductHelp":
-    "**Chat product / session host (default for chat-like UIs):** `ClippedNavShell` + session `NavigationDrawer` (`NavigationDrawerNewChat` full-width labeled New chat, **ghost / no border** ≥ 0.5.257; optional trailing More → Delete all `tone=\"danger\"`; empty list = `EmptyState` sm; row trailing prefer More; footer = account + settings) + main `FillColumn` → `Chat`. **New-chat landing:** omit TopAppBar; greeting `EmptyState` + soft `Surface` `padded` `interactive` starters **centered above**; `ChatComposer` **inside** `ChatThread.empty` pinned bottom with the same `--fynns-chat-composer-inset-block` as a docked Chat composer (collapse docked composer row). Active thread: composer docks under `ChatThread` inside Chat — never FillColumn `footer`. Flat **destination** roots stay on `DestinationAppShell`; session-history chat / drill-in hand-compose this tree (`navKey` drill-in ok). Forbidden: Trash+Plus twin; Chip / revived ChatStarterPrompts; PageScroll as chat main scroll; composer outside Chat. Anatomy dual-host → Globals `#chat`. Aside-host twin (same landing) → `#layouts-demo-chat-aside`.",
+    "**Chat product / session host (default for chat-like UIs):** `ClippedNavShell` + session `NavigationDrawer` (`NavigationDrawerNewChat` full-width labeled New chat, **ghost / no border** ≥ 0.5.257; optional trailing More → Delete all `tone=\"danger\"`; empty list = `EmptyState` sm; row trailing prefer More; footer = account + settings) + main `FillColumn` → `Chat`. Turn off **No sessions in drawer** to see `RevealMore` directly after a session Item: the drawer's 4dp row gap plus core's 16dp clearance gives 20dp from row to button, without a control-cluster wrapper. **New-chat landing:** omit TopAppBar; greeting `EmptyState` + soft `Surface` `padded` `interactive` starters **centered above**; `ChatComposer` **inside** `ChatThread.empty` pinned bottom with the same `--fynns-chat-composer-inset-block` as a docked Chat composer (collapse docked composer row). Active thread: composer docks under `ChatThread` inside Chat — never FillColumn `footer`. Flat **destination** roots stay on `DestinationAppShell`; session-history chat / drill-in hand-compose this tree (`navKey` drill-in ok). Forbidden: Trash+Plus twin; Chip / revived ChatStarterPrompts; PageScroll as chat main scroll; composer outside Chat. Anatomy dual-host → Globals `#chat`. Aside-host twin (same landing) → `#layouts-demo-chat-aside`.",
   "layouts.chatAsideOpen": "Show EndAside chat",
   "layouts.chatAsideToggle": "Toggle chat aside",
   "layouts.chatAsideShellTitle": "Sample workspace",
@@ -610,7 +610,7 @@ const en = {
   "globals.numberInputInc": "Increment",
   "globals.numberInputDec": "Decrement",
   "globals.numberInputHelp":
-    "NumberInput — spinbutton field with trailing steppers for discrete inspector / form values. Prefer over Slider when the value is typed or stepped (counts, rem steps). Not a RangeSlider.",
+    "NumberInput — spinbutton field with trailing steppers for discrete inspector / form values. Prefer over Slider when the value is typed or stepped (counts, rem steps). Not a RangeSlider. Do **not** use bare Input type=\"number\" (UA spinners are not fynns) — live #number-input (≥ **0.5.301**).",
   "globals.passwordAria": "Password",
   "globals.passwordPlaceholder": "Password",
   "globals.passwordShow": "Show password",
@@ -773,7 +773,7 @@ const en = {
   "globals.tableMapUnpriced": "Unpriced",
   "globals.tableMapAction": "Map",
   "globals.tableHelp":
-    "Titled tables: `Card` `title` + `.fynns-table-wrap.fynns-scroll` (`chrome=\"plain\"` when the wrap is the nested well). Table + Head / Body / Row / HeaderCell / Cell / Caption. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers). Mapping kind / status in a cell is `.fynns-table-meta` (muted caption), **not** `Chip`. Kind + optional id + trailing action: `.fynns-control-cluster--end-align` (**centers on the row band** ≥ 0.5.79); missing middle → `.fynns-control-cluster__grow` so the action shares one trailing edge.",
+    "Titled tables: `Card` `title` + `.fynns-table-wrap.fynns-scroll` (`chrome=\"plain\"` when the wrap is the nested well). Table + Head / Body / Row / HeaderCell / Cell / Caption. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers). Mid-scroll inline edges soft-mask via `data-fade-left` / `data-fade-right` (≥ **0.5.296** — same family as PageScroll block fades; zero consumer `mask-image`). Mapping kind / status in a cell is `.fynns-table-meta` (muted caption), **not** `Chip`. Kind + optional id + trailing action: `.fynns-control-cluster--end-align` (**centers on the row band** ≥ 0.5.79); missing middle → `.fynns-control-cluster__grow` so the action shares one trailing edge.",
   "globals.tableWheelX": "Wheel → horizontal",
   "globals.tableWheelXHelp":
     "Wide `.fynns-table-wrap.fynns-scroll` (≥ **0.5.184**): when the host has horizontal overflow and cannot scroll further on Y, a vertical mouse wheel pans `scrollLeft` instead of driving the outer PageScroll. Default **on** (core). Opt out with `data-fynns-wheel-x=\"off\"` — toggle below. While H overflows, wheel stays trapped on the wrap even at the left/right edge (≥ **0.5.186**) so slide-back does not yank the page thumb. First Card is width-capped (H-only) so the wheel remap is easy to feel.",
@@ -878,6 +878,11 @@ const en = {
   "globals.drawerNestedScrollCard": "Mounted sample card",
   "globals.drawerNestedScrollHelp":
     "Drawer body scroll + nested CodeBlock: overlay Y rails clamp below shell TopAppBar, `.fynns-dialog-head`, and section heads so thumbs never paint over higher chrome when an outer scrollport moves. Page rails stay under menus via `--fynns-z-scroll-overlay`; menu/Select own thumbs use `--fynns-z-scroll-overlay-flyout` (≥ **0.5.251** — live `#sandbox-scroll-menu-stack`). Live `#drawer-nested-scroll`.",
+  "globals.dialogNestedScrollOpen": "Open dialog nested scroll",
+  "globals.dialogNestedScrollTitle": "Sample nested scroll",
+  "globals.dialogNestedScrollFold": "Mounted sample body",
+  "globals.dialogNestedScrollHelp":
+    "Centered Dialog + List + Collapsible + plain CodeBlock: `maxHeight` sets `--fynns-code-block-max-height` on the root; copy-float overlay Y rails run rounded-clip clamp then chrome clamp so thumbs stay inside `radius-3xl` (never past the panel floor). Live `#dialog-nested-scroll`.",
   "globals.overlayHelp":
     "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). First-child bordered well (CodeBlock) flush-starts under the title — `#fullscreen-flush`. Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
@@ -1201,6 +1206,8 @@ const en = {
   "globals.formRecipeHelp":
     "Recipe hosts: `Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` intro → `FieldStack`(`FieldBlock` text…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → feedback / foot. Dialog foot: **one** `loading` (Extract); siblings `disabled` without rings. See AGENTS.md Toolbar / unit rhythm.",
   "globals.btnSmall": "Small",
+  "globals.btnViewDetails": "View details",
+  "globals.btnCopyText": "Copy text",
   "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
   "globals.btnTonal": "Tonal",
@@ -1511,7 +1518,10 @@ const en = {
   "globals.navDrawerSessionNew": "New chat",
   "globals.navDrawerSessionEntry": "Sample session",
   "globals.navDrawerSessionToolbarHelp":
-    "Session chrome (≥ 0.5.257): NavigationDrawerNewChat = full-width labeled New chat, ghost (no border; Item-like hover wash). Optional trailing More for Delete all (danger). Never Trash+Plus twin; never icon-only --toolbar-end for history.",
+    "Session chrome (≥ 0.5.257 / ≥ 0.5.298): NavigationDrawerNewChat = full-width labeled New chat, ghost (no border; Item-like hover wash). Optional trailing More for Delete all (danger). Session Items default label-only — no leading icon unless opt-in. Never Trash+Plus twin; never icon-only --toolbar-end for history.",
+  "globals.navDrawerSessionIconAria": "Sample session sidebar with leading icons",
+  "globals.navDrawerSessionIconHelp":
+    "Opt-in icon variant (≥ 0.5.298): pass NavigationDrawerItem icon only when the glyph carries meaning. Default session / history rows stay clean (no icon) — see #sandbox-navdrawer-session-chrome.",
   "globals.navDrawerModeHideBuiltin": "Hide samples",
   "globals.navDrawerModeHideBuiltinAria": "Hide sample catalog entries",
   "globals.navDrawerModeHideBuiltinHint":
@@ -1671,6 +1681,8 @@ const en = {
   "globals.chatStreamingLabel": "Generating response",
   "globals.chatStreamFull":
     "Streaming is a UI flag: last-glyph color pulse while incomplete, then clear it when the reply finishes.",
+  "globals.chatRevealCard":
+    "This separate component enters the conversation through ChatReveal.",
   "globals.chatStreamStart": "Simulate stream",
   "globals.chatStreamReset": "Reset",
   "globals.chatError": "There was an error generating a response.",
@@ -1678,6 +1690,10 @@ const en = {
   "globals.chatRetrySuccess":
     "Regenerated — the failed-generation footer is gone and normal actions return.",
   "globals.chatFailDemo": "Show failed turn",
+  "globals.chatExpand": "Show more",
+  "globals.chatCollapse": "Show less",
+  "globals.chatCollapseHelp":
+    "Long-message collapse lives inside the bubble: over 1200 visible chars (markup excluded) a user / assistant turn clamps to 12rem with a mask fade into a plain-text toggle + chevron (bottom-start, in-bubble). Short turns show no toggle, system never collapses, and streaming stays expanded until tokens finish.",
   "globals.chatCitationsLabel": "Sources",
   "globals.chatCiteReuters": "Reuters",
   "globals.chatCiteReutersTitle": "Markets open mixed after overnight futures swing",
@@ -1698,6 +1714,23 @@ const en = {
   "globals.chatComposerAria": "Message",
   "globals.chatComposerPlaceholder": "Message…",
   "globals.chatComposerLeadingTip": "Add files and more",
+  "globals.chatTodoLabel": "Composer · optional task progress",
+  "globals.chatTodoEnable": "Show task list",
+  "globals.chatTodoDisable": "Use normal composer",
+  "globals.chatTodoCompleteNext": "Complete next task",
+  "globals.chatTodoPlaceholder": "Ask for follow-up changes…",
+  "globals.chatTodoProgress": "{done} out of {total} tasks completed",
+  "globals.chatTodoExpand": "Expand tasks",
+  "globals.chatTodoCollapse": "Collapse tasks",
+  "globals.chatTodoCompleted": "Completed",
+  "globals.chatTodoActive": "In progress",
+  "globals.chatTodoPending": "Pending",
+  "globals.chatTodoTask1": "Review the project brief",
+  "globals.chatTodoTask2": "Compare the existing patterns",
+  "globals.chatTodoTask3": "Note open questions",
+  "globals.chatTodoTask4": "Propose concrete changes",
+  "globals.chatTodoTask5": "Summarize the results",
+  "globals.chatTodoHelp": "Pass `todoList` to ChatComposer to show a progress card above the input; omit it to return to the ordinary composer. The caller owns task statuses. The header toggles the list independently of the composer mode. Live #sandbox-chat-composer-todos.",
   "globals.chatComposerMultiLabel": "Composer · multiline (expanded toolbar)",
   "globals.chatComposerMultiAria": "Multiline message",
   "globals.chatComposerMultiHelp":
@@ -1707,7 +1740,8 @@ const en = {
   "globals.chatComposerLeadingMenusHelp": "Recipe (≥ 0.5.286): leading = + IconButton + volume Menu (`align=start`); model Menu in `endActions` (end / right, before Send, `align=end`). Long labels ellipsize with OverflowTip — never mid-glyph hard-clip. Pass string trigger (no consumer max-width / manual slice). Live #sandbox-chat-composer-leading-menus.",
   "globals.chatComposerLeadingMenusNarrowHelp":
     "Narrow host (~365px): menus share shrink under a tighter cap; draft keeps a field floor. Live #sandbox-chat-composer-leading-menus-narrow.",
-  "globals.chatComposerLeadingMenusVolume": "Sample volume · Visible Human Head dataset",
+  "globals.chatComposerLeadingMenusVolume": "Sphere",
+  "globals.chatComposerLeadingMenusVolumeLong": "Sample volume · Visible Human Head dataset",
   "globals.chatComposerLeadingMenusModel": "sample-model-2.5-flash-preview-long-id",
   "globals.chatComposerLeadingMenusVolumeAria": "Sample volume",
   "globals.chatComposerLeadingMenusModelAria": "Sample model",
@@ -1833,8 +1867,10 @@ const en = {
   "globals.listRevealMap": "Map",
   "globals.listRevealMapSnack": "Map action (sample)",
   "globals.listRevealMore": "Show more",
+  "globals.listRevealContinue": "Continue",
+  "globals.listRevealContinueSnack": "Continue action (sample)",
   "globals.listRevealHelp":
-    "Long Card / PageScroll Lists (≥ **0.5.145**): `useRevealMore` (**5** / step **5**) + `RevealMore` **after** the List (unit-stack sibling) — taller ListItems need a lower window than Tables (10/10). Slice in the app; pass locale (`更多` / `Show more`). Short lists / Dialog / true `Pagination` exempt. Live below.",
+    "Long Card / PageScroll Lists (≥ **0.5.145**): `useRevealMore` (**5** / step **5**) + `RevealMore` **after** the List (unit-stack sibling). Core adds 16dp clearance on both sides of the foot beyond the host gap: 32dp from List to Show more and from Show more to the next CTA here. A drawer Item uses its 4dp row gap plus the same clearance (20dp); see chat product layout. Slice in the app; pass locale (`更多` / `Show more`). No consumer spacing wrapper. Short lists / Dialog / true `Pagination` exempt. Live below.",
   "globals.listHostToneHelp":
     "Catalog kind = leading icon + trailingSupportingText (or .fynns-table-meta). No start tick, inset rail, or extra host wash — selected is the radius-3xl pill only. Never wrap ListItem in a div. Headline uses UI font (not mono).",
   "globals.listHostToneAria": "Sample list with kind via icon and trailing meta",
@@ -2562,7 +2598,7 @@ const zh: Record<MessageKey, string> = {
   "layouts.chatProductDeleteAllToast": "已清空示例会话",
   "layouts.chatProductSettingsToast": "设置（示例）",
   "layouts.chatProductHelp":
-    "**Chat 产品 / 会话宿主（chat 类默认）：** `ClippedNavShell` + 会话 `NavigationDrawer`（`NavigationDrawerNewChat` 满宽带文案新建，**ghost 无描边** ≥ 0.5.257；可选 trailing More → 全部删除 `tone=\"danger\"`；空列表 = `EmptyState` sm；行尾优先 More；footer = 账号 + 设置）+ 主列 `FillColumn` → `Chat`。**新会话空态：** 省略 TopAppBar；问候 `EmptyState` + soft `Surface` `padded` `interactive` starters **居中在上方**；`ChatComposer` 放进 `ChatThread.empty` 并贴底，下边距与 docked Chat composer 同为 `--fynns-chat-composer-inset-block`（收起底部 dock 行）。有消息线程：composer 贴在 `ChatThread` 下、仍在 Chat 内 — 勿放进 FillColumn `footer`。扁平**目的地**根仍用 `DestinationAppShell`；会话历史 chat / 钻入手组本树（可用 `navKey` 钻入）。禁止：Trash+Plus 双盘；Chip / 复活 ChatStarterPrompts；用 PageScroll 当 chat 主滚；composer 落在 Chat 外。主/侧气泡解剖 → Globals `#chat`。侧栏宿主同构 landing → `#layouts-demo-chat-aside`。",
+    "**Chat 产品 / 会话宿主（chat 类默认）：** `ClippedNavShell` + 会话 `NavigationDrawer`（`NavigationDrawerNewChat` 满宽带文案新建，**ghost 无描边** ≥ 0.5.257；可选 trailing More → 全部删除 `tone=\"danger\"`；空列表 = `EmptyState` sm；行尾优先 More；footer = 账号 + 设置）+ 主列 `FillColumn` → `Chat`。关闭**侧栏无会话**可查看会话 Item 后直接放置的 `RevealMore`：Drawer 4dp 行距叠加 core 的 16dp 净空，行到按钮共 20dp，无需 control-cluster 包装。**新会话空态：** 省略 TopAppBar；问候 `EmptyState` + soft `Surface` `padded` `interactive` starters **居中在上方**；`ChatComposer` 放进 `ChatThread.empty` 并贴底，下边距与 docked Chat composer 同为 `--fynns-chat-composer-inset-block`（收起底部 dock 行）。有消息线程：composer 贴在 `ChatThread` 下、仍在 Chat 内 — 勿放进 FillColumn `footer`。扁平**目的地**根仍用 `DestinationAppShell`；会话历史 chat / 钻入手组本树（可用 `navKey` 钻入）。禁止：Trash+Plus 双盘；Chip / 复活 ChatStarterPrompts；用 PageScroll 当 chat 主滚；composer 落在 Chat 外。主/侧气泡解剖 → Globals `#chat`。侧栏宿主同构 landing → `#layouts-demo-chat-aside`。",
   "layouts.chatAsideOpen": "显示 EndAside 对话",
   "layouts.chatAsideToggle": "切换对话侧栏",
   "layouts.chatAsideShellTitle": "示例工作区",
@@ -3036,7 +3072,7 @@ const zh: Record<MessageKey, string> = {
   "globals.numberInputInc": "增加",
   "globals.numberInputDec": "减少",
   "globals.numberInputHelp":
-    "NumberInput — 带尾部步进器的 spinbutton 数字字段，用于检查器 / 表单的离散值。需要键入或步进（计数、rem 档）时优先于 Slider。不是 RangeSlider。",
+    "NumberInput — 带尾部步进器的 spinbutton 数字字段，用于检查器 / 表单的离散值。需要键入或步进（计数、rem 档）时优先于 Slider。不是 RangeSlider。**禁止**裸 Input type=\"number\"（浏览器原生箭头不是 fynns）— 活样例 #number-input（≥ **0.5.301**）。",
   "globals.passwordAria": "密码",
   "globals.passwordPlaceholder": "密码",
   "globals.passwordShow": "显示密码",
@@ -3199,7 +3235,7 @@ const zh: Record<MessageKey, string> = {
   "globals.tableMapUnpriced": "未定价",
   "globals.tableMapAction": "映射",
   "globals.tableHelp":
-    "带标题表格：`Card` `title` + `.fynns-table-wrap.fynns-scroll`（wrap 作为嵌套井时 `chrome=\"plain\"`）。Table + Head / Body / Row / HeaderCell / Cell / Caption。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。单元格里的映射来源/状态用 `.fynns-table-meta`（muted 文案），**禁止** `Chip`。种类 + 可选 id + 行尾操作：`.fynns-control-cluster--end-align`（**整行高度内竖直居中** ≥ 0.5.79）；中间缺内容时插 `.fynns-control-cluster__grow`，让操作跨行右对齐。",
+    "带标题表格：`Card` `title` + `.fynns-table-wrap.fynns-scroll`（wrap 作为嵌套井时 `chrome=\"plain\"`）。Table + Head / Body / Row / HeaderCell / Cell / Caption。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。横向滚到中间时左右软渐隐：`data-fade-left` / `data-fade-right`（≥ **0.5.296**，与 PageScroll 上下渐隐同族；禁止消费侧私有 `mask-image`）。单元格里的映射来源/状态用 `.fynns-table-meta`（muted 文案），**禁止** `Chip`。种类 + 可选 id + 行尾操作：`.fynns-control-cluster--end-align`（**整行高度内竖直居中** ≥ 0.5.79）；中间缺内容时插 `.fynns-control-cluster__grow`，让操作跨行右对齐。",
   "globals.tableWheelX": "滚轮 → 横向",
   "globals.tableWheelXHelp":
     "宽 `.fynns-table-wrap.fynns-scroll`（≥ **0.5.184**）：宿主有横向溢出且 Y 方向已无法继续滚动时，纵向鼠标滚轮改为推动 `scrollLeft`，而不是带动外层 PageScroll。默认 **开启**（core）。关闭：`data-fynns-wheel-x=\"off\"` — 见下方开关。只要仍有横向溢出，滚轮留在 wrap 上（含左右边缘，≥ **0.5.186**），滑回起点时不会拽动页面滚动条。首张 Card 仅限宽（纯横向溢出），便于感受滚轮映射。",
@@ -3304,6 +3340,11 @@ const zh: Record<MessageKey, string> = {
   "globals.drawerNestedScrollCard": "已挂载示例卡片",
   "globals.drawerNestedScrollHelp":
     "Drawer 正文滚动 + 嵌套 CodeBlock：overlay Y 轨道裁剪在 TopAppBar、`.fynns-dialog-head` 与分区标题下方，外层滚动时拇指不会画在更高 chrome 上。页轨经 `--fynns-z-scroll-overlay` 低于菜单；菜单/Select 自身拇指用 `--fynns-z-scroll-overlay-flyout`（≥ **0.5.251** — 对照 `#sandbox-scroll-menu-stack`）。活样例 `#drawer-nested-scroll`。",
+  "globals.dialogNestedScrollOpen": "打开对话框嵌套滚动",
+  "globals.dialogNestedScrollTitle": "示例嵌套滚动",
+  "globals.dialogNestedScrollFold": "已挂载示例正文",
+  "globals.dialogNestedScrollHelp":
+    "居中 Dialog + List + Collapsible + plain CodeBlock：`maxHeight` 写到根上的 `--fynns-code-block-max-height`；copy-float 的 overlay Y 轨先做圆角裁剪再做 chrome 裁剪，拇指不超出 `radius-3xl`、不越过面板底边。活样例 `#dialog-nested-scroll`。",
   "globals.overlayHelp":
     "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。正文首个带边框井（CodeBlock）顶天贴标题 — `#fullscreen-flush`。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",
@@ -3624,6 +3665,8 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeHelp":
     "配方宿主：`Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` 引言 → `FieldStack`(`FieldBlock` 文本…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → 反馈 / 底栏。Dialog 底栏：**一颗** `loading`（Extract）；兄弟只 `disabled`、不画圈。见 AGENTS.md Toolbar / unit rhythm。",
   "globals.btnSmall": "小号",
+  "globals.btnViewDetails": "查看详情",
+  "globals.btnCopyText": "复制文本",
   "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",
   "globals.btnTonal": "色调",
@@ -3934,7 +3977,10 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerSessionNew": "新会话",
   "globals.navDrawerSessionEntry": "示例会话",
   "globals.navDrawerSessionToolbarHelp":
-    "会话顶栏（≥ 0.5.257）：NavigationDrawerNewChat = 满宽带文案新建，ghost（无描边；悬停同 Item wash）。可选 trailing More 放全部删除（danger）。禁止 Trash+Plus 双盘；历史侧栏勿用仅图标的 --toolbar-end。",
+    "会话顶栏（≥ 0.5.257 / ≥ 0.5.298）：NavigationDrawerNewChat = 满宽带文案新建，ghost（无描边；悬停同 Item wash）。可选 trailing More 放全部删除（danger）。会话 Item 默认仅 label — 未指定时不要 leading icon。禁止 Trash+Plus 双盘；历史侧栏勿用仅图标的 --toolbar-end。",
+  "globals.navDrawerSessionIconAria": "带 leading icon 的示例会话侧栏",
+  "globals.navDrawerSessionIconHelp":
+    "可选 icon 变体（≥ 0.5.298）：仅在字形有语义时传 NavigationDrawerItem icon。默认会话/历史行保持干净无 icon — 见 #sandbox-navdrawer-session-chrome。",
   "globals.navDrawerModeHideBuiltin": "隐藏示例",
   "globals.navDrawerModeHideBuiltinAria": "隐藏示例目录条目",
   "globals.navDrawerModeHideBuiltinHint":
@@ -4087,12 +4133,17 @@ const zh: Record<MessageKey, string> = {
   "globals.chatStreamingLabel": "正在生成回复",
   "globals.chatStreamFull":
     "streaming 是 UI 标志：未完成时末字换色脉冲，回复结束后关闭即可。",
+  "globals.chatRevealCard": "这个独立组件通过 ChatReveal 滑入对话。",
   "globals.chatStreamStart": "模拟流式输出",
   "globals.chatStreamReset": "重置",
   "globals.chatError": "生成回复时出错。",
   "globals.chatRetry": "重新生成",
   "globals.chatRetrySuccess": "已重新生成 — 失败态页脚消失，常规操作按钮恢复。",
   "globals.chatFailDemo": "显示失败回合",
+  "globals.chatExpand": "展开",
+  "globals.chatCollapse": "收起",
+  "globals.chatCollapseHelp":
+    "长消息折叠收进气泡内部：可见文本超 1200 字（不计 markup）时，用户/助手消息收起为 12rem 预览，底部渐隐接到纯文字触发器 + chevron（气泡内左下）。短消息无控件，system 永不折叠，流式期间始终展开。",
   "globals.chatCitationsLabel": "来源",
   "globals.chatCiteReuters": "Reuters",
   "globals.chatCiteReutersTitle": "隔夜期货波动后市场开盘分化",
@@ -4113,6 +4164,23 @@ const zh: Record<MessageKey, string> = {
   "globals.chatComposerAria": "消息",
   "globals.chatComposerPlaceholder": "发消息…",
   "globals.chatComposerLeadingTip": "添加文件等",
+  "globals.chatTodoLabel": "Composer · 可选任务进度",
+  "globals.chatTodoEnable": "显示任务列表",
+  "globals.chatTodoDisable": "恢复普通输入框",
+  "globals.chatTodoCompleteNext": "完成下一项",
+  "globals.chatTodoPlaceholder": "询问后续修改…",
+  "globals.chatTodoProgress": "已完成 {done} / {total} 项任务",
+  "globals.chatTodoExpand": "展开任务",
+  "globals.chatTodoCollapse": "收起任务",
+  "globals.chatTodoCompleted": "已完成",
+  "globals.chatTodoActive": "进行中",
+  "globals.chatTodoPending": "待处理",
+  "globals.chatTodoTask1": "查看项目简报",
+  "globals.chatTodoTask2": "对照现有模式",
+  "globals.chatTodoTask3": "记录待确认问题",
+  "globals.chatTodoTask4": "提出具体修改",
+  "globals.chatTodoTask5": "汇总结果",
+  "globals.chatTodoHelp": "给 ChatComposer 传 `todoList`，在输入框上方显示任务进度；不传即恢复普通输入框。任务状态由调用方持有，标题行独立控制列表展开与收起。活样 #sandbox-chat-composer-todos。",
   "globals.chatComposerMultiLabel": "Composer · 多行（展开底栏）",
   "globals.chatComposerMultiAria": "多行消息",
   "globals.chatComposerMultiHelp":
@@ -4122,7 +4190,8 @@ const zh: Record<MessageKey, string> = {
   "globals.chatComposerLeadingMenusHelp": "配方（≥ 0.5.286）：leading = + IconButton + 卷 Menu（`align=start`）；模型 Menu 放 `endActions`（靠右、Send 前，`align=end`）。长标签壳内 …+OverflowTip，禁止半字硬裁。trigger 传 string（勿消费仓 max-width / 手写截断）。活样 #sandbox-chat-composer-leading-menus。",
   "globals.chatComposerLeadingMenusNarrowHelp":
     "窄宿主（约 365px）：两侧带标签 Menu 共用收缩上限；草稿区保留 field 下限。Live #sandbox-chat-composer-leading-menus-narrow。",
-  "globals.chatComposerLeadingMenusVolume": "示例卷 · Visible Human Head 数据集",
+  "globals.chatComposerLeadingMenusVolume": "球体",
+  "globals.chatComposerLeadingMenusVolumeLong": "示例卷 · Visible Human Head 数据集",
   "globals.chatComposerLeadingMenusModel": "sample-model-2.5-flash-preview-long-id",
   "globals.chatComposerLeadingMenusVolumeAria": "示例卷",
   "globals.chatComposerLeadingMenusModelAria": "示例模型",
@@ -4245,8 +4314,10 @@ const zh: Record<MessageKey, string> = {
   "globals.listRevealMap": "映射",
   "globals.listRevealMapSnack": "映射操作（示例）",
   "globals.listRevealMore": "更多",
+  "globals.listRevealContinue": "继续",
+  "globals.listRevealContinueSnack": "继续操作（示例）",
   "globals.listRevealHelp":
-    "Card / PageScroll 内长 List（≥ **0.5.145**）：`useRevealMore`（**5** / 每次 **5**）+ 脚 `RevealMore` 放在 List **后**（unit-stack 兄弟）— ListItem 更高，窗口低于 Table（10/10）。行由 app `slice`；文案本地化（`更多` / `Show more`）。短列表 / Dialog / 真 `Pagination` 豁免。见下方样例。",
+    "Card / PageScroll 内长 List（≥ **0.5.145**）：`useRevealMore`（**5** / 每次 **5**）+ `RevealMore` 放在 List **后**（unit-stack 兄弟）。core 在脚上下各增加 16dp 净空，再叠加容器间距：此处 List→更多及更多→后续 CTA 均为 32dp；Drawer Item 的 4dp 行距叠加后为 20dp，见聊天产品布局。行由 app `slice`；文案本地化（`更多` / `Show more`）；不加消费侧间距 wrapper。短列表 / Dialog / 真 `Pagination` 豁免。见下方样例。",
   "globals.listHostToneHelp":
     "目录种类 = leading 图标 + trailingSupportingText（或 .fynns-table-meta）。不要左边竖标、inset 轨或额外 host 洗底——选中只靠 radius-3xl pill。禁止用 div 包 ListItem。headline 用 UI 字族（勿 mono）。",
   "globals.listHostToneAria": "用图标和尾部文案表达种类的列表示例",

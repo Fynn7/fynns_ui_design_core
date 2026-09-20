@@ -26,7 +26,9 @@ export type RevealMoreProps = Omit<
  * Foot CTA for `useRevealMore` — place **outside** `.fynns-table-wrap` as a
  * Card / unit-stack sibling (not inside the horizontal scroll host). Default
  * **tonal** + **md** labeled Button, centered; disappears when
- * `canRevealMore` is false. Live: `#table` / `#list`.
+ * `canRevealMore` is false. Core owns extra block clearance from adjacent
+ * content; render directly, without a consumer spacing wrapper. Live:
+ * `#table` / `#list` / chat NavigationDrawer prototype.
  */
 export function RevealMore({
   canRevealMore,

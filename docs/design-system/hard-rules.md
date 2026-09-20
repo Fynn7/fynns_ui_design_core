@@ -129,8 +129,10 @@
   `.fynns-list-item-trailing-stats` (fixed grid; `--pair` for two metrics).
   One metric per `.fynns-table-meta` cell (wrap label in `<span>` for ellipsis);
   second metric → sibling meta or trailing-stats. Run/job rows → single-line
-  cluster with `.fynns-list-item-status` — never nest `InlineAlert`/`Banner`/
-  `Chip` in ListItem headline. Live `#list` run-summary.
+  headline cluster with `.fynns-list-item-status` (core turns that cluster into
+  a **CSS grid** with fixed `--fynns-list-stats-col-status` ≥ **0.5.295** so
+  Success / Failed / Cancelled do not shift the model column) — never nest
+  `InlineAlert`/`Banner`/`Chip` in ListItem headline. Live `#list` run-summary.
 - **DON'T** park Timeline edit/delete as `--with-end` hover IconButtons —
   flat row `onClick` → `Dialog` `size="lg"` + `showCloseButton`; foot LTR
   **Cancel → Delete → Save** (never Delete leftmost of Cancel); prefer omit
@@ -410,12 +412,15 @@
   (`g` / `y` / `p` look flat) — including `DropdownMenu` triggers,
   `ChatComposerToggle`, `Button` / SplitButton labels, `ToggleChip`, Chip,
   Switch end-labels, DatePicker title, and **`.fynns-overflow-tip-label`**
-  (global seatbelt ≥ **0.5.294**; Menu ≥ **0.5.255**). Use
-  `--fynns-line-height-snug`, never `line-height: 1` /
-  `--fynns-line-height-tight` together with `overflow: hidden`. Do **not**
-  invent consumer padding / line-height on tip or pill labels. Live
-  `#sandbox-menu-field-match` / `#sandbox-chat-composer-thinking-toggle`
-  (Thinking **g**). Failure: CONSUMER_TREATY Ellipsis label clips descenders.
+  (global seatbelt ≥ **0.5.302**; was snug ≥ **0.5.294**; Menu ≥
+  **0.5.255**). Use `--fynns-line-height-body` on overflow:hidden ellipsis
+  hosts — **not** `line-height: 1` / `--fynns-line-height-tight` /
+  `--fynns-line-height-snug` (12px × 1.25 equals Segoe’s font box and still
+  flat-cuts **g**). Do **not** invent consumer padding / line-height on tip
+  or pill labels. Live `#sandbox-menu-field-match` /
+  `#sandbox-chat-composer-thinking-toggle` (Thinking **g**) /
+  `#sandbox-chat-composer-leading-menus` (model ids with **g**). Failure:
+  CONSUMER_TREATY Ellipsis label clips descenders.
 - **DON'T** ship a labeled `DropdownMenu` with a leading glyph **misaligned**
   vs the label (icon rides baseline / floats high) — pass **`leadingIcon`**
   (16dp `.fynns-menu-trigger-leading`, flex-centered with the label — ≥
@@ -431,6 +436,10 @@
   (≥ **0.5.288**). Do **not** invent consumer `max-width` / manual `slice` /
   private chip-label CSS. Live `#sandbox-chat-composer-leading-menus` /
   `#chat`. Failure: CONSUMER_TREATY ChatComposer leading Menu label hard-clips.
+- **DON'T** shrink `ChatComposer` `endActions` until buttons disappear behind
+  the capsule edge. Core promotes crowded ≤26rem composers to a full-width
+  draft and wrapping action rows. Keep icon hit targets whole; let menu labels
+  ellipsize inside their own triggers.
 - **DON'T** park the **model** picker in `ChatComposer` `leading` (stays
   start-clustered) — put it in `endActions` (end / right, before Send) with
   `align="end"` (≥ **0.5.288**). Volume / tools stay in `leading`. Do **not**
@@ -444,12 +453,16 @@
   ChatComposer narrow host crushes draft.
 - **DON'T** let `endActions` model Menu crush to chevron-only beside
   Thinking / Vision / Send — core ≥ **0.5.291** uses content-first model flex
-  + `--fynns-chat-composer-leading-menu-min`; mode pills go icon-only on
+  + soft `min(menu-min, max-content)` floor (≥ **0.5.300** also for leading
+  volume Menus — short labels hug the chevron, no empty mid-capsule pad);
+  mode pills go icon-only on
   ≤ **36rem** containers (≥ **0.5.293**, was 26rem — mid widths must not
   ellipsize to “T.”). Do **not** invent consumer min-width / icon-only
   chip CSS. Live `#sandbox-chat-composer-thinking-toggle` /
-  `#sandbox-chat-composer-thinking-toggle-narrow`. Failure:
-  CONSUMER_TREATY ChatComposer endActions model crushed by toggles.
+  `#sandbox-chat-composer-thinking-toggle-narrow` /
+  `#sandbox-chat-composer-leading-menus`. Failure:
+  CONSUMER_TREATY ChatComposer endActions model crushed by toggles /
+  ChatComposer leading Menu short-label pad.
 - **DON'T** bury ChatComposer **mode** switches (Thinking / Vision / …) in the
   leading `+` Menu — use keep-set `ChatComposerToggle` in `endActions`
   (Model → Thinking → Vision → Send; Tooltip for tip copy — ≥ **0.5.289**).
@@ -502,6 +515,12 @@
   Live `#select` / `#menu` / `#password` / `#input`. Failure: CONSUMER_TREATY
   consumer restyles keep-set chrome radius; Input trailing affix far from
   shell edge.
+- **DON'T** use bare **`Input type="number"`** for numeric values — UA spin
+  buttons are not fynns chrome. Use **`NumberInput`** (custom steppers,
+  `role="spinbutton"`). Core hides UA spinners on `.fynns-input[type=number]`
+  as a safety net (≥ **0.5.301**) but that is **not** a substitute for
+  `NumberInput`. Live `#number-input`. Failure: CONSUMER_TREATY Input
+  type=number UA spinners.
 - **DON'T** invent consumer negative margin / private pad on
   `.fynns-field-shell` / `.fynns-field-affix`, ship **md** IconButton in Input
   `leading`/`trailing`, or clone reveal/clear **outside** `Input` `trailing`
@@ -569,6 +588,10 @@
   **10** / step **10**, ≥ **0.5.144**): slice in the app; foot = **tonal**
   **md** labeled Button (≥ **0.5.147** tonal; size back to **md** ≥ **0.5.149**),
   centered **outside** `.fynns-table-wrap`; pass locale (`更多` / `Show more`).
+  `RevealMore` owns an extra `--fynns-layout-reveal-more-clearance` on **both**
+  block sides, in addition to the host's normal sibling gap. This keeps the
+  expand action visually separate from any adjacent item or CTA; do not
+  replace it with a bare Button or tune consumer margins.
   Short tables, Dialog-hosted tables, and true page `Pagination` are exempt. Do
   not bounce an expanded window when polling only grows `total` — use `resetKey`
   for filter / source identity. Live `#table`.
@@ -576,7 +599,13 @@
   grow past ~5 rows — same `useRevealMore` + `RevealMore`, but pass
   `REVEAL_MORE_LIST_DEFAULT_INITIAL` / `_STEP` (**5** / **5**, ≥ **0.5.145**)
   because ListItems are taller: foot **after** the List (unit-stack sibling);
-  short lists / Dialog / `Pagination` exempt. Live `#list`.
+  short lists / Dialog / `Pagination` exempt. Live `#list`. If a follow-up CTA
+  comes after the foot, keep the foot and CTA in the same `.fynns-unit-stack`
+  so the existing `--fynns-layout-unit-stack-gap` composes with the core
+  clearance on both sides; do not add consumer margin, negative positioning,
+  or a redundant control-cluster wrapper around `RevealMore`. In a
+  `NavigationDrawer`, render it directly after the last Item so the 4dp row
+  gap composes with the same clearance. Live `#list` / `#layouts-demo-chat-product`.
 - **DON'T** open a **DropdownMenu** that paints a near-viewport item tower —
   panel caps `max-height: min(70dvh, 20rem)` + `fynns-scroll` (≥ **0.5.250**);
   overlay thumbs for the menu itself use `--fynns-z-scroll-overlay-flyout`
@@ -676,6 +705,13 @@
   `--toolbar-end` — **not** a lone trash twin. Live
   `#sandbox-navdrawer-session-chrome`. Failure: CONSUMER_TREATY mode drawer
   toolbar trash+new twin.
+- **DON'T** put a leading `icon` on session / history `NavigationDrawerItem`s
+  by default — rows are **label (+ optional `trailing` More) only**. `icon` is
+  **opt-in** when the glyph carries meaning (typed destinations, distinct
+  kinds) — never a uniform decorative `FileIcon` on every chat title. Live
+  `#sandbox-navdrawer-session-chrome` (clean default) /
+  `#sandbox-navdrawer-session-icon` (opt-in icon variant). Failure:
+  CONSUMER_TREATY session history leading icon by default.
 - **DON'T** invent a chat / session-history product layout that skips the
   keep-set tree — default = **`ClippedNavShell`** + session
   `NavigationDrawer` (`NavigationDrawerNewChat` …) + **`FillColumn` → `Chat`**.
@@ -758,13 +794,21 @@
 - **DON'T** park **`IconButton` / check-disk / Fab** (or any icon-only primary)
   as the confirm / dismiss control inside a centered `Dialog` /
   `ConfirmDialog` **body or foot** — **one Dialog foot style only** (≥
-  **0.5.286**). Canonical foot = `.fynns-control-cluster--end-align` with
-  **labeled** `Button`s only: LTR **Cancel** `ghost` `sm` leftmost → optional
-  secondary tonal → **primary** confirm **rightmost** (Wave1 OverflowTip on
-  long labels). `ConfirmDialog` stock foot counts. How-to stays on
+  **0.5.286**). Canonical foot = Dialog **`feet`** prop (sticky
+  `.fynns-dialog-foot`, ≥ **0.5.297**) or `ConfirmDialog` stock foot — never
+  bury Cancel inside scrollable `children`. Inside `feet`: 
+  `.fynns-control-cluster--end-align` with **labeled** `Button`s only: LTR
+  **Cancel** `ghost` `sm` leftmost → optional secondary tonal → **primary**
+  confirm **rightmost** (Wave1 OverflowTip on long labels). Always render
+  Cancel in `feet` on loading / empty-plan branches. How-to stays on
   `headActions` `InfoHint` `sm` — not a `description` essay that restates the
-  FieldBlock label. Live `#overlays` (create Dialog). Failure: CONSUMER_TREATY
-  Dialog foot IconButton / check-disk.
+  FieldBlock label. Live `#overlays` / `#dialog-nested-scroll`. Failure:
+  CONSUMER_TREATY Dialog foot IconButton / check-disk;
+  Dialog body end-align footer clipped; Dialog feet omitted on empty plan.
+- **DON'T** leave a transparent Dialog overlay eating clicks while
+  `data-state="closing"` — core sets `pointer-events: none` on closing
+  overlays (≥ **0.5.297**). Live `#overlays`. Failure: CONSUMER_TREATY
+  Dialog closing scrim blocks clicks.
 - **DON'T** crush BottomSheet title top below actions bottom — header outer
   `padding-block-start` aliases `--fynns-layout-sheet-actions-pad-bottom`
   (**24dp**, ≥ **0.5.281**). Do not revive `sheet-header-gap` as the outer

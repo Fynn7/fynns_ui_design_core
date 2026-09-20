@@ -1166,7 +1166,6 @@ export function LayoutsPage() {
                   }
                 />
                 <NavigationDrawerItem
-                  icon={<FileIcon />}
                   label={t("globals.navDrawerSessionEntry")}
                   active
                   trailing={
@@ -1187,6 +1186,63 @@ export function LayoutsPage() {
               </NavigationDrawer>
             </div>
             <SandboxHelp text={t("globals.navDrawerSessionToolbarHelp")} />
+            <div
+              id="sandbox-navdrawer-session-icon"
+              className="sandbox-globals-navdrawer"
+              style={{
+                display: "flex",
+                width: "fit-content",
+                maxWidth: "100%",
+                height: "14rem",
+                border: "1px solid var(--fynns-color-border)",
+                borderRadius: "var(--fynns-radius-md)",
+                overflow: "hidden",
+                background: "var(--fynns-color-app-bg)",
+              }}
+            >
+              <NavigationDrawer
+                variant="standard"
+                ariaLabel={t("globals.navDrawerSessionIconAria")}
+              >
+                <NavigationDrawerNewChat
+                  label={t("globals.navDrawerSessionNew")}
+                  trailing={
+                    <DropdownMenu
+                      trigger={<MoreHorizontalIcon />}
+                      ariaLabel={t("globals.navDrawerSessionMore")}
+                      align="end"
+                      iconOnly
+                      size="sm"
+                      variant="ghost"
+                    >
+                      <DropdownMenuItem icon={<TrashIcon />} tone="danger">
+                        {t("globals.navDrawerSessionDeleteAll")}
+                      </DropdownMenuItem>
+                    </DropdownMenu>
+                  }
+                />
+                <NavigationDrawerItem
+                  icon={<FileIcon />}
+                  label={t("globals.navDrawerSessionEntry")}
+                  active
+                  trailing={
+                    <DropdownMenu
+                      trigger={<MoreHorizontalIcon />}
+                      ariaLabel={t("globals.navDrawerModeEntryMore")}
+                      align="end"
+                      iconOnly
+                      size="sm"
+                      variant="ghost"
+                    >
+                      <DropdownMenuItem icon={<TrashIcon />} tone="danger">
+                        {t("globals.navDrawerModeEntryDelete")}
+                      </DropdownMenuItem>
+                    </DropdownMenu>
+                  }
+                />
+              </NavigationDrawer>
+            </div>
+            <SandboxHelp text={t("globals.navDrawerSessionIconHelp")} />
             <div
               className="sandbox-globals-navdrawer"
               style={{

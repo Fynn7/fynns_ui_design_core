@@ -49,6 +49,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["按钮", "btn", "primary", "tonal", "ghost"],
   },
   {
+    id: "button-icon-label",
+    categoryId: "actions",
+    label: "Button · icon + label",
+    keywords: ["图标文字按钮", "icon and text", "icon label"],
+  },
+  {
     id: "split-button",
     categoryId: "actions",
     label: "SplitButton",
@@ -352,6 +358,24 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     ],
   },
   {
+    id: "chat-collapse",
+    categoryId: "communication",
+    label: "ChatMessage collapse",
+    keywords: [
+      "折叠",
+      "展开",
+      "收起",
+      "collapse",
+      "expand",
+      "Show more",
+      "Show less",
+      "chevron",
+      "mask",
+      "渐隐",
+      "长消息",
+    ],
+  },
+  {
     id: "thinking",
     categoryId: "communication",
     label: "ChatThinking",
@@ -389,12 +413,6 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     categoryId: "containment",
     label: "Avatar",
     keywords: ["头像", "avatar", "avatargroup"],
-  },
-  {
-    id: "badged-box",
-    categoryId: "containment",
-    label: "BadgedBox",
-    keywords: ["角标", "badge", "badged"],
   },
   {
     id: "list",
@@ -506,6 +524,22 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "title",
       "抽屉",
       "滚动条",
+    ],
+  },
+  {
+    id: "dialog-nested-scroll",
+    categoryId: "containment",
+    label: "Dialog nested CodeBlock scroll",
+    keywords: [
+      "dialog",
+      "scrollbar",
+      "overlay",
+      "codeblock",
+      "collapsible",
+      "copy-float",
+      "overflow",
+      "对话框",
+      "溢出",
     ],
   },
   {

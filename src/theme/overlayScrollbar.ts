@@ -30,11 +30,17 @@
  * Auto-starts when `@fynns/ui` is imported. Idempotent.
  */
 
+import {
+  clearScrollEdgeFade,
+  syncScrollEdgeFade,
+} from "../primitives/scrollEdgeFade";
+
 const HOST_ATTR = "data-fynns-overlay-scroll";
 /** Ties portal rails to a host across Vite HMR / dual-bundle loads. */
 const HOST_ID_ATTR = "data-fynns-scroll-host";
 /** Opt out of vertical-wheel → horizontal pan (`"off"`). Default enabled. */
 const WHEEL_X_ATTR = "data-fynns-wheel-x";
+const BORDER_ATTR = "data-fynns-scroll-border";
 const RAIL_CLASS = "fynns-scroll-rail";
 const THUMB_CLASS = "fynns-scroll-thumb";
 const MIN_THUMB_PX = 24;
@@ -469,6 +475,7 @@ function handleWheelAxisX(
 function isFlyoutScrollHost(host: HTMLElement): boolean {
   return (
     host.classList.contains("fynns-menu") ||
+    host.classList.contains("fynns-menu-scroll") ||
     host.classList.contains("fynns-select-list") ||
     host.classList.contains("fynns-select-menu") ||
     host.classList.contains("fynns-command-list")
@@ -615,23 +622,25 @@ function scheduleUpdate(host: HTMLElement, state: HostState) {
   });
 }
 
-function axisMetrics(host: HTMLElement, axis: Axis) {
+function axisMetrics(host: HTMLElement, axis: Axis, rail: HTMLDivElement) {
   if (axis === "y") {
     const { scrollHeight, clientHeight, scrollTop } = host;
+    const railHeight = rail.getBoundingClientRect().height;
     const thumbSize = Math.max(
       MIN_THUMB_PX,
-      (clientHeight / Math.max(1, scrollHeight)) * clientHeight,
+      Math.min(railHeight, (clientHeight / Math.max(1, scrollHeight)) * railHeight),
     );
-    const thumbTravel = Math.max(0, clientHeight - thumbSize);
+    const thumbTravel = Math.max(0, railHeight - thumbSize);
     const scrollRange = Math.max(1, scrollHeight - clientHeight);
     return { thumbSize, thumbTravel, scrollRange, scrollPos: scrollTop };
   }
   const { scrollWidth, clientWidth, scrollLeft } = host;
+  const railWidth = rail.getBoundingClientRect().width;
   const thumbSize = Math.max(
     MIN_THUMB_PX,
-    (clientWidth / Math.max(1, scrollWidth)) * clientWidth,
+    Math.min(railWidth, (clientWidth / Math.max(1, scrollWidth)) * railWidth),
   );
-  const thumbTravel = Math.max(0, clientWidth - thumbSize);
+  const thumbTravel = Math.max(0, railWidth - thumbSize);
   const scrollRange = Math.max(1, scrollWidth - clientWidth);
   return { thumbSize, thumbTravel, scrollRange, scrollPos: scrollLeft };
 }
@@ -654,7 +663,7 @@ function beginDrag(
   e.stopPropagation();
 
   const onThumb = e.target === thumb || thumb.contains(e.target as Node);
-  let metrics = axisMetrics(host, axis);
+  let metrics = axisMetrics(host, axis, rail);
 
   if (!onThumb) {
     const railRect = rail.getBoundingClientRect();
@@ -666,7 +675,7 @@ function beginDrag(
         ? Math.min(1, Math.max(0, offset / metrics.thumbTravel))
         : 0;
     setScrollPos(host, axis, ratio * metrics.scrollRange);
-    metrics = axisMetrics(host, axis);
+    metrics = axisMetrics(host, axis, rail);
     updateHost(host, state);
   }
 
@@ -750,33 +759,27 @@ function updateHost(host: HTMLElement, state: HostState) {
     if (copyRoot) {
       const rail = copyFloatVerticalRailGeometry(copyRoot, rect, sb);
       railLeft = rail.left;
-      const belowChrome = clampVerticalRailBelowOverlayChrome(
-        host,
-        rail.top,
-        rail.height,
-        railLeft,
-        sb,
-      );
-      railTop = belowChrome.top;
-      railHeight = belowChrome.height;
-    } else {
-      const rounded = clampVerticalRailToRoundedClip(
-        host,
-        railTop,
-        railHeight,
-        railLeft,
-        sb,
-      );
-      const belowChrome = clampVerticalRailBelowOverlayChrome(
-        host,
-        rounded.top,
-        rounded.height,
-        railLeft,
-        sb,
-      );
-      railTop = belowChrome.top;
-      railHeight = belowChrome.height;
+      railTop = rail.top;
+      railHeight = rail.height;
     }
+    /* Plain / `--copy-float` CodeBlock still needs rounded-clip clamp so
+       thumbs stay inside centered Dialog `radius-3xl` (live `#dialog-nested-scroll`). */
+    const rounded = clampVerticalRailToRoundedClip(
+      host,
+      railTop,
+      railHeight,
+      railLeft,
+      sb,
+    );
+    const belowChrome = clampVerticalRailBelowOverlayChrome(
+      host,
+      rounded.top,
+      rounded.height,
+      railLeft,
+      sb,
+    );
+    railTop = belowChrome.top;
+    railHeight = belowChrome.height;
 
     const thumbH = Math.max(
       MIN_THUMB_PX,
@@ -812,6 +815,22 @@ function updateHost(host: HTMLElement, state: HostState) {
   }
 
   syncThumbVisibility(state, host);
+  const cs = getComputedStyle(host);
+  const hasBorder = [
+    cs.borderTopWidth,
+    cs.borderRightWidth,
+    cs.borderBottomWidth,
+    cs.borderLeftWidth,
+  ].some((width) => Number.parseFloat(width) > 0);
+  if (hasBorder && !host.hasAttribute(BORDER_ATTR)) {
+    host.setAttribute(BORDER_ATTR, "");
+  } else if (!hasBorder && host.hasAttribute(BORDER_ATTR)) {
+    host.removeAttribute(BORDER_ATTR);
+  }
+  /* Every overlay host gets vertical soft-edge CSS from these attributes;
+   * table wraps also get inline-edge CSS. Editable CodeBlock uses its
+   * separate glyph twin, because masking the caret host breaks selection. */
+  syncScrollEdgeFade(host);
 }
 
 function attach(host: HTMLElement) {
@@ -928,7 +947,7 @@ function attach(host: HTMLElement) {
 
   if (typeof MutationObserver !== "undefined") {
     state.mo = new MutationObserver(() => scheduleUpdate(host, state));
-    state.mo.observe(host, { childList: true, subtree: true });
+    state.mo.observe(host, { childList: true, characterData: true, subtree: true });
   }
 
   states.set(host, state);
@@ -967,7 +986,9 @@ function detach(host: HTMLElement) {
   if (hostId) removeRailsForHostId(hostId);
   host.removeAttribute(HOST_ATTR);
   host.removeAttribute(HOST_ID_ATTR);
+  host.removeAttribute(BORDER_ATTR);
   host.classList.remove("fynns-scroll--overlay-host");
+  clearScrollEdgeFade(host);
   states.delete(host);
   setBoundState(host, undefined);
 }

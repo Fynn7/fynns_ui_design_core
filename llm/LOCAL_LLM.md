@@ -54,7 +54,7 @@
 1. 新会话只带精简 `AGENTS.md` + 任务；一次一步（读 → 改 → typecheck），长任务拆成多个会话。
 2. 查 API 用 `node scripts/api.mjs <Name>`（`--list` / `--search` / `--tokens`），**不要**整读 `src/` / sandbox / CSS / `tokens.ts`。
 3. Grep 必须限定目录 + `--glob`，只取前几条；Read 带行号范围（≤ 120 行）。
-4. 消费仓（绿地 app）：入口 [`CONSUME.md`](CONSUME.md)；安装脚本会把 [`consumer-AGENTS.md`](consumer-AGENTS.md) 写成该 app 的 `AGENTS.md`。
+4. 消费仓：入口 [`CONSUME.md`](CONSUME.md)（含 §1b 无脚本安装契约）；安装脚本会把 [`consumer-AGENTS.md`](consumer-AGENTS.md) 写成该 app 的 `AGENTS.md`。脚本失败 → 手写契约，勿在消费任务里改 core `scripts/**`；安装 debug 污染上下文 → **新会话**续产品工作。
 5. 上下文一旦被污染（大输出 / 反复失败）：**新开会话**，不要在原会话硬塞。
 6. 不再使用 repomix 打包：32k 窗口下任何整仓包都是负收益。
 

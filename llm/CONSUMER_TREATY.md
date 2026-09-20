@@ -81,9 +81,11 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | NavigationDrawerItem badge IconButton always visible | DESIGN_SYSTEM Hard rules | `#layouts-demo-navigation-drawer` |
 | NavigationDrawerItem always-visible trash / no more-menu | DESIGN_SYSTEM Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer toolbar trash+new twin | DESIGN_SYSTEM Hard rules / NavigationDrawerNewChat ≥ 0.5.256 | `#sandbox-navdrawer-session-chrome` |
+| session history leading icon by default | DESIGN_SYSTEM Hard rules / Content density ≥ 0.5.298 | `#sandbox-navdrawer-session-chrome` / `#sandbox-navdrawer-session-icon` |
 | chat product / session host wrong tree | DESIGN_SYSTEM Content density / Chat product | `#layouts-demo-chat-product` |
 | chat aside host wrong tree | DESIGN_SYSTEM Content density / Chat aside | `#layouts-demo-chat-aside` |
 | FieldHeader inline InfoHint kissed | DESIGN_SYSTEM forms / FieldStack | `#info-hint` / `#form-recipe` |
+| Input type=number UA spinners | DESIGN_SYSTEM hard-rules (≥ **0.5.301**) | `#number-input` |
 | env key FieldHint under input (hint split) | DESIGN_SYSTEM forms / FieldStack | `#env-check` / `#password` |
 | env key status Chip (information redundancy) | DESIGN_SYSTEM forms / FieldStack | `#env-check` / `#password` |
 | Input trailing md IconButton in field shell | DESIGN_SYSTEM hard-rules | `#field-header` |
@@ -122,6 +124,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | ListItem trailing IconButtons stacked vertically | DESIGN_SYSTEM hard-rules | `#list` |
 | page-scroll host flush with Card | DESIGN_SYSTEM Card / Collapsible | `#page-scroll` |
 | PageScroll mid-scroll hard clip (no edge fade) | DESIGN_SYSTEM Hard rules / Scrollbar | `#page-scroll` |
+| Dialog / Drawer / Sheet body or other core scroll container hard-clips overflowing content (including a full-height CodeBlock inside a Dialog) | DESIGN_SYSTEM philosophy / Scrollbar: core `.fynns-scroll` automatically detects overflow and fades its vertical edges; render the core component without private scroll wrappers or mask CSS | `#dialog-nested-scroll` / `#drawer-nested-scroll` |
 | FillColumn header mid-scroll hard clip (no edge fade) | DESIGN_SYSTEM Hard rules / Scrollbar | `#sandbox-fill-column-guide` |
 | Textarea / bordered scroll-edge fade erases stroke | DESIGN_SYSTEM philosophy / Scrollbar (≥ **0.5.282**) | `#textarea` |
 | PageScroll Card sheet-max-width under ControlRow | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
@@ -184,11 +187,12 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | DropdownMenu missing nested submenu | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-menu-submenu` / `#menu` |
 | DropdownMenu panel left-shifted vs trigger | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.254**) | `#sandbox-menu-field-match` / `#menu` |
 | Menu chevron optically high | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.254**) | `#menu` / `#sandbox-menu-field-match` |
-| Ellipsis label clips descenders | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.294**; Menu ≥ **0.5.255**) | `#sandbox-chat-composer-thinking-toggle` / `#sandbox-menu-field-match` / `#menu` / `#chat` |
+| Ellipsis label clips descenders | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.302**; was snug ≥ **0.5.294**; Menu ≥ **0.5.255**) | `#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-leading-menus` / `#sandbox-menu-field-match` / `#menu` / `#chat` |
 | ChatComposer leading Menu label hard-clips | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus` / `#chat` |
 | ChatComposer model Menu left-clustered | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus` / `#chat` |
 | ChatComposer narrow host crushes draft | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-chat-composer-leading-menus-narrow` / `#chat` |
 | ChatComposer endActions model crushed by toggles | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.291** / icon-only ≤ **36rem** ≥ **0.5.293**) | `#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-thinking-toggle-narrow` / `#chat` |
+| ChatComposer leading Menu short-label empty pad | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.300**) | `#sandbox-chat-composer-leading-menus` / `#chat` |
 | ChatComposer mode toggle buried in + Menu | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.289**) | `#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-thinking-toggle-narrow` / `#chat` |
 | ChatComposer model Menu flat without source sections | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.290**) | `#sandbox-chat-composer-model-sections` / `#sandbox-chat-composer-model-empty` / `#chat` |
 | Menu trigger leading icon misaligned | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.258**) | `#sandbox-menu-leading-icon` / `#menu` |
@@ -224,14 +228,16 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | SyncSideFilter tooltip covers chrome or list | DESIGN_SYSTEM content-density / List | `—` |
 | SyncSideFilter / ToggleGroup segment wash bleed | DESIGN_SYSTEM Hard rules | `#toggle-group` |
 | SyncSideFilter long labels crush / flush pad | DESIGN_SYSTEM content-density / shells | `#layouts-demo-navigation-drawer` / `#toggle-group` |
-| CodeBlock editable selection stripes | DESIGN_SYSTEM catalog | `#code-block` |
+| CodeBlock editable selection stripes / false scroll on short fill / dual-layer desync | DESIGN_SYSTEM catalog / shared-overflow gate ≥ 0.5.299 | `#code-block` |
 | Collapsible inside List (skeleton crush) | DESIGN_SYSTEM content-density / List | `#list` |
 | nested short List well + invented list-well token | DESIGN_SYSTEM content-density / List | `#list` |
 | tiny InfoHint in TopAppBar / toolbar chrome | DESIGN_SYSTEM forms / FieldStack | `—` |
 | Surface + FieldHeader as titled table shell | DESIGN_SYSTEM Card / Collapsible | `#table` |
 | wide Table wheel scrolls PageScroll (no wheel→X) | DESIGN_SYSTEM Scrollbar / Content density | `#table` |
+| Table H-scroll hard clip (no left/right edge fade) | DESIGN_SYSTEM philosophy / Content density (≥ **0.5.296**) | `#table` |
 | long Table dumps all rows | DESIGN_SYSTEM Hard rules / Content density | `#table` |
 | long List dumps all rows | DESIGN_SYSTEM Hard rules / Content density | `#list` |
+| RevealMore foot kisses preceding item or following CTA; consumer wraps it in a control cluster | DESIGN_SYSTEM Hard rules / Content density (`--fynns-layout-reveal-more-clearance` on both sides; direct sibling) | `#list` / `#layouts-demo-chat-product` |
 | List tree wrapped in divs / buttons in leading | DESIGN_SYSTEM content-density / List | `#list` |
 | ListItem kind via wrapping div / start rail | DESIGN_SYSTEM hard-rules | `#list` |
 | builtin ListItem looks like a square / chip island | DESIGN_SYSTEM content-density / List | `#list` |
@@ -268,6 +274,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Dialog body Card stack crush | DESIGN_SYSTEM Dialog / overlays | `#form-recipe` |
 | phantom PageScroll rail behind modal Dialog | DESIGN_SYSTEM hard-rules | `#form-recipe` |
 | overlay scrollbar paints through chrome heads | DESIGN_SYSTEM Hard rules | `#drawer-nested-scroll` |
+| overlay scrollbar past Dialog radius | DESIGN_SYSTEM Hard rules | `#dialog-nested-scroll` |
 | overlay scrollbar paints above Select/Menu flyout | DESIGN_SYSTEM Scrollbar discipline | `#sandbox-scroll-menu-stack` |
 | Menu/Select flyout scroll thumb buried under panel | DESIGN_SYSTEM Scrollbar discipline | `#sandbox-scroll-menu-stack` |
 | modal Dialog scrollbar flash on enter | DESIGN_SYSTEM Dialog / overlays | `#timeline` |
@@ -288,7 +295,10 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | fixed-height CodeBlock / Textarea on page scroll | DESIGN_SYSTEM catalog | `#code-block` |
 | Textarea autoGrow soft-capped like ChatComposer (13rem) | DESIGN_SYSTEM catalog / llm/CHAT_* | `#textarea` |
 | skinny form Dialog (tall FieldStack / CodeBlock) | DESIGN_SYSTEM catalog | `#form-recipe` |
-| Dialog body end-align footer clipped | DESIGN_SYSTEM hard-rules | `#form-recipe` |
+| Dialog body end-align footer clipped | DESIGN_SYSTEM hard-rules (≥ **0.5.297** `feet`) | `#overlays` / `#dialog-nested-scroll` |
+| Dialog feet omitted on empty / loading plan | DESIGN_SYSTEM hard-rules / Dialog (≥ **0.5.297**) | `#overlays` / `#dialog-nested-scroll` |
+| Dialog closing scrim blocks clicks | DESIGN_SYSTEM Hard rules / overlays (≥ **0.5.297**) | `#overlays` |
+| OverflowTip restyled via `.fynns-overflow-tip` + tip-fill | DESIGN_SYSTEM Hard rules (≥ **0.5.297** `fill`) | `#list` |
 | Dialog title top ≠ body-end IconButton | DESIGN_SYSTEM hard-rules / Dialog | `#overlays` |
 | Dialog title top ≠ body-end foot | DESIGN_SYSTEM Hard rules / overlays (≥ **0.5.286**) | `#overlays` |
 | Dialog foot IconButton / check-disk | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.286**) | `#overlays` |

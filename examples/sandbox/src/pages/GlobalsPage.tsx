@@ -3,7 +3,6 @@ import {
   ArchiveIcon,
   Avatar,
   AvatarGroup,
-  BadgedBox,
   Banner,
   BarChartIcon,
   BottomSheet,
@@ -35,6 +34,7 @@ import {
   ChatComposer,
   ChatMarkdown,
   ChatMessage,
+  ChatReveal,
   ChatScrollToBottom,
   ChatActivity,
   ChatActivityArtifact,
@@ -159,6 +159,7 @@ import {
 } from "@fynns/ui";
 import { ChatComposerModelMenuSections } from "../components/ChatComposerModelMenuSections";
 import { ChatComposerModeTogglesEndActions } from "../components/ChatComposerModeTogglesEndActions";
+import { ChatTodoComposerDemo } from "../components/ChatTodoComposerDemo";
 import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
@@ -338,6 +339,42 @@ const DRAWER_NESTED_SCROLL_JSON = [
   '    { "id": "gamma", "label": "Sample block C" },',
   '    { "id": "delta", "label": "Sample block D" },',
   '    { "id": "epsilon", "label": "Sample block E" }',
+  "  ]",
+  "}",
+].join("\n");
+
+/** Centered Dialog + List + Collapsible + plain CodeBlock — rail + rail clamp cap. */
+const DIALOG_NESTED_SCROLL_JSON = [
+  "{",
+  '  "sample": "nested-scroll",',
+  '  "region": "EU",',
+  '  "digests": "Daily",',
+  '  "contact": "sample@example.com",',
+  '  "notes": [',
+  '    "Sample note 01 — tall host teaching scroll clamp.",',
+  '    "Sample note 02 — keep thumbs inside radius-3xl.",',
+  '    "Sample note 03 — plain CodeBlock uses copy-float.",',
+  '    "Sample note 04 — Dialog body is a size container.",',
+  '    "Sample note 05 — max-height composes with rail clamp.",',
+  '    "Sample note 06 — List rows stay above the fold.",',
+  '    "Sample note 07 — Collapsible chrome is plain.",',
+  '    "Sample note 08 — generic placeholders only.",',
+  '    "Sample note 09 — wrap soft; vertical overflow only.",',
+  '    "Sample note 10 — overlay Y rail clamps below chrome.",',
+  '    "Sample note 11 — rounded clip after copy-float geometry.",',
+  '    "Sample note 12 — prefer compact rows in narrow hosts.",',
+  '    "Sample note 13 — sample volume metadata for scroll.",',
+  '    "Sample note 14 — section alpha teaching block.",',
+  '    "Sample note 15 — section beta teaching block.",',
+  '    "Sample note 16 — section gamma teaching block.",',
+  '    "Sample note 17 — section delta teaching block.",',
+  '    "Sample note 18 — section epsilon teaching block.",',
+  '    "Sample note 19 — nested scroll stays inside panel.",',
+  '    "Sample note 20 — no consumer product strings here.",',
+  '    "Sample note 21 — textarea-max-height token on root.",',
+  '    "Sample note 22 — host scroll and nested rail coexist.",',
+  '    "Sample note 23 — thumb never paints past bottom curve.",',
+  '    "Sample note 24 — live sandbox #dialog-nested-scroll."',
   "  ]",
   "}",
 ].join("\n");
@@ -1029,36 +1066,34 @@ function TableRevealMoreDemo() {
 
   return (
     <Card title={t("globals.tableRevealCaption")} chrome="plain">
-      <div className="fynns-table-wrap fynns-scroll">
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableHeaderCell>{t("globals.tableColName")}</TableHeaderCell>
-              <TableHeaderCell>{t("globals.tableColStatus")}</TableHeaderCell>
-              <TableHeaderCell align="end">
-                {t("globals.tableColQty")}
-              </TableHeaderCell>
-              <TableHeaderCell align="end">
-                {t("globals.tableColCache")}
-              </TableHeaderCell>
-              <TableHeaderCell align="end">
-                {t("globals.tableColTotal")}
-              </TableHeaderCell>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeaderCell>{t("globals.tableColName")}</TableHeaderCell>
+            <TableHeaderCell>{t("globals.tableColStatus")}</TableHeaderCell>
+            <TableHeaderCell align="end">
+              {t("globals.tableColQty")}
+            </TableHeaderCell>
+            <TableHeaderCell align="end">
+              {t("globals.tableColCache")}
+            </TableHeaderCell>
+            <TableHeaderCell align="end">
+              {t("globals.tableColTotal")}
+            </TableHeaderCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.status}</TableCell>
+              <TableCell align="end">{row.qty}</TableCell>
+              <TableCell align="end">{row.cache}</TableCell>
+              <TableCell align="end">{row.total}</TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.status}</TableCell>
-                <TableCell align="end">{row.qty}</TableCell>
-                <TableCell align="end">{row.cache}</TableCell>
-                <TableCell align="end">{row.total}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+          ))}
+        </TableBody>
+      </Table>
       <RevealMore
         canRevealMore={canRevealMore}
         onRevealMore={revealMore}
@@ -1116,6 +1151,14 @@ function ListRevealMoreDemo() {
           onRevealMore={revealMore}
           label={t("globals.listRevealMore")}
         />
+        <div className="fynns-control-cluster">
+          <Button
+            variant="primary"
+            onClick={() => snackbar(t("globals.listRevealContinueSnack"))}
+          >
+            {t("globals.listRevealContinue")}
+          </Button>
+        </div>
       </div>
     </Card>
   );
@@ -1263,6 +1306,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const [fullscreenFlushOpen, setFullscreenFlushOpen] = useState(false);
   const [drawerNestedScrollOpen, setDrawerNestedScrollOpen] = useState(false);
+  const [dialogNestedScrollOpen, setDialogNestedScrollOpen] = useState(false);
   const [fullscreenLocale, setFullscreenLocale] = useState("zh");
   const [fullscreenPath, setFullscreenPath] = useState("");
   const [fullscreenFlushXml, setFullscreenFlushXml] = useState(FULLSCREEN_FLUSH_XML);
@@ -1305,6 +1349,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   );
   const [chatComposerLeadingMenusDraft, setChatComposerLeadingMenusDraft] =
     useState("");
+  const [chatComposerLeadingMenusVolume, setChatComposerLeadingMenusVolume] =
+    useState<"short" | "long">("short");
   const [chatComposerThinkingOn, setChatComposerThinkingOn] = useState(true);
   const [chatComposerVisionOn, setChatComposerVisionOn] = useState(false);
   const [chatAsideDraft, setChatAsideDraft] = useState("");
@@ -1664,6 +1710,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Button disabled>{t("globals.btnDisabled")}</Button>
           <Button active={btnActive} onClick={() => setBtnActive((v) => !v)}>
             {t("globals.btnActive")}
+          </Button>
+        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="button-icon-label">
+        <div className="sandbox-globals-row">
+          <Button variant="tonal" size="sm">
+            <>
+              <EyeIcon size={16} aria-hidden />
+              {t("globals.btnViewDetails")}
+            </>
+          </Button>
+          <Button variant="ghost" size="sm">
+            <ClipboardIcon size={16} aria-hidden />
+            {t("globals.btnCopyText")}
           </Button>
         </div>
         </GlobalsDemo>
@@ -3443,6 +3503,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 >
                   <ChatMarkdown source={t("globals.chatAssistantMarkdown")} />
                 </ChatMessage>
+                <ChatReveal>
+                  <Surface variant="soft" padded>
+                    {t("globals.chatRevealCard")}
+                  </Surface>
+                </ChatReveal>
                 <ChatStreamingAssistant
                   key={chatStreamEpoch}
                   streaming={chatStreaming}
@@ -3490,6 +3555,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   }
                 >
                   {chatFailed ? undefined : t("globals.chatRetrySuccess")}
+                </ChatMessage>
+                <ChatMessage
+                  role="user"
+                  expandLabel={t("globals.chatExpand")}
+                  collapseLabel={t("globals.chatCollapse")}
+                  markdown={Array(12)
+                    .fill(t("globals.chatUserBody"))
+                    .join("\n\n")}
+                />
+                <ChatMessage
+                  role="assistant"
+                  expandLabel={t("globals.chatExpand")}
+                  collapseLabel={t("globals.chatCollapse")}
+                  markdown={Array(6)
+                    .fill(t("globals.chatAssistantMarkdown"))
+                    .join("\n\n")}
+                />
+                <ChatMessage role="system">
+                  {Array(12).fill(t("globals.chatSystem")).join(" ")}
                 </ChatMessage>
                   </>
                 ) : null}
@@ -3572,6 +3656,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
         </div>
         <p className="sandbox-chat-aside-label">{t("globals.chatComposerMultiLabel")}</p>
+        <ChatTodoComposerDemo />
         <ChatComposer
           value={chatComposerMultiDraft}
           onChange={setChatComposerMultiDraft}
@@ -3596,80 +3681,93 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <p className="sandbox-chat-aside-label">
           {t("globals.chatComposerLeadingMenusLabel")}
         </p>
-        <div id="sandbox-chat-composer-leading-menus" hidden aria-hidden="true" />
         <div
-          id="sandbox-chat-composer-model-sections"
+          id="sandbox-chat-composer-leading-menus"
           className="sandbox-chat-composer-leading-menus-host"
         >
-          <ChatComposer
-            value={chatComposerLeadingMenusDraft}
-            onChange={setChatComposerLeadingMenusDraft}
-            ariaLabel={t("globals.chatComposerLeadingMenusAria")}
-            placeholder={t("globals.chatComposerPlaceholder")}
-            onSubmit={() => setChatComposerLeadingMenusDraft("")}
-            sendLabel={t("globals.chatSend")}
-            leading={
-              <>
-                <Tooltip content={t("globals.chatComposerLeadingTip")}>
-                  <IconButton
-                    type="button"
+          {/* Same host teaches leading labeled Menu + endActions model sections. */}
+          <div id="sandbox-chat-composer-model-sections">
+            <ChatComposer
+              value={chatComposerLeadingMenusDraft}
+              onChange={setChatComposerLeadingMenusDraft}
+              ariaLabel={t("globals.chatComposerLeadingMenusAria")}
+              placeholder={t("globals.chatComposerPlaceholder")}
+              onSubmit={() => setChatComposerLeadingMenusDraft("")}
+              sendLabel={t("globals.chatSend")}
+              leading={
+                <>
+                  <Tooltip content={t("globals.chatComposerLeadingTip")}>
+                    <IconButton
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.chatComposerLeadingTip")}
+                    >
+                      <PlusIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <DropdownMenu
+                    trigger={
+                      chatComposerLeadingMenusVolume === "long"
+                        ? t("globals.chatComposerLeadingMenusVolumeLong")
+                        : t("globals.chatComposerLeadingMenusVolume")
+                    }
+                    ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
                     size="sm"
                     variant="ghost"
-                    aria-label={t("globals.chatComposerLeadingTip")}
+                    align="start"
                   >
-                    <PlusIcon />
-                  </IconButton>
-                </Tooltip>
-                <DropdownMenu
-                  trigger={t("globals.chatComposerLeadingMenusVolume")}
-                  ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
-                  size="sm"
-                  variant="ghost"
-                  align="start"
-                >
-                  <DropdownMenuItem>
-                    {t("globals.chatComposerLeadingMenusVolume")}
-                  </DropdownMenuItem>
-                </DropdownMenu>
-              </>
-            }
-            endActions={
-              <ChatComposerModelMenuSections
-                trigger={t("globals.chatComposerLeadingMenusModel")}
-                ariaLabel={t("globals.chatComposerLeadingMenusModelAria")}
-                emptyLabel={t("globals.chatComposerModelMenuEmpty")}
-                sections={[
-                  {
-                    id: "local",
-                    label: t("globals.chatComposerModelSectionLocal"),
-                    models: [
-                      t("globals.chatComposerLeadingMenusModel"),
-                      t("globals.chatComposerModelLocalSample"),
-                    ],
-                  },
-                  {
-                    id: "cloud",
-                    label: t("globals.chatComposerModelSectionCloud"),
-                    models: [t("globals.chatComposerModelCloudSample")],
-                  },
-                  {
-                    id: "cli",
-                    label: t("globals.chatComposerModelSectionCli"),
-                    models: [
-                      t("globals.chatComposerModelCliCursor"),
-                      t("globals.chatComposerModelCliCodex"),
-                      t("globals.chatComposerModelCliClaude"),
-                    ],
-                  },
-                ]}
-                footer={
-                  <DropdownMenuItem>
-                    {t("globals.chatComposerModelMenuRefresh")}
-                  </DropdownMenuItem>
-                }
-              />
-            }
-          />
+                    <DropdownMenuItem
+                      onClick={() => setChatComposerLeadingMenusVolume("short")}
+                    >
+                      {t("globals.chatComposerLeadingMenusVolume")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => setChatComposerLeadingMenusVolume("long")}
+                    >
+                      {t("globals.chatComposerLeadingMenusVolumeLong")}
+                    </DropdownMenuItem>
+                  </DropdownMenu>
+                </>
+              }
+              endActions={
+                <ChatComposerModelMenuSections
+                  trigger={t("globals.chatComposerLeadingMenusModel")}
+                  ariaLabel={t("globals.chatComposerLeadingMenusModelAria")}
+                  emptyLabel={t("globals.chatComposerModelMenuEmpty")}
+                  sections={[
+                    {
+                      id: "local",
+                      label: t("globals.chatComposerModelSectionLocal"),
+                      models: [
+                        t("globals.chatComposerLeadingMenusModel"),
+                        t("globals.chatComposerModelLocalSample"),
+                      ],
+                    },
+                    {
+                      id: "cloud",
+                      label: t("globals.chatComposerModelSectionCloud"),
+                      models: [t("globals.chatComposerModelCloudSample")],
+                    },
+                    {
+                      id: "cli",
+                      label: t("globals.chatComposerModelSectionCli"),
+                      models: [
+                        t("globals.chatComposerModelCliCursor"),
+                        t("globals.chatComposerModelCliCodex"),
+                        t("globals.chatComposerModelCliClaude"),
+                      ],
+                    },
+                  ]}
+                  footer={
+                    <DropdownMenuItem>
+                      {t("globals.chatComposerModelMenuRefresh")}
+                    </DropdownMenuItem>
+                  }
+                />
+              }
+            />
+          </div>
         </div>
         <div
           id="sandbox-chat-composer-leading-menus-narrow"
@@ -3695,14 +3793,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </IconButton>
                 </Tooltip>
                 <DropdownMenu
-                  trigger={t("globals.chatComposerLeadingMenusVolume")}
+                  trigger={
+                    chatComposerLeadingMenusVolume === "long"
+                      ? t("globals.chatComposerLeadingMenusVolumeLong")
+                      : t("globals.chatComposerLeadingMenusVolume")
+                  }
                   ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
                   size="sm"
                   variant="ghost"
                   align="start"
                 >
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setChatComposerLeadingMenusVolume("short")}
+                  >
                     {t("globals.chatComposerLeadingMenusVolume")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setChatComposerLeadingMenusVolume("long")}
+                  >
+                    {t("globals.chatComposerLeadingMenusVolumeLong")}
                   </DropdownMenuItem>
                 </DropdownMenu>
               </>
@@ -3775,14 +3884,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </IconButton>
                 </Tooltip>
                 <DropdownMenu
-                  trigger={t("globals.chatComposerLeadingMenusVolume")}
+                  trigger={
+                    chatComposerLeadingMenusVolume === "long"
+                      ? t("globals.chatComposerLeadingMenusVolumeLong")
+                      : t("globals.chatComposerLeadingMenusVolume")
+                  }
                   ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
                   size="sm"
                   variant="ghost"
                   align="start"
                 >
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setChatComposerLeadingMenusVolume("short")}
+                  >
                     {t("globals.chatComposerLeadingMenusVolume")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setChatComposerLeadingMenusVolume("long")}
+                  >
+                    {t("globals.chatComposerLeadingMenusVolumeLong")}
                   </DropdownMenuItem>
                 </DropdownMenu>
               </>
@@ -3851,14 +3971,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </IconButton>
                 </Tooltip>
                 <DropdownMenu
-                  trigger={t("globals.chatComposerLeadingMenusVolume")}
+                  trigger={
+                    chatComposerLeadingMenusVolume === "long"
+                      ? t("globals.chatComposerLeadingMenusVolumeLong")
+                      : t("globals.chatComposerLeadingMenusVolume")
+                  }
                   ariaLabel={t("globals.chatComposerLeadingMenusVolumeAria")}
                   size="sm"
                   variant="ghost"
                   align="start"
                 >
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setChatComposerLeadingMenusVolume("short")}
+                  >
                     {t("globals.chatComposerLeadingMenusVolume")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setChatComposerLeadingMenusVolume("long")}
+                  >
+                    {t("globals.chatComposerLeadingMenusVolumeLong")}
                   </DropdownMenuItem>
                 </DropdownMenu>
               </>
@@ -3945,6 +4076,44 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <SandboxHelp text={t("globals.chatHelp")} />
         <TokenList group="chat" title={t("globals.tokenListChat")} />
         <TokenList group="chatmessage" title={t("globals.tokenListChatMessage")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="chat-collapse">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <SandboxHelp text={t("globals.chatCollapseHelp")} />
+          <ChatMessage
+            role="user"
+            expandLabel={t("globals.chatExpand")}
+            collapseLabel={t("globals.chatCollapse")}
+            markdown={t("globals.chatUserBody")}
+          />
+          <ChatMessage
+            role="user"
+            expandLabel={t("globals.chatExpand")}
+            collapseLabel={t("globals.chatCollapse")}
+            markdown={Array(24).fill(t("globals.chatUserBody")).join("\n\n")}
+          />
+          <ChatMessage
+            role="assistant"
+            expandLabel={t("globals.chatExpand")}
+            collapseLabel={t("globals.chatCollapse")}
+            markdown={Array(6)
+              .fill(t("globals.chatAssistantMarkdown"))
+              .join("\n\n")}
+          />
+          <ChatMessage
+            role="assistant"
+            streaming
+            streamingLabel={t("globals.chatStreamingLabel")}
+            expandLabel={t("globals.chatExpand")}
+            collapseLabel={t("globals.chatCollapse")}
+            markdown={Array(6)
+              .fill(t("globals.chatAssistantMarkdown"))
+              .join("\n\n")}
+          />
+          <ChatMessage role="system">
+            {Array(40).fill(t("globals.chatSystem")).join(" ")}
+          </ChatMessage>
+        </div>
         </GlobalsDemo>
         <GlobalsDemo id="thinking">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
@@ -4302,20 +4471,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         <SandboxHelp text={t("globals.avatarInitialsHelp")} />
         </GlobalsDemo>
-        <GlobalsDemo id="badged-box">
+        <GlobalsDemo id="avatar-group">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
-          <BadgedBox badge={3}>
-            <Tooltip content={t("globals.badgedBoxIconTip")}>
-              <IconButton
-                aria-label={`${t("globals.badgedBoxIconTip")}, 3`}
-              >
-                <InfoIcon />
-              </IconButton>
-            </Tooltip>
-          </BadgedBox>
-          <BadgedBox badge>
-            <Avatar name="Ada Lovelace" alt={t("globals.avatarAda")} />
-          </BadgedBox>
           <AvatarGroup max={3} size="sm" aria-label={t("globals.avatarGroupHelp")}>
             <Avatar name="Ada Lovelace" alt="Ada" />
             <Avatar name="Grace Hopper" alt="Grace" />
@@ -4324,7 +4481,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <Avatar name="Mary Jackson" alt="Mary" />
           </AvatarGroup>
         </div>
-        <SandboxHelp text={t("globals.badgedBoxHelp")} />
         <SandboxHelp text={t("globals.avatarGroupHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="list">
@@ -4686,6 +4842,26 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             size="lg"
             showCloseButton
             closeAriaLabel={t("globals.dialogClose")}
+            feet={
+              <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setListCatalogEditOpen(false)}
+                >
+                  {t("globals.formRecipeDialogCancel")}
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setListCatalogEditOpen(false);
+                    snackbar(t("globals.listCatalogEditDialogSaved"));
+                  }}
+                >
+                  {t("globals.formRecipeSave")}
+                </Button>
+              </div>
+            }
           >
             <FieldStack>
               <FieldBlock label={t("globals.listCatalogEditDialogName")}>
@@ -4704,24 +4880,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 />
               </FieldBlock>
             </FieldStack>
-            <div className="fynns-control-cluster fynns-control-cluster--end-align">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setListCatalogEditOpen(false)}
-              >
-                {t("globals.formRecipeDialogCancel")}
-              </Button>
-              <Button
-                size="sm"
-                onClick={() => {
-                  setListCatalogEditOpen(false);
-                  snackbar(t("globals.listCatalogEditDialogSaved"));
-                }}
-              >
-                {t("globals.formRecipeSave")}
-              </Button>
-            </div>
           </Dialog>
           <SandboxHelp text={t("globals.listCatalogHelp")} />
           <List aria-label={t("globals.listCatalogAria")}>
@@ -5471,6 +5629,36 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               size="lg"
               showCloseButton
               closeAriaLabel={t("globals.dialogClose")}
+              feet={
+                <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setTimelineEditOpen(false)}
+                  >
+                    {t("globals.formRecipeDialogCancel")}
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => {
+                      setTimelineEditOpen(false);
+                      snackbar(t("globals.timelineEditDialogDeleted"));
+                    }}
+                  >
+                    {t("globals.timelineEditDialogDelete")}
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      setTimelineEditOpen(false);
+                      snackbar(t("globals.timelineEditDialogSaved"));
+                    }}
+                  >
+                    {t("globals.formRecipeSave")}
+                  </Button>
+                </div>
+              }
             >
               <FieldStack>
                 <FieldBlock label={t("globals.timelineEditDialogName")}>
@@ -5489,34 +5677,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   />
                 </FieldBlock>
               </FieldStack>
-              <div className="fynns-control-cluster fynns-control-cluster--end-align">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setTimelineEditOpen(false)}
-                >
-                  {t("globals.formRecipeDialogCancel")}
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => {
-                    setTimelineEditOpen(false);
-                    snackbar(t("globals.timelineEditDialogDeleted"));
-                  }}
-                >
-                  {t("globals.timelineEditDialogDelete")}
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    setTimelineEditOpen(false);
-                    snackbar(t("globals.timelineEditDialogSaved"));
-                  }}
-                >
-                  {t("globals.formRecipeSave")}
-                </Button>
-              </div>
             </Dialog>
 
             <SandboxHelp text={t("globals.timelineDetailHelp")} />
@@ -6207,14 +6367,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           }
           size="sm"
           closeAriaLabel={t("globals.dialogClose")}
-        >
-          <FieldStack>
-            <FieldBlock label={t("globals.dialogCreateNameLabel")} htmlFor="sandbox-dialog-create-name">
-              <Input
-                id="sandbox-dialog-create-name"
-                placeholder={t("globals.dialogCreateNamePlaceholder")}
-              />
-            </FieldBlock>
+          feet={
             <div className="fynns-control-cluster fynns-control-cluster--end-align">
               <Button
                 variant="ghost"
@@ -6230,6 +6383,15 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 {t("globals.dialogCreateAction")}
               </Button>
             </div>
+          }
+        >
+          <FieldStack>
+            <FieldBlock label={t("globals.dialogCreateNameLabel")} htmlFor="sandbox-dialog-create-name">
+              <Input
+                id="sandbox-dialog-create-name"
+                placeholder={t("globals.dialogCreateNamePlaceholder")}
+              />
+            </FieldBlock>
           </FieldStack>
         </Dialog>
         <SandboxHelp text={t("globals.dialogFootCanonicalHelp")} />
@@ -6450,6 +6612,83 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
         </Drawer>
         <SandboxHelp text={t("globals.drawerNestedScrollHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="dialog-nested-scroll">
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Button size="sm" onClick={() => setDialogNestedScrollOpen(true)}>
+            {t("globals.dialogNestedScrollOpen")}
+          </Button>
+        </div>
+        <Dialog
+          open={dialogNestedScrollOpen}
+          onOpenChange={setDialogNestedScrollOpen}
+          title={t("globals.dialogNestedScrollTitle")}
+          size="md"
+          showCloseButton
+          closeAriaLabel={t("globals.dialogClose")}
+          feet={
+            <div className="fynns-control-cluster fynns-control-cluster--end-align">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setDialogNestedScrollOpen(false)}
+              >
+                {t("globals.dialogCreateCancel")}
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => setDialogNestedScrollOpen(false)}
+              >
+                {t("globals.dialogCreateAction")}
+              </Button>
+            </div>
+          }
+        >
+          <div className="fynns-unit-stack">
+            <List aria-label={t("globals.dialogNestedScrollTitle")}>
+              <ListItem
+                interactive={false}
+                headline="Sample patch · alpha"
+                supportingText="sample.json"
+              />
+              <ListItem
+                interactive={false}
+                headline="Sample patch · beta"
+                supportingText="sample.json"
+              />
+              <ListItem
+                interactive={false}
+                headline="Sample patch · gamma"
+                supportingText="sample.json"
+              />
+              <ListItem
+                interactive={false}
+                headline="Sample patch · delta"
+                supportingText="sample.json"
+              />
+              <ListItem
+                interactive={false}
+                headline="Sample patch · epsilon"
+                supportingText="sample.json"
+              />
+            </List>
+            <Collapsible
+              chrome="plain"
+              defaultOpen
+              title={t("globals.dialogNestedScrollFold")}
+            >
+              <CodeBlock
+                variant="plain"
+                language="json"
+                wrap
+                maxHeight="var(--fynns-layout-textarea-max-height)"
+                copyAriaLabel={t("globals.codeBlockCopy")}
+                code={DIALOG_NESTED_SCROLL_JSON}
+              />
+            </Collapsible>
+          </div>
+        </Dialog>
+        <SandboxHelp text={t("globals.dialogNestedScrollHelp")} />
         </GlobalsDemo>
       </>
         )}
@@ -7395,6 +7634,17 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </TableHead>
               <TableBody>
                 <TableRow>
+                  <TableCell>
+                    <div>sample/catalog-item-with-an-extremely-long-identifier-for-table-overflow-and-a-second-descriptive-segment</div>
+                    <FieldHint>{t("globals.tableMapManual")}</FieldHint>
+                  </TableCell>
+                  <TableCell>Ready</TableCell>
+                  <TableCell align="end">8</TableCell>
+                  <TableCell align="end">16M</TableCell>
+                  <TableCell align="end">24M</TableCell>
+                  <TableCell>sample/ink-35b</TableCell>
+                </TableRow>
+                <TableRow>
                   <TableCell>sample/ink-bench-16k</TableCell>
                   <TableCell>Ready</TableCell>
                   <TableCell align="end">12</TableCell>
@@ -8213,25 +8463,27 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             size="lg"
             showCloseButton
             closeAriaLabel={t("globals.dialogClose")}
+            feet={
+              <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                <Button variant="ghost" size="sm" disabled>
+                  {t("globals.formRecipeDialogCancel")}
+                </Button>
+                <Button variant="tonal" size="sm" disabled>
+                  {t("globals.formRecipeDialogCopyPrompt")}
+                </Button>
+                <Button variant="tonal" size="sm" disabled>
+                  {t("globals.formRecipeDialogImportJson")}
+                </Button>
+                <Button size="sm" loading>
+                  {t("globals.formRecipeDialogExtract")}
+                </Button>
+              </div>
+            }
           >
             <FormRecipeFields
               idPrefix="sandbox-form-dialog"
               {...formRecipeFieldProps}
             />
-            <div className="fynns-control-cluster fynns-control-cluster--end-align">
-              <Button variant="ghost" size="sm" disabled>
-                {t("globals.formRecipeDialogCancel")}
-              </Button>
-              <Button variant="tonal" size="sm" disabled>
-                {t("globals.formRecipeDialogCopyPrompt")}
-              </Button>
-              <Button variant="tonal" size="sm" disabled>
-                {t("globals.formRecipeDialogImportJson")}
-              </Button>
-              <Button size="sm" loading>
-                {t("globals.formRecipeDialogExtract")}
-              </Button>
-            </div>
           </Dialog>
           <Dialog
             open={formRecipeStackDialogOpen}
@@ -8291,6 +8543,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             size="lg"
             showCloseButton
             closeAriaLabel={t("globals.dialogClose")}
+            feet={
+              <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setFormRecipeFileDialogOpen(false)}
+                >
+                  {t("globals.formRecipeDialogCancel")}
+                </Button>
+                <Button size="sm" onClick={() => setFormRecipeFileDialogOpen(false)}>
+                  {t("globals.formRecipeFileDialogSave")}
+                </Button>
+              </div>
+            }
           >
             <CodeBlock
               variant="editable"
@@ -8300,18 +8566,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               copyAriaLabel={t("globals.codeBlockCopy")}
               aria-label={t("globals.codeBlockFileBodyAria")}
             />
-            <div className="fynns-control-cluster fynns-control-cluster--end-align">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setFormRecipeFileDialogOpen(false)}
-              >
-                {t("globals.formRecipeDialogCancel")}
-              </Button>
-              <Button size="sm" onClick={() => setFormRecipeFileDialogOpen(false)}>
-                {t("globals.formRecipeFileDialogSave")}
-              </Button>
-            </div>
           </Dialog>
           <SandboxHelp text={t("globals.formRecipeHelp")} />
         </GlobalsDemo>

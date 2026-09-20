@@ -47,8 +47,9 @@ export type CollapsibleProps = {
  * compact summary and expands on demand. Works controlled (`open`) or
  * uncontrolled (`defaultOpen`). `.fynns-collapsible*`.
  *
- * Body stays mounted so open and close both run the same CSS height + fade
- * transitions (M3-inspired container morph). When open, a full-bleed hairline
+ * Body stays mounted so opening can fade in after releasing its layout row,
+ * while closing fades out before the invisible row settles shut. When open,
+ * a full-bleed hairline
  * under the head meets the outer border (`chrome="card"`). Focus uses the same
  * quiet accent-tinted border as Input — not an inset focus ring.
  *

@@ -84,9 +84,11 @@ belong in a consumer’s own doc.
    phantom idle thumb. **Modal `.fynns-dialog-body`:** suppress thumb until panel
    enter settles (≥ **0.5.34**, mount + `transitionend` ≥ **0.5.35**); on fine
    pointer reveal on **host hover only** — not `:focus-within` from the focus
-   trap. **Nested scroll in Drawer / FullscreenDialog:** Y rails clamp below
-   overlay chrome heads (TopAppBar, dialog head, Card / Collapsible heads, nav
-   headlines ≥ **0.5.134**) — live `#drawer-nested-scroll` /
+   trap. **Nested scroll in Drawer / FullscreenDialog / centered Dialog:** Y
+   rails clamp below overlay chrome heads (TopAppBar, dialog head, Card /
+   Collapsible heads, nav headlines ≥ **0.5.134**) and inside panel
+   `radius-3xl` via copy-float + rounded-clip clamp — live
+   `#drawer-nested-scroll` / `#dialog-nested-scroll` /
    `#sandbox-scroll-menu-stack`. Fine pointer + hover:
    idle-transparent thumbs with soft fade; touch / coarse keeps thumbs tinted.
    **Wheel → horizontal (≥ 0.5.184 / trap at edge ≥ **0.5.186**):**
@@ -96,14 +98,20 @@ belong in a consumer’s own doc.
    **on**; opt out `data-fynns-wheel-x="off"`. While H overflows, vertical wheel
    stays on that host even at the left/right edge (no PageScroll chaining mid
    hover — avoids thumb jump when sliding back). Live `#table`. **Scroll-edge
-   fade (≥ 0.5.135; PageScroll ≥ **0.5.247**; FillColumn header ≥ **0.5.278**):**
-   capped CodeBlock / Textarea / NavigationDrawer body / **`PageScroll`** /
-   canvas-capped **`FillColumn` `header`** soft-mask top+bottom when content
-   overflows mid-scroll
-   (`data-fade-top` / `data-fade-bottom`, length
-   `--fynns-layout-scroll-edge-fade-length`) — **built into `PageScroll`
-   (≥ **0.5.247**) and FillColumn header (≥ **0.5.278**); zero consumer props /
-   private mask CSS**. Masks keep the outer `--fynns-border-hairline` strip
+   fade (≥ 0.5.135; PageScroll ≥ **0.5.247**; FillColumn header ≥ **0.5.278**;
+   Table wrap inline ≥ **0.5.296**):**
+   **Every core `.fynns-scroll` container** (including Dialog / Drawer / Sheet
+   bodies, menus, Chat, SplitPane, CodeBlock and `PageScroll`) soft-masks the
+   top/bottom edge whenever content continues beyond that edge. The core
+   measures overflow and updates `data-fade-top` / `data-fade-bottom` after
+   scrolling, resizing and content changes; callers only render the component.
+   Textarea, ChatComposer input and editable CodeBlock use their dedicated
+   caret-safe paths. Wide
+   **`.fynns-table-wrap`** soft-masks left+right mid-scroll (`data-fade-left` /
+   `data-fade-right`, same length `--fynns-layout-scroll-edge-fade-length`) —
+   **built into overlay `.fynns-scroll` hosts** (≥ **0.5.296** for tables;
+   PageScroll ≥ **0.5.247**; FillColumn header ≥ **0.5.278**); zero consumer
+   props / private mask CSS**. Masks keep the outer `--fynns-border-hairline` strip
    opaque (≥ **0.5.282**) so Textarea / bordered wells do **not** fade their
    stroke with the content. Not a hard clip
    into TopAppBar / canvas floor / Chat. Do **not** invent consumer `mask-image` on
@@ -125,7 +133,7 @@ belong in a consumer’s own doc.
    floating surface island on bare `app-bg` — ≥ **0.5.191**; **pane
    cold-start uses `fill`**, never `EmptyState` + a
    ring, never a ring stacked on a bar), `EmptyState` (**zero-result catalogs
-   only**), `Banner` / `InlineAlert` / `BadgedBox`, and imperative `snackbar`
+   only**), `Banner` / `InlineAlert`, and imperative `snackbar`
    (+ root `<SnackbarHost />`). Do **not** use deleted Toast APIs or the removed
    pill `Badge` (see `llm/BREAKING_PURGE.md`). Color status as `danger` /
    `warning` / `info` / `success`.

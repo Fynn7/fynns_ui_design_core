@@ -795,6 +795,16 @@ export const CHATMESSAGE_TOKENS = {
   /** Gap between optional icon / label / chevron in the thinking trigger row. */
   "thinking-trigger-gap": "0.375rem",
   /**
+   * Collapsed long-message preview ceiling (~12rem). `ChatMessage` clamps the
+   * body to this height and fades content into the expand trigger.
+   */
+  "collapse-preview-height": "12rem",
+  /**
+   * Fade band at the bottom of a collapsed body (mask, not an overlay wash,
+   * so user-bubble fill and bare assistant rows share one rule).
+   */
+  "collapse-fade-height": "3rem",
+  /**
    * Thought body inset under the trigger (and ChatActivity steps under
    * the header). Aliases field-stack-gap so label ↔ body is not flush.
    */
@@ -866,6 +876,9 @@ export const CHATMESSAGE_TOKENS = {
  * Spec: `llm/CHAT_COMPOSER_LAYOUT.md`. `--fynns-chat-<key>`.
  */
 export const CHAT_TOKENS = {
+  /** New turns and caller-owned blocks rise gently into the conversation. */
+  "entry-offset": "0.75rem",
+  "entry-duration": "var(--fynns-duration-slow)",
   /**
    * Vertical gap between turns. ChatGPT clones use `gap-8` (2rem); live
    * turn shells also use `pb-10` (2.5rem) — lock the denser clone gap.
@@ -929,7 +942,9 @@ export const CHAT_TOKENS = {
    * Cap for each **labeled** DropdownMenu in `.fynns-chat-composer-leading`
    * / primary-slot endActions (≥ **0.5.288**). Long volume /
    * model ids ellipsize inside the shell — never mid-glyph hard-clip past
-   * the capsule edge. Icon-only menus stay content-sized.
+   * the capsule edge. Short labels hug content (content-first flex ≥
+   * **0.5.300**) — never invent empty pad before the chevron. Icon-only
+   * menus stay content-sized.
    */
   "composer-leading-menu-max": "10rem",
   /**
@@ -939,9 +954,12 @@ export const CHAT_TOKENS = {
    */
   "composer-leading-menu-max-narrow": "7rem",
   /**
-   * Floor for labeled volume / model Menu triggers so `flex: 1 1 0` leftover
-   * math cannot crush them to chevron-only beside Thinking / Vision / Send
-   * (≥ **0.5.291**). Soft — still ellipsizes under the max caps.
+   * Soft floor for labeled volume / model Menu triggers when flex-shrinking
+   * under chrome pressure (≥ **0.5.291**). Applied as
+   * `min(menu-min, max-content)` (≥ **0.5.300**) so short labels stay
+   * content-sized (no empty pad before the chevron) while long ids still
+   * refuse to crush below this floor. Soft — still ellipsizes under the max
+   * caps.
    */
   "composer-leading-menu-min": "5rem",
   /** Narrow-shell floor for the same labeled menus (≤ **26rem** container). */
@@ -1111,6 +1129,14 @@ export const LIST_TOKENS = {
   "stats-col-tokens": "3.5rem",
   "stats-col-cost": "3.75rem",
   "stats-col-count": "3.25rem",
+  /**
+   * Run-summary headline grid: fixed track for `.fynns-list-item-status`
+   * (icon + Success / Failed / Cancelled / …) so the model/`__grow` column
+   * starts on the same edge across sibling rows. Flex content-width pills
+   * drift — same lesson as trailing-stats. Live: `#list` run-summary.
+   * ≥ **0.5.295**.
+   */
+  "stats-col-status": "8rem",
 } as const;
 
 /**
@@ -1382,6 +1408,8 @@ export const FOCUS_TOKENS = {
 
 /** Generic layout sizes for modals / sheets / tooltips / chrome. `--fynns-layout-<key>`. */
 export const LAYOUT_TOKENS = {
+  /** Plain Table text caps at a share of the viewport, with a desktop ceiling. */
+  "table-text-max-width": "min(40vw, 32rem)",
   "dialog-max-width": "32rem",
   /** Within M3 basic dialog max (560dp). Ceiling only — panel is content-fit. */
   "dialog-max-width-sm": "24rem",
@@ -1448,7 +1476,7 @@ export const LAYOUT_TOKENS = {
    */
   "textarea-max-height": "min(70dvh, 40rem)",
   /**
-   * Soft mask length for scroll-edge fade (`data-fade-top` / `data-fade-bottom`)
+   * Soft mask length for scroll-edge fade (`data-fade-top`/`bottom` / `left`/`right`)
    * on CodeBlock / Textarea / **PageScroll** (≥ **0.5.247**) / **FillColumn
    * header** (≥ **0.5.278**) / NavigationDrawer body (via alias) — not a hard
    * clip. Textarea uses a multi-layer mask (≥ **0.5.282**) so the hairline
@@ -1616,6 +1644,12 @@ export const LAYOUT_TOKENS = {
    * (Card body gap still contributes `unit-stack-gap`).
    */
   "form-cluster-gap": "2rem",
+  /**
+   * Extra breathing room around a progressive `RevealMore` foot (16dp).
+   * Adds to the host's own sibling rhythm: 20dp after a NavigationDrawerItem
+   * (4 + 16), 32dp after a List/Table in a Card or unit stack (16 + 16).
+   */
+  "reveal-more-clearance": "var(--fynns-space-lg)",
   /** Label → controls when the row stacks vertically (narrow). */
   "control-row-gap": "0.25rem",
   /** Label | controls when the row is horizontal. */
@@ -1708,6 +1742,16 @@ export const LAYOUT_TOKENS = {
    * crush below ~280px (12rem min clipped end-aligned clusters).
    */
   "end-aside-min-width": "clamp(17.5rem, 32%, 22rem)",
+  /**
+   * Narrow EndAside bottom-sheet size. `auto` retains intrinsic sizing for
+   * existing apps; canvas consumers can set an explicit height on one shell.
+   */
+  "end-aside-sheet-height": "auto",
+  /**
+   * Narrow EndAside bottom-sheet height ceiling. Override alongside
+   * `end-aside-sheet-height` when a taller canvas is needed.
+   */
+  "end-aside-sheet-max-height": "min(52dvh, 22rem)",
   /**
    * Preferred main canvas size beside `EndAside` (`flex-basis`). Shrink with
    * `min-width: 0` in CSS — never `min(token, 100%)` of the flex parent row.

@@ -12,9 +12,9 @@ import { isValidElement, type ReactElement, type ReactNode } from "react";
  */
 
 const STACK_COMPONENT =
-  /^(CodeBlock|ChatMarkdown|BusyRegion|Surface|Table|Carousel|EmptyState|ChatCitations|LinearProgress|CircularProgress)$/i;
+  /^(CodeBlock|ChatMarkdown|ChatReveal|BusyRegion|Surface|Table|Carousel|EmptyState|ChatCitations|LinearProgress|CircularProgress)$/i;
 const STREAM_OPAQUE_COMPONENT =
-  /^(CodeBlock|BusyRegion|Surface|Table|Carousel|EmptyState|ChatCitations|LinearProgress|CircularProgress)$/i;
+  /^(CodeBlock|ChatReveal|BusyRegion|Surface|Table|Carousel|EmptyState|ChatCitations|LinearProgress|CircularProgress)$/i;
 
 const STACK_CLASS =
   /\bfynns-(code-block|chat-markdown|surface|table|carousel|empty-state|busy-region|chat-citations)\b/;

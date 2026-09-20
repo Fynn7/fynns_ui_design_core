@@ -10,6 +10,31 @@
   box-sizing: border-box;
 }
 
+/* Only newly mounted content enters. ChatThread skips the initial history. */
+@keyframes fynns-chat-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--fynns-chat-entry-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fynns-chat-message--enter,
+.fynns-chat-reveal--enter {
+  animation: fynns-chat-content-enter var(--fynns-chat-entry-duration)
+    var(--fynns-ease-out) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-chat-message--enter,
+  .fynns-chat-reveal--enter {
+    animation: none;
+  }
+}
+
 /*
  * Dual placement — left/right resizable asides:
  * Host = aside **content** width (not viewport / full main). Composer = 100%.
@@ -110,6 +135,7 @@
   gap: 0;
   max-width: 100%;
   box-sizing: border-box;
+  position: relative;
   font-size: var(--fynns-chatmessage-body-size);
   line-height: var(--fynns-chatmessage-body-line);
   color: var(--fynns-color-text);
@@ -161,6 +187,76 @@
  */
 .fynns-chat-message-body > * + * {
   margin-block-start: var(--fynns-chatmessage-body-stack-gap);
+}
+
+/*
+ * Long-message collapse — body only (actions / citations / error footer keep
+ * existing placement). Collapsed clamps to
+ * `--fynns-chatmessage-collapse-preview-height` with a mask fade ending right
+ * above the in-bubble text toggle; expanded shows full prose. Toggle is plain
+ * text (no Button shape) pinned to the bubble start edge (ChatGPT-style),
+ * with a chevron that flips on expand.
+ */
+.fynns-chat-message-body--collapsed {
+  max-height: var(--fynns-chatmessage-collapse-preview-height);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 calc(100% - var(--fynns-chatmessage-collapse-fade-height)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 calc(100% - var(--fynns-chatmessage-collapse-fade-height)),
+    transparent 100%
+  );
+}
+
+.fynns-chat-message-collapse {
+  display: flex;
+  justify-content: flex-start;
+  flex-basis: 100%;
+  margin-block-start: var(--fynns-space-sm);
+}
+
+.fynns-chat-message-collapse-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-2xs);
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--fynns-color-accent);
+  font: inherit;
+  font-size: var(--fynns-chatmessage-name-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-snug);
+  cursor: pointer;
+}
+
+.fynns-chat-message-collapse-toggle:hover {
+  color: var(--fynns-color-accent-hover);
+}
+
+.fynns-chat-message-collapse-toggle:focus {
+  outline: none;
+}
+
+.fynns-chat-message-collapse-toggle:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+  border-radius: var(--fynns-radius-sm);
+}
+
+.fynns-chat-message-collapse-chevron {
+  flex-shrink: 0;
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-chat-message-collapse-toggle[aria-expanded="true"]
+  .fynns-chat-message-collapse-chevron {
+  transform: rotate(180deg);
 }
 
 @keyframes fynns-chat-stream-tail {
@@ -474,7 +570,7 @@
 .fynns-chat-thinking-chevron {
   flex-shrink: 0;
   color: inherit;
-  transition: transform var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-out);
 }
 
 .fynns-chat-thinking--open .fynns-chat-thinking-chevron,
@@ -490,12 +586,6 @@
   color: var(--fynns-color-text-muted);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  opacity: 0;
-  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
-}
-
-.fynns-expand[data-state="open"] > .fynns-expand-inner > .fynns-chat-thinking-body {
-  opacity: 1;
 }
 
 @keyframes fynns-chat-thinking-mark-pulse {
@@ -540,10 +630,6 @@
   }
 
   .fynns-chat-thinking-chevron {
-    transition: none;
-  }
-
-  .fynns-chat-thinking-body {
     transition: none;
   }
 }
@@ -641,7 +727,7 @@
 .fynns-chat-activity-chevron {
   flex-shrink: 0;
   color: inherit;
-  transition: transform var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-out);
 }
 
 .fynns-chat-activity--open .fynns-chat-activity-chevron,
@@ -655,15 +741,7 @@
   flex-direction: column;
   gap: 0;
   padding-block: var(--fynns-chatmessage-thinking-body-pad-block);
-  opacity: 0;
   overflow: visible;
-  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
-}
-
-.fynns-expand[data-state="open"]
-  > .fynns-expand-inner
-  > .fynns-chat-activity-steps {
-  opacity: 1;
 }
 
 /* Snap 0fr/1fr — never morph height. Grid-row easing + overflow clip
@@ -673,6 +751,12 @@
   width: 100%;
   transition: none;
   overflow: visible;
+}
+
+/* Streaming step sequencing owns its opacity; avoid a compounded disclosure fade. */
+.fynns-chat-activity-step-shell > .fynns-expand-inner {
+  opacity: 1;
+  transition: none;
 }
 
 /* Open shells must not clip the center→center rail into the next row. */
@@ -937,6 +1021,47 @@
   line-height: var(--fynns-line-height-snug);
 }
 
+.fynns-chat-activity-desc-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-chatmessage-activity-trigger-gap);
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.fynns-chat-activity-desc-trigger:focus {
+  outline: none;
+}
+
+.fynns-chat-activity-desc-trigger:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+  border-radius: var(--fynns-radius-sm);
+}
+
+.fynns-chat-activity-desc-trigger:hover .fynns-chat-activity-step-label {
+  color: var(--fynns-chat-secondary-hover);
+}
+
+.fynns-chat-activity-desc-chevron {
+  flex-shrink: 0;
+  color: inherit;
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-chat-activity-desc-trigger[aria-expanded="true"]
+  .fynns-chat-activity-desc-chevron {
+  transform: rotate(90deg);
+}
+
 .fynns-chat-activity-step--done .fynns-chat-activity-step-label {
   /* Completed copy stays readable — accent lives on the node (Timeline parity). */
   color: var(--fynns-color-text);
@@ -1083,7 +1208,8 @@ a.fynns-chat-activity-artifact:hover {
     visibility: visible;
   }
 
-  .fynns-chat-activity-chevron {
+  .fynns-chat-activity-chevron,
+  .fynns-chat-activity-desc-chevron {
     transition: none;
   }
 
@@ -1377,6 +1503,10 @@ a.fynns-chat-activity-artifact:hover {
     transition: none;
   }
 
+  .fynns-chat-message-collapse-chevron {
+    transition: none;
+  }
+
   .fynns-chat-message-stream-tail {
     animation: none;
     color: color-mix(
@@ -1475,11 +1605,184 @@ a.fynns-chat-activity-artifact:hover {
 .fynns-chat-composer {
   width: 100%;
   max-width: var(--fynns-layout-chat-max-width);
+  container-type: inline-size;
+  container-name: fynns-chat-composer-host;
   margin-inline: auto;
   padding-inline: var(--fynns-chat-composer-inset-inline);
   padding-block: var(--fynns-chat-composer-inset-block);
   padding-top: var(--fynns-chat-composer-offset);
   box-sizing: border-box;
+}
+
+/* Optional progress card sits behind the input capsule, following its width. */
+.fynns-chat-composer-todos {
+  position: relative;
+  min-width: 0;
+  margin-inline: var(--fynns-space-md);
+  margin-bottom: calc(-1 * var(--fynns-space-md));
+  padding-bottom: var(--fynns-space-md);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-xl);
+  background: var(--fynns-color-surface-2);
+  box-sizing: border-box;
+}
+
+.fynns-chat-composer:has(.fynns-chat-composer-todos) > .fynns-chat-composer-shell {
+  position: relative;
+  z-index: 1;
+  min-height: calc(var(--fynns-chat-composer-line-height) * 4);
+}
+
+.fynns-chat-composer:has(.fynns-chat-composer-todos) .fynns-chat-composer-body {
+  flex: 1 1 auto;
+  justify-content: space-between;
+}
+
+.fynns-chat-composer:has(.fynns-chat-composer-todos) .fynns-chat-composer-placeholder {
+  align-items: flex-start;
+}
+
+.fynns-chat-composer-todos-header {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  min-height: var(--fynns-size-icon-target);
+  gap: var(--fynns-space-sm);
+  padding-inline: var(--fynns-space-lg) var(--fynns-space-sm);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+}
+
+.fynns-chat-composer-todos-header > svg {
+  flex: 0 0 auto;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+.fynns-chat-composer-todos-summary {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.fynns-chat-composer-todos-header .fynns-btn--icon svg {
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-chat-composer-todos[data-expanded] .fynns-chat-composer-todos-header .fynns-btn--icon svg {
+  transform: rotate(180deg);
+}
+
+.fynns-chat-composer-todos-reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  min-width: 0;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    visibility 0s linear var(--fynns-duration-base);
+}
+
+.fynns-chat-composer-todos-reveal[data-open] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition:
+    grid-template-rows var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    visibility 0s;
+}
+
+.fynns-chat-composer-todos-reveal-inner {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(calc(-1 * var(--fynns-space-xs)));
+  transition:
+    opacity var(--fynns-duration-fast) var(--fynns-ease-out),
+    transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-chat-composer-todos-reveal[data-open] .fynns-chat-composer-todos-reveal-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fynns-chat-composer-todos-reveal-inner::before {
+  content: "";
+  display: block;
+  border-top: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+.fynns-chat-composer-todos-list {
+  max-height: var(--fynns-chat-composer-max-height);
+  margin: 0;
+  padding: var(--fynns-space-xs) var(--fynns-space-lg) var(--fynns-space-md);
+  overflow-y: auto;
+  list-style: none;
+  counter-reset: fynns-chat-todo;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-chat-composer-todos-header .fynns-btn--icon svg,
+  .fynns-chat-composer-todos-reveal,
+  .fynns-chat-composer-todos-reveal[data-open],
+  .fynns-chat-composer-todos-reveal-inner {
+    transition: none;
+  }
+}
+
+.fynns-chat-composer-todos-item {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: var(--fynns-space-sm);
+  padding-block: var(--fynns-space-xs);
+  color: var(--fynns-color-text);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+  counter-increment: fynns-chat-todo;
+}
+
+.fynns-chat-composer-todos-status {
+  flex: 0 0 auto;
+  align-self: center;
+  display: grid;
+  place-items: center;
+  width: var(--fynns-space-md);
+  height: var(--fynns-space-md);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-text-muted);
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.fynns-chat-composer-todos-item[data-status="active"] .fynns-chat-composer-todos-status {
+  border-color: var(--fynns-color-accent);
+  background: var(--fynns-color-accent);
+  box-shadow: inset 0 0 0 var(--fynns-space-xs) var(--fynns-color-surface-2);
+}
+
+.fynns-chat-composer-todos-item[data-status="completed"] .fynns-chat-composer-todos-status {
+  border-color: var(--fynns-color-accent);
+  background: var(--fynns-color-accent);
+  color: var(--fynns-color-surface);
+}
+
+.fynns-chat-composer-todos-status svg {
+  width: 100%;
+  height: 100%;
+}
+
+.fynns-chat-composer-todos-number::before {
+  content: counter(fynns-chat-todo) ".";
+  color: var(--fynns-color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.fynns-chat-composer-todos-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .fynns-chat-composer-shell {
@@ -1559,6 +1862,26 @@ a.fynns-chat-activity-artifact:hover {
   gap: var(--fynns-chat-composer-gap);
   width: 100%;
   min-width: 0;
+}
+
+/* A crowded composer moves its draft above the controls. Let the toolbar and
+ * action group wrap instead of shrinking icon buttons behind the shell clip. */
+@container fynns-chat-composer-host (max-width: 26rem) {
+  .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-leading {
+    min-width: min-content;
+  }
+
+  .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-primary-slot {
+    min-width: min-content;
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    overflow: visible;
+  }
 }
 
 /*
@@ -1642,6 +1965,28 @@ a.fynns-chat-activity-artifact:hover {
   order: 2;
   min-width: var(--fynns-chat-composer-field-min);
   display: flex;
+}
+
+/* The textarea owns caret/selection; the field paints only its clipped text
+ * edge so a mask never displaces Chromium selection while scrolling. */
+.fynns-chat-composer-field[data-fade-top]::before,
+.fynns-chat-composer-field[data-fade-bottom]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: min(var(--fynns-layout-scroll-edge-fade-length), 50%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.fynns-chat-composer-field[data-fade-top]::before {
+  inset-block-start: 0;
+  background: linear-gradient(to bottom, var(--fynns-color-surface-2), transparent);
+}
+
+.fynns-chat-composer-field[data-fade-bottom]::after {
+  inset-block-end: 0;
+  background: linear-gradient(to top, var(--fynns-color-surface-2), transparent);
 }
 
 .fynns-chat-composer-input[data-scrollable] {
@@ -1800,11 +2145,11 @@ a.fynns-chat-activity-artifact:hover {
   font-size: var(--fynns-chat-composer-toggle-font-size);
   font-weight: var(--fynns-font-weight-medium);
   /*
-   * Never `line-height: 1` / `--fynns-line-height-tight` with the label’s
-   * overflow:hidden — clips Latin descenders (Thinking “g”) (≥ **0.5.294**;
-   * same seatbelt as Menu ≥ **0.5.255**).
+   * Never `line-height: 1` / `--fynns-line-height-tight` / snug with the
+   * label’s overflow:hidden — clips Latin descenders (Thinking “g”).
+   * Body (≥ **0.5.302**; snug seatbelt was **0.5.294** / Menu **0.5.255**).
    */
-  line-height: var(--fynns-line-height-snug);
+  line-height: var(--fynns-line-height-body);
   cursor: pointer;
   user-select: none;
   transition:
@@ -1909,14 +2254,22 @@ a.fynns-chat-activity-artifact:hover {
  * (≥ **0.5.288**). OverflowTip still owns the full label. Icon-only menus /
  * IconButtons stay fixed.
  *
- * Leading volume Menus share free space with the draft (`1 1 0`).
- * Primary-slot model Menus are content-first (`0 1 auto`): `1 1 0` left only
- * leftover crumbs beside Thinking / Vision / Send and crushed to chevron-only
- * (landing composer ≤ **0.5.291**). Both sides keep a readable min floor.
+ * Labeled Menus are **content-first** (`0 1 auto` + `fit-content`) so short
+ * volume / model ids hug the chevron — no empty pad between glyphs and
+ * trailing caret (≥ **0.5.300**). Soft floor is
+ * `min(menu-min, max-content)` so short labels stay content-sized while long
+ * ones still refuse to crush below the min when flex-shrinking. Caps stay
+ * `--fynns-chat-composer-leading-menu-max` (+ narrow). Triggers are
+ * `width: auto; max-width: 100%` (not `width: 100%`) so a grown flex parent
+ * cannot invent mid-capsule whitespace.
  */
 .fynns-chat-composer-leading .fynns-menu-root:has(.fynns-menu-trigger-label) {
-  flex: 1 1 0;
-  min-width: var(--fynns-chat-composer-leading-menu-min);
+  flex: 0 1 auto;
+  width: fit-content;
+  min-width: min(
+    var(--fynns-chat-composer-leading-menu-min),
+    max-content
+  );
   max-width: var(--fynns-chat-composer-leading-menu-max);
   overflow: hidden;
 }
@@ -1924,7 +2277,11 @@ a.fynns-chat-activity-artifact:hover {
 .fynns-chat-composer-primary-slot
   .fynns-menu-root:has(.fynns-menu-trigger-label) {
   flex: 0 1 auto;
-  min-width: var(--fynns-chat-composer-leading-menu-min);
+  width: fit-content;
+  min-width: min(
+    var(--fynns-chat-composer-leading-menu-min),
+    max-content
+  );
   max-width: var(--fynns-chat-composer-leading-menu-max);
   overflow: hidden;
 }
@@ -1934,7 +2291,10 @@ a.fynns-chat-activity-artifact:hover {
   .fynns-chat-composer-leading .fynns-menu-root:has(.fynns-menu-trigger-label),
   .fynns-chat-composer-primary-slot
     .fynns-menu-root:has(.fynns-menu-trigger-label) {
-    min-width: var(--fynns-chat-composer-leading-menu-min-narrow);
+    min-width: min(
+      var(--fynns-chat-composer-leading-menu-min-narrow),
+      max-content
+    );
     max-width: var(--fynns-chat-composer-leading-menu-max-narrow);
   }
 }
@@ -1945,11 +2305,21 @@ a.fynns-chat-activity-artifact:hover {
 .fynns-chat-composer-primary-slot
   .fynns-menu-root:has(.fynns-menu-trigger-label)
   > .fynns-menu-trigger-btn {
-  width: 100%;
+  width: auto;
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
   justify-content: flex-start;
+}
+
+/* Label hugs glyphs — do not flex-grow into empty space before the chevron. */
+.fynns-chat-composer-leading
+  .fynns-menu-root:has(.fynns-menu-trigger-label)
+  .fynns-menu-trigger-label,
+.fynns-chat-composer-primary-slot
+  .fynns-menu-root:has(.fynns-menu-trigger-label)
+  .fynns-menu-trigger-label {
+  flex: 0 1 auto;
 }
 
 .fynns-chat-composer-leading .fynns-menu-root:has(.fynns-btn--icon),
@@ -1970,7 +2340,7 @@ a.fynns-chat-activity-artifact:hover {
 
 .fynns-chat-composer-primary-slot {
   order: 3;
-  /* Keep Send at the end when there is no leading (collapsed or expanded). */
+  /* Keep Send at the end, including expanded toolbars with no leading item. */
   margin-inline-start: auto;
 }
 
@@ -1988,8 +2358,6 @@ a.fynns-chat-activity-artifact:hover {
 .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-leading,
 .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-primary-slot {
   order: unset;
-  /* space-between owns placement — drop collapsed end-push. */
-  margin-inline-start: 0;
 }
 
 /* Expanded: leading takes free start space; labeled menus still cap+ellipsis. */

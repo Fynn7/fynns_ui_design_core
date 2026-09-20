@@ -35,6 +35,10 @@ function join(...parts: Array<string | false | null | undefined>) {
  *
  * Default `spellCheck={false}` — multilingual / technical copy must not show
  * browser red squiggles; pass `spellCheck` to opt in.
+ *
+ * **Numeric values:** use `NumberInput` (custom steppers). Do **not** pass
+ * `type="number"` here — UA spin buttons are not fynns chrome (CSS hides them
+ * as a safety net ≥ **0.5.301**; still no steppers / spinbutton a11y).
  */
 export const Input = forwardRef(function Input(
   {

@@ -25,6 +25,11 @@ export type OverflowTipProps = {
   /** Class on the Tooltip trigger wrapper. */
   tipClassName?: string;
   /**
+   * Stretch the tip trigger to the host width (nav rails, path rows). Prefer
+   * this over consumer `tipClassName` + `.fynns-overflow-tip` restyles.
+   */
+  fill?: boolean;
+  /**
    * Overflow measure axis. Default `"x"` = single-line ellipsis
    * (`scrollWidth` vs `clientWidth`). `"y"` / `"both"` also compare
    * `scrollHeight` (line-clamp / multi-line clip, e.g. Snackbar).
@@ -51,6 +56,7 @@ export function OverflowTip({
   side = "top",
   className,
   tipClassName,
+  fill = false,
   overflowAxis = "x",
 }: OverflowTipProps) {
   const labelRef = useRef<HTMLSpanElement>(null);
@@ -86,7 +92,11 @@ export function OverflowTip({
       side={side}
       align="start"
       disabled={!overflowing || !content}
-      className={join("fynns-overflow-tip", tipClassName)}
+      className={join(
+        "fynns-overflow-tip",
+        fill && "fynns-overflow-tip--fill",
+        tipClassName,
+      )}
     >
       <span
         ref={labelRef}

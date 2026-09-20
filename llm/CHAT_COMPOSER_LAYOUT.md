@@ -22,6 +22,7 @@ IconButton md 40dp; not SearchBar 56dp chrome).
 
 ```text
 form.fynns-chat-composer
+  [?].fynns-chat-composer-todos          ← `todoList` progress card
   .fynns-chat-composer-shell[data-expanded?]
     [?].fynns-chat-composer-attachments
     .fynns-chat-composer-body
@@ -35,6 +36,19 @@ form.fynns-chat-composer
 
 Public props stay `leading` / `trailing` / `attachments` / `busy` / … — no
 rename required for consumers.
+
+**Task progress variant (live `#sandbox-chat-composer-todos`):** pass
+`todoList={{ items, progressLabel, ... }}` to show a read-only numbered
+progress card above the input. Each item has a stable `id`, `label`, and
+optional `status: "pending" | "active" | "completed"`. The caller owns
+statuses and localization. The card header toggles its list open/closed;
+`expanded` / `onExpandedChange` may control that state externally. **Omit
+`todoList` to restore the ordinary composer**, without replacing the input
+or losing its draft. The variant keeps the editor and bottom toolbar in the
+expanded layout even while the list is collapsed. A divider separates the
+progress header from the first item; opening and closing animate the card
+height and ink (respecting reduced motion). Do not recreate its card
+or interpose a separate scroll container in the consumer.
 
 **Labeled Menus (≥ 0.5.288):** pass **string**
 `DropdownMenu` `trigger` values (core wraps `OverflowTip`). Core caps each
@@ -72,22 +86,32 @@ auth file or login). Omit empty sections entirely. If **no** section has
 models, show one disabled “No models available” row (then optional
 Connection refresh foot). Do **not** dump every provider into one flat list.
 
-**Narrow shells (≥ 0.5.288 / floor ≥ 0.5.291):** labeled menus shrink under
-`--fynns-chat-composer-leading-menu-max` (tighter `*-narrow` caps ≤ **26rem**).
-**endActions** model Menus are content-first (`flex: 0 1 auto`) with
-`--fynns-chat-composer-leading-menu-min` so they never crush to chevron-only
-beside toggles / Send. Leading volume Menus still share free space with the
-draft (`flex: 1 1 0`). The draft keeps `--fynns-chat-composer-field-min`.
+**Narrow shells (≥ 0.5.288 / floor ≥ 0.5.291 / hug ≥ 0.5.300):** labeled
+menus shrink under `--fynns-chat-composer-leading-menu-max` (tighter
+`*-narrow` caps ≤ **26rem**). Leading **and** endActions model Menus are
+content-first (`flex: 0 1 auto` + `width: fit-content`) with soft floor
+`min(--fynns-chat-composer-leading-menu-min, max-content)` so short ids hug
+the chevron (no empty mid-capsule pad) while long ids still refuse to crush
+to chevron-only beside toggles / Send. The draft keeps
+`--fynns-chat-composer-field-min`.
 Live `#sandbox-chat-composer-leading-menus-narrow` /
 `#sandbox-chat-composer-thinking-toggle` (wide &gt; 36rem, labeled) /
 `#sandbox-chat-composer-thinking-toggle-narrow` (≤ 36rem icon-only).
+
+When a composer with `endActions` becomes ≤ **26rem** wide, core moves the
+draft above a wrapping toolbar even if the draft is empty. The leading group
+and end actions can occupy separate rows; the end actions wrap again when
+needed. Every control keeps its hit target instead of disappearing behind the
+capsule's clipping edge. A browser page cannot impose a minimum width on its
+window; native hosts must set their own window minimum if they need that
+behavior.
 
 ## Compact vs expanded (`data-expanded`)
 
 | State | When | Layout |
 | --- | --- | --- |
-| **Collapsed** (default) | Empty draft and no attachments (clearing the value collapses) | Body is a horizontal flex row. Toolbar uses `display: contents` so leading / field / primary share one line (`order` 1 / 2 / 3). |
-| **Expanded** | Measured height &gt; one line (+tolerance), or `attachments` present | Body is a column. Textarea full width on top. Toolbar is a real flex row (`justify-content: space-between`) — tools start, Send end. |
+| **Collapsed** (default) | Empty draft and no attachments or todo list (clearing the value collapses) | Body is a horizontal flex row. Toolbar uses `display: contents` so leading / field / primary share one line (`order` 1 / 2 / 3). |
+| **Expanded** | Measured height &gt; one line (+tolerance), `attachments` or `todoList` present, or an `endActions` composer ≤26rem wide | Body is a column. Textarea full width on top. Toolbar is a real flex row (`justify-content: space-between`) — tools start, Send end; crowded narrow controls wrap. |
 
 Detection runs inside the JS auto-grow (`resize`). Expand freely when content
 needs it. **Do not auto-collapse a non-empty draft** when height would fit one

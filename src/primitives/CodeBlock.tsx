@@ -17,8 +17,8 @@ import { Tooltip } from "./Tooltip";
 import { ClipboardIcon } from "./icons";
 import {
   clearScrollEdgeFade,
-  copyScrollEdgeFadeAttrs,
   syncScrollEdgeFade,
+  syncScrollEdgeFadeOnto,
 } from "./scrollEdgeFade";
 import {
   highlightCode,
@@ -232,9 +232,10 @@ function assertCodeBlockChrome(
  * Supported `language` values get zero-dep syntax coloring via
  * `--fynns-code-*` tokens. Pass `highlightProfile` for app-owned line-command
  * languages. The scroll surface uses `fynns-scroll`. Vertical overflow is
- * gated with `data-scrollable` (same idea as `ChatComposer`) so a 1px
- * scrollHeight/clientHeight mismatch from padding / trailing newlines does
- * not paint an early thumb while copy still fits the host.
+ * gated with `data-scrollable` (same idea as `ChatComposer`) using a
+ * half-line slack (floor 8px) so dual-layer / trailing-newline noise on
+ * fill hosts does not enable scroll, edge fade, or selection drift while
+ * glyphs still fit the host.
  *
  * Editable height defaults to **autoGrow** (content-sized from `rows` floor
  * up to `maxHeight`); pass `autoGrow={false}` for a fixed well or fill hosts
@@ -304,8 +305,20 @@ export function CodeBlock(props: CodeBlockProps) {
       : typeof maxHeight === "number"
         ? `${maxHeight}px`
         : maxHeight;
-  const surfaceStyle: CSSProperties | undefined =
-    maxHeightCss == null ? undefined : { maxHeight: maxHeightCss };
+  /* Cap via CSS var on the root (not inline maxHeight on pre/textarea)
+     so host CSS can compose without fighting specificity. Live
+     `#dialog-nested-scroll`. */
+  const rootStyle: CSSProperties | undefined =
+    style == null && maxHeightCss == null
+      ? undefined
+      : {
+          ...style,
+          ...(maxHeightCss != null
+            ? ({
+                ["--fynns-code-block-max-height"]: maxHeightCss,
+              } as CSSProperties)
+            : {}),
+        };
 
   const readOnly = editable ? props.readOnly : undefined;
   const showEditorOverlay = editable && !readOnly;
@@ -314,14 +327,27 @@ export function CodeBlock(props: CodeBlockProps) {
     const input = inputRef.current;
     const pre = highlightRef.current;
     if (!input || !pre) return;
+    /* Dual-layer metrics often disagree by a few–dozen px (textarea
+       trailing pad vs highlighted <code> box). Never let the caret layer
+       scroll past what the glyph layer can show — that is the selection
+       wash desync. */
+    const maxPreY = Math.max(0, pre.scrollHeight - pre.clientHeight);
+    const maxPreX = Math.max(0, pre.scrollWidth - pre.clientWidth);
+    if (input.scrollTop > maxPreY) input.scrollTop = maxPreY;
+    if (input.scrollLeft > maxPreX) input.scrollLeft = maxPreX;
     pre.scrollTop = input.scrollTop;
     pre.scrollLeft = input.scrollLeft;
   };
 
-  const syncEdgeFade = (el: HTMLElement) => {
-    syncScrollEdgeFade(el);
+  const syncEdgeFade = (scrollSource: HTMLElement) => {
     if (showEditorOverlay && highlightRef.current) {
-      copyScrollEdgeFadeAttrs(el, highlightRef.current);
+      /* Fade the visible glyph layer only. Masking the transparent caret
+         textarea sticks Chromium ::selection while text scrolls (selection
+         wash drifts off the glyphs on small wheel deltas). */
+      syncScrollEdgeFadeOnto(scrollSource, highlightRef.current);
+      clearScrollEdgeFade(scrollSource);
+    } else {
+      syncScrollEdgeFade(scrollSource);
     }
   };
 
@@ -341,7 +367,6 @@ export function CodeBlock(props: CodeBlockProps) {
     if (!el) return;
 
     let padRaf = 0;
-    let wasScrollable = el.hasAttribute("data-scrollable");
 
     const syncHighlightPad = (scrollable: boolean) => {
       const pre = highlightRef.current;
@@ -357,20 +382,54 @@ export function CodeBlock(props: CodeBlockProps) {
           : "";
     };
 
+    /** Pin both layers to the origin when content fits the host. */
+    const clampScrollToOrigin = () => {
+      if (el.scrollTop !== 0) el.scrollTop = 0;
+      if (el.scrollLeft !== 0) el.scrollLeft = 0;
+      if (showEditorOverlay && highlightRef.current) {
+        const pre = highlightRef.current;
+        if (pre.scrollTop !== 0) pre.scrollTop = 0;
+        if (pre.scrollLeft !== 0) pre.scrollLeft = 0;
+      }
+    };
+
+    /**
+     * Real overflow only — ignore dual-layer / trailing-newline / sub-pixel
+     * noise (often 2–6px on fill hosts). Half line-height, floor 8px.
+     * Live: short GSC scripts must stay non-scrollable (`#code-block`).
+     */
+    const overflowSlackPx = () => {
+      const cs = getComputedStyle(el);
+      const line =
+        Number.parseFloat(cs.lineHeight) ||
+        Number.parseFloat(cs.fontSize) * 1.5 ||
+        16;
+      return Math.max(8, Math.ceil(line * 0.5));
+    };
+
     const update = () => {
-      const yOverflow = el.scrollHeight - el.clientHeight > 1;
-      const xOverflow = !wrap && el.scrollWidth - el.clientWidth > 1;
+      const slack = overflowSlackPx();
+      const taY = el.scrollHeight - el.clientHeight;
+      const taX = el.scrollWidth - el.clientWidth;
+      /* Editable overlay: only shared overflow counts. Textarea-only
+         phantom delta (pre still fits) must not enable scroll / fade. */
+      const preEl = showEditorOverlay ? highlightRef.current : null;
+      const preY = preEl ? preEl.scrollHeight - preEl.clientHeight : taY;
+      const preX = preEl ? preEl.scrollWidth - preEl.clientWidth : taX;
+      const yOverflow = Math.min(taY, preY) > slack;
+      const xOverflow = !wrap && Math.min(taX, preX) > slack;
       const scrollable = yOverflow || xOverflow;
       if (scrollable) {
         el.setAttribute("data-scrollable", "");
-        wasScrollable = true;
         // Scrollbar width is only known after overflow:auto paints.
         if (padRaf) cancelAnimationFrame(padRaf);
         padRaf = requestAnimationFrame(() => {
           padRaf = 0;
           syncHighlightPad(true);
+          syncHighlightScroll();
           syncEdgeFade(el);
         });
+        syncHighlightScroll();
         syncEdgeFade(el);
       } else {
         el.removeAttribute("data-scrollable");
@@ -378,24 +437,27 @@ export function CodeBlock(props: CodeBlockProps) {
         if (showEditorOverlay && highlightRef.current) {
           clearScrollEdgeFade(highlightRef.current);
         }
-        /* Only clear scroll when leaving the scrollable state — avoids
-           resetting mid-edit near the overflow threshold every key. */
-        if (wasScrollable) {
-          if (el.scrollTop !== 0) el.scrollTop = 0;
-          if (el.scrollLeft !== 0) el.scrollLeft = 0;
-          if (showEditorOverlay && highlightRef.current) {
-            highlightRef.current.scrollTop = 0;
-            highlightRef.current.scrollLeft = 0;
-          }
-        }
-        wasScrollable = false;
+        /* Always pin when content fits — stray wheel / sub-pixel overflow
+           must not leave ::selection wash drifting off the glyph layer. */
+        clampScrollToOrigin();
         syncHighlightPad(false);
       }
     };
 
     updateScrollableRef.current = update;
     update();
-    const onScroll = () => syncEdgeFade(el);
+    const onScroll = () => {
+      if (!el.hasAttribute("data-scrollable")) {
+        clampScrollToOrigin();
+        clearScrollEdgeFade(el);
+        if (showEditorOverlay && highlightRef.current) {
+          clearScrollEdgeFade(highlightRef.current);
+        }
+        return;
+      }
+      syncHighlightScroll();
+      syncEdgeFade(el);
+    };
     el.addEventListener("scroll", onScroll, { passive: true });
     const ro =
       typeof ResizeObserver !== "undefined"
@@ -538,17 +600,34 @@ export function CodeBlock(props: CodeBlockProps) {
   };
 
   const onInputScroll = () => {
+    const input = inputRef.current;
+    if (input && !input.hasAttribute("data-scrollable")) {
+      if (input.scrollTop !== 0) input.scrollTop = 0;
+      if (input.scrollLeft !== 0) input.scrollLeft = 0;
+      syncHighlightScroll();
+      clearScrollEdgeFade(input);
+      if (highlightRef.current) clearScrollEdgeFade(highlightRef.current);
+      return;
+    }
     /* Sync now + one trailing frame — trackpad inertia / scroll coalescing
        can leave the highlight layer a paint behind the caret otherwise. */
     syncHighlightScroll();
-    const input = inputRef.current;
     if (input) syncEdgeFade(input);
     if (scrollSyncRafRef.current) cancelAnimationFrame(scrollSyncRafRef.current);
     scrollSyncRafRef.current = requestAnimationFrame(() => {
       scrollSyncRafRef.current = 0;
-      syncHighlightScroll();
       const el = inputRef.current;
-      if (el) syncEdgeFade(el);
+      if (!el) return;
+      if (!el.hasAttribute("data-scrollable")) {
+        if (el.scrollTop !== 0) el.scrollTop = 0;
+        if (el.scrollLeft !== 0) el.scrollLeft = 0;
+        syncHighlightScroll();
+        clearScrollEdgeFade(el);
+        if (highlightRef.current) clearScrollEdgeFade(highlightRef.current);
+        return;
+      }
+      syncHighlightScroll();
+      syncEdgeFade(el);
     });
   };
 
@@ -613,7 +692,7 @@ export function CodeBlock(props: CodeBlockProps) {
         className,
       )}
       data-language={language}
-      style={style}
+      style={rootStyle}
     >
       {showHead ? (
         <div className="fynns-code-block-head">
@@ -637,7 +716,6 @@ export function CodeBlock(props: CodeBlockProps) {
           <textarea
             ref={inputRef}
             className="fynns-code-block-input fynns-scroll"
-            style={surfaceStyle}
             value={source}
             onChange={onInputChange}
             onFocus={onInputFocus}
@@ -665,7 +743,6 @@ export function CodeBlock(props: CodeBlockProps) {
         <pre
           ref={preRef}
           className="fynns-code-block-pre fynns-scroll"
-          style={surfaceStyle}
         >
           <code className="fynns-code-block-code">
             {editable

@@ -307,7 +307,7 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "textarea-max-height":
     "Form field · Textarea autoGrow soft cap before inner scroll (min(70dvh, 40rem) — page catalogs grow; ChatComposer stays 13rem)",
   "scroll-edge-fade-length":
-    "Scroll-edge fade · CodeBlock / Textarea / PageScroll / FillColumn header / NavigationDrawer body soft mask (data-fade-top/bottom); hairline stroke stays opaque (≥ 0.5.282)",
+    "Scroll-edge fade · CodeBlock / Textarea / PageScroll / FillColumn header / NavigationDrawer body soft mask (data-fade-top/bottom); Table wrap inline (data-fade-left/right ≥ 0.5.296); hairline stroke stays opaque (≥ 0.5.282)",
   "list-well-max-height":
     "List well · long in-Card List soft cap (20rem; short catalogs → page scroll, no nested fynns-scroll)",
   "list-well-max-height-sm":

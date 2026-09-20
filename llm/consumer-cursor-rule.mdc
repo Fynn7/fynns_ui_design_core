@@ -105,16 +105,20 @@ sandbox `#anchor`。
 - **Timeline row hover edit/delete** — 编辑在 Dialog 脚栏；勿 rail `--with-end` 铅笔/垃圾桶。`#timeline`
 - **NavigationDrawerItem badge / trash / no more-menu** — 行动作用 `trailing` ghost sm 或 More+`DropdownMenu`（删 `tone="danger"`）；禁止删进 `badge`。`#layouts-demo-navigation-drawer`
 - **mode drawer toolbar trash+new twin** — 会话用 `NavigationDrawerNewChat`；可选 trailing More 放全部删除；禁止 Trash+Plus 并排。`#sandbox-navdrawer-session-chrome`
+- **session history leading icon by default** — 会话/历史 `NavigationDrawerItem` 默认**无** leading `icon`（仅 label + 可选 trailing More）；`icon` 仅在字形有语义时 opt-in，禁止每行统一装饰性 `FileIcon`。`#sandbox-navdrawer-session-chrome` / `#sandbox-navdrawer-session-icon`
 - **chat product / aside host wrong tree** — 会话：`ClippedNavShell`+drawer+`FillColumn`→`Chat`；侧栏主题：`DestinationAppShell`+`EndAside`→`.fynns-chat-host--fill`→`Chat`。禁止 PageScroll 当 chat 主滚、composer 进 FillColumn `footer`。`#layouts-demo-chat-product` / `#layouts-demo-chat-aside`
 - **FillColumn guide Surface flush to Chat** — 短 soft Surface / 预览 → `header`；Chat → `children`；禁止 `children` 兄弟 + `paddingBottom:0` 贴死 ChatActivity。`#layouts-demo-fill-column` / `#sandbox-fill-column-guide`
 - **PageScroll mid-scroll hard clip** — 只用 keep-set `PageScroll`（渐隐已封装）；禁止裸 `overflow:auto`。`#page-scroll`
+- **Table H-scroll hard clip** — `.fynns-table-wrap.fynns-scroll` 左右渐隐已封装（`data-fade-left`/`right` ≥ **0.5.296**）；禁止私有 `mask-image` / 硬裁末列。`#table`
 - **FillColumn header mid-scroll hard clip** — canvas 封顶的 `header` 渐隐已封装（≥ **0.5.278**）；禁止私有 `mask-image`。Header **content-sized**（`flex: 0 0 auto` ≥ **0.5.279**），勿靠 flex-shrink 把短 guide Surface 压出嵌套滚动条。`#sandbox-fill-column-guide`
 - **Textarea scroll-edge fade erases border** — core mask 保留外缘 hairline 框（≥ **0.5.282**）；禁止私有 `mask-image` 再抹掉描边。`#textarea`
 - **overlay scrollbar above / buried under Select/Menu** — 页轨 z 在 modal-flyout 下；飞层轨用 scroll-overlay-flyout。`#sandbox-scroll-menu-stack`
 - **mode drawer tools↔filter crushed / toolbar-end md** — body 直接子间距 8dp；toolbar-end 盘 sm 32dp。`#layouts-demo-navigation-drawer`
 - **Dialog foot Delete leftmost / exit clears title** — Cancel 左、主确认右；`open→false` 同拍勿清空 title/body。`#sandbox-list-recipe-catalog`
 - **Dialog title top ≠ body-end IconButton** — 居中非 Confirm head 顶距 = `content-inset`（18dp，≥ **0.5.280**），与 body 底 / 脚栏 labeled Button 下距齐；勿改 `.fynns-dialog-head` 或半 `dialog-inset`。`#overlays`
-- **Dialog foot IconButton / check-disk** — Dialog/Confirm 脚栏**唯一**样式：`.fynns-control-cluster--end-align` + labeled `Button`（Cancel ghost 左 → primary 右）；禁止 primary `IconButton`/对勾盘/Fab（≥ **0.5.286**）。`#overlays`
+- **Dialog foot IconButton / check-disk** — Dialog/Confirm 脚栏**唯一**样式：`Dialog` **`feet`**（sticky，≥ **0.5.297**）或 Confirm 自带脚 + `.fynns-control-cluster--end-align` labeled `Button`（Cancel ghost 左 → primary 右）；禁止 primary `IconButton`/对勾盘/Fab；禁止把 Cancel 塞进可滚 `children`；空态/loading 也要有 Cancel。`#overlays` / `#dialog-nested-scroll`
+- **Dialog closing scrim** — closing overlay 不得挡点击（core ≥ **0.5.297** `pointer-events: none`）。`#overlays`
+- **OverflowTip fill** — 轨道/路径撑满用 `OverflowTip fill`（≥ **0.5.297**）；禁止选中 `.fynns-overflow-tip` 改 display。`#list`
 - **BottomSheet title top ≠ actions bottom** — header 外缘顶距 = `sheet-actions-pad-bottom`（24dp，≥ **0.5.281**）；勿把 `sheet-header-gap` 当外缘。`#overlays`
 - **FillColumn header top-only inset** — Destination canvas header 块向等量 `dialog-inset`（≥ **0.5.281**）。`#sandbox-fill-column-guide`
 - **twin loading rings / BusyRegion + chrome loading / Card batch + row twin** — 一簇最多一圈；busy 时 chrome 只 `disabled`；批量只留 Card 主 CTA。`#sandbox-list-repo-path-actions`
@@ -129,10 +133,15 @@ sandbox `#anchor`。
 - **Dialog description how-to essay** — `description` 仅短 caption；方向/路径/勾选说明进 `headActions` `InfoHint` `sm`（≥ **0.5.284**）；禁止多行 how-to 挂在标题下。`#overlays`
 - **private labeled Button cluster gap / Select refresh crammed** — 用 `.fynns-control-cluster`（+ `--end-align`/`__grow`）。`#rhythm`
 - **env key FieldHint / Input trailing md / affix far from edge** — 门户文案用标签行 InfoHint；壳内盘一律 `IconButton` `sm`；禁止负 margin/壳外克隆 eye。`#password` / `#input` / `#env-check`
+- **Input type=number UA spinners** — 数字用 `NumberInput`；禁止裸 `Input type="number"`（浏览器箭头不是 fynns）。`#number-input`
 - **InlineAlert beside List / Banner icon top-pinned** — 告警全宽兄弟在上；多行 Banner icon/X 垂直居中。`#banner`
 - **EndAside instant open / dense labeled / Card flush bottom** — 切 `open`；`label=""`+一主 CTA；PageScroll 内 Card 勿贴窗格底。`#layouts-demo-shell`
 - **PageScroll Collapsible / Textarea file body / FillColumn megacard / Card sheet-max** — 短表单走 `#form-recipe`；有扩展名用 `CodeBlock`；内容列铺满页滚，禁止 sheet/chat/dialog-max。`#page-scroll`
 - **long Table/List dumps all rows** — Table `RevealMore` 10/10；List 5/5。`#table` / `#list`
+- **RevealMore foot kisses a following CTA** — `RevealMore` 直接作为 List 后的
+  `.fynns-unit-stack` sibling；后续 CTA 仍放同一 stack，使用
+  `--fynns-layout-unit-stack-gap`，禁止消费侧 margin、负定位或多余
+  `.fynns-control-cluster` 包装。`#list`
 - **Pagination overlay / option repeats noun / gaps crushed** — stock Select；options 仅数字；间距 8/16dp。`#pagination`
 - **Select fullWidth / menu width / supporting kisses** — 铺满用 `fullWidth`/`__grow`；菜单 width=live shell；hint 用 `field-hint-gap`。`#select` / `#sandbox-select-wide-short`
 - **DropdownMenu FieldBlock width / chevron / panel shift / chrome clip** — matchTriggerWidth；core 注入 chevron；禁止消费仓 left/transform/translateY。`#menu` / `#sandbox-menu-field-match`
@@ -141,7 +150,7 @@ sandbox `#anchor`。
 - **ChatComposer leading Menu label hard-clips** — 带标签 Menu 须壳内 `…`+OverflowTip；`trigger` 传 string；禁止消费仓 max-width / 手写截断 / 私有 chip-label。`#sandbox-chat-composer-leading-menus`
 - **ChatComposer model Menu left-clustered** — 模型选择放 `endActions`（靠右、Send 前，`align=end`）；卷/工具留 `leading`；勿用 `trailing` 顶掉 Send。`#sandbox-chat-composer-leading-menus`
 - **ChatComposer narrow host crushes draft** — 窄壳两侧 Menu 须可缩 + field 下限；禁止消费仓私有 max-width 挤死草稿。`#sandbox-chat-composer-leading-menus-narrow`
-- **Ellipsis label clips descenders** — 单行 `…` 标签（Menu / Button / Chip / ChatComposerToggle / OverflowTip / Select…）须 `--fynns-line-height-snug`；禁止 `line-height: 1` / `tight` + `overflow:hidden`（Thinking **g** 被切）。core ≥ **0.5.294**。`#sandbox-chat-composer-thinking-toggle` / `#sandbox-menu-field-match`
+- **Ellipsis label clips descenders** — 单行 `…` 标签（Menu / Button / Chip / ChatComposerToggle / OverflowTip / Select…）须 `--fynns-line-height-body`；禁止 `line-height: 1` / `tight` / `snug` + `overflow:hidden`（Thinking / model **g** 被切）。core ≥ **0.5.302**。`#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-leading-menus` / `#sandbox-menu-field-match`
 - **ChatComposer endActions model crushed by toggles** — Model + Thinking/Vision + Send 时模型触发器勿被压成仅 chevron；core ≥ **0.5.291** 有 menu min floor；≥ **0.5.293** 在 ≤ **36rem** 壳切 icon-only pills（勿中宽 ellipsis 成 “T.”）；禁止消费仓私有 min-width / 自绘 icon-only。`#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-thinking-toggle-narrow`
 - **ChatComposer mode toggle buried in + Menu** — Thinking / Vision 等模式用 `ChatComposerToggle` 放 `endActions`（Model → Thinking → Vision → Send）+ Tooltip（窄壳仅图标时 tip 必留）；禁止埋进 leading `+` 菜单或消费仓自绘 chip。`#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-thinking-toggle-narrow`
 - **ChatComposer model Menu flat without source sections** — 模型 Menu 分 Local / Cloud / CLI（`DropdownMenuGroup` + Separator）；仅已配置源显示分区，皆无则禁用「No models available」。`#sandbox-chat-composer-model-sections`
@@ -160,7 +169,9 @@ sandbox `#anchor`。
 - 工具条：`ControlStack` / `ControlRow` / `.fynns-control-cluster` /
   `ControlBlock` `description`。对照 `#rhythm`。
 - List 目录 kind → leading 图标 + meta；禁止 start tick / Chip 当状态。结果标 →
-  `.fynns-list-item-status`。多指标 trailing → `.fynns-list-item-trailing-stats`。
+  `.fynns-list-item-status`（run-summary 标题簇由 core ≥ **0.5.295** 做成固定
+  状态列 CSS grid，勿再用消费仓 flex 私造对齐）。多指标 trailing →
+  `.fynns-list-item-trailing-stats`。
 - Card/Collapsible 嵌套表面子级 → `chrome="plain"`（plain ≠ flush）。
 - PageScroll 分区 Card：勿用 sheet/chat/dialog-max 收窄；内容列铺满页滚；与上方
   ControlRow 同列宽。FullscreenDialog 设置栈亦横向铺满。
@@ -174,7 +185,8 @@ sandbox `#anchor`。
 `llm/CHAT_ARIA_PARITY.md`。优先 `ChatMessage markdown` / `ChatMarkdown`。
 产品壳默认：`ClippedNavShell` + 会话 `NavigationDrawer`（`NavigationDrawerNewChat`
 …）+ `FillColumn` → `Chat`（`#layouts-demo-chat-product`）；扁平根仍用
-`DestinationAppShell`。新会话：问候 + text starter + composer 进
+`DestinationAppShell`。会话/历史 Item **默认无** leading `icon`（`#sandbox-navdrawer-session-chrome`）；
+仅在字形有语义时 opt-in（`#sandbox-navdrawer-session-icon`）。新会话：问候 + text starter + composer 进
 `ChatThread.empty` 居中；有消息后 composer 贴 `ChatThread` 下。空线程 starter：
 满宽可点 `Surface` soft/padded/interactive（M3 Shared Axis Y 轮播；勿 Chip /
 勿 `ChatStarterPrompts`）。对照 `#chat`。勿私有 CSS「修」body stack gap。

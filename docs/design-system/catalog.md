@@ -25,7 +25,7 @@ classes.
   ChipSet (`assist`|`filter`|`input`|`suggestion` — never table-cell status),
   Slider, ToggleGroup, Tabs (M3 Primary underline)
 - **Feedback:** Banner, InlineAlert (phrasing copy only — never nest List /
-  FieldStack / CodeBlock inside), BadgedBox, LinearProgress / CircularProgress,
+  FieldStack / CodeBlock inside), LinearProgress / CircularProgress,
   BusyScrim `{ open, label, message?, value?, size?, indicator? }` /
   BusyRegion `{ busy, label, children?, message?, value?, size?, fill?,
   indicator? }` (soft frosted blur + `--fynns-color-busy-region-mask` when
@@ -113,7 +113,9 @@ classes.
     **`ClippedNavShell`** (or drill-in with `navKey`; omit TopAppBar on
     new-chat landing) + session **`NavigationDrawer`**
     (`NavigationDrawerNewChat` ghost labeled New chat + optional More; empty
-    list `EmptyState` sm; row trailing prefer More; footer account) + main
+    list `EmptyState` sm; session Items **label-only by default** — leading
+    `icon` opt-in only when the glyph carries meaning ≥ **0.5.298**; row
+    trailing prefer More; footer account) + main
     **`FillColumn` → `Chat`**. **New-chat landing:** greeting `EmptyState` +
     soft starters **centered above**; **`ChatComposer` inside `ChatThread.empty`**
     pinned to the column bottom with the same
@@ -121,8 +123,11 @@ classes.
     docked composer row). Active thread: composer under `ChatThread` inside
     Chat. Flat **destination** roots stay on `DestinationAppShell`. Do **not**
     put `ChatComposer` in FillColumn `footer` or use `PageScroll` as the chat
-    main scroll. Live `#layouts-demo-chat-product`. Failure: CONSUMER_TREATY
-    chat product / session host wrong tree.
+    main scroll. Live `#layouts-demo-chat-product` /
+    `#sandbox-navdrawer-session-chrome` (clean) /
+    `#sandbox-navdrawer-session-icon` (opt-in icon). Failure: CONSUMER_TREATY
+    chat product / session host wrong tree /
+    session history leading icon by default.
   - **Main vs aside:** **main** = column ceiling `--fynns-layout-chat-max-width`
     (**48rem**); user bubble **70%** of host (`radius-22`,
     `--fynns-color-chat-user-bubble`); composer **100%** of same host
@@ -138,7 +143,13 @@ classes.
     (narrow hosts can hit update-depth loops). Cap:
     `--fynns-chat-composer-max-height` (13rem). Layout authority:
     [`llm/CHAT_COMPOSER_LAYOUT.md`](../../llm/CHAT_COMPOSER_LAYOUT.md).
-  - **Message extras:** `streaming` = last-glyph color pulse only while answer
+  - **Message entrance:** newly mounted `ChatMessage` rows enter with a
+    tokenized rise/fade after `ChatThread`'s first paint. Wrap keyed non-message
+    results in `ChatReveal` (including blocks added inside an existing answer);
+    initial history stays still, and reduced motion paints immediately. Main
+    and EndAside use the same behavior. Live `#layouts-demo-chat-product` /
+    `#layouts-demo-chat-aside`. See [`CHAT_MOTION.md`](../../llm/CHAT_MOTION.md).
+  - **Message lifecycle:** `streaming` = last-glyph color pulse only while answer
     text exists + `aria-busy`; `error`/`onRetry` = failed-generation footer;
     `thinking`/`ChatThinking` = single-block reasoning (Wave 1); `ChatActivity`/
     Step = multi-step tool tree (Wave 2 — **minimal** ≥ **0.5.272**: default
@@ -210,8 +221,12 @@ classes.
   EndAside closing. Length reads without measure probes under MutationObserver
   ([`llm/PERF.md`](../../llm/PERF.md)). **`EndAside`:** width morph (≥ **0.5.86**
   track stays mounted — toggle `open` only); desktop leading-edge resize;
-  main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet
-  `min(52dvh, 22rem)`. Live `#layouts-demo-shell`.
+  main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet.
+  `--fynns-layout-end-aside-sheet-height` defaults to `auto`; its
+  `--fynns-layout-end-aside-sheet-max-height` ceiling defaults to
+  `min(52dvh, 22rem)`. Canvas consumers can set both on one shell instance and
+  reserve that height in the main canvas so controls stay reachable. Live
+  `#layouts-demo-shell`.
 - **Content:** List / ListItem (selected = `secondary-container` +
   `radius-3xl`; host paints whole-row wash; sibling gap =
   `--fynns-list-item-gap` **4dp**; **no Divider between items**; `--with-end`
@@ -222,7 +237,8 @@ classes.
   `outlined`|`filled`|`elevated`|`soft` — soft = surface-2, same paint as Banner
   default; `interactive` = M3 state-layer large-button hover/press ≥ **0.5.167**
   (inset focus ring ≥ **0.5.168**); `fill` only when parent height-resolved), Carousel, Divider, Table (host
-  `.fynns-table-wrap.fynns-scroll`; nowrap + max-content; cell status =
+  built-in `.fynns-table-wrap.fynns-scroll`; nowrap + max-content, with
+  clipped plain-text cells capped and tipped by core; cell status =
   `.fynns-table-meta` never Chip), **`RevealMore` + `useRevealMore`** (long
   Card / PageScroll catalogs — Table default **10**/step **10** ≥ **0.5.144**;
   List pass **5**/step **5** via `REVEAL_MORE_LIST_DEFAULT_*` ≥ **0.5.145**;
@@ -230,6 +246,10 @@ classes.
   **requires** non-empty `label`; else `variant="plain"`; `label` ≠ `language`
   — always pass matching `language` / `codeLanguageFromPath`; editable
   autoGrow default on PageScroll; soft-wrap live highlight ≥ **0.5.52**;
+  fill-host overflow gate uses shared min(ta,pre) slack (floor 8px)
+  ≥ **0.5.299** so short scripts / textarea-only phantom delta stay
+  non-scrollable (no edge fade / selection drift); caret scroll clamped
+  to glyph-layer max;
   `readOnly` = single pre), Stepper, Dropzone, Avatar / AvatarGroup
 - **Layout helpers:** ControlStack, ControlRow, ControlBlock `{ description?,
   errorText? }`, FieldHint, FieldBlock / FieldHeader, FieldStack,

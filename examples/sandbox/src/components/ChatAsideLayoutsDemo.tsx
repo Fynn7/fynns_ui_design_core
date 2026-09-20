@@ -1,17 +1,13 @@
 import {
-  Chat,
-  ChatComposer,
-  ChatThread,
   DestinationAppShell,
   EmptyState,
   FolderOpenIcon,
   Switch,
-  snackbar,
 } from "@fynns/ui";
 import { useState } from "react";
 import { useLocale } from "../i18n";
 import { SandboxHelp } from "./SandboxHelp";
-import { ChatNewChatLandingEmpty } from "./ChatNewChatLandingEmpty";
+import { ChatConversationDemo } from "./ChatConversationDemo";
 
 /**
  * Aside chat product recipe — same new-chat landing content as
@@ -24,7 +20,6 @@ export function ChatAsideLayoutsDemo() {
   const { t } = useLocale();
   const [navOpen, setNavOpen] = useState(false);
   const [asideOpen, setAsideOpen] = useState(true);
-  const [draft, setDraft] = useState("");
 
   const starterItems = [
     {
@@ -59,17 +54,6 @@ export function ChatAsideLayoutsDemo() {
     },
   ];
 
-  const composer = (
-    <ChatComposer
-      value={draft}
-      onChange={setDraft}
-      ariaLabel={t("layouts.chatAsideComposerAria")}
-      placeholder={t("layouts.chatProductComposerPlaceholder")}
-      sendLabel={t("layouts.fillColumnSend")}
-      onSubmit={() => setDraft("")}
-    />
-  );
-
   return (
     <>
       <div className="sandbox-globals-row sandbox-globals-row--stack">
@@ -103,24 +87,14 @@ export function ChatAsideLayoutsDemo() {
           ]}
           aside={
             <div className="fynns-chat-host--fill">
-              <Chat
+              <ChatConversationDemo
                 label={t("layouts.chatAsideChatLabel")}
-                className="sandbox-chat--landing"
-              >
-                <ChatThread
-                  empty={
-                    <ChatNewChatLandingEmpty
-                      items={starterItems}
-                      composer={composer}
-                      onSelect={(prompt) => {
-                        snackbar(t("globals.chatStarterSent", { prompt }), {
-                          dismissAriaLabel: t("globals.snackbarDismiss"),
-                        });
-                      }}
-                    />
-                  }
-                />
-              </Chat>
+                ariaLabel={t("layouts.chatAsideComposerAria")}
+                placeholder={t("layouts.chatProductComposerPlaceholder")}
+                sendLabel={t("layouts.fillColumnSend")}
+                starterItems={starterItems}
+                landing
+              />
             </div>
           }
         >

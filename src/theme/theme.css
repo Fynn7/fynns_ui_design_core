@@ -348,6 +348,8 @@
   --fynns-chatmessage-citation-card-gap: 0.625rem;
   --fynns-chatmessage-thinking-gap: 0.375rem;
   --fynns-chatmessage-thinking-trigger-gap: 0.375rem;
+  --fynns-chatmessage-collapse-preview-height: 12rem;
+  --fynns-chatmessage-collapse-fade-height: 3rem;
   --fynns-chatmessage-thinking-body-pad-block: var(--fynns-layout-field-stack-gap);
   --fynns-chatmessage-thinking-body-pad-inline: 0;
   --fynns-chatmessage-activity-gap: 0.375rem;
@@ -362,6 +364,8 @@
   --fynns-chatmessage-activity-step-min-busy: var(--fynns-duration-presentation-hint);
   --fynns-chatmessage-activity-enter: var(--fynns-duration-activity);
   --fynns-chatmessage-activity-complete: var(--fynns-duration-activity);
+  --fynns-chat-entry-offset: 0.75rem;
+  --fynns-chat-entry-duration: var(--fynns-duration-slow);
   --fynns-chat-thread-gap: 2rem;
   --fynns-chat-thread-pad-inline: var(--fynns-layout-dialog-inset);
   --fynns-chat-thread-pad-block: var(--fynns-layout-content-pad-block);
@@ -415,6 +419,7 @@
   --fynns-list-stats-col-tokens: 3.5rem;
   --fynns-list-stats-col-cost: 3.75rem;
   --fynns-list-stats-col-count: 3.25rem;
+  --fynns-list-stats-col-status: 8rem;
   --fynns-datepicker-day-size: 2.5rem;
   --fynns-datepicker-pad-inline: 0.75rem;
   --fynns-datepicker-pad-block: 0.75rem;
@@ -558,6 +563,7 @@
   --fynns-focus-ring-offset-control: 2px;
   --fynns-focus-ring-offset-input: 1px;
   --fynns-focus-border-mix: 12%;
+  --fynns-layout-table-text-max-width: min(40vw, 32rem);
   --fynns-layout-dialog-max-width: 32rem;
   --fynns-layout-dialog-max-width-sm: 24rem;
   --fynns-layout-dialog-max-width-md: 32rem;
@@ -608,6 +614,7 @@
   --fynns-layout-control-stack-form-gap: var(--fynns-space-md);
   --fynns-layout-field-stack-gap: var(--fynns-layout-control-stack-form-gap);
   --fynns-layout-form-cluster-gap: 2rem;
+  --fynns-layout-reveal-more-clearance: var(--fynns-space-lg);
   --fynns-layout-control-row-gap: 0.25rem;
   --fynns-layout-control-row-column-gap: 0.5rem;
   --fynns-layout-control-cluster-gap: 0.25rem;
@@ -622,6 +629,8 @@
   --fynns-layout-end-aside-width: 22rem;
   --fynns-layout-end-aside-max-width: 36vw;
   --fynns-layout-end-aside-min-width: clamp(17.5rem, 32%, 22rem);
+  --fynns-layout-end-aside-sheet-height: auto;
+  --fynns-layout-end-aside-sheet-max-height: min(52dvh, 22rem);
   --fynns-layout-main-min-width: clamp(10rem, 36%, 20rem);
   --fynns-layout-chat-max-width: 48rem;
   --fynns-layout-chat-min-width: 20rem;
@@ -931,36 +940,35 @@ button {
 }
 
 /*
- * Soft scroll-edge fade (Cursor-style): when more content sits past the top /
- * bottom of a capped CodeBlock / Textarea / NavigationDrawer body / PageScroll /
- * FillColumn header, mask the overflowing edge instead of a hard clip. Attrs
- * from syncScrollEdgeFade. Overlay thumbs stay in the portal (unaffected by
- * host mask). CodeBlock/Textarea/PageScroll/FillColumn header read layout
- * token; NavDrawer reads navdrawer alias so overriding
+ * Soft scroll-edge fade: every non-replaced .fynns-scroll overlay host gets
+ * a vertical mask whenever content extends past its visible edge. The shared
+ * scrollbar manager measures overflow and writes data-fade-top/bottom; this
+ * covers Dialog/Drawer/Sheet bodies, menus, lists, Chat, and PageScroll with
+ * no consumer setup. Overlay thumbs stay in the portal (unmasked). Editable
+ * CodeBlock and Textarea are replaced elements and keep their own fade path.
+ * NavDrawer reads its alias so overriding
  * --fynns-navdrawer-body-fade-length still applies. PageScroll ≥ 0.5.247;
- * FillColumn header ≥ 0.5.278.
+ * FillColumn header ≥ 0.5.278. Table wrap inline-axis ≥ **0.5.296**
+ * (data-fade-left / data-fade-right).
  *
  * Textarea uses a separate multi-layer mask (≥ 0.5.282): opaque hairline
  * frame + inset content fade — a single vertical mask would erase side
  * strokes in the fade band.
  */
-.fynns-code-block-pre[data-fade-bottom],
-.fynns-code-block-input[data-fade-bottom],
+/* Editable CodeBlock: never mask .fynns-code-block-input — Chromium keeps
+ * ::selection stuck under mask-image while the caret host scrolls (>= 0.5.299).
+ * Soft fade paints on .fynns-code-block-highlight (glyph twin) only. */
+.fynns-scroll:where([data-fynns-overlay-scroll])[data-fade-bottom],
 .fynns-code-block-highlight[data-fade-bottom],
-.fynns-page-scroll[data-fade-bottom],
 .fynns-fill-column-header[data-fade-bottom] {
-  -webkit-mask-image: linear-gradient(
+  --fynns-scroll-y-mask: linear-gradient(
     to bottom,
     #000 0%,
     #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
     transparent 100%
   );
-  mask-image: linear-gradient(
-    to bottom,
-    #000 0%,
-    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
-    transparent 100%
-  );
+  -webkit-mask-image: var(--fynns-scroll-y-mask);
+  mask-image: var(--fynns-scroll-y-mask);
 }
 
 .fynns-nav-drawer-body[data-fade-bottom] {
@@ -978,23 +986,17 @@ button {
   );
 }
 
-.fynns-code-block-pre[data-fade-top],
-.fynns-code-block-input[data-fade-top],
+.fynns-scroll:where([data-fynns-overlay-scroll])[data-fade-top],
 .fynns-code-block-highlight[data-fade-top],
-.fynns-page-scroll[data-fade-top],
 .fynns-fill-column-header[data-fade-top] {
-  -webkit-mask-image: linear-gradient(
+  --fynns-scroll-y-mask: linear-gradient(
     to bottom,
     transparent 0%,
     #000 var(--fynns-layout-scroll-edge-fade-length),
     #000 100%
   );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    #000 var(--fynns-layout-scroll-edge-fade-length),
-    #000 100%
-  );
+  -webkit-mask-image: var(--fynns-scroll-y-mask);
+  mask-image: var(--fynns-scroll-y-mask);
 }
 
 .fynns-nav-drawer-body[data-fade-top] {
@@ -1012,25 +1014,18 @@ button {
   );
 }
 
-.fynns-code-block-pre[data-fade-top][data-fade-bottom],
-.fynns-code-block-input[data-fade-top][data-fade-bottom],
+.fynns-scroll:where([data-fynns-overlay-scroll])[data-fade-top][data-fade-bottom],
 .fynns-code-block-highlight[data-fade-top][data-fade-bottom],
-.fynns-page-scroll[data-fade-top][data-fade-bottom],
 .fynns-fill-column-header[data-fade-top][data-fade-bottom] {
-  -webkit-mask-image: linear-gradient(
+  --fynns-scroll-y-mask: linear-gradient(
     to bottom,
     transparent 0%,
     #000 var(--fynns-layout-scroll-edge-fade-length),
     #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
     transparent 100%
   );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    #000 var(--fynns-layout-scroll-edge-fade-length),
-    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
-    transparent 100%
-  );
+  -webkit-mask-image: var(--fynns-scroll-y-mask);
+  mask-image: var(--fynns-scroll-y-mask);
 }
 
 .fynns-nav-drawer-body[data-fade-top][data-fade-bottom] {
@@ -1048,6 +1043,41 @@ button {
     #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
     transparent 100%
   );
+}
+
+/* The content fades inside a bordered scroll well; four opaque strips retain
+ * its outer hairline. Unbordered hosts keep the full-bleed mask above. */
+.fynns-scroll:where([data-fynns-overlay-scroll])[data-fynns-scroll-border]:is([data-fade-top], [data-fade-bottom]) {
+  -webkit-mask-image:
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    var(--fynns-scroll-y-mask);
+  mask-image:
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    var(--fynns-scroll-y-mask);
+  -webkit-mask-size:
+    100% var(--fynns-border-hairline),
+    100% var(--fynns-border-hairline),
+    var(--fynns-border-hairline) 100%,
+    var(--fynns-border-hairline) 100%,
+    calc(100% - 2 * var(--fynns-border-hairline)) calc(100% - 2 * var(--fynns-border-hairline));
+  mask-size:
+    100% var(--fynns-border-hairline),
+    100% var(--fynns-border-hairline),
+    var(--fynns-border-hairline) 100%,
+    var(--fynns-border-hairline) 100%,
+    calc(100% - 2 * var(--fynns-border-hairline)) calc(100% - 2 * var(--fynns-border-hairline));
+  -webkit-mask-position: 0 0, 0 100%, 0 0, 100% 0, var(--fynns-border-hairline) var(--fynns-border-hairline);
+  mask-position: 0 0, 0 100%, 0 0, 100% 0, var(--fynns-border-hairline) var(--fynns-border-hairline);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-composite: source-over;
+  mask-composite: add;
 }
 
 
@@ -1216,6 +1246,54 @@ button {
     var(--fynns-border-hairline) var(--fynns-border-hairline);
   mask-repeat: no-repeat;
   mask-composite: add;
+}
+
+/*
+ * Table wrap — inline-axis soft edge (≥ **0.5.296**). Driven by
+ * data-fade-left / data-fade-right from syncScrollEdgeFade (overlay
+ * scroll hosts call it on scroll/resize). Live #table.
+ */
+.fynns-table-wrap[data-fade-right] {
+  --fynns-scroll-x-mask: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+  -webkit-mask-image: var(--fynns-scroll-x-mask);
+  mask-image: var(--fynns-scroll-x-mask);
+}
+
+.fynns-table-wrap[data-fade-left] {
+  --fynns-scroll-x-mask: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 100%
+  );
+  -webkit-mask-image: var(--fynns-scroll-x-mask);
+  mask-image: var(--fynns-scroll-x-mask);
+}
+
+.fynns-table-wrap[data-fade-left][data-fade-right] {
+  --fynns-scroll-x-mask: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+  -webkit-mask-image: var(--fynns-scroll-x-mask);
+  mask-image: var(--fynns-scroll-x-mask);
+}
+
+/* A capped wide table can overflow on both axes; intersect the independent
+ * fades so its horizontal mask cannot replace the vertical one. */
+.fynns-table-wrap.fynns-scroll:where([data-fynns-overlay-scroll]):is([data-fade-top], [data-fade-bottom]):is([data-fade-left], [data-fade-right]) {
+  -webkit-mask-image: var(--fynns-scroll-y-mask), var(--fynns-scroll-x-mask);
+  mask-image: var(--fynns-scroll-y-mask), var(--fynns-scroll-x-mask);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
 
 .fynns-sr-only {
