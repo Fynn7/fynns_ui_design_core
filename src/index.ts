@@ -372,6 +372,7 @@ export type {
   ChatScrollToBottomProps,
   ChatThreadProps,
 } from "./primitives/Chat";
+export type { ChatComposerTodoItem, ChatComposerTodoListProps } from "./primitives/ChatComposerTodoList";
 export { ChatComposerToggle } from "./primitives/ChatComposerToggle";
 export type { ChatComposerToggleProps } from "./primitives/ChatComposerToggle";
 export { ChatMessage } from "./primitives/ChatMessage";

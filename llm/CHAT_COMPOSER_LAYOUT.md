@@ -22,6 +22,7 @@ IconButton md 40dp; not SearchBar 56dp chrome).
 
 ```text
 form.fynns-chat-composer
+  [?].fynns-chat-composer-todos          ← `todoList` progress card
   .fynns-chat-composer-shell[data-expanded?]
     [?].fynns-chat-composer-attachments
     .fynns-chat-composer-body
@@ -35,6 +36,19 @@ form.fynns-chat-composer
 
 Public props stay `leading` / `trailing` / `attachments` / `busy` / … — no
 rename required for consumers.
+
+**Task progress variant (live `#sandbox-chat-composer-todos`):** pass
+`todoList={{ items, progressLabel, ... }}` to show a read-only numbered
+progress card above the input. Each item has a stable `id`, `label`, and
+optional `status: "pending" | "active" | "completed"`. The caller owns
+statuses and localization. The card header toggles its list open/closed;
+`expanded` / `onExpandedChange` may control that state externally. **Omit
+`todoList` to restore the ordinary composer**, without replacing the input
+or losing its draft. The variant keeps the editor and bottom toolbar in the
+expanded layout even while the list is collapsed. A divider separates the
+progress header from the first item; opening and closing animate the card
+height and ink (respecting reduced motion). Do not recreate its card
+or interpose a separate scroll container in the consumer.
 
 **Labeled Menus (≥ 0.5.288):** pass **string**
 `DropdownMenu` `trigger` values (core wraps `OverflowTip`). Core caps each
@@ -88,8 +102,8 @@ Live `#sandbox-chat-composer-leading-menus-narrow` /
 
 | State | When | Layout |
 | --- | --- | --- |
-| **Collapsed** (default) | Empty draft and no attachments (clearing the value collapses) | Body is a horizontal flex row. Toolbar uses `display: contents` so leading / field / primary share one line (`order` 1 / 2 / 3). |
-| **Expanded** | Measured height &gt; one line (+tolerance), or `attachments` present | Body is a column. Textarea full width on top. Toolbar is a real flex row (`justify-content: space-between`) — tools start, Send end. |
+| **Collapsed** (default) | Empty draft and no attachments or todo list (clearing the value collapses) | Body is a horizontal flex row. Toolbar uses `display: contents` so leading / field / primary share one line (`order` 1 / 2 / 3). |
+| **Expanded** | Measured height &gt; one line (+tolerance), `attachments` or `todoList` present | Body is a column. Textarea full width on top. Toolbar is a real flex row (`justify-content: space-between`) — tools start, Send end. |
 
 Detection runs inside the JS auto-grow (`resize`). Expand freely when content
 needs it. **Do not auto-collapse a non-empty draft** when height would fit one

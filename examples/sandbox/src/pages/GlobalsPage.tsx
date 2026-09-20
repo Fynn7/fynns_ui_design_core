@@ -159,6 +159,7 @@ import {
 } from "@fynns/ui";
 import { ChatComposerModelMenuSections } from "../components/ChatComposerModelMenuSections";
 import { ChatComposerModeTogglesEndActions } from "../components/ChatComposerModeTogglesEndActions";
+import { ChatTodoComposerDemo } from "../components/ChatTodoComposerDemo";
 import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
@@ -3655,6 +3656,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
         </div>
         <p className="sandbox-chat-aside-label">{t("globals.chatComposerMultiLabel")}</p>
+        <ChatTodoComposerDemo />
         <ChatComposer
           value={chatComposerMultiDraft}
           onChange={setChatComposerMultiDraft}

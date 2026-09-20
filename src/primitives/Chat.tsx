@@ -23,6 +23,7 @@ import { IconButton } from "./IconButton";
 import { Tooltip } from "./Tooltip";
 import { clearScrollEdgeFade, syncScrollEdgeFadeOnto } from "./scrollEdgeFade";
 import { ChatEntranceContext } from "./chatEntrance";
+import { ChatComposerTodoList, type ChatComposerTodoListProps } from "./ChatComposerTodoList";
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -234,6 +235,8 @@ export type ChatComposerProps = Omit<
   leading?: ReactNode | null;
   /** Optional attachment previews above the field (caller-owned). */
   attachments?: ReactNode;
+  /** Optional progress card above the input. Omit to render the standard composer. */
+  todoList?: ChatComposerTodoListProps;
   /**
    * Optional end-of-toolbar actions **before** Send/Stop (e.g. model Menu).
    * Renders in `.fynns-chat-composer-primary-slot` — visually **end / right**,
@@ -295,6 +298,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       placeholder = "Message",
       leading,
       attachments,
+      todoList,
       endActions,
       trailing,
       busy = false,
@@ -338,6 +342,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
 
     const canSubmit = value.trim().length > 0 && !busy && !disabled;
     const hasAttachments = attachments != null;
+    const hasExpandedChrome = hasAttachments || todoList != null;
 
     const syncComposerFade = useCallback(() => {
       const input = localRef.current;
@@ -409,11 +414,11 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
         el.style.height = `${controlLine}px`;
         el.removeAttribute("data-scrollable");
         syncComposerFade();
-        setExpanded(hasAttachments);
+        setExpanded(hasExpandedChrome);
         return;
       }
 
-      const forceExpand = hasAttachments || el.value.includes("\n");
+      const forceExpand = hasExpandedChrome || el.value.includes("\n");
       // Probe full content height under *current* CSS line-height (collapsed or
       // expanded). Height 0 → scrollHeight = intrinsic text block.
       el.style.height = "0px";
@@ -446,11 +451,11 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
         el.removeAttribute("data-scrollable");
       }
       syncComposerFade();
-    }, [hasAttachments, expanded, syncComposerFade]);
+    }, [hasExpandedChrome, expanded, syncComposerFade]);
 
     useLayoutEffect(() => {
       resize();
-    }, [value, hasAttachments, expanded, resize]);
+    }, [value, hasExpandedChrome, expanded, resize]);
 
     useLayoutEffect(() => {
       const el = localRef.current;
@@ -612,6 +617,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
         onSubmit={handleSubmit}
         aria-busy={busy || undefined}
       >
+        {todoList ? <ChatComposerTodoList {...todoList} /> : null}
         <div
           className="fynns-chat-composer-shell"
           data-expanded={expanded ? "" : undefined}
