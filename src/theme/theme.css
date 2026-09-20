@@ -629,6 +629,8 @@
   --fynns-layout-end-aside-width: 22rem;
   --fynns-layout-end-aside-max-width: 36vw;
   --fynns-layout-end-aside-min-width: clamp(17.5rem, 32%, 22rem);
+  --fynns-layout-end-aside-sheet-height: auto;
+  --fynns-layout-end-aside-sheet-max-height: min(52dvh, 22rem);
   --fynns-layout-main-min-width: clamp(10rem, 36%, 20rem);
   --fynns-layout-chat-max-width: 48rem;
   --fynns-layout-chat-min-width: 20rem;

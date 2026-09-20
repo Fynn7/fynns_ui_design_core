@@ -1743,6 +1743,16 @@ export const LAYOUT_TOKENS = {
    */
   "end-aside-min-width": "clamp(17.5rem, 32%, 22rem)",
   /**
+   * Narrow EndAside bottom-sheet size. `auto` retains intrinsic sizing for
+   * existing apps; canvas consumers can set an explicit height on one shell.
+   */
+  "end-aside-sheet-height": "auto",
+  /**
+   * Narrow EndAside bottom-sheet height ceiling. Override alongside
+   * `end-aside-sheet-height` when a taller canvas is needed.
+   */
+  "end-aside-sheet-max-height": "min(52dvh, 22rem)",
+  /**
    * Preferred main canvas size beside `EndAside` (`flex-basis`). Shrink with
    * `min-width: 0` in CSS — never `min(token, 100%)` of the flex parent row.
    * Dropped while EndAside overlays (≤32rem main).

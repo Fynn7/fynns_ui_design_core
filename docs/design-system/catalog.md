@@ -221,8 +221,12 @@ classes.
   EndAside closing. Length reads without measure probes under MutationObserver
   ([`llm/PERF.md`](../../llm/PERF.md)). **`EndAside`:** width morph (≥ **0.5.86**
   track stays mounted — toggle `open` only); desktop leading-edge resize;
-  main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet
-  `min(52dvh, 22rem)`. Live `#layouts-demo-shell`.
+  main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet.
+  `--fynns-layout-end-aside-sheet-height` defaults to `auto`; its
+  `--fynns-layout-end-aside-sheet-max-height` ceiling defaults to
+  `min(52dvh, 22rem)`. Canvas consumers can set both on one shell instance and
+  reserve that height in the main canvas so controls stay reachable. Live
+  `#layouts-demo-shell`.
 - **Content:** List / ListItem (selected = `secondary-container` +
   `radius-3xl`; host paints whole-row wash; sibling gap =
   `--fynns-list-item-gap` **4dp**; **no Divider between items**; `--with-end`
