@@ -436,6 +436,10 @@
   (≥ **0.5.288**). Do **not** invent consumer `max-width` / manual `slice` /
   private chip-label CSS. Live `#sandbox-chat-composer-leading-menus` /
   `#chat`. Failure: CONSUMER_TREATY ChatComposer leading Menu label hard-clips.
+- **DON'T** shrink `ChatComposer` `endActions` until buttons disappear behind
+  the capsule edge. Core promotes crowded ≤26rem composers to a full-width
+  draft and wrapping action rows. Keep icon hit targets whole; let menu labels
+  ellipsize inside their own triggers.
 - **DON'T** park the **model** picker in `ChatComposer` `leading` (stays
   start-clustered) — put it in `endActions` (end / right, before Send) with
   `align="end"` (≥ **0.5.288**). Volume / tools stay in `leading`. Do **not**

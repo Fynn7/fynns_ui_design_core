@@ -1605,6 +1605,8 @@ a.fynns-chat-activity-artifact:hover {
 .fynns-chat-composer {
   width: 100%;
   max-width: var(--fynns-layout-chat-max-width);
+  container-type: inline-size;
+  container-name: fynns-chat-composer-host;
   margin-inline: auto;
   padding-inline: var(--fynns-chat-composer-inset-inline);
   padding-block: var(--fynns-chat-composer-inset-block);
@@ -1860,6 +1862,26 @@ a.fynns-chat-activity-artifact:hover {
   gap: var(--fynns-chat-composer-gap);
   width: 100%;
   min-width: 0;
+}
+
+/* A crowded composer moves its draft above the controls. Let the toolbar and
+ * action group wrap instead of shrinking icon buttons behind the shell clip. */
+@container fynns-chat-composer-host (max-width: 26rem) {
+  .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-leading {
+    min-width: min-content;
+  }
+
+  .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-primary-slot {
+    min-width: min-content;
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    overflow: visible;
+  }
 }
 
 /*

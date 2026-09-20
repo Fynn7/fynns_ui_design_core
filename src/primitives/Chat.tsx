@@ -319,6 +319,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
     ref,
   ) {
     const autoId = useId();
+    const composerRef = useRef<HTMLFormElement | null>(null);
     const localRef = useRef<HTMLTextAreaElement | null>(null);
     /** True between compositionstart and compositionend (CJK IME). */
     const composingRef = useRef(false);
@@ -331,6 +332,38 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
     const skipEnterClearRafRef = useRef<number | null>(null);
     /** Compact row vs full-width text + bottom toolbar (Cursor morph). */
     const [expanded, setExpanded] = useState(false);
+    const [narrowActions, setNarrowActions] = useState(false);
+    const hasEndActions = trailing === undefined && endActions != null;
+    const layoutExpanded = expanded || narrowActions;
+
+    useLayoutEffect(() => {
+      const form = composerRef.current;
+      if (!form || !hasEndActions) {
+        setNarrowActions(false);
+        return;
+      }
+      // Match the 26rem composer-host container query's content box. The form
+      // width stays fixed when the toolbar wraps, so this cannot oscillate.
+      const sync = () => {
+        const formStyle = getComputedStyle(form);
+        const contentWidth =
+          form.clientWidth -
+          (Number.parseFloat(formStyle.paddingLeft) || 0) -
+          (Number.parseFloat(formStyle.paddingRight) || 0);
+        const rootFontSize = Number.parseFloat(
+          getComputedStyle(document.documentElement).fontSize,
+        ) || 16;
+        setNarrowActions(contentWidth <= 26 * rootFontSize);
+      };
+      sync();
+      if (typeof ResizeObserver === "undefined") {
+        window.addEventListener("resize", sync);
+        return () => window.removeEventListener("resize", sync);
+      }
+      const observer = new ResizeObserver(sync);
+      observer.observe(form);
+      return () => observer.disconnect();
+    }, [hasEndActions]);
     const setRefs = useCallback(
       (node: HTMLTextAreaElement | null) => {
         localRef.current = node;
@@ -423,7 +456,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       // expanded). Height 0 → scrollHeight = intrinsic text block.
       el.style.height = "0px";
       const scrollH = el.scrollHeight;
-      const oneLine = expanded || forceExpand ? textLine : controlLine;
+      const oneLine = layoutExpanded || forceExpand ? textLine : controlLine;
       const tallerThanOneLine = scrollH > oneLine + 2;
       const shouldExpand = forceExpand || tallerThanOneLine;
 
@@ -441,17 +474,17 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
         return;
       }
 
-      const floor = expanded || shouldExpand ? textLine : controlLine;
+      const floor = layoutExpanded || shouldExpand ? textLine : controlLine;
       const next = Math.min(Math.max(scrollH, floor), max);
       el.style.height = `${next}px`;
       // Scroll only when content is clipped by the max-height cap.
-      if ((expanded || shouldExpand) && scrollH > max + 0.5) {
+      if ((layoutExpanded || shouldExpand) && scrollH > max + 0.5) {
         el.setAttribute("data-scrollable", "");
       } else {
         el.removeAttribute("data-scrollable");
       }
       syncComposerFade();
-    }, [hasExpandedChrome, expanded, syncComposerFade]);
+    }, [hasExpandedChrome, expanded, layoutExpanded, syncComposerFade]);
 
     useLayoutEffect(() => {
       resize();
@@ -613,6 +646,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
     return (
       <form
         {...rest}
+        ref={composerRef}
         className={join("fynns-chat-composer", className)}
         onSubmit={handleSubmit}
         aria-busy={busy || undefined}
@@ -620,7 +654,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
         {todoList ? <ChatComposerTodoList {...todoList} /> : null}
         <div
           className="fynns-chat-composer-shell"
-          data-expanded={expanded ? "" : undefined}
+          data-expanded={layoutExpanded ? "" : undefined}
         >
           {hasAttachments ? (
             <div className="fynns-chat-composer-attachments fynns-scroll">
@@ -663,8 +697,8 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
             </div>
             <div
               className="fynns-chat-composer-toolbar"
-              role={expanded ? "toolbar" : undefined}
-              aria-label={expanded ? "Composer actions" : undefined}
+              role={layoutExpanded ? "toolbar" : undefined}
+              aria-label={layoutExpanded ? "Composer actions" : undefined}
             >
               {showLeading ? (
                 <div className="fynns-chat-composer-leading">{leading}</div>

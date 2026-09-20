@@ -98,12 +98,20 @@ Live `#sandbox-chat-composer-leading-menus-narrow` /
 `#sandbox-chat-composer-thinking-toggle` (wide &gt; 36rem, labeled) /
 `#sandbox-chat-composer-thinking-toggle-narrow` (≤ 36rem icon-only).
 
+When a composer with `endActions` becomes ≤ **26rem** wide, core moves the
+draft above a wrapping toolbar even if the draft is empty. The leading group
+and end actions can occupy separate rows; the end actions wrap again when
+needed. Every control keeps its hit target instead of disappearing behind the
+capsule's clipping edge. A browser page cannot impose a minimum width on its
+window; native hosts must set their own window minimum if they need that
+behavior.
+
 ## Compact vs expanded (`data-expanded`)
 
 | State | When | Layout |
 | --- | --- | --- |
 | **Collapsed** (default) | Empty draft and no attachments or todo list (clearing the value collapses) | Body is a horizontal flex row. Toolbar uses `display: contents` so leading / field / primary share one line (`order` 1 / 2 / 3). |
-| **Expanded** | Measured height &gt; one line (+tolerance), `attachments` or `todoList` present | Body is a column. Textarea full width on top. Toolbar is a real flex row (`justify-content: space-between`) — tools start, Send end. |
+| **Expanded** | Measured height &gt; one line (+tolerance), `attachments` or `todoList` present, or an `endActions` composer ≤26rem wide | Body is a column. Textarea full width on top. Toolbar is a real flex row (`justify-content: space-between`) — tools start, Send end; crowded narrow controls wrap. |
 
 Detection runs inside the JS auto-grow (`resize`). Expand freely when content
 needs it. **Do not auto-collapse a non-empty draft** when height would fit one
