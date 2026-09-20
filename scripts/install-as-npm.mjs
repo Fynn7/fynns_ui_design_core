@@ -16,6 +16,7 @@ import { createHash } from "node:crypto";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawnSync } from "node:child_process";
 import { semverLt, walkInstallChain } from "./check-ui-update.mjs";
+import { ensureNoStoreDevHeader, hasNoStoreDevHeader } from "./vite-dev-cache.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = path.resolve(__dirname, "..");
@@ -285,6 +286,24 @@ function wireVite(viteFile, entryRel, dryRun, log) {
     file: viteFile,
     detail: `Add resolve.alias ${ALIAS} → ${entryRel} and dedupe react`,
   });
+}
+
+function wireViteDevCache(viteFile, dryRun, log) {
+  const before = readText(viteFile);
+  const next = ensureNoStoreDevHeader(before);
+  if (next === null) {
+    log.push({
+      step: "vite_dev_cache",
+      status: "manual",
+      file: viteFile,
+      detail: 'Add server.headers: { "Cache-Control": "no-store" } to the Vite dev config',
+    });
+  } else if (next === before) {
+    log.push({ step: "vite_dev_cache", status: "ok", file: viteFile });
+  } else {
+    writeText(viteFile, next, dryRun);
+    log.push({ step: "vite_dev_cache", status: dryRun ? "dry-run" : "patched", file: viteFile });
+  }
 }
 
 function wireTsconfig(tsconfigFile, entryRel, dryRun, log) {
@@ -763,6 +782,9 @@ function checkMode(pkgRoot, viteFile, tsconfigFile, gitRoot) {
       );
     }
     if (!hasDedupe(t)) issues.push(`vite missing react dedupe: ${viteFile}`);
+    if (!hasNoStoreDevHeader(t)) {
+      issues.push(`vite dev server missing Cache-Control: no-store (prevents stale @fynns/ui ESM in embedded browsers): ${viteFile}`);
+    }
   } else {
     issues.push("no vite.config.* found to validate");
   }
@@ -877,6 +899,7 @@ function main() {
   if (viteFile) {
     const entryRel = entryRelFromVite(viteFile, pkgRoot);
     wireVite(viteFile, entryRel, opts.dryRun, log);
+    wireViteDevCache(viteFile, opts.dryRun, log);
   } else {
     log.push({ step: "vite_alias", status: "manual", detail: "no vite.config found" });
   }

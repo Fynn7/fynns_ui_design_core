@@ -28,6 +28,7 @@
     "README.md",
     "scripts/check-ui-update.mjs",
     "scripts/check-ui-exports.mjs",
+    "scripts/vite-dev-cache.mjs",
     "scripts/ensure-sibling-ui-core.mjs",
     "scripts/api.mjs"
   ],

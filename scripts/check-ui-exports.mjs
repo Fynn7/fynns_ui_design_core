@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Hard gate: consumer named imports from `@fynns/ui` must exist on the linked
- * `@fynn7/ui-design-core` barrel (src/index.ts + export * re-exports).
+ * `@fynn7/ui-design-core` barrel (src/index.ts + export * re-exports), and a
+ * Vite consumer must disable dev browser caching of native ESM responses.
  *
  * Catches stale sibling checkouts before Vite serves a blank page with
  * "does not provide an export named ...".
@@ -10,11 +11,12 @@
  *   node scripts/check-ui-exports.mjs --target <consumer-pkg>
  *   node scripts/check-ui-exports.mjs --target ../my-app/apps/web --json
  *
- * Exit 1 when any imported symbol is missing from the linked barrel.
+ * Exit 1 when any imported symbol is missing or Vite dev caching is unsafe.
  */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { hasNoStoreDevHeader } from "./vite-dev-cache.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PKG_NAME = "@fynn7/ui-design-core";
@@ -316,25 +318,36 @@ export function checkUiExports(pkgRoot) {
   const exports = collectBarrelExports(barrelPath);
   const { imports, files } = scanConsumerImports(pkgRoot);
   const missing = [...imports].filter((n) => !exports.has(n)).sort();
+  const viteConfig = ["ts", "mts", "js", "mjs", "cjs"]
+    .map((ext) => path.join(pkgRoot, `vite.config.${ext}`))
+    .find((file) => fs.existsSync(file));
+  const staleBrowserCache = viteConfig && !hasNoStoreDevHeader(fs.readFileSync(viteConfig, "utf8"));
+  const errors = [];
+  if (missing.length) {
+    errors.push(`${ALIAS} imports missing from linked ${PKG_NAME}: ${missing.join(", ")}\n` +
+      `Barrel: ${barrelPath}\n` +
+      `Fix: sync sibling UI core then retry:\n` +
+      `  node node_modules/@fynn7/ui-design-core/scripts/ensure-sibling-ui-core.mjs --target "${pkgRoot}" --update\n` +
+      `  (or: git -C ../fynns_ui_design_core pull)\n` +
+      `Skip auto-sync only while editing core locally: FYNNS_UI_SKIP_SIBLING_SYNC=1`);
+  }
+  if (staleBrowserCache) {
+    errors.push(`Vite dev config lacks server.headers Cache-Control: no-store: ${viteConfig}\n` +
+      `An embedded browser can serve an old ${ALIAS} barrel and crash despite a valid export.\n` +
+      `Fix: run node node_modules/@fynn7/ui-design-core/scripts/install-as-npm.mjs --target "${pkgRoot}" --wire-only`);
+  }
 
   return {
-    ok: missing.length === 0,
+    ok: errors.length === 0,
     missing,
     imports: [...imports].sort(),
     exportsCount: exports.size,
     barrelPath,
+    viteConfig: viteConfig ?? null,
     files: Object.fromEntries(
       [...files.entries()].map(([f, names]) => [path.relative(pkgRoot, f) || f, names]),
     ),
-    error:
-      missing.length === 0
-        ? null
-        : `${ALIAS} imports missing from linked ${PKG_NAME}: ${missing.join(", ")}\n` +
-          `Barrel: ${barrelPath}\n` +
-          `Fix: sync sibling UI core then retry:\n` +
-          `  node node_modules/@fynn7/ui-design-core/scripts/ensure-sibling-ui-core.mjs --target "${pkgRoot}" --update\n` +
-          `  (or: git -C ../fynns_ui_design_core pull)\n` +
-          `Skip auto-sync only while editing core locally: FYNNS_UI_SKIP_SIBLING_SYNC=1`,
+    error: errors.length ? errors.join("\n\n") : null,
   };
 }
 

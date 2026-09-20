@@ -23,7 +23,7 @@ npm create vite@latest my-app -- --template react-ts && cd my-app
 node ../fynns_ui_design_core/scripts/ensure-sibling-ui-core.mjs --target . --install --npmrc --json
 node ../fynns_ui_design_core/scripts/install-as-npm.mjs --target . --sibling --json
 
-# 3. verify (exit 0 = dependency + .npmrc + alias + dedupe + rule OK)
+# 3. verify (exit 0 = dependency + .npmrc + alias + dev cache policy + rule OK)
 node ../fynns_ui_design_core/scripts/install-as-npm.mjs --target . --check --json
 npm run dev
 ```
@@ -34,7 +34,7 @@ What the two scripts leave behind (all idempotent):
 | --- | --- |
 | `package.json` | `dependencies["@fynn7/ui-design-core"] = "file:../fynns_ui_design_core"`; scripts `fynns-ui:gate` / `fynns-ui:check-update` on `predev` / `prebuild` / `prepreview` / `postinstall` |
 | `.npmrc` | `@fynn7:registry=https://registry.npmjs.org` (safe; never commit an `_authToken=${NODE_AUTH_TOKEN}` line) |
-| `vite.config.*` | `resolve.alias["@fynns/ui"] → node_modules/@fynn7/ui-design-core/src/index.ts` + `resolve.dedupe: ["react", "react-dom"]` |
+| `vite.config.*` | `resolve.alias["@fynns/ui"] → node_modules/@fynn7/ui-design-core/src/index.ts` + `resolve.dedupe: ["react", "react-dom"]` + `server.headers["Cache-Control"] = "no-store"` |
 | `tsconfig*.json` | `paths["@fynns/ui"]` → same entry; `target` / `lib` **ES2022+** |
 | `.cursor/rules/fynns-ui-consumer.mdc` | copy of [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) (written once; `--sync-consumer-rule` to refresh) |
 | `AGENTS.md` | copy of [`consumer-AGENTS.md`](consumer-AGENTS.md) when the app has none (OpenCode / small local models) |
@@ -61,6 +61,7 @@ npm pkg set dependencies.@fynn7/ui-design-core=file:../fynns_ui_design_core
 # .npmrc: @fynn7:registry=https://registry.npmjs.org
 # vite: resolve.alias["@fynns/ui"] → node_modules/@fynn7/ui-design-core/src/index.ts
 #       + resolve.dedupe: ["react", "react-dom"]
+#       + server.headers: { "Cache-Control": "no-store" }
 # tsconfig: paths["@fynns/ui"] → same; target/lib ES2022+
 npm install
 ```
@@ -69,6 +70,13 @@ npm install
 4. If the failure looks like a core-script bug: note it and stop; fix upstream
    only in a task whose goal is the design-system / installer — not mid
    consumer feature work.
+
+The dev header prevents embedded browsers from reusing an old native ESM
+response when the linked core gains a new export. The predev export gate also
+checks this policy, so an existing consumer fails before launching Vite until
+`install-as-npm.mjs --wire-only` updates its config. A browser that already
+stored an old response before this policy was installed may need one hard
+reload or cache clear when first migrating.
 
 Same class of recovery as **E401** below: return to sibling `file:` wiring,
 do not fight Packages auth or patch installers in-session.

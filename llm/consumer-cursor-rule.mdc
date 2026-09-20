@@ -28,9 +28,11 @@ ASCII `-`。
    `ensure-sibling-ui-core.mjs --target <根> --install --npmrc --update` 与/或
    `npm run consume:check -- --target <根>`。`consume:install` 接线
    `fynns-ui:gate` 到 predev/prebuild/postinstall。脏 sibling → 软跳过同步；缺
-   导出仍硬失败。CI：`FYNNS_UI_STRICT_SIBLING_SYNC=1`。E401 → 切回 sibling。见
+   导出或 Vite dev `no-store` 缺失仍硬失败。CI：`FYNNS_UI_STRICT_SIBLING_SYNC=1`。E401 → 切回 sibling。见
    `llm/CONSUME.md`。
-3. Vite：`resolve.dedupe: ["react", "react-dom"]`；`tsconfig` ≥ **ES2022**。
+3. Vite：`resolve.dedupe: ["react", "react-dom"]`；开发服务器
+   `server.headers: { "Cache-Control": "no-store" }`，防内置浏览器复用旧 ESM；
+   `tsconfig` ≥ **ES2022**。
 4. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止
    `@radix-ui/*` / `sonner`、禁止复活已 purge API。缺能力 → 先在 core 加，再刷新
    sibling / bump。

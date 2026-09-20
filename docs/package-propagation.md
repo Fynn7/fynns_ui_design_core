@@ -46,7 +46,9 @@ Do **not** commit `_authToken=${NODE_AUTH_TOKEN}` (empty env → E401).
    the consumer does not clear sibling dirt. Dev continues; export check still
    runs.
    `FYNNS_UI_STRICT_SIBLING_SYNC=1` hard-fails those cases (CI). Also
-   fails closed on failed fetch or missing `@fynns/ui` barrel symbols.
+   fails closed on failed fetch, missing `@fynns/ui` barrel symbols, or a Vite
+   dev config without `Cache-Control: no-store`. The last check prevents a
+   webview from reusing a stale native ESM barrel after the sibling updates.
    Optional: `FYNNS_UI_SKIP_SIBLING_SYNC=1` while editing core. Optional
    floor: `"fynnsUi": { "minVersion": "…" }` in the consumer package.json.
 2. **`fynns-ui:check-update`** (soft) — registry notice on
@@ -77,6 +79,11 @@ consumer-visible changes:
    `node_modules/@fynn7/ui-design-core/...`.
 4. While iterating on core next to a consumer: set
    `FYNNS_UI_SKIP_SIBLING_SYNC=1` so predev does not reset your WIP tip.
+
+`consume:install -- --wire-only` adds the dev response header to existing
+consumer Vite configs. A browser with a previously cached response can require
+one hard reload or cache clear during this migration. Future responses carry
+`no-store`, so subsequent linked-core updates do not reuse that stale module.
 
 ## Legacy submodule bump workflows (removed)
 
