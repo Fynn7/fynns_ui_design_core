@@ -95,7 +95,8 @@ classes.
     Preview above Chat → wrap with **`FillColumn`** (`header` = Preview,
     `children` = Chat or pane-boot `BusyRegion` `fill`). Only `ChatThread`
     scrolls (`role="log"` + `fynns-scroll`); composer docks at root; scroll-to-
-    bottom = 32dp elevated IconButton (not Fab). `empty` prefers `EmptyState`;
+    bottom = 32dp elevated IconButton (not Fab); it stays visually above any
+    overlay scrollbar crossing its footprint. `empty` prefers `EmptyState`;
     empty-thread starter prompts = app-owned full-width clickable
     **`Surface` `variant="soft"` `padded` `interactive`** rows inside
     `ChatThread.empty`

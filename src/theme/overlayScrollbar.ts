@@ -43,6 +43,7 @@ const WHEEL_X_ATTR = "data-fynns-wheel-x";
 const BORDER_ATTR = "data-fynns-scroll-border";
 const RAIL_CLASS = "fynns-scroll-rail";
 const THUMB_CLASS = "fynns-scroll-thumb";
+const SCROLL_OCCLUDER = "[data-fynns-scroll-occluder]";
 const MIN_THUMB_PX = 24;
 /** Element-bound state so a second module instance does not double-attach. */
 const BOUND_STATE = "__fynnsOverlayScroll";
@@ -256,6 +257,53 @@ function railHorizontallyOverlaps(
   boxRight: number,
 ): boolean {
   return railRight > boxLeft + 0.5 && railLeft < boxRight - 0.5;
+}
+
+/** Portal rails clear raised controls even inside container-query stacking contexts. */
+function clipRailBelowControls(
+  rail: HTMLDivElement,
+  axis: Axis,
+  left: number,
+  top: number,
+  width: number,
+  height: number,
+  controls: readonly DOMRect[],
+): void {
+  const length = axis === "x" ? width : height;
+  const intervals: Array<[number, number]> = [];
+  for (const rect of controls) {
+    if (rect.width < 1 || rect.height < 1) continue;
+    if (
+      rect.right <= left || rect.left >= left + width ||
+      rect.bottom <= top || rect.top >= top + height
+    ) continue;
+    const start = axis === "x" ? rect.left - left : rect.top - top;
+    const end = axis === "x" ? rect.right - left : rect.bottom - top;
+    intervals.push([Math.max(0, start), Math.min(length, end)]);
+  }
+  if (intervals.length === 0) {
+    rail.style.clipPath = "";
+    return;
+  }
+
+  intervals.sort((a, b) => a[0] - b[0]);
+  const parts: string[] = [];
+  let visibleStart = 0;
+  for (const [start, end] of intervals) {
+    if (start > visibleStart) {
+      parts.push(axis === "x"
+        ? `M ${visibleStart} 0 H ${start} V ${height} H ${visibleStart} Z`
+        : `M 0 ${visibleStart} H ${width} V ${start} H 0 Z`);
+    }
+    visibleStart = Math.max(visibleStart, end);
+  }
+  if (visibleStart < length) {
+    parts.push(axis === "x"
+      ? `M ${visibleStart} 0 H ${length} V ${height} H ${visibleStart} Z`
+      : `M 0 ${visibleStart} H ${width} V ${length} H 0 Z`);
+  }
+  /* The same clip masks the thumb and removes rail hit targets below the control. */
+  rail.style.clipPath = parts.length > 0 ? `path("${parts.join(" ")}")` : "inset(100%)";
 }
 
 /**
@@ -747,6 +795,10 @@ function updateHost(host: HTMLElement, state: HostState) {
   const xOverflow = state.allowX && scrollWidth - clientWidth > 1;
   const paintRail = shouldPaintOverlayRail(host);
   const enterHidden = modalDialogBodyEnterHidden(host, state);
+  const controlRects = paintRail && (xOverflow || yOverflow)
+    ? [...document.querySelectorAll<HTMLElement>(SCROLL_OCCLUDER)]
+        .map((control) => control.getBoundingClientRect())
+    : [];
 
   state.railY.hidden = !paintRail || !yOverflow || enterHidden;
   state.railX.hidden = !paintRail || !xOverflow || enterHidden;
@@ -795,6 +847,7 @@ function updateHost(host: HTMLElement, state: HostState) {
     state.thumbY.style.width = `${sb}px`;
     state.thumbY.style.height = `${thumbH}px`;
     state.thumbY.style.transform = `translateY(${thumbTop}px)`;
+    clipRailBelowControls(state.railY, "y", railLeft, railTop, sb, railHeight, controlRects);
   }
 
   if (paintRail && xOverflow) {
@@ -812,6 +865,7 @@ function updateHost(host: HTMLElement, state: HostState) {
     state.thumbX.style.height = `${sb}px`;
     state.thumbX.style.width = `${thumbW}px`;
     state.thumbX.style.transform = `translateX(${thumbLeft}px)`;
+    clipRailBelowControls(state.railX, "x", rect.left, rect.bottom - sb, rect.width, sb, controlRects);
   }
 
   syncThumbVisibility(state, host);
@@ -1133,6 +1187,7 @@ export function ensureOverlayScrollbars(): void {
     let overlayLayerTouched = false;
     let overlayOpened = false;
     let overlayRemoved = false;
+    let scrollOccluderTouched = false;
     for (const record of records) {
       if (
         record.type === "attributes" &&
@@ -1149,6 +1204,9 @@ export function ensureOverlayScrollbars(): void {
       }
       record.addedNodes.forEach((node) => {
         if (node instanceof Element) {
+          if (node.matches(SCROLL_OCCLUDER) || node.querySelector(SCROLL_OCCLUDER)) {
+            scrollOccluderTouched = true;
+          }
           const overlays: HTMLElement[] = isModalDialogOverlay(node)
             ? [node]
             : [
@@ -1170,6 +1228,9 @@ export function ensureOverlayScrollbars(): void {
       });
       record.removedNodes.forEach((node) => {
         if (!(node instanceof Element)) return;
+        if (node.matches(SCROLL_OCCLUDER) || node.querySelector(SCROLL_OCCLUDER)) {
+          scrollOccluderTouched = true;
+        }
         if (canHostOverlay(node) && states.has(node)) detach(node);
         node.querySelectorAll?.(`[${HOST_ATTR}]`).forEach((el) => {
           if (el instanceof HTMLElement) detach(el);
@@ -1189,6 +1250,7 @@ export function ensureOverlayScrollbars(): void {
     } else if (overlayLayerTouched) {
       scheduleOverlayLayerRefresh();
     }
+    if (scrollOccluderTouched) refreshOverlayScrollbars();
   });
   mo.observe(document.documentElement, {
     childList: true,

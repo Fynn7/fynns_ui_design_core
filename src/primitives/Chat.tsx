@@ -24,6 +24,7 @@ import { Tooltip } from "./Tooltip";
 import { clearScrollEdgeFade, syncScrollEdgeFadeOnto } from "./scrollEdgeFade";
 import { ChatEntranceContext } from "./chatEntrance";
 import { ChatComposerTodoList, type ChatComposerTodoListProps } from "./ChatComposerTodoList";
+import { refreshOverlayScrollbars } from "../theme/overlayScrollbar";
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -204,14 +205,28 @@ export function ChatScrollToBottom({
   className,
 }: ChatScrollToBottomProps) {
   const { atBottom, scrollToBottom } = useChatContext("ChatScrollToBottom");
+  const fabRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (atBottom || typeof ResizeObserver === "undefined") return;
+    const fab = fabRef.current;
+    const composer = fab?.parentElement?.querySelector(".fynns-chat-composer");
+    if (!fab || !composer) return;
+    const observer = new ResizeObserver(refreshOverlayScrollbars);
+    observer.observe(fab);
+    observer.observe(composer);
+    return () => observer.disconnect();
+  }, [atBottom]);
+
   if (atBottom) return null;
 
   return (
-    <div className={join("fynns-chat-scroll-fab", className)}>
+    <div ref={fabRef} className={join("fynns-chat-scroll-fab", className)}>
       <Tooltip content={label}>
         <IconButton
           size="sm"
           variant="elevated"
+          data-fynns-scroll-occluder=""
           aria-label={label}
           onClick={() => scrollToBottom()}
         >
