@@ -8,6 +8,15 @@
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`, `var(--fynns-shadow-lg)`,
   `var(--fynns-duration-fast)`, etc. Missing value →
   [`src/theme/tokens.ts`](../../src/theme/tokens.ts) + `npm run gen:theme`.
+- **DO** default consumer app action Buttons to **semantic leading icon +
+  visible label** across every variant and size: `CloseIcon` + Cancel,
+  `CheckIcon` + Apply, `RefreshIcon` + Refresh, etc. Put both directly inside
+  `Button`; the primitive owns exactly one `--fynns-space-2` gap. **DON'T** add
+  icon margin, consumer `gap`, literal whitespace, `&nbsp;`, or make the icon
+  separately focusable. Visible label → icon `aria-hidden`. Compact,
+  self-evident chrome may use `IconButton` + `Tooltip` + `aria-label`; arbitrary
+  values/actions without a stable glyph may stay text-only rather than gaining
+  a meaningless decorative icon. Live `#globals-demo-button-icon-label-matrix`.
 - **DO** group inspector / settings / Dialog form options with **`FieldStack`**
   by **semantic kind** (identity fields together, radio/checkbox choices
   together, preference switches together, …) — not one flat list of FieldBlocks

@@ -7,7 +7,9 @@ import { OverflowTip, overflowTipText } from "./OverflowTip";
  * Button primitive. The single source of truth for `<button>` styling across
  * fynns apps. Default variant is `primary` (M3 filled). Style axes are
  * `variant`, `size`, `active`, `iconOnly`, `loading` only; any other visual
- * tweak must go through `--fynns-*` overrides, never inline color.
+ * tweak must go through `--fynns-*` overrides, never inline color. Consumer
+ * action buttons should normally render a semantic leading icon followed by a
+ * visible label; core supplies their alignment and one shared control gap.
  */
 export type ButtonVariant =
   | "default"

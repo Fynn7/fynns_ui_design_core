@@ -1212,8 +1212,15 @@ const en = {
   "globals.formRecipeHelp":
     "Recipe hosts: `Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` intro → `FieldStack`(`FieldBlock` text…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → feedback / foot. Dialog foot: **one** `loading` (Extract); siblings `disabled` without rings. See AGENTS.md Toolbar / unit rhythm.",
   "globals.btnSmall": "Small",
+  "globals.btnApply": "Apply",
+  "globals.btnRefresh": "Refresh",
   "globals.btnViewDetails": "View details",
   "globals.btnCopyText": "Copy text",
+  "globals.btnSave": "Save",
+  "globals.btnCancel": "Cancel",
+  "globals.btnDelete": "Delete",
+  "globals.btnIconLabelHelp":
+    "Default consumer action: semantic leading icon + visible label. Button owns the exact icon-to-label gap; do not add icon margin, custom gap, or spaces. Use IconButton + Tooltip only for compact, self-evident chrome.",
   "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
   "globals.btnTonal": "Tonal",
@@ -3676,8 +3683,15 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeHelp":
     "配方宿主：`Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` 引言 → `FieldStack`(`FieldBlock` 文本…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → 反馈 / 底栏。Dialog 底栏：**一颗** `loading`（Extract）；兄弟只 `disabled`、不画圈。见 AGENTS.md Toolbar / unit rhythm。",
   "globals.btnSmall": "小号",
+  "globals.btnApply": "应用",
+  "globals.btnRefresh": "刷新",
   "globals.btnViewDetails": "查看详情",
   "globals.btnCopyText": "复制文本",
+  "globals.btnSave": "保存",
+  "globals.btnCancel": "取消",
+  "globals.btnDelete": "删除",
+  "globals.btnIconLabelHelp":
+    "消费仓动作默认使用语义前置图标 + 可见文字。Button 统一提供图标与文字的精确间距；禁止另加图标 margin、自定义 gap 或空格。仅紧凑且语义自明的铬使用 IconButton + Tooltip。",
   "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",
   "globals.btnTonal": "色调",

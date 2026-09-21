@@ -55,6 +55,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["图标文字按钮", "icon and text", "icon label"],
   },
   {
+    id: "button-icon-label-matrix",
+    categoryId: "actions",
+    label: "Button · icon + label matrix",
+    keywords: ["按钮图标间距", "button icon gap", "button variants", "取消按钮"],
+  },
+  {
     id: "split-button",
     categoryId: "actions",
     label: "SplitButton",

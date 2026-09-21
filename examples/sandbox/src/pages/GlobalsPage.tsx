@@ -91,6 +91,7 @@ import {
   Drawer,
   IconButton,
   InfoIcon,
+  CheckIcon,
   CheckCircleIcon,
   AlertTriangleIcon,
   InlineAlert,
@@ -1721,14 +1722,59 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <div className="sandbox-globals-row">
           <Button variant="tonal" size="sm">
             <>
-              <EyeIcon size={16} aria-hidden />
+              <EyeIcon aria-hidden />
               {t("globals.btnViewDetails")}
             </>
           </Button>
           <Button variant="ghost" size="sm">
-            <ClipboardIcon size={16} aria-hidden />
+            <ClipboardIcon aria-hidden />
             {t("globals.btnCopyText")}
           </Button>
+        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="button-icon-label-matrix">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <div className="sandbox-globals-row">
+            <Button>
+              <CheckIcon aria-hidden />
+              {t("globals.btnApply")}
+            </Button>
+            <Button variant="tonal">
+              <RefreshIcon aria-hidden />
+              {t("globals.btnRefresh")}
+            </Button>
+            <Button variant="elevated">
+              <EyeIcon aria-hidden />
+              {t("globals.btnViewDetails")}
+            </Button>
+            <Button variant="default">
+              <SaveIcon aria-hidden />
+              {t("globals.btnSave")}
+            </Button>
+            <Button variant="ghost">
+              <CloseIcon aria-hidden />
+              {t("globals.btnCancel")}
+            </Button>
+            <Button variant="danger">
+              <TrashIcon aria-hidden />
+              {t("globals.btnDelete")}
+            </Button>
+          </div>
+          <div className="sandbox-globals-row">
+            <Button variant="tonal" size="sm">
+              <ClipboardIcon aria-hidden />
+              {t("globals.btnCopyText")}
+            </Button>
+            <Button variant="tonal">
+              <ClipboardIcon aria-hidden />
+              {t("globals.btnCopyText")}
+            </Button>
+            <Button variant="tonal" size="lg">
+              <ClipboardIcon aria-hidden />
+              {t("globals.btnCopyText")}
+            </Button>
+          </div>
+          <SandboxHelp text={t("globals.btnIconLabelHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="split-button">

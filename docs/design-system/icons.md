@@ -23,20 +23,34 @@ Pick by meaning, not nearest shape:
 | Archive | `ArchiveIcon` | |
 | Restore from archive | `UndoIcon` | `ArchiveIcon` (archive again) |
 | Delete | `TrashIcon` | |
+| Cancel / discard / leave edit mode | `CloseIcon` + visible label | text-only app CTA; icon-only X in a footer |
+| Apply / confirm a non-destructive change | `CheckIcon` + visible label | icon-only check disk |
+| Refresh / retry | `RefreshIcon` + visible label | text-only app CTA when space permits |
 | Nav / mode exit back (TopAppBar) | `ArrowLeftIcon` | `CloseIcon` as destination back |
 | Export (write file / format menu — Word, PDF, …) | `UploadIcon` | `DownloadIcon` (pull/download semantics) |
 | Download (fetch / pull from remote) | `DownloadIcon` | `UploadIcon` for export menus |
 | Copy to clipboard | `ClipboardIcon` (+ Tooltip) | Labeled ghost `Button` “Copy …” in Card chrome |
 | Save defaults / draft save (icon chrome) | `SaveIcon` (+ Tooltip) | Labeled ghost `Button` “Save defaults” mid Select cluster |
 
-## Icon with a visible label
+## Default action button: icon + visible label
 
-Use a regular `Button` with an icon followed by text; reserve `IconButton` for
-icon-only actions. The Button label centers the glyph and text together, with
-the shared control gap. Live example: Components
-`#globals-demo-button-icon-label` ([source](../../examples/sandbox/src/pages/GlobalsPage.tsx))
-with `EyeIcon` + label and `ClipboardIcon` + label. The icon is decorative when
-the text already names the action, so pass `aria-hidden`.
+Consumer app action buttons **default to** a regular `Button` with a semantic
+leading icon followed by visible text. This applies across `primary`, `tonal`,
+`elevated`, `default`, `ghost`, and `danger`, and across every Button size.
+For example, Cancel is `CloseIcon` + “Cancel”; Apply is `CheckIcon` + “Apply”.
+
+The Button centers the pair and owns exactly one
+`--fynns-space-2` icon-to-label gap. Put the icon and text directly in the
+Button; do **not** add icon `margin`, consumer `gap`, `{" "}`, or `&nbsp;`.
+The visible text already supplies the accessible name, so the icon is
+decorative and must use `aria-hidden`.
+
+Reserve `IconButton` + `Tooltip` + `aria-label` for compact, self-evident
+chrome (for example a Card copy disk or a top-corner close control). A
+text-only Button is acceptable when no stable semantic glyph exists, such as
+an arbitrary value/choice; do not invent a decorative icon merely to satisfy
+the default. Live matrix: Components `#globals-demo-button-icon-label-matrix`
+([source](../../examples/sandbox/src/pages/GlobalsPage.tsx)).
 
 ## Bulk row check
 

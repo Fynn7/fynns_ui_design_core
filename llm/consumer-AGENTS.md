@@ -23,6 +23,11 @@ This app consumes the fynns design system from the sibling checkout
 3. Missing capability → say so and stop; it must land in `fynns_ui_design_core`
    first (never edit `node_modules/@fynn7/ui-design-core`).
 4. Keep `npm run build` green; run `node ../fynns_ui_design_core/scripts/install-as-npm.mjs --target . --check` when imports fail.
+5. Consumer app action Buttons default to a semantic leading icon plus visible
+   text (`CloseIcon` + Cancel, `CheckIcon` + Apply, `RefreshIcon` + Refresh).
+   Put both directly inside `Button`, set the icon `aria-hidden`, and never add
+   local icon margin / gap / literal spaces; core owns the spacing. Use
+   `IconButton` + Tooltip + `aria-label` only for compact self-evident chrome.
 
 ## Token discipline (local models)
 

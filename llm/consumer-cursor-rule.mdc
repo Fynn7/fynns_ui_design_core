@@ -117,6 +117,7 @@ sandbox `#anchor`。
 - **overlay scrollbar above / buried under Select/Menu** — 页轨 z 在 modal-flyout 下；飞层轨用 scroll-overlay-flyout。`#sandbox-scroll-menu-stack`
 - **mode drawer tools↔filter crushed / toolbar-end md** — body 直接子间距 8dp；toolbar-end 盘 sm 32dp。`#layouts-demo-navigation-drawer`
 - **Dialog foot Delete leftmost / exit clears title** — Cancel 左、主确认右；`open→false` 同拍勿清空 title/body。`#sandbox-list-recipe-catalog`
+- **text-only action Button / icon-label gap 漂移** — 消费仓动作默认用语义前置图标 + 可见文字（如 `CloseIcon`+取消、`CheckIcon`+应用、`RefreshIcon`+刷新）；二者直接放进 `Button`，图标 `aria-hidden`。间距只由 core 的 `--fynns-space-2` 提供，禁止消费仓 icon margin / 自定义 gap / `{" "}` / `&nbsp;`。仅紧凑且自明的铬用 `IconButton`+Tooltip+`aria-label`；无稳定语义图标时宁可文字按钮。`#globals-demo-button-icon-label-matrix`
 - **Dialog title top ≠ body-end IconButton** — 居中非 Confirm head 顶距 = `content-inset`（18dp，≥ **0.5.280**），与 body 底 / 脚栏 labeled Button 下距齐；勿改 `.fynns-dialog-head` 或半 `dialog-inset`。`#overlays`
 - **Dialog foot IconButton / check-disk** — Dialog/Confirm 脚栏**唯一**样式：`Dialog` **`feet`**（sticky，≥ **0.5.297**）或 Confirm 自带脚 + `.fynns-control-cluster--end-align` labeled `Button`（Cancel ghost 左 → primary 右）；禁止 primary `IconButton`/对勾盘/Fab；禁止把 Cancel 塞进可滚 `children`；空态/loading 也要有 Cancel。`#overlays` / `#dialog-nested-scroll`
 - **Dialog closing scrim** — closing overlay 不得挡点击（core ≥ **0.5.297** `pointer-events: none`）。`#overlays`

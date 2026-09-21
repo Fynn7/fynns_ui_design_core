@@ -153,6 +153,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Empty data shown as BusyRegion | DESIGN_SYSTEM hard-rules | `#busy-region` |
 | pane cold-start hang without error surface | DESIGN_SYSTEM hard-rules | `#sandbox-pane-load-error` |
 | snackbar used as AppError / ErrorCode bus | DESIGN_SYSTEM feedback (boundary) | `#snackbar` |
+| text-only consumer action Button / inconsistent icon-label gap | DESIGN_SYSTEM Hard rules / Icons / Content density | `#globals-demo-button-icon-label-matrix` |
 | tight labeled Button gaps in end-align footers | DESIGN_SYSTEM form-rhythm | `#timeline` |
 | private labeled Button cluster gap | DESIGN_SYSTEM form-rhythm | `#rhythm` |
 | labeled Button cluster gap stacked to 12dp | DESIGN_SYSTEM form-rhythm | `#rhythm` |

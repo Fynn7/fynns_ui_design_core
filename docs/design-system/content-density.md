@@ -46,6 +46,7 @@ in sandbox demos (and on-demand rules such as timeline-catalog). Live index:
 | Narrow EndAside Card actions | `label=""`; one primary Button; ghost sm icons; UploadIcon export | `#layouts-demo-shell` aside | Visible label crush; tonal icons; DownloadIcon export |
 | Chrome locale switch | Settings ToggleGroup en/zh | `#layouts-demo-shell` | TopAppBar language control |
 | Action footer / end-align strip | `--end-align`; Cancel…→primary; one loading; cluster **default end** (≥ **0.5.158**) | `#rhythm` / `#timeline` foot | Empty-label ControlRow; Delete leftmost of Cancel; left-pack Buttons under label |
+| Consumer app action Button | Regular `Button` with semantic leading icon + visible label by default; core owns one `--fynns-space-2` gap; icon `aria-hidden` | `#globals-demo-button-icon-label-matrix` | Text-only default CTA when a stable glyph exists; icon margin + Button gap; literal spaces; icon-only footer CTA |
 | Persistent strip + dismiss | `Banner` `onDismiss` (icon \| body \| X **center**) | `#banner` | Sibling X outside host; flex-start top-pin |
 | Error recovery | InlineAlert + hint + end-align reload | `#sandbox-inline-alert-recovery` | Start-aligned bare Button under alert |
 | Service / process / CLI probe | Label = short status only; labeled Buttons (+ optional path meta); detail `InfoHint` | DESIGN_SYSTEM Hard rules (no live service Card) | Tool-name label + status Chip + FieldHint essay |
