@@ -295,6 +295,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | fixed-height CodeBlock / Textarea on page scroll | DESIGN_SYSTEM catalog | `#code-block` |
 | Textarea autoGrow soft-capped like ChatComposer (13rem) | DESIGN_SYSTEM catalog / llm/CHAT_* | `#textarea` |
 | skinny form Dialog (tall FieldStack / CodeBlock) | DESIGN_SYSTEM catalog | `#form-recipe` |
+| code/config Dialog still too small at `lg`, consumer width/height overrides | DESIGN_SYSTEM catalog / overlays: `Dialog size="viewport"` + direct CodeBlock (`autoGrow={false}` when editable) | `#dialog-viewport` |
 | Dialog body end-align footer clipped | DESIGN_SYSTEM hard-rules (≥ **0.5.297** `feet`) | `#overlays` / `#dialog-nested-scroll` |
 | Dialog feet omitted on empty / loading plan | DESIGN_SYSTEM hard-rules / Dialog (≥ **0.5.297**) | `#overlays` / `#dialog-nested-scroll` |
 | Dialog closing scrim blocks clicks | DESIGN_SYSTEM Hard rules / overlays (≥ **0.5.297**) | `#overlays` |

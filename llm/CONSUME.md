@@ -186,7 +186,7 @@ Pick primitives by job (details: `node scripts/api.mjs <Name>`; catalog:
 | Titled section | `Card` (static) / `Collapsible`; untitled well → `Surface` |
 | Markdown body | `ChatMarkdown source={md}` (GFM subset); source code → `CodeBlock language="ts" label="file.ts"` |
 | Forms | `FieldStack` → `FieldBlock` → `Input` / `Textarea` / `Switch` / `Checkbox` / `Radio`; discrete choices → `DropdownMenu` / `ToggleGroup` |
-| Modal | `Dialog` (`size="lg"` for forms) / `ConfirmDialog` / `FullscreenDialog` |
+| Modal | `Dialog` (`size="lg"` for forms; `size="viewport"` for a large inset code/config workspace) / `ConfirmDialog` / `FullscreenDialog` |
 | Feedback | `snackbar()` + `<SnackbarHost />`; inline → `InlineAlert`; announcement → `Banner` |
 | Loading | pane cold-start `BusyRegion fill`; whole app `BusyScrim`; buttons `loading` + `runLoadingTask` |
 | Search / filter | `SearchBar` (requires `ariaLabel`); tags → `Chip` / `ChipSet` (never as status) |

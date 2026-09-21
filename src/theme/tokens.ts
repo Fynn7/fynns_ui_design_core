@@ -1415,6 +1415,9 @@ export const LAYOUT_TOKENS = {
   "dialog-max-width-sm": "24rem",
   "dialog-max-width-md": "32rem",
   "dialog-max-width-lg": "35rem",
+  /** Large inset workspace dialog; distinct from M3 basic and fullscreen. */
+  "dialog-viewport-width": "88vw",
+  "dialog-viewport-height": "82dvh",
   /** Content side sheet (M3 ~400dp); not NavigationDrawer width. */
   "drawer-width": "25rem",
   /**

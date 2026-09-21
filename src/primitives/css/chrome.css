@@ -101,6 +101,15 @@
   max-width: min(100%, var(--fynns-layout-dialog-max-width-lg));
 }
 
+/* Large, still-inset workspace dialog for code/configuration surfaces. Unlike
+ * FullscreenDialog it keeps centered-dialog radius, scrim margin, and feet. */
+.fynns-dialog-panel--centered.fynns-dialog-panel--size-viewport {
+  width: min(100%, var(--fynns-layout-dialog-viewport-width));
+  max-width: min(100%, var(--fynns-layout-dialog-viewport-width));
+  height: var(--fynns-layout-dialog-viewport-height);
+  max-height: var(--fynns-layout-dialog-viewport-height);
+}
+
 /*
  * Form-host centered Dialog: stretch panel width to the `size` ceiling when
  * body hosts FieldStack / FieldBlock / multiline fields / CodeBlock file
@@ -159,6 +168,36 @@
     )
 ) {
   width: min(100%, var(--fynns-layout-dialog-max-width-lg));
+}
+
+.fynns-dialog-panel--centered.fynns-dialog-panel--size-viewport:has(
+  > .fynns-dialog-body
+    :is(
+      .fynns-field-stack,
+      .fynns-field-block,
+      .fynns-textarea,
+      .fynns-otp-input,
+      .fynns-code-block
+    )
+) {
+  width: min(100%, var(--fynns-layout-dialog-viewport-width));
+}
+
+/* A direct CodeBlock is the viewport preset's primary workspace: stretch its
+ * frame and editor into the body's resolved height. Consumers only opt out of
+ * content-driven editor sizing with `autoGrow={false}`; no private host CSS. */
+.fynns-dialog-panel--centered.fynns-dialog-panel--size-viewport
+  > .fynns-dialog-body
+  > .fynns-code-block {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.fynns-dialog-panel--centered.fynns-dialog-panel--size-viewport
+  > .fynns-dialog-body
+  > .fynns-code-block--editable
+  .fynns-code-block-input {
+  height: 100%;
 }
 
 .fynns-dialog-panel--centered .fynns-field-stack,

@@ -1307,6 +1307,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [fullscreenFlushOpen, setFullscreenFlushOpen] = useState(false);
   const [drawerNestedScrollOpen, setDrawerNestedScrollOpen] = useState(false);
   const [dialogNestedScrollOpen, setDialogNestedScrollOpen] = useState(false);
+  const [dialogViewportOpen, setDialogViewportOpen] = useState(false);
+  const [dialogViewportCode, setDialogViewportCode] = useState(
+    DIALOG_NESTED_SCROLL_JSON,
+  );
   const [fullscreenLocale, setFullscreenLocale] = useState("zh");
   const [fullscreenPath, setFullscreenPath] = useState("");
   const [fullscreenFlushXml, setFullscreenFlushXml] = useState(FULLSCREEN_FLUSH_XML);
@@ -6689,6 +6693,47 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
         </Dialog>
         <SandboxHelp text={t("globals.dialogNestedScrollHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="dialog-viewport">
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Button size="sm" onClick={() => setDialogViewportOpen(true)}>
+            {t("globals.dialogViewportOpen")}
+          </Button>
+        </div>
+        <Dialog
+          open={dialogViewportOpen}
+          onOpenChange={setDialogViewportOpen}
+          title={t("globals.dialogViewportTitle")}
+          description={t("globals.dialogViewportDescription")}
+          size="viewport"
+          showCloseButton
+          closeAriaLabel={t("globals.dialogClose")}
+          feet={
+            <div className="fynns-control-cluster fynns-control-cluster--end-align">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setDialogViewportOpen(false)}
+              >
+                {t("globals.dialogCreateCancel")}
+              </Button>
+              <Button size="sm" onClick={() => setDialogViewportOpen(false)}>
+                {t("globals.dialogCreateAction")}
+              </Button>
+            </div>
+          }
+        >
+          <CodeBlock
+            variant="editable"
+            label="sample.config.json"
+            language="json"
+            wrap={false}
+            autoGrow={false}
+            value={dialogViewportCode}
+            onChange={setDialogViewportCode}
+          />
+        </Dialog>
+        <SandboxHelp text={t("globals.dialogViewportHelp")} />
         </GlobalsDemo>
       </>
         )}

@@ -844,7 +844,8 @@
   `drawerHeadline` / sheet `headline` under DestinationAppShell / TopAppBar
   title (omit; Groups for body sections). Live `#layouts-demo-shell`.
 - **DON'T** rename tokens to non-`--fynns-*` forms; invent consumer
-  `width`/`min-width` on `.fynns-dialog-panel` (use FieldStack + `size="lg"`);
+  `width`/`min-width` on `.fynns-dialog-panel` (use FieldStack + `size="lg"`,
+  or `size="viewport"` for a large inset code/config workspace);
   pin CodeBlock/Textarea to fixed height on PageScroll catalogs (default
   autoGrow; `autoGrow={false}` only for height-resolved fill hosts); set main
   app chrome to `--fynns-font-serif`. Live `#form-recipe` / `#code-block`.

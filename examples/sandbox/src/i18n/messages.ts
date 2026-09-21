@@ -883,8 +883,14 @@ const en = {
   "globals.dialogNestedScrollFold": "Mounted sample body",
   "globals.dialogNestedScrollHelp":
     "Centered Dialog + List + Collapsible + plain CodeBlock: `maxHeight` sets `--fynns-code-block-max-height` on the root; copy-float overlay Y rails run rounded-clip clamp then chrome clamp so thumbs stay inside `radius-3xl` (never past the panel floor). Live `#dialog-nested-scroll`.",
+  "globals.dialogViewportOpen": "Open viewport workspace dialog",
+  "globals.dialogViewportTitle": "Sample configuration workspace",
+  "globals.dialogViewportDescription":
+    "Edit a larger configuration without leaving the current page.",
+  "globals.dialogViewportHelp":
+    "Large non-fullscreen workspace: `Dialog size=\"viewport\"` keeps centered radius and viewport margins while resolving a wider, taller work area. A direct editable CodeBlock uses `autoGrow={false}` and fills the remaining body height without consumer CSS. Live `#dialog-viewport`.",
   "globals.overlayHelp":
-    "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). First-child bordered well (CodeBlock) flush-starts under the title — `#fullscreen-flush`. Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
+    "Dialogs: M3 basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X), large inset workspace (`Dialog size=\"viewport\"`), and full-screen (`FullscreenDialog`). First-child bordered well (CodeBlock) flush-starts under the fullscreen title — `#fullscreen-flush`. Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
   "globals.dialogLabeledOpen": "Open Dialog with close",
   "globals.dialogLabeledTitle": "Dialog with close",
@@ -3345,8 +3351,13 @@ const zh: Record<MessageKey, string> = {
   "globals.dialogNestedScrollFold": "已挂载示例正文",
   "globals.dialogNestedScrollHelp":
     "居中 Dialog + List + Collapsible + plain CodeBlock：`maxHeight` 写到根上的 `--fynns-code-block-max-height`；copy-float 的 overlay Y 轨先做圆角裁剪再做 chrome 裁剪，拇指不超出 `radius-3xl`、不越过面板底边。活样例 `#dialog-nested-scroll`。",
+  "globals.dialogViewportOpen": "打开视口工作区对话框",
+  "globals.dialogViewportTitle": "示例配置工作区",
+  "globals.dialogViewportDescription": "在不离开当前页面的情况下编辑较大配置。",
+  "globals.dialogViewportHelp":
+    "大型非全屏工作区：`Dialog size=\"viewport\"` 保留居中圆角和视口留白，同时提供更宽、更高的工作面。直属 editable CodeBlock 使用 `autoGrow={false}` 后会填满正文剩余高度，无需消费侧 CSS。活样例 `#dialog-viewport`。",
   "globals.overlayHelp":
-    "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。正文首个带边框井（CodeBlock）顶天贴标题 — `#fullscreen-flush`。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
+    "对话框：M3 basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）、大型内嵌工作区（`Dialog size=\"viewport\"`）与 full-screen（`FullscreenDialog`）。正文首个带边框井（CodeBlock）在全屏标题下顶天贴合 — `#fullscreen-flush`。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",
   "globals.dialogLabeledOpen": "打开 Dialog（关闭）",
   "globals.dialogLabeledTitle": "带关闭的 Dialog",

@@ -86,11 +86,13 @@ export type DialogProps = {
   /**
    * Centered only: max-width ceiling via `--fynns-layout-dialog-max-width-*`
    * (`sm` / `md` / `lg`). Panel width is content-fit by default (`max-content`);
-   * it grows with body content up to this ceiling (and the viewport). At the
-   * ceiling, ControlStack / Switch labels wrap — body never shows a horizontal
-   * scrollbar (`overflow-x: clip`).
+   * it grows with body content up to this ceiling (and the viewport). Use
+   * `viewport` for a large, still-inset workspace (for example a CodeBlock
+   * editor); it fills a tokenized share of the viewport without becoming a
+   * FullscreenDialog. At the ceiling, ControlStack / Switch labels wrap — body
+   * never shows a horizontal scrollbar (`overflow-x: clip`).
    */
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "viewport";
   className?: string;
   showCloseButton?: boolean;
   closeAriaLabel?: string;
@@ -118,6 +120,8 @@ export function Dialog({
     variant === "centered"
       ? size === "sm"
         ? "fynns-dialog-panel--size-sm"
+        : size === "viewport"
+          ? "fynns-dialog-panel--size-viewport"
         : size === "lg"
           ? "fynns-dialog-panel--size-lg"
           : "fynns-dialog-panel--size-md"

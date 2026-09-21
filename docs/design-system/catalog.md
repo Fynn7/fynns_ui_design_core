@@ -170,10 +170,15 @@ classes.
     core yet): [`llm/CHAT_USER_EDIT_UX.md`](../../llm/CHAT_USER_EDIT_UX.md). Live
     `#activity` / `#thinking`.
 - **Overlay / sheets:** Dialog / DialogShell / ConfirmDialog / FullscreenDialog
-  (M3 basic + full-screen only). `ConfirmDialog` = title + supporting + foot
+  (M3 basic + large inset workspace + full-screen). `ConfirmDialog` = title +
+  supporting + foot
   (no close). `Dialog` optional `showCloseButton` for dismissible forms —
   **form bodies** (`FieldStack` / `FieldBlock` / `Textarea` / `CodeBlock`)
   stretch to the `size` ceiling (prefer `size="lg"` / M3 560dp). Centered
+  code/configuration workspaces may use `size="viewport"`: it retains scrim
+  margins + `radius-3xl`, resolves to a tokenized viewport share, and stretches
+  a direct CodeBlock through the body (`autoGrow={false}` for editable). Use
+  FullscreenDialog when the workflow truly owns the viewport. Centered
   non-confirm head block-start = `--fynns-layout-content-inset` (**18dp**, ≥
   **0.5.280**) — title ink top equals body-end / trailing primary IconButton
   bottom clearance (no consumer head-pad patch). Dismissible

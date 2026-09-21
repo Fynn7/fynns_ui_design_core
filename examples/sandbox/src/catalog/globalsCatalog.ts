@@ -543,6 +543,22 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     ],
   },
   {
+    id: "dialog-viewport",
+    categoryId: "containment",
+    label: "Dialog viewport workspace",
+    keywords: [
+      "dialog",
+      "viewport",
+      "workspace",
+      "codeblock",
+      "editor",
+      "large",
+      "非全屏",
+      "大对话框",
+      "代码编辑",
+    ],
+  },
+  {
     id: "empty-state",
     categoryId: "patterns",
     label: "EmptyState",

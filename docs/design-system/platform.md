@@ -33,7 +33,7 @@ on that page are parts — not a desktop greenfield root.
 | Drawer | desktop-first | Modal **content** side sheet (~400dp). Phone → BottomSheet. ≠ NavigationDrawer |
 | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. Drag handle; no header\|body divider |
 | FullscreenDialog | mobile-first | Full-viewport; flush-start when first body child is bordered well (`#fullscreen-flush`) |
-| Dialog / ConfirmDialog | both | Centered; form hosts fill `size` ceiling; dismissible prefs = `showCloseButton` + ControlStack |
+| Dialog / ConfirmDialog | both | Centered; form hosts fill `size` ceiling; `size="viewport"` = large inset code/config workspace (not fullscreen); dismissible prefs = `showCloseButton` + ControlStack |
 | CommandPalette | both | ⌘K filter dialog; live `#command-palette` |
 | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer/hover-first |
 | Table* | desktop-first | Horizontal scroll when narrow |

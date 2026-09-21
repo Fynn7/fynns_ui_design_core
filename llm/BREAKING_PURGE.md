@@ -115,7 +115,7 @@ as a hard fail.
 | `Textarea` | Multiline dense field aligned to Input chrome; **not** full M3 floating-label Text Field. |
 | `Tabs` | M3 primary underline tabs — **not** a `ToggleGroup` substitute. |
 | `InlineAlert` | In-panel severity strip (**fynns utility, not M3**): soft `color-mix` tonal fill. Pad / gap / icon size reuse `--fynns-banner-*` strip tokens (same constants as chrome Banner). Icon tinted by severity; body on-surface. Width follows parent (`width: 100%`). Long paths wrap. **Phrasing copy only** — stack `List` / form clusters below as unit-stack siblings, not inside `children`. Replaces old Alert `*Banner` exports. Do not invent a second bordered status shell. |
-| Dialog sizes | `--fynns-layout-dialog-max-width-lg` is now `35rem` (was `42rem`; stays within M3 ≤560dp). |
+| Dialog sizes | `--fynns-layout-dialog-max-width-lg` remains `35rem` (M3 ≤560dp). Large code/config workspaces use the separate `Dialog size="viewport"` preset (88vw × 82dvh, still inset), not a widened `lg` or consumer CSS. |
 | `SplitButton` | M3 Expressive split: leading `Button` + trailing menu (`DropdownMenu`); flush segments (no gap); variants `primary` / `tonal` / `default` / `elevated`. Demoed in Globals Actions. |
 | `CommandPalette` | Spotlight / ⌘K filter dialog (`open` / `onOpenChange` / `items[]`). Apps own the global accelerator. Live: sandbox Globals `#command-palette`. Not DropdownMenu / SearchBar alone. |
 | `Button` `danger` | Filled like `primary`: `--fynns-color-danger` surface + `--fynns-color-on-accent` ink (outlined red chrome retired). IconButton danger mirrors filled primary. |

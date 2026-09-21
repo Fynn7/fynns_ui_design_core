@@ -138,7 +138,7 @@ sandbox `#anchor`。
 - **Input type=number UA spinners** — 数字用 `NumberInput`；禁止裸 `Input type="number"`（浏览器箭头不是 fynns）。`#number-input`
 - **InlineAlert beside List / Banner icon top-pinned** — 告警全宽兄弟在上；多行 Banner icon/X 垂直居中。`#banner`
 - **EndAside instant open / dense labeled / Card flush bottom** — 切 `open`；`label=""`+一主 CTA；PageScroll 内 Card 勿贴窗格底。`#layouts-demo-shell`
-- **PageScroll Collapsible / Textarea file body / FillColumn megacard / Card sheet-max** — 短表单走 `#form-recipe`；有扩展名用 `CodeBlock`；内容列铺满页滚，禁止 sheet/chat/dialog-max。`#page-scroll`
+- **PageScroll Collapsible / Textarea file body / FillColumn megacard / Card sheet-max** — 短表单走 `#form-recipe`；有扩展名用 `CodeBlock`；内容列铺满页滚，禁止 sheet/chat/dialog-max。大型非全屏代码/配置工作区用 `Dialog size="viewport"` + 直属 CodeBlock（editable 时 `autoGrow={false}`），勿消费侧覆盖面板宽高。`#page-scroll` / `#dialog-viewport`
 - **long Table/List dumps all rows** — Table `RevealMore` 10/10；List 5/5。`#table` / `#list`
 - **RevealMore foot kisses a following CTA** — `RevealMore` 直接作为 List 后的
   `.fynns-unit-stack` sibling；后续 CTA 仍放同一 stack，使用

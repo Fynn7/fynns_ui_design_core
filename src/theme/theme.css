@@ -568,6 +568,8 @@
   --fynns-layout-dialog-max-width-sm: 24rem;
   --fynns-layout-dialog-max-width-md: 32rem;
   --fynns-layout-dialog-max-width-lg: 35rem;
+  --fynns-layout-dialog-viewport-width: 88vw;
+  --fynns-layout-dialog-viewport-height: 82dvh;
   --fynns-layout-drawer-width: 25rem;
   --fynns-layout-content-inset: 1.125rem;
   --fynns-layout-strip-pad-inline: 1.25rem;
