@@ -28,6 +28,12 @@ This app consumes the fynns design system from the sibling checkout
    Put both directly inside `Button`, set the icon `aria-hidden`, and never add
    local icon margin / gap / literal spaces; core owns the spacing. Use
    `IconButton` + Tooltip + `aria-label` only for compact self-evident chrome.
+6. Every ellipsized or line-clamped UI label must reveal its exact full text in
+   a hover/focus Tooltip. Prefer string props that core wraps automatically;
+   wrap custom `ReactNode` text with `OverflowTip` at the call site. This also
+   applies in intentionally narrow drawers/sidebars. Never use native `title=`
+   or hand-author `.fynns-control-row__label-text`; pass a string to
+   `ControlRow label` whenever possible.
 
 ## Token discipline (local models)
 

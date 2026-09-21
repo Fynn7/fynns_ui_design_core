@@ -47,6 +47,14 @@ ASCII `-`。
 5. 样式只用 `var(--fynns-*)`。正文/chrome `--fynns-font-ui`；代码
    `--fynns-font-mono`；禁止主界面 serif。
 6. 瞬时反馈：`snackbar` + `<SnackbarHost />`。
+7. **截断文字必须可读全文（硬）**：任何 `ellipsis` / line-clamp 文字都必须在实际
+   被截断时通过 hover/focus Tooltip 显示**完整原文**。优先传 primitive 的字符串
+   prop，让 core 自动使用 `OverflowTip`；自定义 `ReactNode` / 消费侧元素必须在调用
+   点用 `OverflowTip` 包住真正截断的文字节点。窄抽屉 / 边栏不是例外。禁止原生
+   `title=`，禁止手写 `.fynns-control-row__label-text`；`ControlRow label` 尽量直接传
+   字符串。对照 `#rhythm` / `#form-recipe` / `#info-hint`；失败模式：
+   CONSUMER_TREATY truncated ControlRow / custom field label lacks full-text
+   Tooltip。
 
 ## 加载与忙碌（硬）
 

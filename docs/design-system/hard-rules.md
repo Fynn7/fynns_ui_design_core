@@ -360,6 +360,16 @@
   trigger for long option labels — menu stays shell-width; labels ellipsize
   (≥ **0.5.238**). Live `.sandbox-select-narrow-host` under `#select`.
   Failure: CONSUMER_TREATY Select menu wider than narrow trigger.
+- **MUST** expose the exact, complete text of **every** ellipsized or
+  line-clamped UI label in a hover/focus Tooltip. Prefer the primitive's string
+  prop so core can add `OverflowTip` automatically; when the truncating content
+  is a custom `ReactNode` or consumer-owned element, wrap the actual text node
+  in `OverflowTip` at the call site. The Tooltip appears only while the text is
+  really clipped. Never use native `title=`, and never treat an intentionally
+  narrow drawer/sidebar as an exception. In particular, pass a string to
+  `ControlRow label` instead of hand-authoring
+  `.fynns-control-row__label-text`; custom label markup owns its own
+  `OverflowTip`.
 - **DON'T** hard-clip truncated Select / Autocomplete / SearchBar result /
   Menu item / FieldBlock Menu trigger / Card·Collapsible title /
   NavigationDrawerItem / **NavigationDrawerGroup** label / TopAppBar title /
@@ -376,7 +386,8 @@
   `NavigationDrawerGroup` `label` is `ReactNode` (≥ **0.5.242**); prefer a
   **string** so core wraps `OverflowTip` (full worktree path on hover) — do
   **not** cast ReactNode `as unknown as string`. List `__grow` /
-  `.fynns-table-meta` ReactNode cells → wrap at the call site (sandbox
+  `.fynns-table-meta` ReactNode cells and all other custom truncating nodes →
+  wrap at the call site (sandbox
   `#list` run-summary). Live `#select` / `#autocomplete` / `#search-bar` /
   `#sandbox-menu-field-match` / `#card` / `#toggle-group` / `#activity` /
   `#list` / `#layouts-demo-shell`. Failure: CONSUMER_TREATY truncated option
