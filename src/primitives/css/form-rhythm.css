@@ -208,6 +208,10 @@
  * (and even over the Switch). Text wraps within its own track instead. */
 .fynns-control-row__label:has(.fynns-info-hint-trigger) {
   display: grid;
+  /* ControlStack uses justify-items:start; fill its shared label track so
+     every preference InfoHint lands on the same trailing icon column. */
+  justify-self: stretch;
+  width: 100%;
   grid-template-columns: minmax(0, 1fr) max-content;
   align-items: center;
   column-gap: var(--fynns-space-xs);
