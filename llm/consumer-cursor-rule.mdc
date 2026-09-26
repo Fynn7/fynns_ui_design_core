@@ -140,6 +140,7 @@ sandbox `#anchor`。
 - **ChatActivity tool-icon / artifact default** — 默认 status mark + 连续轨（done = accent；pulse 时 node 洗底挡住轨）；勿默认扳手/文件图标或强制 Artifact。`#activity`
 - **service Chip+label / ControlRow left-packed / label crush** — 状态只在 `label`；簇默认右齐；长 path meta 省略+InfoHint。`#rhythm`
 - **ControlRow InfoHint stacks above Switch** — 偏好说明挂 `label` 尾 `InfoHint` `sm`；`__controls` 仅 Switch；禁止 tip+Switch wrap 竖叠（≥ **0.5.292**）。`#info-hint`
+- **Preference InfoHint overlaps Switch / icon column drifts** — 偏好行用 `ControlStack columns={1}`；`ControlRow label` 内文字+`InfoHint sm`，子节点仅 Switch。核心为图标预留独立轨道，长标签换行；多行长文案 Dialog 选合适 `size`（通常 `md`），窄视口和最长本地化文案下量实际矩形，文字、图标热区、Switch、Dialog 边界与相邻行不得交叠。禁止消费侧 `.fynns-*` 覆盖、绝对定位、负 margin 或裁切来掩盖重叠。`#sandbox-control-row-tip-wrap`
 - **FieldHint restates ToggleGroup / TopAppBar InfoHint / overline restates trailing** — 禁止同源复述。`#rhythm` / `#layouts-demo-shell` / `#sandbox-list-repo-path-actions`
 - **Dialog description how-to essay** — `description` 仅短 caption；方向/路径/勾选说明进 `headActions` `InfoHint` `sm`（≥ **0.5.284**）；禁止多行 how-to 挂在标题下。`#overlays`
 - **private labeled Button cluster gap / Select refresh crammed** — 用 `.fynns-control-cluster`（+ `--end-align`/`__grow`）。`#rhythm`

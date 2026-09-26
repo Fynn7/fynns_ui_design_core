@@ -2039,6 +2039,52 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               />
             </ControlRow>
           </ControlStack>
+          <div id="sandbox-control-row-tip-wrap" style={{ width: "var(--fynns-layout-dialog-max-width-sm)", maxWidth: "100%" }}>
+            <ControlStack columns={1}>
+              <ControlRow
+                label={
+                  <>
+                    <OverflowTip content={t("globals.infoHintWrapLabel")}>
+                      {t("globals.infoHintWrapLabel")}
+                    </OverflowTip>
+                    <InfoHint
+                      size="sm"
+                      content={t("globals.infoHintNarrowBody")}
+                      ariaLabel={t("globals.infoHintNarrowAria")}
+                    />
+                  </>
+                }
+              >
+                <Switch
+                  label=""
+                  ariaLabel={t("globals.infoHintWrapLabel")}
+                  checked={switchOn}
+                  onCheckedChange={setSwitchOn}
+                />
+              </ControlRow>
+              <ControlRow
+                label={
+                  <>
+                    <OverflowTip content={t("globals.infoHintRowLabel")}>
+                      {t("globals.infoHintRowLabel")}
+                    </OverflowTip>
+                    <InfoHint
+                      size="sm"
+                      content={t("globals.infoHintRowBody")}
+                      ariaLabel={t("globals.infoHintRowAria")}
+                    />
+                  </>
+                }
+              >
+                <Switch
+                  label=""
+                  ariaLabel={t("globals.infoHintRowSwitch")}
+                  checked={switchOn}
+                  onCheckedChange={setSwitchOn}
+                />
+              </ControlRow>
+            </ControlStack>
+          </div>
           <div
             id="sandbox-control-row-tip-switch-narrow"
             className="sandbox-select-narrow-host"

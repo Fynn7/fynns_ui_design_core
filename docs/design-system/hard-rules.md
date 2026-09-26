@@ -215,6 +215,16 @@
   / a tip-only cluster. Do **not** invent consumer `flex-direction: column` /
   private wrap overrides. Live `#info-hint`. Failure: CONSUMER_TREATY
   ControlRow InfoHint stacks above Switch.
+- **DON'T** ship visually colliding controls even when each component's props
+  are valid. In preference rows, the label text must wrap within its track;
+  the trailing `InfoHint` target, `Switch`, panel edge, and neighboring rows
+  must have distinct rendered rectangles. Keep the tip in `ControlRow label`
+  and the track-only Switch in `children`; use `ControlStack columns={1}` and
+  choose a fitting Dialog `size` (`md` for several long rows). Verify at the
+  narrowest supported width and longest localized labels. No absolute offsets,
+  negative margins, clipping, or consumer `.fynns-*` restyles to conceal a
+  collision. Live `#sandbox-control-row-tip-wrap`. Failure: CONSUMER_TREATY
+  preference InfoHint overlaps Switch / uneven icon column.
 - **DON'T** let `.fynns-table-meta` hard-clip past a Card / unit-stack /
   narrow host **without** `…` — core ≥ **0.5.231** applies
   `overflow: hidden` + `text-overflow: ellipsis` + `min-width: 0` /

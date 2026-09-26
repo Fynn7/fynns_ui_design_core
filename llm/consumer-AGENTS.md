@@ -34,6 +34,13 @@ This app consumes the fynns design system from the sibling checkout
    applies in intentionally narrow drawers/sidebars. Never use native `title=`
    or hand-author `.fynns-control-row__label-text`; pass a string to
    `ControlRow label` whenever possible.
+7. Before shipping dense rows, inspect their rendered geometry at the narrowest
+   supported viewport and with the longest localized labels. Text, InfoHint
+   target, Switch, panel edge, and adjacent rows must not overlap. Preference
+   rows use `ControlStack columns={1}`: text + `InfoHint size="sm"` in
+   `ControlRow label`, Switch alone in children. Allow core label wrapping and
+   choose a fitting Dialog `size` (usually `md` for several long rows). Never
+   hide a collision with clipping, absolute offsets, or local `.fynns-*` CSS.
 
 ## Token discipline (local models)
 

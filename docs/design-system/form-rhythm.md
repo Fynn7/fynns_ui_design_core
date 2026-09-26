@@ -19,6 +19,21 @@ controls look top-heavy). Do **not** stuff the timestamp into `ControlRow`
 body). Live: Globals `#rhythm`. Pasteable recipe:
 [`llm/consumer-cursor-rule.mdc`](../../llm/consumer-cursor-rule.mdc).
 
+**Preference rows with help:** use `ControlStack columns={1}` and one
+`ControlRow` per preference. Put visible text (a custom label may use
+`OverflowTip`) and `InfoHint size="sm"` in `label`; put only the track-only
+`Switch` in `children`. Core reserves a separate label-end track for the help
+target, centers it on its own row, and wraps long text inside the remaining
+label space. All help targets and switches then share their respective edges.
+Choose a Dialog `size` that lets most labels read comfortably (`md` for a
+multi-row settings panel with longer labels); the size is a ceiling, so text
+must still reflow at smaller viewports. Do not solve collisions by absolute
+positioning, negative margins, hidden overflow, or a consumer override of
+`.fynns-*` geometry. Check rendered rectangles at the narrowest supported
+viewport and with longest localized labels: label, help target, Switch, panel
+edges, and adjacent rows must not intersect. Live:
+`#sandbox-control-row-tip-wrap` / `#sandbox-control-row-tip-switch-narrow`.
+
 | Role | Token / host |
 | --- | --- |
 | Between ControlRows (toolbar) | `--fynns-layout-control-stack-gap` (**8dp**) |

@@ -162,6 +162,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | ControlRow / control-cluster Buttons left-packed under label | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` end-align |
 | ControlRow label crushed to 2px / hairline sliver | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` end-align |
 | ControlRow InfoHint stacks above Switch | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.292**) | `#info-hint` / `#sandbox-control-row-tip-switch-narrow` |
+| preference InfoHint overlaps Switch / uneven icon column | DESIGN_SYSTEM form-rhythm / Hard rules: `ControlStack columns={1}`, text + `InfoHint sm` in `ControlRow label`, Switch alone in children; core reserves an icon track and wraps text; choose a fitting Dialog `size` and inspect rendered rectangles at narrow and long-label states | `#sandbox-control-row-tip-wrap` / `#sandbox-control-row-tip-switch-narrow` |
 | path meta paints over ControlRow label | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` end-align |
 | outcome Chip as status (suggestion/assist / StatusChip fake Badge) | DESIGN_SYSTEM Hard rules / Content density | `#list` |
 | List path catalog Switch+Chip+danger disk soup | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-repo-path-actions` / `#list` |

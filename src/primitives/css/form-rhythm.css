@@ -203,13 +203,40 @@
   color: var(--fynns-color-text-muted);
 }
 
-/* Label + trailing InfoHint (policy copy in Tooltip — not ControlBlock description). */
+/* Label + trailing InfoHint: reserve a real icon track. A full-width
+ * OverflowTip in a flex label used to push the icon across the controls track
+ * (and even over the Switch). Text wraps within its own track instead. */
 .fynns-control-row__label:has(.fynns-info-hint-trigger) {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
   align-items: center;
-  gap: var(--fynns-space-xs);
+  column-gap: var(--fynns-space-xs);
   overflow: visible;
   text-overflow: unset;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.fynns-control-row__label:has(.fynns-info-hint-trigger)
+  > .fynns-overflow-tip.fynns-tooltip-trigger {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.fynns-control-row__label:has(.fynns-info-hint-trigger)
+  .fynns-overflow-tip-label {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+.fynns-control-row__label:has(.fynns-info-hint-trigger)
+  > .fynns-tooltip-trigger:has(.fynns-info-hint-trigger) {
+  grid-column: 2;
+  justify-self: end;
+  align-self: center;
 }
 
 .fynns-control-row__label-text {
