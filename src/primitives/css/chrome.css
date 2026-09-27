@@ -4690,7 +4690,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     max-width: none;
     min-width: 0;
     height: var(--fynns-layout-end-aside-sheet-height);
-    max-height: var(--fynns-layout-end-aside-sheet-max-height);
+    max-height: min(
+      var(--fynns-layout-end-aside-sheet-max-height),
+      var(--fynns-layout-end-aside-sheet-viewport-max-height)
+    );
     overflow: hidden;
     box-shadow: var(--fynns-shadow-md);
     transition:

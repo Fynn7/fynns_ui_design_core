@@ -49,6 +49,9 @@ expanded layout even while the list is collapsed. A divider separates the
 progress header from the first item; opening and closing animate the card
 height and ink (respecting reduced motion). Do not recreate its card
 or interpose a separate scroll container in the consumer.
+The input shell stays content-sized: the task list must not impose a fixed
+four-line editor well. An empty draft remains one text line above the toolbar,
+including when the task list is collapsed.
 
 **Labeled Menus (≥ 0.5.288):** pass **string**
 `DropdownMenu` `trigger` values (core wraps `OverflowTip`). Core caps each

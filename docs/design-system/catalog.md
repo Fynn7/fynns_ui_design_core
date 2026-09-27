@@ -240,8 +240,12 @@ classes.
   main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet.
   `--fynns-layout-end-aside-sheet-height` defaults to `auto`; its
   `--fynns-layout-end-aside-sheet-max-height` ceiling defaults to
-  `min(52dvh, 22rem)`. Canvas consumers can set both on one shell instance and
-  reserve that height in the main canvas so controls stay reachable. Live
+  `min(52dvh, 22rem)`. The sheet also has a 60dvh viewport ceiling via
+  `--fynns-layout-end-aside-sheet-viewport-max-height`. Canvas consumers can
+  set the preferred height and maximum on one shell instance; when an overlay
+  covers a docked Chat, reserve the sheet's **measured visible height** in the
+  main canvas and update it as Collapsible content opens or closes. Reserving
+  the configured maximum strands the composer after the sheet shrinks. Live
   `#layouts-demo-shell`.
 - **Content:** List / ListItem (selected = `secondary-container` +
   `radius-3xl`; host paints whole-row wash; sibling gap =

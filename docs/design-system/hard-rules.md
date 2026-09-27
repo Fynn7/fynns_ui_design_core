@@ -876,6 +876,13 @@
   core ≥ **0.5.263** sizes that column `flex: 0 0 auto` + `min-height: 100%`
   so pad-block-end joins scroll overflow (never `flex:1` inside the scrolling
   host, which ate bottom breath). Live `#layouts-demo-shell`.
+- **DON'T** let a narrow EndAside bottom sheet consume the docked Chat. Core
+  caps the sheet at `--fynns-layout-end-aside-sheet-viewport-max-height`
+  (60dvh); keep a taller Preview inside its own scrollable sheet. If the main
+  Chat reserves room for the overlay, track the sheet's visible height as it
+  expands and collapses, not the requested maximum or a stale open-state
+  guess. The task-list `ChatComposer` shell is content-sized even when its
+  progress list is present. Live `#layouts-demo-shell` / `#sandbox-chat-composer-todos`.
 - **DON'T** pad destination labels with redundant meta (`· N`, parenthetical
   glosses) unless asked — short name + optional Item `badge`. Don't pass
   `drawerHeadline` / sheet `headline` under DestinationAppShell / TopAppBar

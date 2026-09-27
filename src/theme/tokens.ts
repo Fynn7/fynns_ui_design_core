@@ -1756,6 +1756,12 @@ export const LAYOUT_TOKENS = {
    */
   "end-aside-sheet-max-height": "min(52dvh, 22rem)",
   /**
+   * Absolute viewport ceiling for a narrow EndAside, even when a consumer
+   * raises the preferred sheet max-height for a large preview. Preserve room
+   * for the main canvas and its docked Chat composer.
+   */
+  "end-aside-sheet-viewport-max-height": "60dvh",
+  /**
    * Preferred main canvas size beside `EndAside` (`flex-basis`). Shrink with
    * `min-width: 0` in CSS — never `min(token, 100%)` of the flex parent row.
    * Dropped while EndAside overlays (≤32rem main).

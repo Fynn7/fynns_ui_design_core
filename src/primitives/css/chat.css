@@ -1637,12 +1637,6 @@ a.fynns-chat-activity-artifact:hover {
 .fynns-chat-composer:has(.fynns-chat-composer-todos) > .fynns-chat-composer-shell {
   position: relative;
   z-index: 1;
-  min-height: calc(var(--fynns-chat-composer-line-height) * 4);
-}
-
-.fynns-chat-composer:has(.fynns-chat-composer-todos) .fynns-chat-composer-body {
-  flex: 1 1 auto;
-  justify-content: space-between;
 }
 
 .fynns-chat-composer:has(.fynns-chat-composer-todos) .fynns-chat-composer-placeholder {

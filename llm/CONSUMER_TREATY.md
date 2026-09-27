@@ -352,6 +352,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | EndAside dense labeled Button strip (information redundancy) | DESIGN_SYSTEM hard-rules | `#layouts-demo-shell` |
 | EndAside ControlRow label crush | DESIGN_SYSTEM hard-rules | `#layouts-demo-shell` |
 | EndAside icon tonal disks | DESIGN_SYSTEM hard-rules | `#layouts-demo-shell` |
+| EndAside Preview expansion starves Chat or collapsed sheet leaves composer raised | DESIGN_SYSTEM hard-rules / catalog; CHAT_COMPOSER_LAYOUT task progress | `#layouts-demo-shell` / `#sandbox-chat-composer-todos` |
 | Export menu uses DownloadIcon | DESIGN_SYSTEM Hard rules | `#split-button` |
 
 ## Related docs
