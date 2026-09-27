@@ -1,4 +1,5 @@
 import {
+  Button,
   ClippedNavShell,
   DropdownMenu,
   DropdownMenuItem,
@@ -34,6 +35,7 @@ import { ChatConversationDemo } from "./ChatConversationDemo";
 export function ChatProductLayoutsDemo() {
   const { t } = useLocale();
   const [navOpen, setNavOpen] = useState(true);
+  const [modalNavOpen, setModalNavOpen] = useState(false);
   const [sessionsEmpty, setSessionsEmpty] = useState(true);
   const [sessionsExpanded, setSessionsExpanded] = useState(false);
   const [demoEpoch, setDemoEpoch] = useState(0);
@@ -93,6 +95,9 @@ export function ChatProductLayoutsDemo() {
           checked={navOpen}
           onCheckedChange={setNavOpen}
         />
+        <Button variant="ghost" onClick={() => setModalNavOpen(true)}>
+          {t("globals.navDrawerSessionAria")}
+        </Button>
         <Switch
           labelSide="end"
           label={t("layouts.chatProductSessionsEmpty")}
@@ -109,6 +114,48 @@ export function ChatProductLayoutsDemo() {
           }}
         />
       </div>
+      <NavigationDrawer
+        variant="modal"
+        open={modalNavOpen}
+        onClose={() => setModalNavOpen(false)}
+        ariaLabel={t("globals.navDrawerSessionAria")}
+        headline={t("globals.navDrawerSessionAria")}
+        footer={
+          <NavDrawerFooterAccount
+            accountLabel={t("layouts.chatProductAccountLabel")}
+            settingsLabel={t("globals.appBarSettings")}
+            onSettingsClick={() => setModalNavOpen(false)}
+          />
+        }
+      >
+        <NavigationDrawerNewChat
+          label={t("globals.navDrawerSessionNew")}
+          onClick={() => {
+            resetToNewChatLanding();
+            setModalNavOpen(false);
+          }}
+        />
+        {sessionsEmpty ? (
+          <EmptyState
+            size="sm"
+            title={t("layouts.chatProductSessionsEmptyTitle")}
+            description={t("layouts.chatProductSessionsEmptyBody")}
+          />
+        ) : (
+          <>
+            <NavigationDrawerItem
+              label={t("layouts.chatProductSessionA")}
+              active={activeSession === "alpha"}
+              onClick={() => setModalNavOpen(false)}
+            />
+            <NavigationDrawerItem
+              label={t("layouts.chatProductSessionB")}
+              active={activeSession === "beta"}
+              onClick={() => setModalNavOpen(false)}
+            />
+          </>
+        )}
+      </NavigationDrawer>
       <div className="sandbox-chat-product-stage sandbox-chat-landing-host">
         {/*
          * New-chat landing matches product chrome without TopAppBar

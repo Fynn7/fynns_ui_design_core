@@ -117,8 +117,12 @@ classes.
     list `EmptyState` sm; session Items **label-only by default** — leading
     `icon` opt-in only when the glyph carries meaning ≥ **0.5.298**; row
     trailing prefer More; footer account) + main
-    **`FillColumn` → `Chat`**. **New-chat landing:** greeting `EmptyState` +
-    soft starters **centered above**; **`ChatComposer` inside `ChatThread.empty`**
+     **`FillColumn` → `Chat`**. For a narrow-screen session overlay, render
+     `NavigationDrawer` `variant="modal"` and pass the same account row through
+     `footer`; the session list remains in `children`. A content `Drawer`
+     scrolls all of its children together and does not pin an appended account
+     row. **New-chat landing:** greeting `EmptyState` + soft starters
+     **centered above**; **`ChatComposer` inside `ChatThread.empty`**
     pinned to the column bottom with the same
     `--fynns-chat-composer-inset-block` as a docked Chat composer (collapse
     docked composer row). Active thread: composer under `ChatThread` inside

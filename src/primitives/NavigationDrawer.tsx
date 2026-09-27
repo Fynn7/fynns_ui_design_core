@@ -111,7 +111,10 @@ export type NavigationDrawerProps = {
    * — soft end fade only when truncated via `data-fade`) +
    * settings `IconButton` `size="sm"` end (core optical glyph align — not
    * TopAppBar `trailing`. Live: sandbox Layouts
-   * `#layouts-demo-shell` + SandboxShell.
+   * `#layouts-demo-shell` + SandboxShell. This prop also pins the account row
+   * in `variant="modal"` session drawers; placing that row in a generic
+   * `Drawer` body instead leaves it directly after the session content. Live:
+   * `#layouts-demo-chat-product`.
    */
   footer?: ReactNode;
   /**

@@ -83,6 +83,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | mode drawer toolbar trash+new twin | DESIGN_SYSTEM Hard rules / NavigationDrawerNewChat ≥ 0.5.256 | `#sandbox-navdrawer-session-chrome` |
 | session history leading icon by default | DESIGN_SYSTEM Hard rules / Content density ≥ 0.5.298 | `#sandbox-navdrawer-session-chrome` / `#sandbox-navdrawer-session-icon` |
 | chat product / session host wrong tree | DESIGN_SYSTEM Content density / Chat product | `#layouts-demo-chat-product` |
+| narrow session modal account row stranded below empty/history content | DESIGN_SYSTEM Hard rules / Chat product modal `NavigationDrawer footer` | `#layouts-demo-chat-product` |
 | chat aside host wrong tree | DESIGN_SYSTEM Content density / Chat aside | `#layouts-demo-chat-aside` |
 | FieldHeader inline InfoHint kissed | DESIGN_SYSTEM forms / FieldStack | `#info-hint` / `#form-recipe` |
 | Input type=number UA spinners | DESIGN_SYSTEM hard-rules (≥ **0.5.301**) | `#number-input` |

@@ -745,6 +745,13 @@
 - **DON'T** invent a chat / session-history product layout that skips the
   keep-set tree — default = **`ClippedNavShell`** + session
   `NavigationDrawer` (`NavigationDrawerNewChat` …) + **`FillColumn` → `Chat`**.
+  When the session rail must overlay a narrow viewport, use the **same**
+  `NavigationDrawer` with `variant="modal"`, `open`, `onClose`, and its
+  `footer` prop. Keep `NavigationDrawerNewChat` and the empty/history list in
+  `children`; put the account row in `footer`. A generic `Drawer` places every
+  child in its scrolling body, so an account row appended after the empty state
+  sits halfway down the panel instead of at the bottom. Live modal and
+  permanent examples: `#layouts-demo-chat-product`.
   New-chat landing = greeting + soft starters + `ChatComposer` inside
   `ChatThread.empty` (centered); active thread docks composer under
   `ChatThread` inside Chat. Flat destination roots stay on
