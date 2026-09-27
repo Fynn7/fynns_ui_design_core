@@ -54,10 +54,17 @@ function join(...parts: Array<string | false | null | undefined>) {
  * “Thinking / Thought for Ns”; Cursor-style tool status via `streamingLabel`).
  * Compose via `ChatMessage.thinking`. UI chrome only — no LLM / markdown.
  *
+ * Lifecycle: keep the same disclosure mounted after `streaming` becomes false
+ * and while answer tokens, later activity, or an error render. Completion
+ * changes the label and open state; it never removes the trigger or body.
+ * Pass completed thought text as `children` and a past-tense `label` or
+ * `durationMs`. The parent owns retention across its own state transitions.
+ *
  * Open policy (uncontrolled): force open while `streaming` unless the user
  * pinned closed (trigger stays enabled so the disclosure can collapse
- * mid-run; a new streaming cycle clears the pin). Auto-collapse once when
- * streaming ends; user expand after done sticks.
+ * mid-run; a new streaming cycle clears the pin). Auto-collapse the body once
+ * when streaming ends; the header remains visible and can be reopened.
+ * User expand after done sticks.
  *
  * Without `children`, renders a non-expandable duration / label strip (no chevron).
  * Do **not** pipe labels or thought text into a live region.

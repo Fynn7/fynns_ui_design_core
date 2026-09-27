@@ -107,7 +107,10 @@ export type ChatMessageProps = Omit<
   /**
    * Optional reasoning disclosure between `name` and the answer bubble
    * (typically `<ChatThinking>…</ChatThinking>`). Core does not hide this on
-   * `error` — the app decides whether to pass it. Ignored for `system`.
+   * `error` — the app decides whether to pass it. Keep the same disclosure
+   * mounted after streaming ends and as the answer grows; preserve completed
+   * thought text instead of clearing this slot on a status transition.
+   * Ignored for `system`.
    */
   thinking?: ReactNode;
   /**

@@ -156,7 +156,13 @@ classes.
     `#layouts-demo-chat-aside`. See [`CHAT_MOTION.md`](../../llm/CHAT_MOTION.md).
   - **Message lifecycle:** `streaming` = last-glyph color pulse only while answer
     text exists + `aria-busy`; `error`/`onRetry` = failed-generation footer;
-    `thinking`/`ChatThinking` = single-block reasoning (Wave 1); `ChatActivity`/
+    `thinking`/`ChatThinking` = single-block reasoning (Wave 1); keep the
+    disclosure mounted with completed text after streaming, while the answer
+    grows, and through later status/error states. `streaming={false}` only
+    auto-collapses its body; the header and chevron stay available. Do not
+    gate the slot on the current step or clear its text at completion. The
+    trigger keeps its intrinsic label width, independent of body/answer length.
+    `ChatActivity`/
     Step = multi-step tool tree (Wave 2 — **minimal** ≥ **0.5.272**: default
     status **mark** + continuous rail, no default tool icons / file artifacts;
     step band **2rem** + gap `unit-stack-gap` ≥ **0.5.273**;

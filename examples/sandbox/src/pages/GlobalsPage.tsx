@@ -4247,6 +4247,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               ? undefined
               : t("globals.thinkingAnswer")}
           </ChatMessage>
+          <ChatMessage
+            role="assistant"
+            thinking={
+              <ChatThinking
+                durationMs={thinkingDoneMs}
+                label={t("globals.thinkingLabel")}
+                durationLabel={(n) => t("globals.thinkingDuration").replace("{n}", String(n))}
+              >
+                {Array(8).fill(t("globals.thinkingBody")).join(" ")}
+              </ChatThinking>
+            }
+          >
+            {Array(8).fill(t("globals.thinkingAnswer")).join(" ")}
+          </ChatMessage>
           <div className="sandbox-globals-row">
             <Button
               size="sm"
