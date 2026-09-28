@@ -958,11 +958,6 @@
   box-sizing: border-box;
 }
 
-/* ChatThinking activity gallery — denser than unit siblings. */
-.sandbox-globals-thinking-actions {
-  gap: var(--fynns-layout-field-hint-gap);
-}
-
 /* Empty-thread starter: full-width clickable Surface soft (app-owned). */
 .sandbox-chat-empty {
   width: 100%;

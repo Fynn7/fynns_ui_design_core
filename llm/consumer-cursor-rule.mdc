@@ -58,6 +58,12 @@ ASCII `-`。
 
 ## 加载与忙碌（硬）
 
+Chat 问题井直接用 `ChatQuestion`（默认最后 Other + Input）；轻量状态行用
+`ChatThinking variant="status"` / `"disclosure"` + `ChatThinkingStack`，勿消费侧
+再封装铬和间距。prompt / LLM 请求与回复 / thinking / 卡片来自同一时间顺序事件
+列表，逐个追加到底部；已回答卡片原位保留；卡片后的 thinking 开新 stack，禁止
+回填旧 stack 或永久沉底结果。详见 `llm/CHAT_SEQUENCE.md`，sandbox `#chat-question`。
+
 | 场景 | 用 | 禁止 |
 | --- | --- | --- |
 | 全屏阻塞 | `BusyScrim` | EmptyState + 圈 |

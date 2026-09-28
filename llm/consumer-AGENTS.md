@@ -9,6 +9,7 @@ This app consumes the fynns design system from the sibling checkout
 | Install / greenfield skeleton / primitive-by-job table | `llm/CONSUME.md` |
 | Props of a primitive | run `node ../fynns_ui_design_core/scripts/api.mjs <Name>` (`--list`, `--search <re>`, `--tokens <re>`) |
 | A screen looks wrong (failure-mode index) | `llm/CONSUMER_TREATY.md` |
+| Chat question / thinking variants / event order | `llm/CHAT_SEQUENCE.md`: `ChatQuestion` with Other/Input; `ChatThinking` status/disclosure in `ChatThinkingStack`; append one chronological list |
 | Deleted APIs → replacements | `llm/BREAKING_PURGE.md` |
 | Full design rules | `docs/DESIGN_SYSTEM.md` → one chapter at a time |
 

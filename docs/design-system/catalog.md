@@ -156,7 +156,9 @@ classes.
     `#layouts-demo-chat-aside`. See [`CHAT_MOTION.md`](../../llm/CHAT_MOTION.md).
   - **Message lifecycle:** `streaming` = last-glyph color pulse only while answer
     text exists + `aria-busy`; `error`/`onRetry` = failed-generation footer;
-    `thinking`/`ChatThinking` = single-block reasoning (Wave 1); keep the
+    `thinking`/`ChatThinking` = single-block reasoning (Wave 1), with
+    `variant="status"` / `"disclosure"`; `ChatThinkingStack` owns equal spacing
+    for consecutive mixed rows. Keep the
     disclosure mounted with completed text after streaming, while the answer
     grows, and through later status/error states. `streaming={false}` only
     auto-collapses its body; the header and chevron stay available. Do not
@@ -178,7 +180,11 @@ classes.
     `.fynns-chat-message-prose`; do **not** patch with consumer CSS. ARIA:
     [`llm/CHAT_ARIA_PARITY.md`](../../llm/CHAT_ARIA_PARITY.md). User edit UX (not in
     core yet): [`llm/CHAT_USER_EDIT_UX.md`](../../llm/CHAT_USER_EDIT_UX.md). Live
-    `#activity` / `#thinking`.
+    `#activity` / `#thinking`. `ChatQuestion` = Card + concise radio choices +
+    final Other/Input by default; `onSubmit` adds validated Continue, `readOnly`
+    retains the answered card in place. All chat events append chronologically;
+    split thinking stacks at intervening cards/prompts. Live `#chat-question`;
+    [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
 - **Overlay / sheets:** Dialog / DialogShell / ConfirmDialog / FullscreenDialog
   (M3 basic + large inset workspace + full-screen). `ConfirmDialog` = title +
   supporting + foot

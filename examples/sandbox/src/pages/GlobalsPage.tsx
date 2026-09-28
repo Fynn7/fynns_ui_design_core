@@ -40,6 +40,7 @@ import {
   ChatActivityArtifact,
   ChatActivityStep,
   ChatThinking,
+  ChatThinkingStack,
   ChatThread,
   ClipboardIcon,
   ListChecksIcon,
@@ -161,6 +162,7 @@ import {
 import { ChatComposerModelMenuSections } from "../components/ChatComposerModelMenuSections";
 import { ChatComposerModeTogglesEndActions } from "../components/ChatComposerModeTogglesEndActions";
 import { ChatTodoComposerDemo } from "../components/ChatTodoComposerDemo";
+import { ChatQuestionSequenceDemo } from "../components/ChatQuestionSequenceDemo";
 import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
@@ -1233,7 +1235,7 @@ export type GlobalsPageProps = {
 };
 
 export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const [openCategories, setOpenCategories] = useState<
     Partial<Record<GlobalsCategoryId, boolean>>
   >(() => loadSandboxUiSession()?.openCategories ?? {});
@@ -4211,18 +4213,22 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </ChatMessage>
         </div>
         </GlobalsDemo>
+        <GlobalsDemo id="chat-question">
+          <ChatQuestionSequenceDemo key={locale} />
+        </GlobalsDemo>
         <GlobalsDemo id="thinking">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <SandboxHelp text={t("globals.thinkingActionsHelp")} />
-          <div className="sandbox-globals-row sandbox-globals-row--stack sandbox-globals-thinking-actions">
+          <ChatThinkingStack>
             {thinkingActions.map((action) => (
               <ChatThinking
                 key={action}
+                variant="status"
                 streaming
                 streamingLabel={action}
               />
             ))}
-          </div>
+          </ChatThinkingStack>
           <ChatThinking
             durationMs={3800}
             streamingLabel={t("globals.thinkingStreaming")}

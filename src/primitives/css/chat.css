@@ -467,6 +467,59 @@
 }
 
 /* ---------- ChatThinking — single-block reasoning disclosure ---------- */
+.fynns-chat-thinking-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  gap: var(--fynns-chatmessage-thinking-stack-gap);
+}
+
+.fynns-chat-thinking-stack > .fynns-chat-thinking {
+  margin-block-end: 0;
+}
+
+/* ---------- ChatQuestion — chronological in-thread question well ---------- */
+.fynns-chat-question {
+  font-family: var(--fynns-font-ui);
+}
+
+.fynns-chat-question-group {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.fynns-chat-question-prompt {
+  padding: 0;
+  margin-block-end: var(--fynns-layout-field-label-control-gap);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-form-label);
+  line-height: var(--fynns-line-height-compact);
+  overflow-wrap: anywhere;
+}
+
+.fynns-chat-question-option {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: var(--fynns-space-xs);
+  overflow-wrap: anywhere;
+}
+
+.fynns-chat-question-description {
+  color: var(--fynns-color-text-muted);
+  font-weight: var(--fynns-font-weight-regular);
+}
+
+.fynns-chat-question-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .fynns-chat-thinking {
   display: flex;
   flex-direction: column;
@@ -1526,6 +1579,7 @@ a.fynns-chat-activity-artifact:hover {
 
 /* ---------- Chat shell ---------- */
 .fynns-chat {
+  font-family: var(--fynns-font-ui);
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);

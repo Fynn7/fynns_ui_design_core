@@ -9,6 +9,8 @@ import { ChevronRightIcon, ICON_SIZE } from "./icons";
 import { OverflowTip } from "./OverflowTip";
 
 export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
+  /** `status` = label only; `disclosure` = expandable when a body exists. @default "disclosure" */
+  variant?: "status" | "disclosure";
   /** Thought body (caller-owned summary — core does not parse markdown). */
   children?: ReactNode;
   /**
@@ -66,7 +68,10 @@ function join(...parts: Array<string | false | null | undefined>) {
  * when streaming ends; the header remains visible and can be reopened.
  * User expand after done sticks.
  *
- * Without `children`, renders a non-expandable duration / label strip (no chevron).
+ * `variant="status"` renders a label strip without chevron or body.
+ * Default `variant="disclosure"` expands only when `children` exists; without
+ * a body it falls back to the same non-expandable strip. ChatThinkingStack
+ * owns consecutive row spacing for both variants.
  * Do **not** pipe labels or thought text into a live region.
  *
  * @example
@@ -85,6 +90,7 @@ function join(...parts: Array<string | false | null | undefined>) {
  * ```
  */
 export function ChatThinking({
+  variant = "disclosure",
   children,
   streaming = false,
   streamingLabel,
@@ -107,7 +113,7 @@ export function ChatThinking({
     onOpenChange,
   });
 
-  const hasBody = children != null && children !== "";
+  const hasBody = variant === "disclosure" && children != null && children !== "";
   const resolvedLabel = resolveThinkingLabel({
     streaming,
     durationMs,
@@ -203,6 +209,21 @@ export function ChatThinking({
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+export type ChatThinkingStackProps = HTMLAttributes<HTMLDivElement>;
+
+/**
+ * Consecutive ChatThinking rows with the canonical quiet status rhythm.
+ * Use in ChatMessage.thinking; preserve child keys and append in event order.
+ * End a stack at an intervening question/message/result; start a new one after it.
+ */
+export function ChatThinkingStack({ children, className, ...rest }: ChatThinkingStackProps) {
+  return (
+    <div {...rest} className={join("fynns-chat-thinking-stack", className)}>
+      {children}
     </div>
   );
 }

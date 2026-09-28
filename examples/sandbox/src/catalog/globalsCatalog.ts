@@ -382,10 +382,16 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     ],
   },
   {
+    id: "chat-question",
+    categoryId: "communication",
+    label: "ChatQuestion · chronological conversation",
+    keywords: ["问题卡片", "其他", "自由文本", "顺序", "question", "other", "chronological", "ChatThinkingStack"],
+  },
+  {
     id: "thinking",
     categoryId: "communication",
     label: "ChatThinking",
-    keywords: ["思维", "thinking", "reasoning", "thought", "披露"],
+    keywords: ["思维", "thinking", "reasoning", "thought", "披露", "status", "disclosure", "ChatThinkingStack"],
   },
   {
     id: "activity",

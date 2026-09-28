@@ -185,6 +185,7 @@ Pick primitives by job (details: `node scripts/api.mjs <Name>`; catalog:
 | Record collection (posts, paths, bookmarks) | one `List` of `ListItem` (`headline` / `supportingText` / `trailingSupportingText`), `Pagination` or `useRevealMore` + `RevealMore` for long lists |
 | Titled section | `Card` (static) / `Collapsible`; untitled well → `Surface` |
 | Markdown body | `ChatMarkdown source={md}` (GFM subset); source code → `CodeBlock language="ts" label="file.ts"` |
+| Chat question / thinking / order | `ChatQuestion` (Other/Input built in); `ChatThinking variant="status"` / `"disclosure"` in `ChatThinkingStack`; one chronological list ([recipe](CHAT_SEQUENCE.md)) |
 | Forms | `FieldStack` → `FieldBlock` → `Input` / `Textarea` / `Switch` / `Checkbox` / `Radio`; discrete choices → `DropdownMenu` / `ToggleGroup` |
 | Modal | `Dialog` (`size="lg"` for forms; `size="viewport"` for a large inset code/config workspace) / `ConfirmDialog` / `FullscreenDialog` |
 | Feedback | `snackbar()` + `<SnackbarHost />`; inline → `InlineAlert`; announcement → `Banner` |

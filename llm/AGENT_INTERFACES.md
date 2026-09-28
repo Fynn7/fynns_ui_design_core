@@ -39,7 +39,7 @@ Read by role; do not duplicate specs across files — follow the links.
 | Cursor rule | [`.cursor/rules/fynns-ui.mdc`](../.cursor/rules/fynns-ui.mdc) | Always-on pointer → AGENTS + DESIGN_SYSTEM |
 | Repo entry | [`README.md`](../README.md) | Package overview / sandbox |
 
-Chat-only deep dives (read only when the task hits Chat): [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md) (geometry authority), [`CHAT_ARIA_PARITY.md`](CHAT_ARIA_PARITY.md), [`CHAT_USER_EDIT_UX.md`](CHAT_USER_EDIT_UX.md). Token drafting reference: [`m3-draft-tokens.md`](m3-draft-tokens.md).
+Chat-only deep dives (read only when the task hits Chat): [`CHAT_SEQUENCE.md`](CHAT_SEQUENCE.md) (question/Other, thinking variants and event order), [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md) (geometry authority), [`CHAT_ARIA_PARITY.md`](CHAT_ARIA_PARITY.md), [`CHAT_USER_EDIT_UX.md`](CHAT_USER_EDIT_UX.md). Token drafting reference: [`m3-draft-tokens.md`](m3-draft-tokens.md).
 
 ---
 

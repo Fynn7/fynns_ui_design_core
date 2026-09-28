@@ -53,6 +53,7 @@ day-to-day consume. Publish / optional Packages bumps:
 | Busy / loading | `#busy-region`, `#sandbox-pane-load-error` |
 | Busy hang guards (timeout/abort) | `#busy-paint`, `#sandbox-busy-task-timeout`, `#sandbox-busy-task-abort`, `#sandbox-busy-task-generation`, `#sandbox-button-loading-task`, `#sandbox-confirm-loading-trap`, `#sandbox-chat-busy-no-stop` |
 | CodeBlock file body | `#code-block` |
+| Chat question / Other input / thinking variants / event order | `#chat-question` / `#thinking` ([contract](../llm/CHAT_SEQUENCE.md)) |
 | Env key FieldHeader | `#env-check` / `#password` / `#provider-settings` |
 | Card head Select / draft / chrome icons | `#sandbox-card-head-select`, `#sandbox-card-draft-actions`, `#sandbox-card-chrome-icon-actions`, `#sandbox-card-head-primary-end` |
 | Destination shell / EndAside | `#layouts-demo-shell`, `#layouts-demo-drill-in`, `#layouts-demo-fill-column` |

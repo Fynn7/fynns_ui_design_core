@@ -581,6 +581,19 @@
   the whole morph, and `refreshOverlayScrollbars` updates **synchronously**
   (no rAF defer — stale rails for one paint = Back Y flash). Live
   `#layouts-demo-drill-in`. (≥ **0.5.202**/ **0.5.203**)
+- **DO** use `ChatQuestion` for in-thread questions: concise radio choices +
+  final Other with inline Input by default. Only explicit special structures
+  may omit Other or add detailed copy. `ChatThinking variant="status"` /
+  `"disclosure"` in `ChatThinkingStack` owns uniform quiet row rhythm;
+  consumers must not clone or restyle this anatomy. Live `#chat-question` /
+  `#thinking`; recipe: [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
+- **DON'T** reorder Chat UI by role/type/completion. Prompts, LLM calls/replies,
+  thinking and question/result cards share one chronological list: append new
+  events below earlier ones with stable keys; streaming/completion updates in
+  place. Questions interrupt thinking stacks; later activity starts after the
+  question. Never dock a perpetual result/question or move answered cards.
+  Only composer/task-summary chrome is docked. Live `#chat-question`; contract:
+  [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
 - **DON'T** invent shell/column/chat insets as raw `rem`/`px` or private CSS
   vars — reuse `--fynns-layout-*` (see **Inset decision tree**). Don't ship
   broken chrome type/row proportion (see **Chrome type & row proportion** /

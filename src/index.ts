@@ -396,10 +396,14 @@ export type {
 } from "./primitives/ChatCitation";
 export {
   ChatThinking,
+  ChatThinkingStack,
 } from "./primitives/ChatThinking";
 export type {
   ChatThinkingProps,
+  ChatThinkingStackProps,
 } from "./primitives/ChatThinking";
+export { ChatQuestion } from "./primitives/ChatQuestion";
+export type { ChatQuestionProps, ChatQuestionOption, ChatQuestionAnswer } from "./primitives/ChatQuestion";
 export {
   ChatActivity,
   ChatActivityArtifact,

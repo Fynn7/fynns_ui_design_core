@@ -792,6 +792,8 @@ export const CHATMESSAGE_TOKENS = {
    * `name-size` — no separate THINKING_* token group.
    */
   "thinking-gap": "0.375rem",
+  /** Consecutive quiet status rows: unit breath + existing thinking clearance. */
+  "thinking-stack-gap": "calc(var(--fynns-layout-unit-stack-gap) + var(--fynns-chatmessage-thinking-gap))",
   /** Gap between optional icon / label / chevron in the thinking trigger row. */
   "thinking-trigger-gap": "0.375rem",
   /**

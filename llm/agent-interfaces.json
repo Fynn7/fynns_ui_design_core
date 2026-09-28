@@ -6,6 +6,11 @@
   "human": "llm/AGENT_INTERFACES.md",
   "documentation": [
     {
+      "path": "llm/CHAT_SEQUENCE.md",
+      "role": "chat-sequence",
+      "summary": "Reusable ChatQuestion with Other/Input, ChatThinking variants/stack rhythm, chronological event append contract."
+    },
+    {
       "path": "llm/AGENT_INTERFACES.md",
       "role": "agent-interfaces",
       "summary": "Authoritative documentation catalog + custom highlight technical API."

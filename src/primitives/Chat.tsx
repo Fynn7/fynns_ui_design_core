@@ -118,6 +118,10 @@ export type ChatThreadProps = HTMLAttributes<HTMLDivElement> & {
 
 /**
  * Scrollable message log (`role="log"`). Only this region scrolls inside `Chat`.
+ * Pass one chronological event list with stable keys. New prompts, calls,
+ * thinking and result/question cards append after earlier events; streaming
+ * and completion update their event in place. Never bucket by role/type or
+ * dock a perpetual result. Split thinking stacks at intervening events.
  */
 export function ChatThread({
   empty,

@@ -347,6 +347,7 @@
   --fynns-chatmessage-citation-card-pad: 0.625rem;
   --fynns-chatmessage-citation-card-gap: 0.625rem;
   --fynns-chatmessage-thinking-gap: 0.375rem;
+  --fynns-chatmessage-thinking-stack-gap: calc(var(--fynns-layout-unit-stack-gap) + var(--fynns-chatmessage-thinking-gap));
   --fynns-chatmessage-thinking-trigger-gap: 0.375rem;
   --fynns-chatmessage-collapse-preview-height: 12rem;
   --fynns-chatmessage-collapse-fade-height: 3rem;

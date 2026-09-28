@@ -28,6 +28,7 @@ const DEMO_FILES = [
   "examples/sandbox/src/components/IconsLibraryDemo.tsx",
   // Live ChatComposer endActions recipe (Thinking/Vision toggles + model Menu).
   "examples/sandbox/src/components/ChatComposerModeTogglesEndActions.tsx",
+  "examples/sandbox/src/components/ChatQuestionSequenceDemo.tsx",
 ];
 
 const COMPANION_PATH = "llm/wysiwyg-companion.json";
