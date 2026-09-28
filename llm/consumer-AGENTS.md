@@ -45,6 +45,11 @@ This app consumes the fynns design system from the sibling checkout
 
 ## Token discipline (local models)
 
+Chat tool summaries (`ChatActivity`) and reasoning (`ChatThinking`) keep the
+chevron a shared short gap after the label text, independent of body width or
+expansion. Do not stretch header/label or override core geometry; see
+`llm/CHAT_SEQUENCE.md`, sandbox `#chat-chevron`.
+
 - Look props up with `api.mjs`; do **not** Read files under
   `../fynns_ui_design_core/src` or `examples/sandbox` whole (`GlobalsPage.tsx`
   is 300 KB). If you must, Read ≤ 120 lines with an offset.

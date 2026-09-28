@@ -158,7 +158,9 @@ classes.
     text exists + `aria-busy`; `error`/`onRetry` = failed-generation footer;
     `thinking`/`ChatThinking` = single-block reasoning (Wave 1), with
     `variant="status"` / `"disclosure"`; `ChatThinkingStack` owns equal spacing
-    for consecutive mixed rows. Keep the
+    for consecutive mixed rows. `ChatActivity` summaries and `ChatThinking`
+    share a short label→chevron gap; intrinsic headers must not stretch with
+    their bodies. Live `#chat-chevron`. Keep the
     disclosure mounted with completed text after streaming, while the answer
     grows, and through later status/error states. `streaming={false}` only
     auto-collapses its body; the header and chevron stay available. Do not

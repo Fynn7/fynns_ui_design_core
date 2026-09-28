@@ -50,6 +50,18 @@ Asynchronous question generation uses `BusyRegion` / `InlineAlert` as usual.
   inside the stack. Do not clone plain status divs or override core spacing.
 - Labels are progressive while running, past tense when done. Flat activities
   use these rows; branching tool trees continue to use `ChatActivity`.
+- **Chevron placement is label-owned for `ChatThinking` and `ChatActivity`:**
+  it follows visible label text by `--fynns-chatmessage-thinking-trigger-gap`
+  (default 6dp). `--fynns-chatmessage-activity-trigger-gap` aliases that token.
+  Tool-count summaries (`1 read`, `2 tool calls`) and Thinking/Thought use the
+  same gap. Host/output width, output growth and open/closed state must not
+  move the chevron away from the label. Longer labels move it by their added
+  width; it is not a fixed page coordinate. Core keeps headers intrinsic and
+  expanded bodies full-width. Consumers must not add `width: 100%`, `flex: 1`,
+  `space-between`, auto margins, spacers or absolute positioning to headers,
+  labels or chevrons. Use concise string labels. Narrow hosts shrink/ellipsis
+  the label while retaining OverflowTip. Live `#chat-chevron` / DOM
+  `#globals-demo-chat-chevron`.
 
 ```tsx
 <ChatMessage role="assistant" thinking={

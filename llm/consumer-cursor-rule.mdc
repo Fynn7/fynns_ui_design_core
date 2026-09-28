@@ -63,6 +63,10 @@ Chat 问题井直接用 `ChatQuestion`（默认最后 Other + Input）；轻量�
 再封装铬和间距。prompt / LLM 请求与回复 / thinking / 卡片来自同一时间顺序事件
 列表，逐个追加到底部；已回答卡片原位保留；卡片后的 thinking 开新 stack，禁止
 回填旧 stack 或永久沉底结果。详见 `llm/CHAT_SEQUENCE.md`，sandbox `#chat-question`。
+工具摘要 `ChatActivity` 与 `ChatThinking` 的 chevron 都紧跟文字末尾，统一
+`thinking-trigger-gap`（默认 6dp，`activity-trigger-gap` 是其 alias）。展开 /
+输出变长 / 容器缩放不得推远箭头；禁止 header/label 拉宽、space-between、
+auto margin 或私写几何。对照 `#chat-chevron`，不得在消费仓覆盖 `.fynns-*` 修补。
 
 | 场景 | 用 | 禁止 |
 | --- | --- | --- |

@@ -587,6 +587,14 @@
   `"disclosure"` in `ChatThinkingStack` owns uniform quiet row rhythm;
   consumers must not clone or restyle this anatomy. Live `#chat-question` /
   `#thinking`; recipe: [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
+- **DON'T** stretch ChatActivity tool-count headers or push their chevron to
+  the body/panel end. `ChatActivity` and `ChatThinking` share the label→chevron
+  token (`thinking-trigger-gap`, default 6dp; `activity-trigger-gap` aliases
+  it). Same labels keep the same chevron position across output growth,
+  expand/collapse and host resizing; longer labels move it with the text end.
+  Headers stay intrinsic, bodies fill the column. No consumer header/label
+  `flex: 1`, `width: 100%`, `space-between`, auto margins or custom geometry.
+  Live `#chat-chevron`; [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
 - **DON'T** reorder Chat UI by role/type/completion. Prompts, LLM calls/replies,
   thinking and question/result cards share one chronological list: append new
   events below earlier ones with stable keys; streaming/completion updates in

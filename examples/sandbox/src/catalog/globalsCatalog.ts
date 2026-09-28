@@ -382,6 +382,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     ],
   },
   {
+    id: "chat-chevron",
+    categoryId: "communication",
+    label: "ChatThinking / ChatActivity · chevron gap",
+    keywords: ["chevron", "箭头", "间距", "read", "tool summary", "Thinking", "Thought"],
+  },
+  {
     id: "chat-question",
     categoryId: "communication",
     label: "ChatQuestion · chronological conversation",

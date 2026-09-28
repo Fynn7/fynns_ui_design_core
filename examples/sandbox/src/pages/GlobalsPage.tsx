@@ -163,6 +163,7 @@ import { ChatComposerModelMenuSections } from "../components/ChatComposerModelMe
 import { ChatComposerModeTogglesEndActions } from "../components/ChatComposerModeTogglesEndActions";
 import { ChatTodoComposerDemo } from "../components/ChatTodoComposerDemo";
 import { ChatQuestionSequenceDemo } from "../components/ChatQuestionSequenceDemo";
+import { ChatChevronDemo } from "../components/ChatChevronDemo";
 import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
@@ -4212,6 +4213,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             {Array(40).fill(t("globals.chatSystem")).join(" ")}
           </ChatMessage>
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="chat-chevron">
+          <ChatChevronDemo />
         </GlobalsDemo>
         <GlobalsDemo id="chat-question">
           <ChatQuestionSequenceDemo key={locale} />

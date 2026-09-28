@@ -817,7 +817,8 @@ export const CHATMESSAGE_TOKENS = {
    * Separate from `thinking-*` — single-block vs multi-step rail.
    */
   "activity-gap": "0.375rem",
-  "activity-trigger-gap": "0.375rem",
+  /** Tool-count summaries and Thinking/Thought share one label→chevron gap. */
+  "activity-trigger-gap": "var(--fynns-chatmessage-thinking-trigger-gap)",
   /**
    * Vertical gap between step rows (rail spans this + half next band).
    * Aliases `unit-stack-gap` (16dp) — same breath as Timeline `item-gap`

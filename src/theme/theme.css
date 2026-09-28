@@ -354,7 +354,7 @@
   --fynns-chatmessage-thinking-body-pad-block: var(--fynns-layout-field-stack-gap);
   --fynns-chatmessage-thinking-body-pad-inline: 0;
   --fynns-chatmessage-activity-gap: 0.375rem;
-  --fynns-chatmessage-activity-trigger-gap: 0.375rem;
+  --fynns-chatmessage-activity-trigger-gap: var(--fynns-chatmessage-thinking-trigger-gap);
   --fynns-chatmessage-activity-step-gap: var(--fynns-layout-unit-stack-gap);
   --fynns-chatmessage-activity-node-gap: 0.5rem;
   --fynns-chatmessage-activity-desc-gap: 0.25rem;

@@ -713,6 +713,10 @@
 
 .fynns-chat-activity-trigger {
   display: inline-flex;
+  /* Like ChatThinking: body width must never stretch the header. */
+  align-self: flex-start;
+  width: max-content;
+  min-width: 0;
   align-items: center;
   gap: var(--fynns-chatmessage-activity-trigger-gap);
   max-width: 100%;
