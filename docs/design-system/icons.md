@@ -27,6 +27,7 @@ Pick by meaning, not nearest shape:
 | Apply / confirm a non-destructive change | `CheckIcon` + visible label | icon-only check disk |
 | Refresh / retry | `RefreshIcon` + visible label | text-only app CTA when space permits |
 | Nav / mode exit back (TopAppBar) | `ArrowLeftIcon` | `CloseIcon` as destination back |
+| Hand off to another surface and take the result back (e.g. browser LLM) | `ArrowLeftRightIcon` (+ Tooltip) | `RefreshIcon` (looks like retry) |
 | Export (write file / format menu — Word, PDF, …) | `UploadIcon` | `DownloadIcon` (pull/download semantics) |
 | Download (fetch / pull from remote) | `DownloadIcon` | `UploadIcon` for export menus |
 | Copy to clipboard | `ClipboardIcon` (+ Tooltip) | Labeled ghost `Button` “Copy …” in Card chrome |

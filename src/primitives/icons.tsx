@@ -66,6 +66,18 @@ export function ArrowLeftIcon(props: IconProps) {
   );
 }
 
+/** Two-way transfer — hand a payload off to another surface and take it back. */
+export function ArrowLeftRightIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <line x1="8" y1="8" x2="16" y2="8" />
+      <polyline points="13 5 16 8 13 11" />
+      <line x1="16" y1="16" x2="8" y2="16" />
+      <polyline points="11 13 8 16 11 19" />
+    </svg>
+  );
+}
+
 export function CloseIcon(props: IconProps) {
   return (
     <svg {...svgProps({ strokeWidth: 2.5, ...props })}>

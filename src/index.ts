@@ -23,6 +23,7 @@ export {
   AlertTriangleIcon,
   ArchiveIcon,
   ArrowLeftIcon,
+  ArrowLeftRightIcon,
   ArrowUpIcon,
   BarChartIcon,
   BotIcon,
