@@ -896,6 +896,20 @@ export const CHAT_TOKENS = {
    * second independent layout literal.
    */
   "thread-pad-inline": "var(--fynns-layout-dialog-inset)",
+  /**
+   * Block inset above the first turn. Aliases **`thread-gap`**, never
+   * `content-pad-block`: a thread resting at the top must read as one
+   * continuous column, so the opening turn breathes exactly like every turn
+   * below it. A narrower top (16dp against a 32dp gap) pinned the first
+   * bubble to the ceiling and read as clipped.
+   */
+  "thread-pad-block-start": "var(--fynns-chat-thread-gap)",
+  /**
+   * Block inset at the scroll end, before the composer clearance the thread
+   * adds on top of it. Kept separate from `thread-pad-block-start` because
+   * the two ends answer different questions (first turn vs. docked composer);
+   * consumers reusing this key for their own thread floor keep 16dp.
+   */
   "thread-pad-block": "var(--fynns-layout-content-pad-block)",
   /** Scroll/fade clearance above sticky composer (~28dp). */
   "composer-scroll-pad": "1.75rem",

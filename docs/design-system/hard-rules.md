@@ -780,6 +780,15 @@
   `PageScroll` as chat main scroll, Chip starters, or Trash+Plus twin. Live
   `#layouts-demo-chat-product`. Failure: CONSUMER_TREATY chat product /
   session host wrong tree.
+- **DON'T** let the first turn hug the thread ceiling: top inset is
+  `--fynns-chat-thread-pad-block-start`, aliased to **`chat-thread-gap`**
+  (**2rem**), so the opening bubble breathes exactly like the turns below it
+  (**0.5.306** — it was `content-pad-block` **16dp**, half a gap). The scroll
+  end keeps its own pair (`thread-pad-block` **16dp** + `composer-scroll-pad`
+  ≥44dp) because it answers a different question. Do **not** set
+  `padding` / `margin` on `.fynns-chat-thread`, re-alias
+  `pad-block-start` to a narrower token, or collapse both ends into one
+  `padding-block` shorthand. Live `#chat` / `#layouts-demo-chat-product`.
 - **DON'T** inset mode `--toolbar-end` Plus (or preference Switch) with Item
   `item-pad-inline-end` so it sits ~16dp short of destination **Item pill
   outer** — Plus / Switch / **pill outer** share one trailing edge (body

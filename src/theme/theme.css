@@ -369,6 +369,7 @@
   --fynns-chat-entry-duration: var(--fynns-duration-slow);
   --fynns-chat-thread-gap: 2rem;
   --fynns-chat-thread-pad-inline: var(--fynns-layout-dialog-inset);
+  --fynns-chat-thread-pad-block-start: var(--fynns-chat-thread-gap);
   --fynns-chat-thread-pad-block: var(--fynns-layout-content-pad-block);
   --fynns-chat-composer-scroll-pad: 1.75rem;
   --fynns-chat-composer-min-height: 2rem;

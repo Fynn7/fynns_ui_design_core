@@ -1618,7 +1618,10 @@ a.fynns-chat-activity-artifact:hover {
   /* Inline pad lives on `.fynns-chat-thread-inner` so the max-width box
    * matches `.fynns-chat-composer` (pad inside the capped column). */
   padding-inline: 0;
-  padding-block: var(--fynns-chat-thread-pad-block);
+  /* Start holds a full turn gap so the opening bubble is not pinned to the
+   * ceiling; the end keeps its own base plus the composer clearance below. */
+  padding-block: var(--fynns-chat-thread-pad-block-start)
+    var(--fynns-chat-thread-pad-block);
   padding-bottom: calc(
     var(--fynns-chat-thread-pad-block) + var(--fynns-chat-composer-scroll-pad)
   );
