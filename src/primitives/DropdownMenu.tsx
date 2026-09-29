@@ -475,6 +475,16 @@ export type DropdownMenuItemProps = ButtonHTMLAttributes<HTMLButtonElement> & {
    * (ChatGPT-style destructive More-menu rows). Default is neutral text.
    */
   tone?: "default" | "danger";
+  /**
+   * Trailing row action (`IconButton` / `Tooltip` + `IconButton`), rendered as
+   * a **sibling** of the row button — a button inside a button is invalid, so
+   * it can never be part of `children`. Idle-hidden and revealed on row hover /
+   * `focus-within` (coarse pointer keeps it visible); the row's inline pad
+   * expands on reveal so the label never runs under the glyph. Activating the
+   * slot closes the whole menu like a normal pick. Prefer `size="sm"` ghost.
+   * ≥ **0.5.307**. Live: `#sandbox-menu-row-action`.
+   */
+  trailing?: ReactNode;
 };
 
 export function DropdownMenuItem({
@@ -483,12 +493,14 @@ export function DropdownMenuItem({
   className,
   closeOnSelect = true,
   tone = "default",
+  trailing,
   onClick,
   ...rest
 }: DropdownMenuItemProps) {
   const ctx = useMenuContext(true);
   const tip = overflowTipText(children);
-  return (
+  const trailingRef = useRef<HTMLSpanElement>(null);
+  const item = (
     <button
       {...rest}
       type="button"
@@ -508,6 +520,24 @@ export function DropdownMenuItem({
         {tip != null ? <OverflowTip content={tip}>{children}</OverflowTip> : children}
       </span>
     </button>
+  );
+
+  if (trailing == null) return item;
+
+  return (
+    <div
+      className="fynns-menu-item-host"
+      onClick={(event) => {
+        // A pick inside the end-action slot closes the menu like a row pick
+        // (the row button never saw this click).
+        if (trailingRef.current?.contains(event.target as Node)) ctx?.closeRoot();
+      }}
+    >
+      {item}
+      <span ref={trailingRef} className="fynns-menu-item-trailing">
+        {trailing}
+      </span>
+    </div>
   );
 }
 

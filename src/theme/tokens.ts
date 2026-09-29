@@ -1232,6 +1232,33 @@ export const CAROUSEL_TOKENS = {
 } as const;
 
 /**
+ * Menu row end action (`DropdownMenuItem` `trailing`, ≥ **0.5.307**) —
+ * overlay-reveal strip inside the 48dp menu row, same vocabulary as List
+ * `--with-end` / NavDrawer. `--fynns-menu-<key>`.
+ */
+export const MENU_TOKENS = {
+  /**
+   * Row end action disk — the 32dp `sm` IconButton strip. A bare `md`
+   * IconButton is clamped to it by `overlays.css` so it cannot outgrow the
+   * 48dp row (same clamp as the NavDrawer item end cluster).
+   */
+  "actions-disk": "2rem",
+  /**
+   * Preceding content → overlay row action (hover / focus-within / coarse).
+   * Aliases `--fynns-layout-control-cluster-gap` (4dp) — the rhythm of any
+   * sibling immediately left of an IconButton, not a new menu gap.
+   */
+  "actions-gap": "var(--fynns-layout-control-cluster-gap)",
+  /**
+   * End action opacity fade (idle → hover / focus-within). Aliases
+   * `--fynns-duration-slow` (360ms) — same family as List / NavDrawer /
+   * ChatMessage `actions-reveal`. Do **not** use `duration-fast` (140ms reads
+   * as snap).
+   */
+  "actions-reveal": "var(--fynns-duration-slow)",
+} as const;
+
+/**
  * Navigation rail geometry (at 16px rem).
  * Container 80dp; destination highlight wraps icon (+ label when shown).
  * Icon-only / unlabeled hover = TopAppBar IconButton target (40dp).
@@ -2204,6 +2231,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["avatar", AVATAR_TOKENS],
   ["fab", FAB_TOKENS],
   ["fabmenu", FABMENU_TOKENS],
+  ["menu", MENU_TOKENS],
   ["appbar", APPBAR_TOKENS],
   ["bottomappbar", BOTTOM_APPBAR_TOKENS],
   ["statusbar", STATUSBAR_TOKENS],

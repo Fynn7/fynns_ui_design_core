@@ -2374,6 +2374,47 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </DropdownMenu>
           <SandboxHelp text={t("globals.menuSubHelp")} />
         </div>
+        <div id="sandbox-menu-row-action" className="sandbox-globals-row">
+          <DropdownMenu
+            trigger={t("globals.menuRowActionTrigger")}
+            ariaLabel={t("globals.menuRowActionAria")}
+          >
+            <DropdownMenuItem icon={<FileIcon />}>
+              {t("globals.menuSubItemA")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              icon={<FolderOpenIcon />}
+              trailing={
+                <Tooltip content={t("globals.menuRowActionDeleteTip")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.menuRowActionDeleteAria")}
+                  >
+                    <TrashIcon aria-hidden />
+                  </IconButton>
+                </Tooltip>
+              }
+            >
+              {t("globals.menuSubItemB")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              icon={<FolderOpenIcon />}
+              trailing={
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  aria-label={t("globals.menuRowActionDeleteAria")}
+                >
+                  <TrashIcon aria-hidden />
+                </IconButton>
+              }
+            >
+              {t("globals.menuSubItemC")}
+            </DropdownMenuItem>
+          </DropdownMenu>
+          <SandboxHelp text={t("globals.menuRowActionHelp")} />
+        </div>
         <div id="sandbox-scroll-menu-stack">
           <SandboxHelp text={t("globals.scrollMenuStackHelp")} />
           <div className="sandbox-scroll-menu-stack fynns-scroll">

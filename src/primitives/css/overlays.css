@@ -393,6 +393,79 @@
   gap: var(--fynns-space-sm);
 }
 
+/*
+ * Menu row end action (`DropdownMenuItem` `trailing`, ≥ **0.5.307**): the List
+ * `--with-end` / NavDrawer overlay-reveal vocabulary inside the 48dp menu row.
+ * The action is a **sibling** of the row button (a button in a button is
+ * invalid HTML), idle-hidden, revealed on row hover / `focus-within`; the
+ * row's inline pad expands on reveal so the label never runs under the glyph.
+ * Coarse pointer has no hover to reveal with → always visible. Do **not** add a
+ * second `tone="danger"` row for the same op — one row, one hover action.
+ * Live: `#sandbox-menu-row-action`.
+ */
+.fynns-menu-item-host {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.fynns-menu-item-host > .fynns-menu-item-trailing {
+  position: absolute;
+  inset-inline-end: var(--fynns-space-md);
+  inset-block: 0;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fynns-menu-actions-reveal) var(--fynns-ease-out);
+}
+
+.fynns-menu-item-host:hover > .fynns-menu-item-trailing,
+.fynns-menu-item-host:focus-within > .fynns-menu-item-trailing {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Recipe prefers size="sm"; a bare md IconButton is clamped to the 32dp strip
+ * so it cannot outgrow the 48dp row (same clamp as the NavDrawer end cluster). */
+.fynns-menu-item-host > .fynns-menu-item-trailing .fynns-btn--icon {
+  width: var(--fynns-menu-actions-disk);
+  height: var(--fynns-menu-actions-disk);
+  min-width: var(--fynns-menu-actions-disk);
+  min-height: var(--fynns-menu-actions-disk);
+}
+
+.fynns-menu-item-host > .fynns-menu-item {
+  /* Idle: full-bleed label. Reveal: clear the measured end cluster. */
+  padding-inline-end: var(--fynns-space-md);
+  transition: padding-inline-end var(--fynns-menu-actions-reveal)
+    var(--fynns-ease-out);
+}
+
+.fynns-menu-item-host:hover > .fynns-menu-item,
+.fynns-menu-item-host:focus-within > .fynns-menu-item {
+  padding-inline-end: calc(
+    var(--fynns-menu-actions-disk) + var(--fynns-menu-actions-gap) +
+      var(--fynns-space-md)
+  );
+}
+
+@media (hover: none), (pointer: coarse) {
+  .fynns-menu-item-host > .fynns-menu-item-trailing {
+    opacity: 1;
+    pointer-events: auto;
+    transition: none;
+  }
+
+  .fynns-menu-item-host > .fynns-menu-item {
+    padding-inline-end: calc(
+      var(--fynns-menu-actions-disk) + var(--fynns-menu-actions-gap) +
+        var(--fynns-space-md)
+    );
+  }
+}
+
 /* ---------- Tooltip / InfoHint ---------- */
 .fynns-tooltip-trigger {
   display: inline-flex;

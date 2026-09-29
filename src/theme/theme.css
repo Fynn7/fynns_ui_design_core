@@ -263,6 +263,9 @@
   --fynns-fabmenu-label-pad-inline: 0.75rem;
   --fynns-fabmenu-stagger: 0.035s;
   --fynns-fabmenu-stagger-exit: 0.025s;
+  --fynns-menu-actions-disk: 2rem;
+  --fynns-menu-actions-gap: var(--fynns-layout-control-cluster-gap);
+  --fynns-menu-actions-reveal: var(--fynns-duration-slow);
   --fynns-appbar-height: var(--fynns-layout-bar-height);
   --fynns-appbar-height-md: 5rem;
   --fynns-appbar-height-lg: 6.5rem;
