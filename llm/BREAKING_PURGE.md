@@ -70,6 +70,12 @@ Anything else must be deleted or kept as a non-exported internal.
 - **Do not** import or reimplement those names.
 - Use **`snackbar(...)` + `<SnackbarHost />`** (M3 Snackbar). Mount the host
   once near the app root. Never re-add sonner-shaped toast APIs.
+- Capsule action with / without close X: use `action: { label, onClick,
+  variant: "tonal" }` and `dismissible: true | false`. Omitting
+  `action.variant` keeps the existing `ghost` text action. Actions default to
+  `duration: "indefinite"` with X; for no X, prefer `duration: "long"`
+  (10s auto-dismiss). See the [consumer recipe](../docs/design-system/catalog.md#snackbar-action-variants)
+  and sandbox `#snackbar`; do not rebuild the shell or action CSS in consumers.
 
 ## Removed → how consumers should fix
 

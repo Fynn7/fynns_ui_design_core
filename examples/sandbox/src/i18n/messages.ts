@@ -1640,6 +1640,10 @@ const en = {
     "M3 Banner: full-width strip under TopAppBar (message + actions + dismiss). Multi-line supportingText: leading icon and dismiss X stay vertically **centered** on the row (core `align-items: center`) — use `onDismiss` inside the strip, never a sibling close outside the rounded host. For in-panel severity use InlineAlert (soft tonal fill; fynns utility, not M3).",
   "globals.snackbarShortBtn": "Short snackbar",
   "globals.snackbarUndoBtn": "Snackbar with Undo",
+  "globals.snackbarActionDismissBtn": "Tonal action + dismiss",
+  "globals.snackbarActionOnlyBtn": "Tonal action only",
+  "globals.snackbarView": "View draft",
+  "globals.snackbarViewed": "Draft opened",
   "globals.snackbarIndefiniteBtn": "Indefinite snackbar",
   "globals.snackbarShort": "Draft saved",
   "globals.snackbarUndoMsg": "Item removed",
@@ -1648,7 +1652,7 @@ const en = {
   "globals.snackbarIndefiniteMsg": "Waiting for confirmation…",
   "globals.snackbarDismiss": "Dismiss",
   "globals.snackbarHelp":
-    "Imperative `snackbar(message, opts?)` + root `<SnackbarHost />`. One at a time (bottom-center). Optional single action; `short` / `long` / `indefinite`. Do not use deleted toast APIs.",
+    "Imperative `snackbar(message, opts?)` + root `<SnackbarHost />`. One at a time (bottom-center). Single action: label / onClick / variant (ghost default, tonal capsule). dismissible toggles the close X. Actions default to indefinite + X; use duration=long and dismissible=false for a capsule action without X (auto-dismiss after 10s). Action clicks dismiss only their own snackbar. Do not use deleted toast APIs.",
   "globals.snackbarHostNote":
     "`SnackbarHost` is mounted once in SandboxShell (companion API) — not duplicated in this row.",
   "globals.chatSystem": "This is a demo thread — no model is connected.",
@@ -4118,6 +4122,10 @@ const zh: Record<MessageKey, string> = {
     "M3 Banner：顶栏下全宽条（文案 + 操作 + 关闭）。多行 supportingText 时 leading 图标与 dismiss X 相对整行垂直居中（core `align-items: center`）— 用条内 `onDismiss`，勿在圆角条外再放关闭。面板内严重度请用 InlineAlert（轻底色；fynns 工具，非 M3）。",
   "globals.snackbarShortBtn": "短时 Snackbar",
   "globals.snackbarUndoBtn": "带 Undo 的 Snackbar",
+  "globals.snackbarActionDismissBtn": "胶囊操作 + 关闭",
+  "globals.snackbarActionOnlyBtn": "仅胶囊操作",
+  "globals.snackbarView": "查看草稿",
+  "globals.snackbarViewed": "已打开草稿",
   "globals.snackbarIndefiniteBtn": "不自动关闭",
   "globals.snackbarShort": "草稿已保存",
   "globals.snackbarUndoMsg": "已删除该项",
@@ -4126,7 +4134,7 @@ const zh: Record<MessageKey, string> = {
   "globals.snackbarIndefiniteMsg": "等待确认…",
   "globals.snackbarDismiss": "关闭",
   "globals.snackbarHelp":
-    "命令式 `snackbar(message, opts?)` + 根级 `<SnackbarHost />`。同时只显示一条（底部居中）。可选单个 action；时长 `short` / `long` / `indefinite`。勿使用已删除的 toast API。",
+    "命令式 `snackbar(message, opts?)` + 根级 `<SnackbarHost />`。同时只显示一条（底部居中）。单个 action：label / onClick / variant（默认 ghost，tonal 为浅色胶囊按钮）。dismissible 控制关闭 X。带操作默认 indefinite + X；无 X 用 duration=long、dismissible=false（10 秒后自动关闭）。点击操作只关闭当前条，不会清掉回调中新弹出的条。勿使用已删除的 toast API。",
   "globals.snackbarHostNote":
     "`SnackbarHost` 挂在 SandboxShell 一次（companion API）— 本行不重复挂载。",
   "globals.chatSystem": "演示会话 — 未连接任何模型。",

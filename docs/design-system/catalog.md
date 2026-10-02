@@ -35,6 +35,44 @@ classes.
   **Chat** family (see below), Snackbar (`snackbar()` + `<SnackbarHost />`),
   Tooltip, InfoHint
 
+  <a id="snackbar-action-variants"></a>
+  **Snackbar action variants:** mount `<SnackbarHost />` once at the app root;
+  call `snackbar(message, options)` from `@fynns/ui`. Core owns the surface,
+  capsule button, close icon, positioning and motion. Live sandbox: `#snackbar`.
+
+  | Parameter | Purpose / default |
+  | --- | --- |
+  | `message` | Feedback text (first argument) |
+  | `action: { label, onClick, variant? }` | One labeled action; `variant: "tonal"` gives a filled capsule; omitted / `"ghost"` keeps the text action |
+  | `dismissible` | Show / hide the trailing X; defaults to `true` for indefinite duration |
+  | `dismissAriaLabel` | Localized accessible close label; defaults to `"Dismiss"` |
+  | `duration` | `"short"` = 4s, `"long"` = 10s, `"indefinite"` = until action / dismissal / replacement; with action defaults to indefinite, otherwise short |
+
+  ```tsx
+  import { snackbar, SnackbarHost } from "@fynns/ui";
+
+  // Mount <SnackbarHost /> once next to the app shell.
+  // Capsule action + close X; stays visible until acted on or dismissed.
+  snackbar("Draft saved", {
+    action: { label: "View draft", onClick: openDraft, variant: "tonal" },
+    dismissible: true,
+    dismissAriaLabel: "Dismiss",
+  });
+
+  // Capsule action without X; automatically dismisses after 10 seconds.
+  snackbar("Draft saved", {
+    action: { label: "View draft", onClick: openDraft, variant: "tonal" },
+    dismissible: false,
+    duration: "long",
+  });
+  ```
+
+  Clicking the action invokes `onClick`, then dismisses that snackbar. If the
+  callback shows a new snackbar, the new one stays visible. With no X, prefer
+  a finite duration; `indefinite` requires an action, `snackbar.dismiss(id)` or
+  replacement to remove it. Consumers supply labels and callbacks; do not
+  build another toast wrapper or override `.fynns-snackbar*` CSS.
+
   **Loading placement (hard):**
 
   | Scene | Use | Do **not** |

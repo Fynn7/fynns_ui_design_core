@@ -12,10 +12,12 @@ export type SnackbarDuration = "short" | "long" | "indefinite";
 export type SnackbarAction = {
   label: string;
   onClick: () => void;
+  /** `ghost` text action (default), or `tonal` for a filled capsule. */
+  variant?: "ghost" | "tonal";
 };
 
 export type SnackbarOptions = {
-  /** Optional single text action (M3: at most one). */
+  /** Optional single action (M3: at most one). */
   action?: SnackbarAction;
   /**
    * Auto-dismiss timing. Defaults to `indefinite` when `action` is set,
@@ -228,7 +230,7 @@ export function SnackbarHost({ className }: SnackbarHostProps) {
             {item.action ? (
               <Button
                 type="button"
-                variant="ghost"
+                variant={item.action.variant ?? "ghost"}
                 size="sm"
                 className="fynns-snackbar__action"
                 onClick={onAction}

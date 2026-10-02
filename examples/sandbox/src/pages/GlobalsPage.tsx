@@ -3484,6 +3484,40 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             size="sm"
             variant="tonal"
             onClick={() =>
+              snackbar(t("globals.snackbarShort"), {
+                action: {
+                  label: t("globals.snackbarView"),
+                  onClick: () => snackbar(t("globals.snackbarViewed")),
+                  variant: "tonal",
+                },
+                dismissible: true,
+                dismissAriaLabel: t("globals.snackbarDismiss"),
+              })
+            }
+          >
+            {t("globals.snackbarActionDismissBtn")}
+          </Button>
+          <Button
+            size="sm"
+            variant="tonal"
+            onClick={() =>
+              snackbar(t("globals.snackbarShort"), {
+                action: {
+                  label: t("globals.snackbarView"),
+                  onClick: () => snackbar(t("globals.snackbarViewed")),
+                  variant: "tonal",
+                },
+                duration: "long",
+                dismissible: false,
+              })
+            }
+          >
+            {t("globals.snackbarActionOnlyBtn")}
+          </Button>
+          <Button
+            size="sm"
+            variant="tonal"
+            onClick={() =>
               snackbar(t("globals.snackbarIndefiniteMsg"), {
                 duration: "indefinite",
                 dismissible: true,
