@@ -25,7 +25,8 @@ describe("sweep skeleton loading convention", () => {
         render(true);
         const content = host.querySelector("button");
         expect(host.querySelector(".fynns-loading-skeleton")).not.toBeNull();
-        expect(host.querySelector(".fynns-loading-skeleton--block")).not.toBeNull();
+        expect(host.querySelector(".fynns-loading-skeleton--text")).not.toBeNull();
+        expect(host.querySelectorAll(".fynns-loading-skeleton-bar")).toHaveLength(6);
         expect(host.querySelector(".fynns-busy-message")).toBeNull();
         expect(host.querySelector(".fynns-circular-progress")).toBeNull();
         expect(host.querySelector("[role=progressbar]")).toBeNull();
@@ -62,7 +63,7 @@ describe("sweep skeleton loading convention", () => {
       expect(host.querySelector(".fynns-loading-skeleton")).toBeNull();
       act(() => root.render(createElement(BusyRegion, {
         busy: true, label: "Loading preview", message: "Loading preview…",
-        skeleton: createElement(LoadingSkeleton, { fill: true, "aria-hidden": true }),
+        skeleton: createElement(LoadingSkeleton, { variant: "block", fill: true, "aria-hidden": true }),
       })));
       expect(host.querySelector(".fynns-loading-skeleton--block")).not.toBeNull();
       expect(host.querySelector(".fynns-busy-message")).toBeNull();
@@ -71,15 +72,18 @@ describe("sweep skeleton loading convention", () => {
     } finally { dispose(); }
   });
 
-  it("standalone placeholders default to one block, with text rows only when explicitly requested", () => {
+  it("standalone placeholders default to the large six-row text skeleton; media explicitly uses block", () => {
     const { host, root, dispose } = mount();
     try {
       act(() => root.render(createElement(LoadingSkeleton)));
-      expect(host.querySelector(".fynns-loading-skeleton--block")).not.toBeNull();
-      expect(host.querySelector(".fynns-loading-skeleton--md")).toBeNull();
-      expect(host.querySelectorAll(".fynns-loading-skeleton-bar")).toHaveLength(1);
+      expect(host.querySelector(".fynns-loading-skeleton--text")).not.toBeNull();
+      expect(host.querySelector(".fynns-loading-skeleton--md")).not.toBeNull();
+      expect(host.querySelectorAll(".fynns-loading-skeleton-bar")).toHaveLength(6);
       act(() => root.render(createElement(LoadingSkeleton, { variant: "text", lines: 2 })));
       expect(host.querySelectorAll(".fynns-loading-skeleton-bar")).toHaveLength(2);
+      act(() => root.render(createElement(LoadingSkeleton, { variant: "block" })));
+      expect(host.querySelector(".fynns-loading-skeleton--block")).not.toBeNull();
+      expect(host.querySelectorAll(".fynns-loading-skeleton-bar")).toHaveLength(1);
     } finally { dispose(); }
   });
 
@@ -115,7 +119,8 @@ describe("sweep skeleton loading convention", () => {
       act(() => root.render(createElement(BusyRegion, {
         busy: true, label: "Loading preview", skeleton: false,
       })));
-      expect(host.querySelector(".fynns-loading-skeleton--block")).not.toBeNull();
+      expect(host.querySelector(".fynns-loading-skeleton--text")).not.toBeNull();
+      expect(host.querySelectorAll(".fynns-loading-skeleton-bar")).toHaveLength(6);
       expect(host.querySelector(".fynns-busy-message")).toBeNull();
     } finally { dispose(); }
   });
@@ -129,7 +134,8 @@ describe("sweep skeleton loading convention", () => {
     try {
       act(() => root.render(createElement(BusyScrim, { open: true, label: "Loading workspace" })));
       const scrim = document.querySelector(".fynns-busy-scrim")!;
-      expect(scrim.querySelector(".fynns-loading-skeleton")).not.toBeNull();
+      expect(scrim.querySelector(".fynns-loading-skeleton--text")).not.toBeNull();
+      expect(scrim.querySelectorAll(".fynns-loading-skeleton-bar")).toHaveLength(6);
       expect(document.activeElement).toBe(scrim);
       expect(document.body.style.overflow).toBe("hidden");
       act(() => root.render(createElement(BusyScrim, { open: false, label: "Loading workspace" })));

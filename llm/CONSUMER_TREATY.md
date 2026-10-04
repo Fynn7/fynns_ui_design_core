@@ -143,7 +143,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Dialog exit clears title/body (flash) | DESIGN_SYSTEM Hard rules / overlays | `#sandbox-list-recipe-catalog` |
 | twin Button loading rings in one control-cluster | DESIGN_SYSTEM form-rhythm | `#rhythm` |
 | Card batch CTA + ListItem row twin loading rings | DESIGN_SYSTEM Hard rules / Loading placement | `#sandbox-list-repo-path-actions` |
-| Skeleton as compact busy mark / centered random text stack / visible loading copy | [Content-position skeleton convention](../docs/design-system/loading.md) | `#sandbox-loading-skeleton` |
+| Skeleton as compact busy mark / small centered text emblem / visible loading copy; block used as default text placeholder | [Content-position skeleton convention](../docs/design-system/loading.md) | `#sandbox-loading-skeleton` |
 | New consumer uses archived ring / consumer shimmer CSS | [Loading skeleton convention](../docs/design-system/loading.md) | `#sandbox-loading-skeleton` / `#busy-region` |
 | BusyRegion + chrome loading stack | DESIGN_SYSTEM hard-rules | `#busy-region` |
 | runBusyTask hang forever (no timeout/signal) | DESIGN_SYSTEM paint-before-work | `#sandbox-busy-task-timeout` / `#busy-paint` |

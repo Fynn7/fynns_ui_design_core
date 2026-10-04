@@ -841,6 +841,13 @@ a.fynns-breadcrumb-link:visited {
   animation: fynns-chat-thinking-shimmer var(--fynns-duration-thinking-shimmer) linear infinite;
 }
 
+.fynns-loading-skeleton--text > .fynns-loading-skeleton-bar:nth-child(3n + 1) {
+  width: 58%;
+}
+.fynns-loading-skeleton--text > .fynns-loading-skeleton-bar:nth-child(3n + 2) {
+  width: 82%;
+}
+
 .fynns-loading-skeleton--block {
   height: var(--fynns-layout-skeleton-block-height);
 }

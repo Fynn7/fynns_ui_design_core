@@ -5,6 +5,33 @@ test.beforeEach(async ({ page }) => {
   await resetSandboxSession(page);
 });
 
+test("sandbox retains the large default text skeleton with full-width rows and a soft sweep", async ({ page }) => {
+  await openGlobalsDemo(page, "busy-region", "BusyRegion");
+  const gallery = globalsDemo(page, "busy-region").locator("#sandbox-loading-skeleton");
+  const skeleton = gallery.locator("#sandbox-loading-skeleton-text");
+  await expect(skeleton).toHaveClass(/fynns-loading-skeleton--text/);
+  await expect(skeleton.locator(".fynns-loading-skeleton-bar")).toHaveCount(6);
+  await expect(gallery.locator(".fynns-loading-skeleton--compact, .fynns-busy-message")).toHaveCount(0);
+  const widths = await skeleton.evaluate(el => {
+    const width = el.getBoundingClientRect().width;
+    return Array.from(el.querySelectorAll(".fynns-loading-skeleton-bar"))
+      .map(bar => bar.getBoundingClientRect().width / width);
+  });
+  for (let i = 0; i < widths.length; i++) {
+    expect(widths[i]).toBeCloseTo([0.58, 0.82, 1][i % 3], 2);
+  }
+  const skeletonWidth = (await skeleton.boundingBox())!.width;
+  const galleryWidth = (await gallery.boundingBox())!.width;
+  expect(Math.abs(skeletonWidth - galleryWidth)).toBeLessThanOrEqual(1);
+  const bar = skeleton.locator(".fynns-loading-skeleton-bar").first();
+  await expect(bar).toBeVisible();
+  await expect.poll(() => bar.evaluate(el => getComputedStyle(el).animationName))
+    .toBe("fynns-chat-thinking-shimmer");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect.poll(() => bar.evaluate(el => getComputedStyle(el).animationName)).toBe("none");
+  await expect(bar).toBeVisible();
+});
+
 test("content skeleton replaces the upcoming preview at the same bounds without loading copy", async ({ page }) => {
   await openGlobalsDemo(page, "busy-region", "BusyRegion");
   const demo = globalsDemo(page, "busy-region");

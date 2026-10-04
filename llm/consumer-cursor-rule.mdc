@@ -59,9 +59,9 @@ ASCII `-`。
 ## 加载与忙碌（硬）
 
 骨架必须在即将出现的 UI / 文字原位占位，加载画面无可见 Loading 文案；
-label 仅供无障碍。BusyRegion / BusyScrim 默认大块，skeleton 槽匹配实际内容。
-LoadingSkeleton 默认 block；text 只在真实文字位置显式使用。compact 已删除，
-禁止居中随机文字条和把骨架当 busy 图标。按钮优先 disabled + aria-busy，
+label 仅供无障碍。BusyRegion / BusyScrim 默认最大的宽幅六行文字骨架，skeleton 槽匹配实际内容。
+LoadingSkeleton 默认 text；显式 block 仅用于图片 / iframe / 画布等整块内容。保留大的文字骨架；compact 已删除，
+禁止小型居中文字徽记和把骨架当 busy 图标。按钮优先 disabled + aria-busy，
 正文骨架负责等待。真实 value 用线性进度。显式 message / circular 与按钮 loading
 恢复旧圈，仅作永久 archive/deprecated，强烈不推荐消费仓使用。禁止私造动画。
 详见 `docs/design-system/loading.md`，活例 `#sandbox-loading-skeleton`。

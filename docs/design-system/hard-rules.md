@@ -154,8 +154,9 @@
   sibling `IconButton` outside the strip. Live `#banner`.
 - [Content-position skeletons](loading.md) reserve exactly the UI / text that
   will appear there. Loading screens have no visible loading copy; labels are
-  accessible-only. BusyRegion / BusyScrim use large content placeholders. No
-  compact busy skeletons or arbitrary centered text stacks. Ring styles,
+  accessible-only. BusyRegion / BusyScrim default to the large, full-width
+  six-row text skeleton. Explicit block is for images / iframes / canvas.
+  Keep the large text pattern; no compact busy skeletons or small centered text emblems. Ring styles,
   CircularProgress, explicit busy `message` / `circular`, and Button `loading`
   are permanently archived / deprecated and strongly discouraged in consumers.
   Prefer disabled + aria-busy actions while the content skeleton owns the wait.

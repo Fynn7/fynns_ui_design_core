@@ -7009,8 +7009,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <GlobalsDemo id="busy-region">
         <div id="sandbox-loading-skeleton" className="fynns-unit-stack">
           <SandboxHelp text={t("globals.loadingSkeletonHelp")} />
+          <LoadingSkeleton id="sandbox-loading-skeleton-text" label={t("globals.busyRegionLabel")} />
           <BusyRegion busy={busyRegion} label={t("globals.busyRegionLabel")}
-            skeleton={<LoadingSkeleton fill aria-hidden />}>
+            skeleton={<LoadingSkeleton variant="block" fill aria-hidden />}>
             <Surface data-loading-target="preview" padded
               style={{ height: "var(--fynns-layout-skeleton-block-height)" }}>
               {t("globals.busyRegionBody")}

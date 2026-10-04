@@ -21,8 +21,10 @@ This app consumes the fynns design system from the sibling checkout
 2. Default chrome `DestinationAppShell` → main `PageScroll` → `Card` / `List`
    / `EmptyState`. Modal = `Dialog`; feedback = `snackbar` + `<SnackbarHost />`;
    loading = large content-position `BusyRegion` / `BusyScrim` skeletons,
-   `LoadingSkeleton` slots matching the upcoming UI/text. Labels are accessible-only;
-   no visible Loading copy, compact busy marks or arbitrary text-bar stacks.
+   `LoadingSkeleton` slots matching the upcoming UI/text. Default = the large,
+   full-width six-row text skeleton; explicit block = image / iframe / canvas.
+   Labels are accessible-only; no visible Loading copy, compact busy marks or
+   small centered text emblems. Keep the large text skeleton.
    Actions prefer disabled + aria-busy with the content skeleton owning the wait.
    Rings / Button loading / explicit busy message+circular are permanently
    archived, deprecated and strongly discouraged. Real value = linear progress.

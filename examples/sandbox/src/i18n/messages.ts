@@ -630,7 +630,7 @@ const en = {
   "globals.archivedLoadingTitle": "Archived loading ring (deprecated)",
   "globals.archivedLoadingHelp": "Permanently archived compatibility example. Explicit visible message or circular indicator restores a ring with text. Strongly discouraged in consumers; new loading screens use content-position skeletons without visible loading copy.",
   "globals.loadingSkeletonHelp":
-    "A skeleton reserves exactly the upcoming component footprint. Use Show busy / Clear busy below: the large preview block replaces the same Surface at the same bounds, with no loading copy. Text placeholders belong only where real text will appear. There is no compact busy skeleton. Label stays accessible-only.",
+    "Default: the large, full-width six-row text skeleton below, with the ChatThinking sweep, placed where text will appear. Keep this large text pattern; compact and small centered busy skeletons are removed. Explicit block is for images / iframes / canvas: Show busy / Clear busy replaces the preview at the same bounds. No visible loading copy; label stays accessible-only.",
   "globals.busyRegionLabel": "Loading section",
   "globals.busyRegionTitle": "Section",
   "globals.busyRegionMessage": "Refreshing this block…",
@@ -639,7 +639,7 @@ const en = {
   "globals.busyRegionStart": "Show busy",
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
-    "Preferred: BusyRegion places a large content skeleton in the upcoming UI bounds, with an accessible-only label. Use skeleton to match actual text / preview / list geometry. Loaded children stay mounted but hidden and inert while replaced. Real value uses one linear bar. Explicit message or circular is permanently archived and strongly discouraged; no compact skeletons or arbitrary centered text rows.",
+    "Preferred: BusyRegion defaults to the large, full-width six-row text skeleton at the upcoming text position. Explicit block is for images / iframes / canvas. Use skeleton to match known content geometry. Label is accessible-only. Children stay mounted but hidden and inert while replaced. Real value uses one linear bar. Explicit message or circular is permanently archived and strongly discouraged; no compact or small centered busy skeletons.",
   "globals.busyRegionNarrowHelp":
     "Narrow host (NavigationDrawer / EndAside width): linear BusyStack must shrink to the host — never a fixed 20rem / 100vw bar that spills past the drawer seam. Live sample below.",
   "globals.busyRegionNarrowLabel": "Scanning samples",
@@ -683,7 +683,7 @@ const en = {
   "globals.busyRegionDialogLabel": "Loading catalog",
   "globals.busyRegionDialogMessage": "Fetching the list…",
   "globals.busyRegionDialogHelp":
-    "Dialog / section body load: put BusyRegion in the body (add fill when the host height is resolved — see fill sample above). Never park a bare default-md CircularProgress in the Dialog or unit-stack. Button / IconButton use the stock loading prop for compact skeletons.",
+    "Dialog / section body load: put BusyRegion in the body (add fill when the host height is resolved). Default is the large text skeleton; use explicit block for images / iframes. Keep actions disabled + aria-busy while content loads. CircularProgress and Button / IconButton loading are permanently archived; compact skeletons are removed.",
   "globals.busyRegionColdHelp":
     "Card / section body cold-start: render BusyRegion only — do not also paint Sessions Select / Pagination as siblings under the empty overlay (mask covers the footer; loading placeholder sits on the Select). After data loads, keep pager chrome outside BusyRegion and wrap only the List / table on refresh.",
   "globals.busyRegionColdTitle": "Sessions catalog",
@@ -743,7 +743,7 @@ const en = {
   "globals.busyScrimLabel": "Loading",
   "globals.busyScrimMessage": "Working — please wait…",
   "globals.busyScrimHelp":
-    "Preferred full-app loading reserves the upcoming UI with large content skeletons and an accessible-only label. No visible loading copy. Explicit message / circular restores the permanently archived ring presentation. Real value uses one linear bar. This sample closes after 2s.",
+    "Preferred full-app loading defaults to the large, full-width six-row text skeleton at the upcoming text position. Use explicit block only for images / iframes / canvas. Label is accessible-only; no visible loading copy. Explicit message / circular restores the permanently archived ring. Real value uses one linear bar. This sample closes after 2s.",
   "globals.busyPaintBad": "Anti-pattern: busy then stall",
   "globals.busyPaintGood": "runBusyTask then stall",
   "globals.busyPaintLabel": "Heavy work",
@@ -3135,7 +3135,7 @@ const zh: Record<MessageKey, string> = {
   "globals.archivedLoadingTitle": "归档加载圈（deprecated）",
   "globals.archivedLoadingHelp": "永久归档的兼容样例。显式 message 或 circular indicator 恢复加载圈与文字。强烈不推荐消费仓使用；新的加载画面用内容原位骨架，不显示 Loading 文案。",
   "globals.loadingSkeletonHelp":
-    "骨架恰好预留即将出现的组件位置。点击下方显示 / 清除 busy：大的预览骨架在同一位置、同一尺寸替换 Surface，不显示加载文案。文字骨架只用于真实文字将出现的位置。不再有紧凑 busy 骨架。label 仅供无障碍播报。",
+    "默认使用下方最大的宽幅六行文字骨架，带 ChatThinking 扫光，放在文字即将出现的位置。保留这一大的文字样式，仅移除 compact 与小型居中 busy 骨架。显式 block 用于图片 / iframe / 画布：点击显示 / 清除 busy 可在同一位置、同一尺寸替换预览。无可见加载文案，label 仅供无障碍。",
   "globals.busyRegionLabel": "区块加载中",
   "globals.busyRegionTitle": "区块",
   "globals.busyRegionMessage": "正在刷新此区域…",
@@ -3144,7 +3144,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionStart": "显示 busy",
   "globals.busyRegionStop": "清除 busy",
   "globals.busyRegionHelp":
-    "推荐方式：BusyRegion 在即将出现的 UI 位置显示大的骨架，label 仅供无障碍。通过 skeleton 对齐真实文字 / 预览 / 列表结构。已有 children 保持挂载，加载时隐藏并 inert。真实 value 显示一条线性进度条。显式 message 或 circular 永久归档，强烈不推荐；禁止紧凑骨架和居中的随机文字条。",
+    "推荐方式：BusyRegion 默认在文字即将出现的位置显示最大的宽幅六行文字骨架。图片 / iframe / 画布显式使用 block。通过 skeleton 对齐已知内容结构，label 仅供无障碍。已有 children 保持挂载，加载时隐藏并 inert。真实 value 显示一条线性进度条。显式 message 或 circular 永久归档，强烈不推荐；禁止 compact 和小型居中 busy 骨架。",
   "globals.busyRegionNarrowHelp":
     "窄宿主（NavigationDrawer / EndAside 宽）：linear BusyStack 必须随宿主收缩 — 禁止固定 20rem / 100vw 进度条溢出抽屉缝。下方为活样例。",
   "globals.busyRegionNarrowLabel": "扫描样例",
@@ -3188,7 +3188,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionDialogLabel": "加载目录",
   "globals.busyRegionDialogMessage": "正在拉取列表…",
   "globals.busyRegionDialogHelp":
-    "Dialog / section 正文加载：正文里放 BusyRegion（宿主已定高再加 fill — 见上方 fill 样例）。禁止把裸默认 md CircularProgress 塞进 Dialog 或 unit-stack。Button / IconButton 只用 stock loading 属性显示紧凑骨架。",
+    "Dialog / section 正文加载：正文里放 BusyRegion（宿主已定高再加 fill）。默认用最大的文字骨架，图片 / iframe 显式用 block。等待正文时动作保持 disabled + aria-busy。CircularProgress 与 Button / IconButton loading 永久归档；compact 骨架已删除。",
   "globals.busyRegionColdHelp":
     "Card / section 正文冷启动：只渲 BusyRegion — 禁止再并行渲 Sessions Select / Pagination 等脚栏兄弟（mask 遮罩会盖住脚栏，圈叠在 Select 上）。有数据后：脚栏留在 BusyRegion 外，翻页 / 刷新只包 List / 表。",
   "globals.busyRegionColdTitle": "会话目录",
@@ -3248,7 +3248,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyScrimLabel": "加载中",
   "globals.busyScrimMessage": "处理中，请稍候…",
   "globals.busyScrimHelp":
-    "推荐全屏加载：在将出现的 UI 位置铺大的内容骨架，label 仅供无障碍，不显示加载文案。显式 message / circular 恢复永久归档的加载圈。真实 value 显示一条线性进度条。本样例 2 秒后关闭。",
+    "推荐全屏加载：默认在文字将出现的位置显示最大的宽幅六行文字骨架；图片 / iframe / 画布显式使用 block。label 仅供无障碍，不显示加载文案。显式 message / circular 恢复永久归档的加载圈。真实 value 显示一条线性进度条。本样例 2 秒后关闭。",
   "globals.busyPaintBad": "反例：busy 后立刻卡主线程",
   "globals.busyPaintGood": "runBusyTask 后再卡主线程",
   "globals.busyPaintLabel": "繁重工作",
