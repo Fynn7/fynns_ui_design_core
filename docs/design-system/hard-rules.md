@@ -780,6 +780,19 @@
   `PageScroll` as chat main scroll, Chip starters, or Trash+Plus twin. Live
   `#layouts-demo-chat-product`. Failure: CONSUMER_TREATY chat product /
   session host wrong tree.
+- **DON'T** reset `.fynns-fill-column-main` top or inline padding: core owns
+  `--fynns-layout-dialog-inset` around the main well so inserted notices do
+  not hug the top or side edges. Chat keeps its own conversation insets and
+  bottom docking. Live `#layouts-demo-fill-column`.
+- **DON'T** insert a transient request error as an InlineAlert above Chat.
+  Use `snackbar(message, { severity: "error", duration: "long",
+  dismissible: true })` with one root SnackbarHost. Default snackbar keeps
+  the theme surface without an icon; status variants use the **original
+  InlineAlert's transparent 12% semantic backgrounds**, on-surface text and
+  matching icons. Do not change InlineAlert to white pastel or add opaque
+  backing layers to status snackbars. `icon: true` enables an icon on the
+  default; `false` / `null` hides one without changing the surface.
+  Persistent notices/recovery remain InlineAlert. Live `#snackbar`.
 - **DON'T** let the first turn hug the thread ceiling: top inset is
   `--fynns-chat-thread-pad-block-start`, aliased to **`chat-thread-gap`**
   (**2rem**), so the opening bubble breathes exactly like the turns below it

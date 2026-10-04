@@ -35,6 +35,9 @@ export type FillColumnProps = HTMLAttributes<HTMLDivElement> & {
    * or `<PageScroll>` for Card / List catalogs (never a private
    * max-width `.hub-scroll` on this slot).
    * Do not stack Preview / EmptyState / Composer as siblings.
+   * Core reserves top and inline well padding with `--fynns-layout-dialog-inset`.
+   * Do not reset it when inserting persistent notices. Transient request errors
+   * use `snackbar(message, { severity: "error" })` instead of an inline ceiling strip.
    */
   children: ReactNode;
 };

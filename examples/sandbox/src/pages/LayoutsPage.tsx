@@ -1,4 +1,5 @@
 import {
+  AlertCircleIcon,
   ArchiveIcon,
   ArrowLeftIcon,
   BarChartIcon,
@@ -164,6 +165,7 @@ export function LayoutsPage() {
   const [navSearchQuery, setNavSearchQuery] = useState("");
   const [navSearchExpanded, setNavSearchExpanded] = useState(false);
   const [fillColumnDraft, setFillColumnDraft] = useState("");
+  const [fillColumnNotice, setFillColumnNotice] = useState(true);
   const [fillColumnPreviewDraft, setFillColumnPreviewDraft] = useState("");
   const [shellFooterShowAccountLabel, setShellFooterShowAccountLabel] =
     useState(true);
@@ -424,8 +426,20 @@ export function LayoutsPage() {
           </LayoutsDemo>
 
           <LayoutsDemo id="fill-column">
+            <ControlRow label={t("layouts.fillColumnNoticeToggle")}>
+              <Switch label={null} ariaLabel={t("layouts.fillColumnNoticeToggle")}
+                checked={fillColumnNotice} onCheckedChange={setFillColumnNotice} />
+              <Button size="sm" onClick={() => snackbar(t("globals.snackbarRequestError"), {
+                severity: "error", duration: "long", dismissible: true,
+                dismissAriaLabel: t("globals.snackbarDismiss"),
+              })}>
+                <AlertCircleIcon aria-hidden />
+                {t("layouts.fillColumnRequestError")}
+              </Button>
+            </ControlRow>
             <div className="sandbox-fill-column-stage">
               <FillColumn>
+                {fillColumnNotice ? <InlineAlert severity="warning" message={t("layouts.fillColumnNotice")} /> : null}
                 <Chat label={t("layouts.fillColumnLabel")}>
                   <ChatThread
                     empty={

@@ -4,10 +4,25 @@ import { createPortal } from "react-dom";
 import { DURATION_TOKENS } from "../theme/motionTokens";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
-import { CloseIcon } from "./icons";
+import {
+  AlertCircleIcon,
+  AlertTriangleIcon,
+  CheckCircleIcon,
+  CloseIcon,
+  InfoIcon,
+} from "./icons";
+import type { InlineAlertSeverity } from "./InlineAlert";
 import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 export type SnackbarDuration = "short" | "long" | "indefinite";
+export type SnackbarSeverity = "default" | InlineAlertSeverity;
+
+function defaultIcon(severity: SnackbarSeverity): ReactNode {
+  if (severity === "error") return <AlertCircleIcon size={16} />;
+  if (severity === "warning") return <AlertTriangleIcon size={16} />;
+  if (severity === "success") return <CheckCircleIcon size={16} />;
+  return <InfoIcon size={16} />;
+}
 
 export type SnackbarAction = {
   label: string;
@@ -17,6 +32,10 @@ export type SnackbarAction = {
 };
 
 export type SnackbarOptions = {
+  /** `default` (omitted) keeps the theme surface; status variants match InlineAlert's transparent fill. */
+  severity?: SnackbarSeverity;
+  /** Default variant has no icon; status variants have matching icons. `true` enables one, `false` / `null` hides it. */
+  icon?: ReactNode;
   /** Optional single action (M3: at most one). */
   action?: SnackbarAction;
   /**
@@ -36,6 +55,8 @@ export type SnackbarOptions = {
 export type SnackbarItem = {
   id: string;
   message: ReactNode;
+  severity: SnackbarSeverity;
+  icon: ReactNode;
   action?: SnackbarAction;
   duration: SnackbarDuration;
   dismissible: boolean;
@@ -106,9 +127,14 @@ class SnackbarStore {
       opts.duration ?? (opts.action ? "indefinite" : "short");
     const dismissible = opts.dismissible ?? duration === "indefinite";
     const id = `snackbar-${++this.seq}`;
+    const severity = opts.severity ?? "default";
     const next: SnackbarItem = {
       id,
       message,
+      severity,
+      icon: opts.icon === undefined
+        ? (severity === "default" ? null : defaultIcon(severity))
+        : opts.icon === true ? defaultIcon(severity) : opts.icon,
       action: opts.action,
       duration,
       dismissible,
@@ -211,11 +237,18 @@ export function SnackbarHost({ className }: SnackbarHostProps) {
       className={["fynns-snackbar-host", className ?? ""].filter(Boolean).join(" ")}
     >
       <div
-        className="fynns-snackbar"
-        role="status"
-        aria-live="polite"
+        key={item.id}
+        className={`fynns-snackbar fynns-snackbar--${item.severity}`}
+        role={item.severity === "error" ? "alert" : "status"}
+        aria-live={item.severity === "error" ? "assertive" : "polite"}
+        aria-atomic="true"
         data-state={open ? "open" : "closed"}
       >
+        {item.icon != null && item.icon !== false ? (
+          <span className="fynns-snackbar__icon" aria-hidden>
+            {item.icon}
+          </span>
+        ) : null}
         <div className="fynns-snackbar__message">
           {messageTip != null ? (
             <OverflowTip content={messageTip} overflowAxis="y">

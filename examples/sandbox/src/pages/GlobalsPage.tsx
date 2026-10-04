@@ -3454,6 +3454,38 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="snackbar">
         <div className="sandbox-globals-row">
+          {(["default", "info", "success", "warning", "error"] as const).map((severity) => (
+            <Button
+              key={severity}
+              size="sm"
+              variant="tonal"
+              onClick={() => snackbar(t("globals.snackbarStatusMessage"), {
+                severity,
+                duration: "long",
+                dismissible: true,
+                dismissAriaLabel: t("globals.snackbarDismiss"),
+              })}
+            >
+              {t(`globals.snackbarVariant_${severity}`)}
+            </Button>
+          ))}
+          {(["info", "success", "warning", "error"] as const).map((severity) => (
+            <Button
+              key={`${severity}-text`}
+              size="sm"
+              variant="ghost"
+              onClick={() => snackbar(t("globals.snackbarStatusMessage"), {
+                severity,
+                icon: false,
+                duration: "long",
+              })}
+            >
+              {t(`globals.snackbarText_${severity}`)}
+            </Button>
+          ))}
+          <Button size="sm" variant="ghost" onClick={() => snackbar(t("globals.snackbarShort"), { icon: true })}>
+            {t("globals.snackbarDefaultIcon")}
+          </Button>
           <Button
             size="sm"
             variant="tonal"
@@ -3527,6 +3559,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           >
             {t("globals.snackbarIndefiniteBtn")}
           </Button>
+        </div>
+        <div className="fynns-unit-stack" id="sandbox-snackbar-inline-reference">
+          {(["info", "success", "warning", "error"] as const).map((severity) => (
+            <InlineAlert key={severity} severity={severity} message={t("globals.snackbarStatusMessage")} />
+          ))}
         </div>
         <SandboxHelp text={t("globals.snackbarHelp")} />
         </GlobalsDemo>

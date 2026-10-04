@@ -21,6 +21,14 @@ This app consumes the fynns design system from the sibling checkout
 2. Default chrome `DestinationAppShell` → main `PageScroll` → `Card` / `List`
    / `EmptyState`. Modal = `Dialog`; feedback = `snackbar` + `<SnackbarHost />`;
    loading = `BusyRegion` / `BusyScrim`.
+   Chat = FillColumn → Chat; core owns main top + inline `dialog-inset`.
+   Never reset `.fynns-fill-column-main`. Transient request errors use
+   `snackbar(message, { severity: "error", duration: "long", dismissible: true })`.
+   Default snackbar = theme surface, no icon; four severity variants match
+   the original InlineAlert's 12% semantic color + transparent remainder,
+   on-surface text and matching icons. Never change InlineAlert or add an
+   opaque pastel/backing layer. `icon: true` enables an icon on the default;
+   `false` / `null` hides one. Persistent notices/recovery remain InlineAlert.
 3. Missing capability → say so and stop; it must land in `fynns_ui_design_core`
    first (never edit `node_modules/@fynn7/ui-design-core`).
 4. Keep `npm run build` green; run `node ../fynns_ui_design_core/scripts/install-as-npm.mjs --target . --check` when imports fail.

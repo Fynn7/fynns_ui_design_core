@@ -155,6 +155,9 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | pane cold-start hang without error surface | DESIGN_SYSTEM hard-rules | `#sandbox-pane-load-error` |
 | snackbar used as AppError / ErrorCode bus | DESIGN_SYSTEM feedback (boundary) | `#snackbar` |
 | private toast action capsule / close X wrapper | DESIGN_SYSTEM [Snackbar action variants](../docs/design-system/catalog.md#snackbar-action-variants): `action.variant="tonal"`, `dismissible`, `duration` | `#snackbar` |
+| FillColumn main status flush to top / side edges | DESIGN_SYSTEM Hard rules / FillColumn: core main top + inline `dialog-inset`, never reset padding | `#layouts-demo-fill-column` |
+| transient chat request error as inline ceiling strip | DESIGN_SYSTEM Hard rules / feedback: `snackbar(message, { severity: "error", duration: "long", dismissible: true })` + root SnackbarHost | `#layouts-demo-fill-column` / `#snackbar` |
+| severity snackbar uses theme fill or opaque pastel | DESIGN_SYSTEM [Snackbar action variants](../docs/design-system/catalog.md#snackbar-action-variants): default theme/no icon; four status variants match original InlineAlert transparent fills; never modify InlineAlert | `#snackbar` |
 | text-only consumer action Button / inconsistent icon-label gap | DESIGN_SYSTEM Hard rules / Icons / Content density | `#globals-demo-button-icon-label-matrix` |
 | tight labeled Button gaps in end-align footers | DESIGN_SYSTEM form-rhythm | `#timeline` |
 | private labeled Button cluster gap | DESIGN_SYSTEM form-rhythm | `#rhythm` |

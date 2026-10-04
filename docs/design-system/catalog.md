@@ -43,6 +43,8 @@ classes.
   | Parameter | Purpose / default |
   | --- | --- |
   | `message` | Feedback text (first argument) |
+  | `severity` | `"default"` / omitted = original theme surface; `"info"`, `"success"`, `"warning"`, `"error"` = the original InlineAlert's 12% semantic color + transparent remainder |
+  | `icon` | Default variant has no icon; status variants have matching icons. `true` enables the default info icon, `false` / `null` hides icons, a ReactNode replaces one |
   | `action: { label, onClick, variant? }` | One labeled action; `variant: "tonal"` gives a filled capsule; omitted / `"ghost"` keeps the text action |
   | `dismissible` | Show / hide the trailing X; defaults to `true` for indefinite duration |
   | `dismissAriaLabel` | Localized accessible close label; defaults to `"Dismiss"` |
@@ -52,6 +54,13 @@ classes.
   import { snackbar, SnackbarHost } from "@fynns/ui";
 
   // Mount <SnackbarHost /> once next to the app shell.
+  snackbar("Draft saved"); // Original theme surface, no icon.
+  snackbar("Draft saved", { icon: true }); // Optional info icon, same surface.
+  snackbar("Request failed. Please try again.", {
+    severity: "error", duration: "long", dismissible: true,
+  });
+  snackbar("Informational notice", { severity: "info", icon: false });
+
   // Capsule action + close X; stays visible until acted on or dismissed.
   snackbar("Draft saved", {
     action: { label: "View draft", onClick: openDraft, variant: "tonal" },
@@ -72,6 +81,13 @@ classes.
   a finite duration; `indefinite` requires an action, `snackbar.dismiss(id)` or
   replacement to remove it. Consumers supply labels and callbacks; do not
   build another toast wrapper or override `.fynns-snackbar*` CSS.
+  Status backgrounds copy the original InlineAlert expression exactly; keep
+  on-surface body text and semantic icons. Do not add white pastel fills,
+  opaque backing layers, or mix status colors into the theme toast surface.
+  InlineAlert itself is unchanged. Error snackbar uses `role="alert"` /
+  assertive announcements; other variants use status / polite. Transient
+  request failures use this API; persistent failures with recovery controls
+  remain InlineAlert. Reduced motion fades without translation.
 
   **Loading placement (hard):**
 

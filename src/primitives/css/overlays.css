@@ -1449,6 +1449,56 @@
   transform: translateY(0);
 }
 
+/* Match the original InlineAlert exactly: semantic color at 12%, transparent
+ * remainder, on-surface body and a semantic icon. No opaque backing layer. */
+.fynns-snackbar--info {
+  background: color-mix(in srgb, var(--fynns-color-info) 12%, transparent);
+}
+
+.fynns-snackbar--success {
+  background: color-mix(in srgb, var(--fynns-color-success) 12%, transparent);
+}
+
+.fynns-snackbar--warning {
+  background: color-mix(in srgb, var(--fynns-color-warning) 12%, transparent);
+}
+
+.fynns-snackbar--error {
+  background: color-mix(in srgb, var(--fynns-color-danger) 12%, transparent);
+}
+
+.fynns-snackbar:not(.fynns-snackbar--default) {
+  border-color: transparent;
+}
+
+.fynns-snackbar__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: var(--fynns-banner-icon-size);
+  height: var(--fynns-banner-icon-size);
+  color: var(--fynns-color-info);
+  line-height: 0;
+}
+
+.fynns-snackbar__icon svg {
+  width: var(--fynns-banner-icon-size);
+  height: var(--fynns-banner-icon-size);
+}
+
+.fynns-snackbar--success .fynns-snackbar__icon {
+  color: var(--fynns-color-success);
+}
+
+.fynns-snackbar--warning .fynns-snackbar__icon {
+  color: var(--fynns-color-warning);
+}
+
+.fynns-snackbar--error .fynns-snackbar__icon {
+  color: var(--fynns-color-danger);
+}
+
 .fynns-snackbar__message {
   flex: 1 1 auto;
   min-width: 0;
