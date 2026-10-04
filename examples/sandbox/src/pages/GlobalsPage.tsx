@@ -3454,12 +3454,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="snackbar">
         <div className="sandbox-globals-row">
-          <Button size="sm" variant="tonal" onClick={() => snackbar(t("globals.snackbarShort"))}>
-            {t("globals.snackbarDefaultBtn")}
-          </Button>
-          <Button size="sm" variant="ghost" onClick={() => snackbar(t("globals.snackbarShort"), { icon: true })}>
-            {t("globals.snackbarDefaultIconBtn")}
-          </Button>
           <Button
             size="sm"
             variant="tonal"
@@ -3491,7 +3485,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               onClick={() => snackbar(t(`globals.snackbar${severity}Msg`), {
                 // The original info demo keeps the ordinary default surface.
                 severity: severity === "info" ? undefined : severity,
-                icon: true,
                 duration: "long",
                 dismissible: true,
                 dismissAriaLabel: t("globals.snackbarDismiss"),
@@ -3519,7 +3512,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             variant="tonal"
             onClick={() =>
               snackbar(t("globals.snackbarShort"), {
-                icon: true,
                 dismissAriaLabel: t("globals.snackbarDismiss"),
               })
             }

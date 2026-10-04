@@ -43,8 +43,8 @@ classes.
   | Parameter | Purpose / default |
   | --- | --- |
   | `message` | Feedback text (first argument) |
-  | `severity` | Exactly five backgrounds: omitted = dark teal; `"error"` = light red, `"warning"` = orange-yellow, `"info"` = light blue, `"success"` = light green. The four status backgrounds are opaque pastels shared with InlineAlert |
-  | `icon` | Omitted severity defaults to no icon; status variants default to matching icons. `true` opts the default into an info icon; `false` / `null` hides any icon; a custom ReactNode replaces it |
+  | `severity` | Omitted = normal surface + info icon; explicit `"info"` = blue, `"warning"` = yellow, `"error"` = red, `"success"` = green. All four share InlineAlert's soft background tokens over an opaque canvas base |
+  | `icon` | Matching severity icon by default; `false` / `null` for color + text only; custom ReactNode to replace it |
   | `action: { label, onClick, variant? }` | One labeled action; `variant: "tonal"` gives a filled capsule; omitted / `"ghost"` keeps the text action |
   | `dismissible` | Show / hide the trailing X; defaults to `true` for indefinite duration |
   | `dismissAriaLabel` | Localized accessible close label; defaults to `"Dismiss"` |
@@ -54,9 +54,8 @@ classes.
   import { snackbar, SnackbarHost } from "@fynns/ui";
 
   // Mount <SnackbarHost /> once next to the app shell.
-  snackbar("Draft ready"); // Dark teal, no icon.
-  snackbar("Draft ready", { icon: true }); // Dark teal, optional info icon.
-  snackbar("Draft ready", { severity: "info" }); // Light blue + info icon.
+  snackbar("Draft ready"); // Normal surface + info icon.
+  snackbar("Draft ready", { severity: "info" }); // Blue info surface.
   // Transient request failure: core slides up from bottom-center.
   snackbar("Request failed. Please try again.", {
     severity: "error", duration: "long", dismissible: true,
@@ -90,10 +89,6 @@ classes.
   without translation. Transient request/submit failures use this API, not
   an InlineAlert appended above Chat. Persistent pane failures with recovery
   controls and persistent conversation notices still use InlineAlert.
-  Status backgrounds must remain visibly light red/orange-yellow/blue/green,
-  with dark readable copy and controls. Never use gray or a transparent wash
-  mixed into the dark canvas. Core also colors error/warning/success by their
-  severity classes when a previously loaded host lacks `data-tone`.
 
   **Loading placement (hard):**
 

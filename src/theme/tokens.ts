@@ -80,17 +80,11 @@ export const COLOR_TOKENS = {
   danger: "#f87171",
   "danger-border": "rgba(248, 113, 113, 0.5)",
   info: "#60a5fa",
-  /** Opaque pastel status surfaces shared by InlineAlert and Snackbar. */
-  "feedback-info-surface": "color-mix(in srgb, var(--fynns-color-info) 24%, white)",
-  "feedback-warning-surface": "color-mix(in srgb, var(--fynns-color-warning) 40%, white)",
-  "feedback-error-surface": "color-mix(in srgb, var(--fynns-color-danger) 24%, white)",
-  "feedback-success-surface": "color-mix(in srgb, var(--fynns-color-success) 24%, white)",
-  /** Dark body copy and semantic glyphs stay legible on the pastel surfaces. */
-  "feedback-on-surface": "var(--fynns-color-on-accent)",
-  "feedback-info-ink": "#1e3a8a",
-  "feedback-warning-ink": "#854d0e",
-  "feedback-error-ink": "#991b1b",
-  "feedback-success-ink": "#166534",
+  /** Shared soft severity washes for InlineAlert and tonal Snackbar. */
+  "feedback-info-surface": "color-mix(in srgb, var(--fynns-color-info) 12%, transparent)",
+  "feedback-warning-surface": "color-mix(in srgb, var(--fynns-color-warning) 12%, transparent)",
+  "feedback-error-surface": "color-mix(in srgb, var(--fynns-color-danger) 12%, transparent)",
+  "feedback-success-surface": "color-mix(in srgb, var(--fynns-color-success) 12%, transparent)",
   /** Keyboard ring fill — keep faint (fields use quiet border-mix instead). */
   focus: "rgba(45, 212, 191, 0.22)",
   overlay: "rgba(0, 0, 0, 0.48)",

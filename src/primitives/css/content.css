@@ -1162,7 +1162,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /* ---------- InlineAlert (in-panel severity; not chrome Banner) ---------- */
-/* Opaque pastel fill. Dark semantic icon and body stay readable.
+/* Soft tonal fill. Icon carries severity; body is on-surface (readable).
    Pad rhythm shared with Banner strip tokens. Not M3 — maps to Banner / Snackbar. */
 .fynns-inline-alert {
   display: flex;
@@ -1208,38 +1208,34 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-inline-alert--info {
   background: var(--fynns-color-feedback-info-surface);
-  color: var(--fynns-color-feedback-on-surface);
 }
 
 .fynns-inline-alert--info .fynns-inline-alert__icon {
-  color: var(--fynns-color-feedback-info-ink);
+  color: var(--fynns-color-info);
 }
 
 .fynns-inline-alert--success {
   background: var(--fynns-color-feedback-success-surface);
-  color: var(--fynns-color-feedback-on-surface);
 }
 
 .fynns-inline-alert--success .fynns-inline-alert__icon {
-  color: var(--fynns-color-feedback-success-ink);
+  color: var(--fynns-color-success);
 }
 
 .fynns-inline-alert--warning {
   background: var(--fynns-color-feedback-warning-surface);
-  color: var(--fynns-color-feedback-on-surface);
 }
 
 .fynns-inline-alert--warning .fynns-inline-alert__icon {
-  color: var(--fynns-color-feedback-warning-ink);
+  color: var(--fynns-color-warning);
 }
 
 .fynns-inline-alert--error {
   background: var(--fynns-color-feedback-error-surface);
-  color: var(--fynns-color-feedback-on-surface);
 }
 
 .fynns-inline-alert--error .fynns-inline-alert__icon {
-  color: var(--fynns-color-feedback-error-ink);
+  color: var(--fynns-color-danger);
 }
 
 /* ---------- Banner (M3 full-width strip) ---------- */

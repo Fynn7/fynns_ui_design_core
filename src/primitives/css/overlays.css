@@ -1449,42 +1449,32 @@
   transform: translateY(0);
 }
 
-/* Exactly five backgrounds: neutral dark teal, or one opaque pastel severity.
- * Error/warning/success classes also support hosts loaded before data-tone. */
+/* Same wash as InlineAlert; the canvas base keeps floating feedback opaque. */
 .fynns-snackbar--info {
   --fynns-snackbar-severity-color: var(--fynns-color-info);
-  --fynns-snackbar-severity-ink: var(--fynns-color-feedback-info-ink);
   --fynns-snackbar-severity-surface: var(--fynns-color-feedback-info-surface);
 }
 
 .fynns-snackbar--warning {
   --fynns-snackbar-severity-color: var(--fynns-color-warning);
-  --fynns-snackbar-severity-ink: var(--fynns-color-feedback-warning-ink);
   --fynns-snackbar-severity-surface: var(--fynns-color-feedback-warning-surface);
 }
 
 .fynns-snackbar--error {
   --fynns-snackbar-severity-color: var(--fynns-color-danger);
-  --fynns-snackbar-severity-ink: var(--fynns-color-feedback-error-ink);
   --fynns-snackbar-severity-surface: var(--fynns-color-feedback-error-surface);
 }
 
 .fynns-snackbar--success {
   --fynns-snackbar-severity-color: var(--fynns-color-success);
-  --fynns-snackbar-severity-ink: var(--fynns-color-feedback-success-ink);
   --fynns-snackbar-severity-surface: var(--fynns-color-feedback-success-surface);
 }
 
-.fynns-snackbar[data-tone="severity"],
-.fynns-snackbar:is(.fynns-snackbar--error, .fynns-snackbar--warning, .fynns-snackbar--success) {
-  background: var(--fynns-snackbar-severity-surface);
-  color: var(--fynns-color-feedback-on-surface);
-  border-color: color-mix(in srgb, var(--fynns-snackbar-severity-ink) 24%, var(--fynns-snackbar-severity-surface));
-}
-
-.fynns-snackbar[data-tone="severity"] :is(.fynns-snackbar__icon, .fynns-snackbar__action.fynns-btn, .fynns-snackbar__dismiss.fynns-btn),
-.fynns-snackbar:is(.fynns-snackbar--error, .fynns-snackbar--warning, .fynns-snackbar--success) :is(.fynns-snackbar__icon, .fynns-snackbar__action.fynns-btn, .fynns-snackbar__dismiss.fynns-btn) {
-  color: var(--fynns-snackbar-severity-ink);
+.fynns-snackbar[data-tone="severity"] {
+  background:
+    linear-gradient(var(--fynns-snackbar-severity-surface), var(--fynns-snackbar-severity-surface)),
+    var(--fynns-color-surface);
+  border-color: color-mix(in srgb, var(--fynns-snackbar-severity-color) 24%, var(--fynns-color-border));
 }
 
 .fynns-snackbar__icon {
