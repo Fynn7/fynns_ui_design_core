@@ -1560,9 +1560,11 @@ export const LAYOUT_TOKENS = {
   "skeleton-line-md": "0.75rem",
   "skeleton-line-lg": "1rem",
   "skeleton-block-height": "8rem",
-  "skeleton-compact-sm": "1rem",
-  "skeleton-compact-md": "1.5rem",
-  "skeleton-compact-lg": "2.5rem",
+  /** Permanently archived loading ring geometry (legacy calls only). */
+  "loading-ring-sm": "1rem",
+  "loading-ring-md": "1.6rem",
+  "loading-ring-lg": "2.5rem",
+  "loading-ring-stroke": "2px",
   /**
    * Soft cap for `FillColumn` `header` on `DestinationAppShell` canvas when the
    * preview band hosts a Card / PageScroll — keeps Chat visible in `main`.

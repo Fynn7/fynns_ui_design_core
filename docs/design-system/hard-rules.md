@@ -152,29 +152,34 @@
   `supportingText` — the strip row is cross-axis **center** (icon | body |
   trailing). Dismiss only via `onDismiss` **inside** the rounded host — never a
   sibling `IconButton` outside the strip. Live `#banner`.
-- Unknown waits use [sweep skeletons](loading.md): BusyRegion / BusyScrim
-  default to skeletons; real `value` uses one linear bar. Button / IconButton
-  `loading` uses a compact skeleton. No consumer spinners or private shimmer CSS.
-- **DON'T** put two+ `loading` skeletons in one `.fynns-control-cluster`; leave
-  `IconButton` `loading` showing skeleton **and** glyph (core ≥ **0.5.80** =
-  skeleton-only for iconOnly); stack BusyRegion/BusyScrim with chrome `loading`
+- [Content-position skeletons](loading.md) reserve exactly the UI / text that
+  will appear there. Loading screens have no visible loading copy; labels are
+  accessible-only. BusyRegion / BusyScrim use large content placeholders. No
+  compact busy skeletons or arbitrary centered text stacks. Ring styles,
+  CircularProgress, explicit busy `message` / `circular`, and Button `loading`
+  are permanently archived / deprecated and strongly discouraged in consumers.
+  Prefer disabled + aria-busy actions while the content skeleton owns the wait.
+  Real `value` uses one linear bar. No private shimmer CSS.
+- **DON'T** put two+ archived `loading` rings in one `.fynns-control-cluster`; leave
+  `IconButton` `loading` showing ring **and** glyph (core ≥ **0.5.80** =
+  ring-only for iconOnly); stack BusyRegion/BusyScrim with chrome `loading`
   on the same wait host — **one** progress chrome per wait. Live `#rhythm`
   end-align / `#busy-region`.
 - **DON'T** twin the same in-flight wait as **Card / Collapsible `actions`
   primary `loading`** **and** every (or many) path-catalog row rebuild
   `IconButton` `loading` — **information redundancy (hard)** (≥ **0.5.265**).
-  One shared batch task → **one** skeleton on the batch CTA; list rows stay
-  `disabled` **without** `loading`. One per-row rebuild → skeleton **only** on that
-  row's IconButton; Card primary stays `disabled` without a second skeleton. Never
+  Archived callers only: one shared batch task → **one** ring on the batch CTA; list rows stay
+  `disabled` **without** `loading`. One per-row legacy rebuild → ring **only** on that
+  row's IconButton; Card primary stays `disabled` without a second ring. Never
   `loading={busy === "run"}` on both the head Button and every row Refresh.
   Live `#sandbox-list-repo-path-actions`. Failure: CONSUMER_TREATY Card batch
   CTA + ListItem row twin loading rings.
 - **DON'T** swap `IconButton` children for a nested `CircularProgress` while
-  busy — use the stock **`loading`** prop (compact skeleton; iconOnly = skeleton-only).
+  busy. New UI uses disabled + aria-busy with content-position skeletons;
+  only archived callers keep stock **`loading`** (ring-only for iconOnly).
   Nesting `CircularProgress` on `variant="primary"` / `danger` paints an
   accent ring on an accent fill (looks like a blank disk — core ≥ **0.5.217**
-  retints nested rings to `currentColor` as a safety net, but the API is still
-  `loading`). Live `#icon-button` / `#sandbox-iconbutton-primary-loading`.
+  retints nested rings to `currentColor` as an archived compatibility safety net). Live `#icon-button` / `#sandbox-iconbutton-primary-loading`.
   Failure: CONSUMER_TREATY IconButton busy swaps CircularProgress instead of
   loading.
 - **DON'T** put service status in ControlRow `__controls` (Chip/badge/meta) —

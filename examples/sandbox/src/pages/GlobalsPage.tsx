@@ -7009,14 +7009,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <GlobalsDemo id="busy-region">
         <div id="sandbox-loading-skeleton" className="fynns-unit-stack">
           <SandboxHelp text={t("globals.loadingSkeletonHelp")} />
-          <LoadingSkeleton label={t("globals.busyRegionLabel")} lines={6} />
-          <LoadingSkeleton label={t("globals.busyRegionLabel")} variant="block" />
-          <LoadingSkeleton label={t("globals.busyRegionLabel")} variant="compact" />
-          <BusyRegion busy label={t("globals.busyRegionLabel")}
-            skeleton={<LoadingSkeleton lines={5} aria-hidden />} />
+          <BusyRegion busy={busyRegion} label={t("globals.busyRegionLabel")}
+            skeleton={<LoadingSkeleton fill aria-hidden />}>
+            <Surface data-loading-target="preview" padded
+              style={{ height: "var(--fynns-layout-skeleton-block-height)" }}>
+              {t("globals.busyRegionBody")}
+            </Surface>
+          </BusyRegion>
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Collapsible title={t("globals.archivedLoadingTitle")}>
           <BusyRegion
+            id="sandbox-archived-loading-ring"
             busy={busyRegion}
             label={t("globals.busyRegionLabel")}
             message={t("globals.busyRegionMessage")}
@@ -7025,6 +7029,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <p style={{ margin: 0 }}>{t("globals.busyRegionBody")}</p>
             </Card>
           </BusyRegion>
+            <SandboxHelp text={t("globals.archivedLoadingHelp")} />
+          </Collapsible>
           <div className="sandbox-globals-row">
             <Button size="sm" onClick={() => setBusyRegion(true)} disabled={busyRegion}>
               {t("globals.busyRegionStart")}
@@ -7049,7 +7055,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             busy={busyRegionDeterminate}
             indicator="linear"
             label={t("globals.busyRegionLabel")}
-            message={t("globals.busyRegionMessage")}
             value={0.55}
           >
             <Card title={t("globals.busyRegionTitle")}>
@@ -7062,7 +7067,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               busy
               indicator="linear"
               label={t("globals.busyRegionNarrowLabel")}
-              message={t("globals.busyRegionNarrowMessage")}
               value={0.35}
             />
           </div>
@@ -7087,7 +7091,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 fill
                 busy={busyRegionFill}
                 label={t("globals.busyRegionFillLabel")}
-                message={t("globals.busyRegionFillMessage")}
               />
             </FillColumn>
           </div>
@@ -7168,7 +7171,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   fill
                   busy
                   label={t("globals.paneLoadErrorBusyLabel")}
-                  message={t("globals.paneLoadErrorBusyMessage")}
                 />
               ) : paneLoadPhase === "error" ? (
                 <div className="fynns-unit-stack">
@@ -7236,7 +7238,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <BusyRegion
               busy
               label={t("globals.busyRegionDialogLabel")}
-              message={t("globals.busyRegionDialogMessage")}
             />
           </Dialog>
           <SandboxHelp text={t("globals.busyRegionDialogHelp")} />
@@ -7246,7 +7247,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <BusyRegion
                 busy
                 label={t("globals.busyRegionColdLabel")}
-                message={t("globals.busyRegionColdMessage")}
               />
             ) : (
               <div className="fynns-unit-stack">
@@ -7309,7 +7309,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <BusyRegion
                 busy={busyRegionFieldBusy}
                 label={t("globals.busyRegionFieldBusyLabel")}
-                message={t("globals.busyRegionFieldBusyMessage")}
               >
                 <CodeBlock
                   variant="plain"
@@ -7520,13 +7519,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <BusyScrim
             open={busyScrimOpen}
             label={t("globals.busyScrimLabel")}
-            message={t("globals.busyScrimMessage")}
           />
           <BusyScrim
             open={busyScrimDeterminateOpen}
             indicator="linear"
             label={t("globals.busyScrimLabel")}
-            message={t("globals.busyScrimMessage")}
             value={0.7}
           />
           <SandboxHelp text={t("globals.busyScrimHelp")} />
@@ -7794,7 +7791,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   ? (busyTaskAbort.label ?? t("globals.busyPaintLabel"))
                   : t("globals.busyPaintLabel")
             }
-            message={t("globals.busyPaintMessage")}
           />
         </div>
         </GlobalsDemo>

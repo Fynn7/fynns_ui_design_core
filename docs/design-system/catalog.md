@@ -26,12 +26,12 @@ classes.
   Slider, ToggleGroup, Tabs (M3 Primary underline)
 - **Feedback:** Banner, InlineAlert (phrasing copy only — never nest List /
   FieldStack / CodeBlock inside), LoadingSkeleton / LinearProgress,
-  CircularProgress (compatibility only; not the loading convention),
+  CircularProgress (permanent archive / deprecated; strongly discouraged),
   BusyScrim `{ open, label, message?, value?, size?, indicator?, skeleton? }` /
   BusyRegion `{ busy, label, children?, message?, value?, size?, fill?,
   indicator?, skeleton? }` (soft frosted blur + `--fynns-color-busy-region-mask` when
   children are mounted; empty cold-start ≥ **0.5.191** = chrome only — no
-  content-sized mask island; unknown waits use sweep skeletons; real `value` uses one linear bar; `fill` for height-resolved cold-start), EmptyState,
+  content-sized mask island; content skeletons occupy the upcoming UI, without visible loading copy; explicit message / circular is permanently archived; real `value` uses one linear bar; `fill` for height-resolved cold-start), EmptyState,
   **Chat** family (see below), Snackbar (`snackbar()` + `<SnackbarHost />`),
   Tooltip, InfoHint
 
@@ -104,10 +104,10 @@ classes.
   | Pane cold-start | `BusyRegion` `fill` as FillColumn/shell child **or** PageScroll → `.fynns-content-column` (direct / thin section wrapper hosting only the fill — core ≥ **0.5.136** stretches scrollport + pass-through wrappers so BusyStack centers, does not overflow a collapsed overlay); hide section FieldHint until ready; empty host ≥ **0.5.191** paints chrome without frosted mask island | Nest under content-sized unit-stack/Card; EmptyState as loading; FieldHint + busy in one well; bare `fill` inside PageScroll without the content-column height chain; empty BusyRegion painting a content-sized mask “贴图色块” (fixed in core ≥ **0.5.191**) |
   | Dialog/Card body load | `BusyRegion` (+ `fill` if height resolved); no pager siblings under empty overlay; drawer SearchBar **above** BusyRegion | Bare CircularProgress as body; wrap List+Select+Pagination so chrome flickers |
   | Refresh over existing | BusyRegion around List/table only | Unmount → EmptyState; consumer `surface-*` wash; wrap whole Card |
-  | Known % / unknown wait | real `value` → linear bar / omitted `value` → sweep skeleton; chrome `min(20rem,100%)` | Stack ring+bar; nest progress in `message` |
-  | Button/icon slot | Compact sweep skeleton via `loading` + **`runLoadingTask` / `useLoadingTask`** (≥ **0.5.177**) | Page-level CircularProgress in the slot; bare `setLoading(true)` with no timeout/abort clear path |
+  | Known % / unknown wait | real `value` → linear bar / content wait → matching large skeleton, accessible-only label | Stack ring+bar; nest progress in `message` |
+  | Button/icon slot | Existing `loading` ring is permanently archived / deprecated; prefer disabled + aria-busy action and content skeleton. Legacy calls keep **`runLoadingTask` / `useLoadingTask`** (≥ **0.5.177**) | Page-level CircularProgress in the slot; bare `setLoading(true)` with no timeout/abort clear path |
   | Multi-action footer | **At most one** `loading` in cluster | Twin `loading={busy}` indicators |
-  | Card batch CTA + path List rows | **One** loading skeleton: batch → Card primary only; per-row → that IconButton only (≥ **0.5.265**) | Card `loading` **and** every row Refresh `loading` for the same run |
+  | Card batch CTA + path List rows | Legacy only: **one** archived ring: batch → Card primary only; per-row → that IconButton only (≥ **0.5.265**) | Card `loading` **and** every row Refresh `loading` for the same run |
   | Section wait + chrome | BusyRegion only; header/foot `disabled` without `loading` | BusyRegion + chrome loading |
   | Zero-result catalog | `EmptyState` (`fill` if sole pane body) | EmptyState as loading; content-sized EmptyState as sole canvas child |
   | Hang / cancel guard | `runBusyTask` / `runLoadingTask` with `timeoutMs` and/or `signal` (+ `onError` for toast) | Forever BusyRegion/Scrim/`loading` when fetch never settles; empty catalog painted as BusyRegion |

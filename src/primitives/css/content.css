@@ -798,10 +798,17 @@ a.fynns-breadcrumb-link:visited {
   justify-content: center;
 }
 
-/* Legacy DOM hooks retained for internal callers; there is no rotating ring. */
+/* Permanently archived / deprecated: legacy Button and text-based waits only. */
+.fynns-loading-spinner--sm { width: var(--fynns-layout-loading-ring-sm); height: var(--fynns-layout-loading-ring-sm); }
+.fynns-loading-spinner--md { width: var(--fynns-layout-loading-ring-md); height: var(--fynns-layout-loading-ring-md); }
+.fynns-loading-spinner--lg { width: var(--fynns-layout-loading-ring-lg); height: var(--fynns-layout-loading-ring-lg); }
 .fynns-loading-spinner-ring {
-  display: inline-flex;
-  color: inherit;
+  width: 100%;
+  height: 100%;
+  border: var(--fynns-layout-loading-ring-stroke) solid color-mix(in srgb, currentColor 25%, transparent);
+  border-top-color: currentColor;
+  border-radius: var(--fynns-radius-round);
+  animation: fynns-spin var(--fynns-duration-loading-spin) linear infinite;
 }
 
 .fynns-loading-skeleton {
@@ -834,34 +841,20 @@ a.fynns-breadcrumb-link:visited {
   animation: fynns-chat-thinking-shimmer var(--fynns-duration-thinking-shimmer) linear infinite;
 }
 
-.fynns-loading-skeleton--text > :nth-child(3n + 1) { width: 58%; }
-.fynns-loading-skeleton--text > :nth-child(3n + 2) { width: 82%; }
-.fynns-loading-skeleton--block > .fynns-loading-skeleton-bar {
+.fynns-loading-skeleton--block {
   height: var(--fynns-layout-skeleton-block-height);
+}
+.fynns-loading-skeleton--block > .fynns-loading-skeleton-bar {
+  height: 100%;
   border-radius: var(--fynns-radius-sm);
 }
-
-.fynns-loading-skeleton--compact {
-  width: var(--fynns-layout-skeleton-compact-md);
-  height: var(--fynns-layout-skeleton-compact-md);
-  justify-content: center;
-  gap: var(--fynns-space-2xs);
-  --fynns-skeleton-height: var(--fynns-space-2xs);
-  --fynns-skeleton-fill: color-mix(in srgb, currentColor 25%, transparent);
-  --fynns-skeleton-peak: currentColor;
+.fynns-loading-skeleton--fill {
+  height: 100%;
+  min-height: 0;
 }
-.fynns-loading-skeleton--compact.fynns-loading-skeleton--sm {
-  width: var(--fynns-layout-skeleton-compact-sm);
-  height: var(--fynns-layout-skeleton-compact-sm);
-}
-.fynns-loading-skeleton--compact.fynns-loading-skeleton--lg {
-  width: var(--fynns-layout-skeleton-compact-lg);
-  height: var(--fynns-layout-skeleton-compact-lg);
-}
-.fynns-loading-skeleton--compact > :first-child { width: 60%; }
-.fynns-loading-skeleton--compact > :nth-child(3) { width: 80%; }
 
 @media (prefers-reduced-motion: reduce) {
+  .fynns-loading-spinner-ring { animation: none; }
   .fynns-loading-skeleton-bar {
     animation: none;
     background-image: none;
@@ -870,11 +863,13 @@ a.fynns-breadcrumb-link:visited {
 
 /*
  * Same trap for nested CircularProgress (consumer anti-pattern: swap IconButton
- * children instead of `loading`). Prefer `loading` — compact skeleton is the chrome glyph.
+ * children instead of `loading`). Prefer `loading` — the archived ring is retained only for compatibility.
  * ≥ **0.5.217**: on-accent / on-danger stroke so the ring is not accent-on-accent.
  */
 .fynns-btn--primary .fynns-circular-progress,
-.fynns-btn--danger .fynns-circular-progress {
+.fynns-btn--danger /* Permanently archived / deprecated loading ring. Compatibility only;
+ * strongly discouraged for consumers. New UI reserves content-position skeletons. */
+.fynns-circular-progress {
   color: currentColor;
 }
 

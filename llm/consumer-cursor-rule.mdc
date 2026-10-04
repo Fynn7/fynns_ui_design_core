@@ -58,10 +58,12 @@ ASCII `-`。
 
 ## 加载与忙碌（硬）
 
-未知进度统一用扫光骨架：BusyRegion / BusyScrim 默认封装，定制文字 / 预览占位
-用 LoadingSkeleton（text / block / compact）。真实 value 才显示线性进度条；
-旧 indicator=circular / linear 兼容但无 value 时都显示骨架。按钮保留 loading
-属性（core 已改为紧凑骨架）。禁止消费侧圈、dots、keyframes 或重写 .fynns-*。
+骨架必须在即将出现的 UI / 文字原位占位，加载画面无可见 Loading 文案；
+label 仅供无障碍。BusyRegion / BusyScrim 默认大块，skeleton 槽匹配实际内容。
+LoadingSkeleton 默认 block；text 只在真实文字位置显式使用。compact 已删除，
+禁止居中随机文字条和把骨架当 busy 图标。按钮优先 disabled + aria-busy，
+正文骨架负责等待。真实 value 用线性进度。显式 message / circular 与按钮 loading
+恢复旧圈，仅作永久 archive/deprecated，强烈不推荐消费仓使用。禁止私造动画。
 详见 `docs/design-system/loading.md`，活例 `#sandbox-loading-skeleton`。
 
 Chat 问题井直接用 `ChatQuestion`（默认最后 Other + Input）；轻量状态行用

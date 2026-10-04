@@ -88,7 +88,8 @@ const CIRCULAR_C = 2 * Math.PI * CIRCULAR_R;
 const CIRCULAR_GAP = (4 / 48) * CIRCULAR_C;
 
 /**
- * M3 circular progress — retained for compatibility. Loading convention:
+ * @deprecated Permanently archived M3 circular progress, retained for compatibility.
+ * Strongly discouraged for consumers. Loading convention:
  * unknown waits use LoadingSkeleton / BusyRegion; real values use LinearProgress.
  */
 export function CircularProgress({

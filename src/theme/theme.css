@@ -596,9 +596,10 @@
   --fynns-layout-skeleton-line-md: 0.75rem;
   --fynns-layout-skeleton-line-lg: 1rem;
   --fynns-layout-skeleton-block-height: 8rem;
-  --fynns-layout-skeleton-compact-sm: 1rem;
-  --fynns-layout-skeleton-compact-md: 1.5rem;
-  --fynns-layout-skeleton-compact-lg: 2.5rem;
+  --fynns-layout-loading-ring-sm: 1rem;
+  --fynns-layout-loading-ring-md: 1.6rem;
+  --fynns-layout-loading-ring-lg: 2.5rem;
+  --fynns-layout-loading-ring-stroke: 2px;
   --fynns-layout-fill-column-header-max-height: min(52dvh, 28rem);
   --fynns-layout-list-pane-width: 18rem;
   --fynns-layout-nav-pane-width: 17.5rem;

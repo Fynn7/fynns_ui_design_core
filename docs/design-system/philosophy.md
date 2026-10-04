@@ -123,8 +123,10 @@ belong in a consumer’s own doc.
    only. Vertical scroll hosts must pin `overflow-x: clip` (not bare
    `overflow: auto`). Live `#page-scroll` (scroll mid-pane → both edges fade) /
    `#sandbox-fill-column-guide` (scroll capped guide Surface → bottom edge fades).
-5. **Always show loading / empty / error state.** Use [sweep skeletons](loading.md) for unknown waits; `LoadingSkeleton`
-   (inline placeholders), `LinearProgress value` (real determinate progress), `BusyScrim` (fullscreen blocking) /
+5. **Always show loading / empty / error state.** Use [content-position skeletons](loading.md) for upcoming UI / text;
+   loading copy is accessible-only, never visible. Rings are permanently archived
+   / deprecated and strongly discouraged; `LoadingSkeleton`
+   (matching content footprints), `LinearProgress value` (real determinate progress), `BusyScrim` (fullscreen blocking) /
    `BusyRegion` (sectional **soft frosted blur** + tokenized gray mask
    `--fynns-color-busy-region-mask` + **one** progress chrome + message —
    never `--fynns-color-overlay` / BusyScrim; never a consumer `surface-*`

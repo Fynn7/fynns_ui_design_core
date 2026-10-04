@@ -2,6 +2,7 @@ import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import {
+  CircularProgress,
   LinearProgress,
   type CircularProgressSize,
 } from "./Progress";
@@ -20,6 +21,15 @@ function getFocusable(container: HTMLElement): HTMLElement[] {
 
 export type BusyIndicator = "skeleton" | "circular" | "linear";
 
+function hasVisibleContent(content: ReactNode) {
+  return content != null && content !== false && content !== "";
+}
+
+function isContentSkeleton(value: number | undefined, indicator: BusyIndicator, message: ReactNode, skeleton: ReactNode) {
+  return value == null && indicator !== "circular" &&
+    (hasVisibleContent(skeleton) || !hasVisibleContent(message));
+}
+
 function BusyStack({
   label,
   message,
@@ -37,54 +47,69 @@ function BusyStack({
   skeleton?: ReactNode;
   messageId?: string;
 }) {
-  // Legacy indicator names normalize to skeletons until real progress exists.
   const chrome = value != null ? "linear"
-    : indicator === "circular" || indicator === "linear" ? "skeleton" : indicator;
+    : isContentSkeleton(value, indicator, message, skeleton) ? "skeleton" : "circular";
   return (
     <div
       className={join(
         "fynns-busy-stack",
         chrome === "linear" && "fynns-busy-stack--linear",
+        chrome === "skeleton" && "fynns-busy-stack--skeleton",
       )}
+      data-loading-appearance={chrome === "circular" ? "archived-ring" : chrome}
     >
-      {chrome === "linear" ? (
-        <LinearProgress label={label} value={value} />
+      {chrome === "skeleton" ? (
+        <>
+          <div className="fynns-busy-skeleton" aria-hidden="true">
+            {hasVisibleContent(skeleton) ? skeleton : <LoadingSkeleton fill aria-hidden="true" />}
+          </div>
+          <span className="fynns-sr-only" id={messageId}>{label}</span>
+        </>
       ) : (
-        <div className="fynns-busy-skeleton" aria-hidden="true">
-          {skeleton ?? <LoadingSkeleton size={size} aria-hidden="true" />}
-        </div>
+        <>
+          {chrome === "linear" ? (
+            <LinearProgress label={label} value={value} />
+          ) : (
+            <CircularProgress label={label} size={size} />
+          )}
+          <div
+            className={join("fynns-busy-message", chrome === "linear" && !hasVisibleContent(message) && "fynns-sr-only")}
+            id={messageId}
+          >
+            {hasVisibleContent(message) ? message : label}
+          </div>
+        </>
       )}
-      <div className="fynns-busy-message" id={messageId}>
-        {message}
-      </div>
     </div>
   );
 }
 
 export type BusyScrimProps = {
   open: boolean;
-  /** Progress accessible name; also used as visible text when `message` is omitted. */
+  /** Accessible name only on content skeletons; never visible loading copy. */
   label: string;
   /**
-   * Visible copy under the single progress chrome. Defaults to `label`.
-   * Phrasing only — never nest `LinearProgress` / `CircularProgress`.
+   * @deprecated Permanently archived message + ring wait (unless real value is supplied).
+   * Omit for content-position skeletons. Explicit skeleton slots suppress this copy.
    */
   message?: ReactNode;
   /** Determinate progress in `[0, 1]`. Omit for indeterminate. */
   value?: number;
-  /** Skeleton size. Ignored with determinate `value`. @default "md" */
+  /** Archived ring size. Skeleton geometry belongs to the content slot. @default "md" */
   size?: CircularProgressSize;
   /**
-   * Unknown wait → skeleton (default); a supplied `value` → linear progress.
-   * Legacy `circular` / `linear` values remain accepted and follow this policy.
+   * Content wait → skeleton (default); real `value` → linear progress.
+   * `circular` is permanently archived / deprecated; explicit visible message
+   * also opts into the archived ring when no skeleton slot is supplied.
    */
   indicator?: BusyIndicator;
-  /** Optional decorative LoadingSkeleton composition; ignored with `value`. */
+  /** Upcoming content footprint, placed in the region; hides message. Ignored with `value`. */
   skeleton?: ReactNode;
 };
 
 /**
- * Full-viewport blocking busy layer (M3 scrim + one progress chrome + message).
+ * Full-viewport blocking layer: content skeletons and an accessible-only label.
+ * Explicit message / circular retains the permanently archived ring presentation.
  * Non-dismissible: no Esc / scrim click. Prefer `BusyRegion` for sectional waits.
  * For heavy boots, open via `runBusyTask` / `useBusyTask` (with `timeoutMs` /
  * `signal` when the work can hang) so the skeleton can paint
@@ -101,7 +126,7 @@ export function BusyScrim({
 }: BusyScrimProps) {
   const messageId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
-  const visibleMessage = message ?? label;
+  const skeletonMode = isContentSkeleton(value, indicator, message, skeleton);
 
   useEffect(() => {
     if (!open) return;
@@ -162,7 +187,7 @@ export function BusyScrim({
   return createPortal(
     <div
       ref={rootRef}
-      className="fynns-busy-scrim"
+      className={join("fynns-busy-scrim", skeletonMode && "fynns-busy-scrim--skeleton")}
       role="alertdialog"
       aria-modal="true"
       aria-busy="true"
@@ -172,7 +197,7 @@ export function BusyScrim({
     >
       <BusyStack
         label={label}
-        message={visibleMessage}
+        message={message}
         value={value}
         size={size}
         indicator={indicator}
@@ -186,23 +211,24 @@ export function BusyScrim({
 
 export type BusyRegionProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
   busy: boolean;
-  /** Progress accessible name; also used as visible text when `message` is omitted. */
+  /** Accessible name only on content skeletons; never visible loading copy. */
   label: string;
   /**
-   * Visible copy under the single progress chrome. Defaults to `label`.
-   * Phrasing only — never nest `LinearProgress` / `CircularProgress`.
+   * @deprecated Permanently archived message + ring wait (unless real value is supplied).
+   * Omit for content-position skeletons. Explicit skeleton slots suppress this copy.
    */
   message?: ReactNode;
   /** Determinate progress in `[0, 1]`. Omit for indeterminate. */
   value?: number;
-  /** Skeleton size. Ignored with determinate `value`. @default "md" */
+  /** Archived ring size. Skeleton geometry belongs to the content slot. @default "md" */
   size?: CircularProgressSize;
   /**
-   * Unknown wait → skeleton (default); a supplied `value` → linear progress.
-   * Legacy `circular` / `linear` values remain accepted and follow this policy.
+   * Content wait → skeleton (default); real `value` → linear progress.
+   * `circular` is permanently archived / deprecated; explicit visible message
+   * also opts into the archived ring when no skeleton slot is supplied.
    */
   indicator?: BusyIndicator;
-  /** Optional decorative LoadingSkeleton composition; ignored with `value`. */
+  /** Upcoming content footprint, placed in the region; hides message. Ignored with `value`. */
   skeleton?: ReactNode;
   /**
    * Stretch to a height-resolved parent (`FillColumn` children, shell main /
@@ -215,18 +241,13 @@ export type BusyRegionProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> &
 };
 
 /**
- * Sectional busy wrapper: children stay mounted under a **soft frosted blur**
- * overlay plus tokenized gray wash (`--fynns-color-busy-region-mask` +
- * `backdrop-filter` — not `--fynns-color-overlay` / BusyScrim, not a consumer
- * `surface-*` wash). Keep the blur radius light so busy does not read as a
- * glitchy frame. Sets `aria-busy` on the region while active. Overlay uses
- * `place-items: center` — the chrome sits in the region's box, so a
- * content-sized host leaves it stuck at the top of a tall pane. **Empty
- * cold-start** (no children): overlay wash + blur are **off** so BusyStack is
- * not a floating surface island on bare `app-bg` (≥ **0.5.191**). **Empty
- * cold-start without `fill`:** chrome is in normal flow (not absolute) so it
- * cannot paint over previous siblings such as a NavigationDrawer `SearchBar`.
- * Full-viewport blocking → `BusyScrim`.
+ * Content-position loading: children remain mounted, hidden and inert while a
+ * matching skeleton occupies their bounds. No visible loading text. Empty
+ * cold-start stays in normal flow unless fill resolves to the pane height.
+ *
+ * Explicit message / circular is permanently archived: the centered ring and
+ * copy retain the soft frosted mask over existing content. Empty cold-start
+ * has no mask island. Prefer content skeletons for all new consumer UI.
  */
 export function BusyRegion({
   busy,
@@ -242,7 +263,7 @@ export function BusyRegion({
   ...rest
 }: BusyRegionProps) {
   const messageId = useId();
-  const visibleMessage = message ?? label;
+  const skeletonMode = isContentSkeleton(value, indicator, message, skeleton);
 
   return (
     <div
@@ -250,6 +271,7 @@ export function BusyRegion({
       className={join(
         "fynns-busy-region",
         busy && "fynns-busy-region--busy",
+        busy && skeletonMode && "fynns-busy-region--skeleton",
         fill && "fynns-busy-region--fill",
         className,
       )}
@@ -263,13 +285,13 @@ export function BusyRegion({
       </div>
       {busy ? (
         <div
-          className="fynns-busy-region-overlay"
+          className={join("fynns-busy-region-overlay", skeletonMode && "fynns-busy-region-overlay--skeleton")}
           role="status"
           aria-labelledby={messageId}
         >
           <BusyStack
             label={label}
-            message={visibleMessage}
+            message={message}
             value={value}
             size={size}
             indicator={indicator}

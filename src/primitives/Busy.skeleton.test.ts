@@ -13,7 +13,7 @@ function mount() {
 }
 
 describe("sweep skeleton loading convention", () => {
-  it.each<BusyIndicator | undefined>([undefined, "skeleton", "circular", "linear"])(
+  it.each<BusyIndicator | undefined>([undefined, "skeleton", "linear"])(
     "unknown wait uses a skeleton with indicator %s and restores mounted content",
     (indicator) => {
       const { host, root, dispose } = mount();
@@ -25,6 +25,8 @@ describe("sweep skeleton loading convention", () => {
         render(true);
         const content = host.querySelector("button");
         expect(host.querySelector(".fynns-loading-skeleton")).not.toBeNull();
+        expect(host.querySelector(".fynns-loading-skeleton--block")).not.toBeNull();
+        expect(host.querySelector(".fynns-busy-message")).toBeNull();
         expect(host.querySelector(".fynns-circular-progress")).toBeNull();
         expect(host.querySelector("[role=progressbar]")).toBeNull();
         expect(host.querySelectorAll("[role=status]")).toHaveLength(1);
@@ -36,6 +38,50 @@ describe("sweep skeleton loading convention", () => {
       } finally { dispose(); }
     },
   );
+
+  it("explicit circular is a permanently archived ring with copy, never a skeleton", () => {
+    const { host, root, dispose } = mount();
+    try {
+      act(() => root.render(createElement(BusyRegion, {
+        busy: true, label: "Loading catalog", indicator: "circular",
+      })));
+      expect(host.querySelector("[data-loading-appearance=archived-ring]")).not.toBeNull();
+      expect(host.querySelector(".fynns-circular-progress")).not.toBeNull();
+      expect(host.querySelector(".fynns-busy-message")?.textContent).toBe("Loading catalog");
+      expect(host.querySelector(".fynns-loading-skeleton")).toBeNull();
+    } finally { dispose(); }
+  });
+
+  it("visible loading copy restores an archived ring; an explicit content slot suppresses copy", () => {
+    const { host, root, dispose } = mount();
+    try {
+      act(() => root.render(createElement(BusyRegion, {
+        busy: true, label: "Loading preview", message: "Loading preview…",
+      })));
+      expect(host.querySelector(".fynns-circular-progress")).not.toBeNull();
+      expect(host.querySelector(".fynns-loading-skeleton")).toBeNull();
+      act(() => root.render(createElement(BusyRegion, {
+        busy: true, label: "Loading preview", message: "Loading preview…",
+        skeleton: createElement(LoadingSkeleton, { fill: true, "aria-hidden": true }),
+      })));
+      expect(host.querySelector(".fynns-loading-skeleton--block")).not.toBeNull();
+      expect(host.querySelector(".fynns-busy-message")).toBeNull();
+      expect(host.querySelector(".fynns-circular-progress")).toBeNull();
+      expect(host.querySelector(".fynns-sr-only")?.textContent).toBe("Loading preview");
+    } finally { dispose(); }
+  });
+
+  it("standalone placeholders default to one block, with text rows only when explicitly requested", () => {
+    const { host, root, dispose } = mount();
+    try {
+      act(() => root.render(createElement(LoadingSkeleton)));
+      expect(host.querySelector(".fynns-loading-skeleton--block")).not.toBeNull();
+      expect(host.querySelector(".fynns-loading-skeleton--md")).toBeNull();
+      expect(host.querySelectorAll(".fynns-loading-skeleton-bar")).toHaveLength(1);
+      act(() => root.render(createElement(LoadingSkeleton, { variant: "text", lines: 2 })));
+      expect(host.querySelectorAll(".fynns-loading-skeleton-bar")).toHaveLength(2);
+    } finally { dispose(); }
+  });
 
   it("real progress uses one clamped linear bar and ignores custom skeletons", () => {
     const { host, root, dispose } = mount();
@@ -63,6 +109,17 @@ describe("sweep skeleton loading convention", () => {
     } finally { dispose(); }
   });
 
+  it("an empty conditional slot still shows the default large content placeholder", () => {
+    const { host, root, dispose } = mount();
+    try {
+      act(() => root.render(createElement(BusyRegion, {
+        busy: true, label: "Loading preview", skeleton: false,
+      })));
+      expect(host.querySelector(".fynns-loading-skeleton--block")).not.toBeNull();
+      expect(host.querySelector(".fynns-busy-message")).toBeNull();
+    } finally { dispose(); }
+  });
+
   it("fullscreen wait traps focus, restores it, and removes the skeleton on close", () => {
     const { root, dispose } = mount();
     const previous = document.createElement("button");
@@ -82,7 +139,7 @@ describe("sweep skeleton loading convention", () => {
     } finally { dispose(); previous.remove(); }
   });
 
-  it("button loading uses a compact skeleton and preserves disabled/busy semantics", () => {
+  it("legacy button loading retains the archived ring and never substitutes a compact skeleton", () => {
     const { host, root, dispose } = mount();
     try {
       act(() => root.render(createElement(Button, {
@@ -91,7 +148,9 @@ describe("sweep skeleton loading convention", () => {
       const button = host.querySelector("button")!;
       expect(button.disabled).toBe(true);
       expect(button.getAttribute("aria-busy")).toBe("true");
-      expect(button.querySelector(".fynns-loading-skeleton--compact")).not.toBeNull();
+      expect(button.querySelector("[data-loading-appearance=archived-ring]")).not.toBeNull();
+      expect(button.querySelector(".fynns-loading-spinner-ring")).not.toBeNull();
+      expect(button.querySelector(".fynns-loading-skeleton")).toBeNull();
       expect(button.querySelector("svg")).toBeNull();
     } finally { dispose(); }
   });

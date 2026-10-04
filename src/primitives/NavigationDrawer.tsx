@@ -571,7 +571,7 @@ export type NavigationDrawerNewChatProps = Omit<
    * `新会话` — ChatGPT sidebar grammar.
    */
   label: string;
-  /** Shows a compact sweep skeleton and disables the control. */
+  /** @deprecated Permanently archived ring wait. Prefer disabled + aria-busy with content-position skeletons. */
   loading?: boolean;
   /**
    * Optional trailing chrome on the same row (typically `DropdownMenu`
