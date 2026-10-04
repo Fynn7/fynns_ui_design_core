@@ -1640,6 +1640,8 @@ const en = {
     "M3 Banner: full-width strip under TopAppBar (message + actions + dismiss). Multi-line supportingText: leading icon and dismiss X stay vertically **centered** on the row (core `align-items: center`) — use `onDismiss` inside the strip, never a sibling close outside the rounded host. For in-panel severity use InlineAlert (soft tonal fill; fynns utility, not M3).",
   "globals.snackbarShortBtn": "Short snackbar",
   "globals.snackbarinfoBtn": "Info toast",
+  "globals.snackbarBlueInfoBtn": "Blue info toast",
+  "globals.snackbarBlueInfoTextBtn": "Blue info without icon",
   "globals.snackbarwarningBtn": "Warning toast",
   "globals.snackbarerrorBtn": "Error toast",
   "globals.snackbarsuccessBtn": "Success toast",
@@ -1667,7 +1669,7 @@ const en = {
   "globals.snackbarIndefiniteMsg": "Waiting for confirmation…",
   "globals.snackbarDismiss": "Dismiss",
   "globals.snackbarHelp":
-    "Imperative `snackbar(message, opts?)` + root `<SnackbarHost />`. One at a time, rising from bottom-center (reduced motion fades only). Default normal surface + info icon; severity=warning/error/success uses the InlineAlert palette and matching icon. icon=false/null gives color + text only; a custom ReactNode replaces the glyph. Error announces as alert, others as status. Transient request failures belong here; persistent conversation notices stay inline in the inset FillColumn well. Single action: label / onClick / variant (ghost default, tonal capsule). dismissible toggles X. Actions default to indefinite + X; duration=long and dismissible=false auto-dismiss after 10s. Action clicks dismiss only their own snackbar.",
+    "Imperative `snackbar(message, opts?)` + root `<SnackbarHost />`. One at a time, rising from bottom-center (reduced motion fades only). Omit severity for normal surface + info icon (Info toast / Short snackbar). Explicit severity=info gives blue; warning/error/success gives yellow/red/green. All four reuse InlineAlert's exact soft wash over an opaque canvas base, not the teal toast surface. icon=false/null keeps the same background with text only; a custom ReactNode replaces the glyph. Error announces as alert, others as status. Transient request failures belong here; persistent conversation notices stay inline in the inset FillColumn well. Single action: label / onClick / variant (ghost default, tonal capsule). dismissible toggles X. Actions default to indefinite + X; duration=long and dismissible=false auto-dismiss after 10s. Action clicks dismiss only their own snackbar.",
   "globals.snackbarHostNote":
     "`SnackbarHost` is mounted once in SandboxShell (companion API) — not duplicated in this row.",
   "globals.chatSystem": "This is a demo thread — no model is connected.",
@@ -4137,6 +4139,8 @@ const zh: Record<MessageKey, string> = {
     "M3 Banner：顶栏下全宽条（文案 + 操作 + 关闭）。多行 supportingText 时 leading 图标与 dismiss X 相对整行垂直居中（core `align-items: center`）— 用条内 `onDismiss`，勿在圆角条外再放关闭。面板内严重度请用 InlineAlert（轻底色；fynns 工具，非 M3）。",
   "globals.snackbarShortBtn": "短时 Snackbar",
   "globals.snackbarinfoBtn": "信息 Toast",
+  "globals.snackbarBlueInfoBtn": "蓝色信息 Toast",
+  "globals.snackbarBlueInfoTextBtn": "蓝色信息 · 无图标",
   "globals.snackbarwarningBtn": "警告 Toast",
   "globals.snackbarerrorBtn": "错误 Toast",
   "globals.snackbarsuccessBtn": "成功 Toast",
@@ -4164,7 +4168,7 @@ const zh: Record<MessageKey, string> = {
   "globals.snackbarIndefiniteMsg": "等待确认…",
   "globals.snackbarDismiss": "关闭",
   "globals.snackbarHelp":
-    "命令式 `snackbar(message, opts?)` + 根级 `<SnackbarHost />`。同时只显示一条，从底部居中向上出现（减少动效时仅淡入）。默认普通底色 + info 图标；severity=warning/error/success 复用 InlineAlert 状态色与对应图标。icon=false/null 只保留颜色与文字，自定义 ReactNode 可替换图标。错误以 alert 播报，其余为 status。瞬时请求失败用此入口；持续会话提示留在自带留白的 FillColumn 井内。单个 action：label / onClick / variant（默认 ghost，tonal 为胶囊）。dismissible 控制 X。带操作默认 indefinite + X；无 X 用 duration=long、dismissible=false（10 秒后自动关闭）。点击操作只关闭当前条，不会清掉回调中新弹出的条。",
+    "命令式 `snackbar(message, opts?)` + 根级 `<SnackbarHost />`。同时只显示一条，从底部居中向上出现（减少动效时仅淡入）。省略 severity 为普通底色 + info 图标（信息 Toast / 短时 Snackbar）；显式 severity=info 为蓝色，warning/error/success 为黄色/红色/绿色。四种状态共用 InlineAlert 的浅色背景 token，并铺在不透明画布底色上，不再混入暗青 toast 底色。icon=false/null 保留相同背景，只显示文字；自定义 ReactNode 可替换图标。错误以 alert 播报，其余为 status。瞬时请求失败用此入口；持续会话提示留在自带留白的 FillColumn 井内。单个 action：label / onClick / variant（默认 ghost，tonal 为胶囊）。dismissible 控制 X。带操作默认 indefinite + X；无 X 用 duration=long、dismissible=false（10 秒后自动关闭）。点击操作只关闭当前条，不会清掉回调中新弹出的条。",
   "globals.snackbarHostNote":
     "`SnackbarHost` 挂在 SandboxShell 一次（companion API）— 本行不重复挂载。",
   "globals.chatSystem": "演示会话 — 未连接任何模型。",

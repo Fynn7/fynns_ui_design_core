@@ -1207,7 +1207,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-inline-alert--info {
-  background: color-mix(in srgb, var(--fynns-color-info) 12%, transparent);
+  background: var(--fynns-color-feedback-info-surface);
 }
 
 .fynns-inline-alert--info .fynns-inline-alert__icon {
@@ -1215,7 +1215,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-inline-alert--success {
-  background: color-mix(in srgb, var(--fynns-color-success) 12%, transparent);
+  background: var(--fynns-color-feedback-success-surface);
 }
 
 .fynns-inline-alert--success .fynns-inline-alert__icon {
@@ -1223,7 +1223,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-inline-alert--warning {
-  background: color-mix(in srgb, var(--fynns-color-warning) 12%, transparent);
+  background: var(--fynns-color-feedback-warning-surface);
 }
 
 .fynns-inline-alert--warning .fynns-inline-alert__icon {
@@ -1231,7 +1231,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-inline-alert--error {
-  background: color-mix(in srgb, var(--fynns-color-danger) 12%, transparent);
+  background: var(--fynns-color-feedback-error-surface);
 }
 
 .fynns-inline-alert--error .fynns-inline-alert__icon {

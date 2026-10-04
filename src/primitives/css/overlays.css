@@ -1449,25 +1449,31 @@
   transform: translateY(0);
 }
 
-/* Same severity palette as InlineAlert, over an opaque floating surface. */
+/* Same wash as InlineAlert; the canvas base keeps floating feedback opaque. */
 .fynns-snackbar--info {
   --fynns-snackbar-severity-color: var(--fynns-color-info);
+  --fynns-snackbar-severity-surface: var(--fynns-color-feedback-info-surface);
 }
 
 .fynns-snackbar--warning {
   --fynns-snackbar-severity-color: var(--fynns-color-warning);
+  --fynns-snackbar-severity-surface: var(--fynns-color-feedback-warning-surface);
 }
 
 .fynns-snackbar--error {
   --fynns-snackbar-severity-color: var(--fynns-color-danger);
+  --fynns-snackbar-severity-surface: var(--fynns-color-feedback-error-surface);
 }
 
 .fynns-snackbar--success {
   --fynns-snackbar-severity-color: var(--fynns-color-success);
+  --fynns-snackbar-severity-surface: var(--fynns-color-feedback-success-surface);
 }
 
-.fynns-snackbar:is(.fynns-snackbar--warning, .fynns-snackbar--error, .fynns-snackbar--success) {
-  background: color-mix(in srgb, var(--fynns-snackbar-severity-color) 12%, var(--fynns-color-toast-surface));
+.fynns-snackbar[data-tone="severity"] {
+  background:
+    linear-gradient(var(--fynns-snackbar-severity-surface), var(--fynns-snackbar-severity-surface)),
+    var(--fynns-color-surface);
   border-color: color-mix(in srgb, var(--fynns-snackbar-severity-color) 24%, var(--fynns-color-border));
 }
 

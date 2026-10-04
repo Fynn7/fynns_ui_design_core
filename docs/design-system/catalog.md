@@ -43,7 +43,7 @@ classes.
   | Parameter | Purpose / default |
   | --- | --- |
   | `message` | Feedback text (first argument) |
-  | `severity` | `"info"` (default, normal surface + info icon), `"warning"`, `"error"`, `"success"`; tonal variants share InlineAlert severity colors |
+  | `severity` | Omitted = normal surface + info icon; explicit `"info"` = blue, `"warning"` = yellow, `"error"` = red, `"success"` = green. All four share InlineAlert's soft background tokens over an opaque canvas base |
   | `icon` | Matching severity icon by default; `false` / `null` for color + text only; custom ReactNode to replace it |
   | `action: { label, onClick, variant? }` | One labeled action; `variant: "tonal"` gives a filled capsule; omitted / `"ghost"` keeps the text action |
   | `dismissible` | Show / hide the trailing X; defaults to `true` for indefinite duration |
@@ -54,6 +54,8 @@ classes.
   import { snackbar, SnackbarHost } from "@fynns/ui";
 
   // Mount <SnackbarHost /> once next to the app shell.
+  snackbar("Draft ready"); // Normal surface + info icon.
+  snackbar("Draft ready", { severity: "info" }); // Blue info surface.
   // Transient request failure: core slides up from bottom-center.
   snackbar("Request failed. Please try again.", {
     severity: "error", duration: "long", dismissible: true,
