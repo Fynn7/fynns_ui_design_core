@@ -54,6 +54,9 @@ classes.
   import { snackbar, SnackbarHost } from "@fynns/ui";
 
   // Mount <SnackbarHost /> once next to the app shell.
+  // For a composer app, mount <SnackbarHost placement="inline" /> as the
+  // last child of a full-height flex column; its shell flexes into remaining
+  // space. This reserves an unobstructed footer while feedback is visible.
   snackbar("Draft saved"); // Original theme surface, no icon.
   snackbar("Draft saved", { icon: true }); // Optional info icon, same surface.
   snackbar("Request failed. Please try again.", {
@@ -88,6 +91,13 @@ classes.
   assertive announcements; other variants use status / polite. Transient
   request failures use this API; persistent failures with recovery controls
   remain InlineAlert. Reduced motion fades without translation.
+  `SnackbarHost` defaults to the existing fixed overlay. `placement="inline"`
+  renders in document flow and reserves its own space; use this in a flex app
+  footer when transparent status fills would reveal composer text underneath.
+  The footer uses the app surface and owns hit testing, so an open drawer's
+  fixed footer cannot show or receive clicks through this reserved region.
+  Keep one host per app. Do not compensate with private snackbar CSS, opaque
+  backing layers, or changes to InlineAlert.
 
   **Loading placement (hard):**
 

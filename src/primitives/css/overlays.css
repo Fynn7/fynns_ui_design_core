@@ -1444,6 +1444,21 @@
     transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
+.fynns-snackbar-host--inline {
+  position: relative;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  left: auto;
+  bottom: auto;
+  width: 100%;
+  max-width: none;
+  padding: var(--fynns-layout-snackbar-inset);
+  /* This is an app footer surface; the snackbar itself retains its transparent fill. */
+  background: var(--fynns-color-app-bg);
+  transform: none;
+  pointer-events: auto;
+}
+
 .fynns-snackbar[data-state="open"] {
   opacity: 1;
   transform: translateY(0);

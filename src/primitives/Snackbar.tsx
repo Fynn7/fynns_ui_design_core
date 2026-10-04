@@ -194,12 +194,14 @@ export const snackbar: SnackbarFn = Object.assign(
 
 export type SnackbarHostProps = {
   className?: string;
+  /** `inline` reserves space in a flex app footer, keeping transparent feedback off interactive content. */
+  placement?: "overlay" | "inline";
 };
 
 /**
  * Live snackbar portal. Mount once (e.g. next to the app shell).
  */
-export function SnackbarHost({ className }: SnackbarHostProps) {
+export function SnackbarHost({ className, placement = "overlay" }: SnackbarHostProps) {
   const item = useSyncExternalStore(
     store.subscribe,
     store.getSnapshot,
@@ -232,9 +234,9 @@ export function SnackbarHost({ className }: SnackbarHostProps) {
   };
   const messageTip = overflowTipText(item.message);
 
-  return createPortal(
+  const host = (
     <div
-      className={["fynns-snackbar-host", className ?? ""].filter(Boolean).join(" ")}
+      className={["fynns-snackbar-host", placement === "inline" ? "fynns-snackbar-host--inline" : "", className ?? ""].filter(Boolean).join(" ")}
     >
       <div
         key={item.id}
@@ -285,7 +287,7 @@ export function SnackbarHost({ className }: SnackbarHostProps) {
           </div>
         ) : null}
       </div>
-    </div>,
-    document.body,
+    </div>
   );
+  return placement === "inline" ? host : createPortal(host, document.body);
 }

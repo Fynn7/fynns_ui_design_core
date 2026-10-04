@@ -793,6 +793,11 @@
   backing layers to status snackbars. `icon: true` enables an icon on the
   default; `false` / `null` hides one without changing the surface.
   Persistent notices/recovery remain InlineAlert. Live `#snackbar`.
+- **DON'T** float transparent status feedback over composer text or controls.
+  Use one `SnackbarHost placement="inline"` as the footer of a full-height
+  flex app column; give the shell a `flex: 1; min-height: 0` wrapper. The
+  host reserves a footer surface while visible and releases it on dismissal.
+  Keep snackbar fills unchanged. Live `#snackbar` (reserve-space switch).
 - **DON'T** let the first turn hug the thread ceiling: top inset is
   `--fynns-chat-thread-pad-block-start`, aliased to **`chat-thread-gap`**
   (**2rem**), so the opening bubble breathes exactly like the turns below it

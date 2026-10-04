@@ -158,6 +158,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | FillColumn main status flush to top / side edges | DESIGN_SYSTEM Hard rules / FillColumn: core main top + inline `dialog-inset`, never reset padding | `#layouts-demo-fill-column` |
 | transient chat request error as inline ceiling strip | DESIGN_SYSTEM Hard rules / feedback: `snackbar(message, { severity: "error", duration: "long", dismissible: true })` + root SnackbarHost | `#layouts-demo-fill-column` / `#snackbar` |
 | severity snackbar uses theme fill or opaque pastel | DESIGN_SYSTEM [Snackbar action variants](../docs/design-system/catalog.md#snackbar-action-variants): default theme/no icon; four status variants match original InlineAlert transparent fills; never modify InlineAlert | `#snackbar` |
+| transparent snackbar reveals composer text / controls underneath | DESIGN_SYSTEM [Snackbar action variants](../docs/design-system/catalog.md#snackbar-action-variants): one `SnackbarHost placement="inline"` in a full-height flex app footer reserves space; shell flexes into remaining height | `#snackbar` |
 | text-only consumer action Button / inconsistent icon-label gap | DESIGN_SYSTEM Hard rules / Icons / Content density | `#globals-demo-button-icon-label-matrix` |
 | tight labeled Button gaps in end-align footers | DESIGN_SYSTEM form-rhythm | `#timeline` |
 | private labeled Button cluster gap | DESIGN_SYSTEM form-rhythm | `#rhythm` |
