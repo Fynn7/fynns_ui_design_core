@@ -3454,35 +3454,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="snackbar">
         <div className="sandbox-globals-row">
-          {(["info", "warning", "error", "success"] as const).map((severity) => (
-            <Button
-              key={severity}
-              size="sm"
-              variant="tonal"
-              onClick={() => snackbar(t(`globals.snackbar${severity}Msg`), {
-                severity,
-                duration: "long",
-                dismissible: true,
-                dismissAriaLabel: t("globals.snackbarDismiss"),
-              })}
-            >
-              {t(`globals.snackbar${severity}Btn`)}
-            </Button>
-          ))}
-          {(["info", "warning", "error", "success"] as const).map((severity) => (
-            <Button
-              key={`${severity}-text`}
-              size="sm"
-              variant="ghost"
-              onClick={() => snackbar(t(`globals.snackbar${severity}Msg`), {
-                severity,
-                icon: false,
-                duration: "long",
-              })}
-            >
-              {t(`globals.snackbar${severity}TextBtn`)}
-            </Button>
-          ))}
           <Button
             size="sm"
             variant="tonal"

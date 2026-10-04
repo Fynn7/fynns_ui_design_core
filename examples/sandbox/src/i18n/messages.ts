@@ -69,7 +69,7 @@ const en = {
   "layouts.shellAsideBody":
     "Supporting pane content is caller-owned — tokens, forms, or docs — not tied to Chat. Toggle via TopAppBar trailing: width morph matches drawer flyout (`--fynns-duration-flyout`); `EndAsideMorphTrack` stays mounted (≥ 0.5.86). **Chrome toggles must not** remount the shell main into `BusyRegion` / workspace boot copy — keep provider fetch effects keyed on `applicationId` only (stable `onExit` ref).",
   "layouts.fillColumnHelp":
-    "FillColumn — fixed-height host: put Chat in children so the thread takes leftover height and the composer docks at the bottom. Core main well always reserves top + inline dialog-inset (24dp); never reset it. Toggle the persistent conversation notice to check insertion clearance. Simulate request error sends a bottom-center error snackbar instead of adding an inline strip. Chat retains its own thread/composer insets inside the well. Empty thread = EmptyState + soft Surface padded interactive starters. Optional header/footer stay content-sized. Do not stack EmptyState / Composer as siblings of Chat. Aside bubble 100% still uses .fynns-chat-host--fill / EndAside.",
+    "FillColumn — fixed-height host: put Chat in children so the thread takes leftover height and the composer docks at the bottom. Empty thread = EmptyState + soft `Surface` `padded` `interactive` starters (same recipe as `#chat` / `#layouts-demo-chat-product`). Optional header/footer stay content-sized when needed. Do not stack EmptyState / Composer as siblings of Chat (dead band). Aside bubble 100% still uses .fynns-chat-host--fill / EndAside.",
   "layouts.fillColumnEmptyTitle": "No messages yet",
   "layouts.fillColumnEmptyBody":
     "Send a note below. The composer stays docked while the thread fills this column.",
@@ -1639,21 +1639,6 @@ const en = {
   "globals.bannerHelp":
     "M3 Banner: full-width strip under TopAppBar (message + actions + dismiss). Multi-line supportingText: leading icon and dismiss X stay vertically **centered** on the row (core `align-items: center`) — use `onDismiss` inside the strip, never a sibling close outside the rounded host. For in-panel severity use InlineAlert (soft tonal fill; fynns utility, not M3).",
   "globals.snackbarShortBtn": "Short snackbar",
-  "globals.snackbarinfoBtn": "Info toast",
-  "globals.snackbarwarningBtn": "Warning toast",
-  "globals.snackbarerrorBtn": "Error toast",
-  "globals.snackbarsuccessBtn": "Success toast",
-  "globals.snackbarinfoTextBtn": "Info without icon",
-  "globals.snackbarwarningTextBtn": "Warning without icon",
-  "globals.snackbarerrorTextBtn": "Error without icon",
-  "globals.snackbarsuccessTextBtn": "Success without icon",
-  "globals.snackbarinfoMsg": "Draft is ready to review",
-  "globals.snackbarwarningMsg": "Connection is unstable. Try again shortly.",
-  "globals.snackbarerrorMsg": "Request failed. Please try again.",
-  "globals.snackbarsuccessMsg": "Changes saved successfully",
-  "layouts.fillColumnNoticeToggle": "Persistent conversation notice",
-  "layouts.fillColumnNotice": "This conversation is close to its size limit.",
-  "layouts.fillColumnRequestError": "Simulate request error",
   "globals.snackbarUndoBtn": "Snackbar with Undo",
   "globals.snackbarActionDismissBtn": "Tonal action + dismiss",
   "globals.snackbarActionOnlyBtn": "Tonal action only",
@@ -1667,7 +1652,7 @@ const en = {
   "globals.snackbarIndefiniteMsg": "Waiting for confirmation…",
   "globals.snackbarDismiss": "Dismiss",
   "globals.snackbarHelp":
-    "Imperative `snackbar(message, opts?)` + root `<SnackbarHost />`. One at a time, rising from bottom-center (reduced motion fades only). Default normal surface + info icon; severity=warning/error/success uses the InlineAlert palette and matching icon. icon=false/null gives color + text only; a custom ReactNode replaces the glyph. Error announces as alert, others as status. Transient request failures belong here; persistent conversation notices stay inline in the inset FillColumn well. Single action: label / onClick / variant (ghost default, tonal capsule). dismissible toggles X. Actions default to indefinite + X; duration=long and dismissible=false auto-dismiss after 10s. Action clicks dismiss only their own snackbar.",
+    "Imperative `snackbar(message, opts?)` + root `<SnackbarHost />`. One at a time (bottom-center). Single action: label / onClick / variant (ghost default, tonal capsule). dismissible toggles the close X. Actions default to indefinite + X; use duration=long and dismissible=false for a capsule action without X (auto-dismiss after 10s). Action clicks dismiss only their own snackbar. Do not use deleted toast APIs.",
   "globals.snackbarHostNote":
     "`SnackbarHost` is mounted once in SandboxShell (companion API) — not duplicated in this row.",
   "globals.chatSystem": "This is a demo thread — no model is connected.",
@@ -2585,7 +2570,7 @@ const zh: Record<MessageKey, string> = {
   "layouts.shellAsideBody":
     "侧栏内容由调用方决定 — token、表单或文档均可，不绑定 Chat。用顶栏 trailing 切换：宽度 morph 与抽屉 flyout 同节奏（`--fynns-duration-flyout`）；`EndAsideMorphTrack` 保持挂载（≥ 0.5.86）。**禁止**因切换侧栏把主画布 remount 成 `BusyRegion` /「正在加载工作区」— 管线 Provider 的 fetch 只应依赖 `applicationId`（`onExit` 用稳定 ref）。",
   "layouts.fillColumnHelp":
-    "FillColumn — 已定高宿主：Chat 放在 children，thread 吃剩余高度、composer 贴底。主井顶部和左右固定保留 dialog-inset（24dp），禁止清零。切换持续会话提示可检查插入内容的留白；模拟请求错误会从底部弹出 error snackbar，不在井顶插入错误条。Chat 在井内保留自身 thread/composer 的内距。空线程 = EmptyState + soft Surface padded interactive starters。需要时再用内容定高的 header/footer。禁止把 EmptyState / Composer 当 Chat 兄弟堆叠。aside 气泡 100% 仍用 .fynns-chat-host--fill / EndAside。",
+    "FillColumn — 已定高宿主：Chat 放在 children，thread 吃剩余高度、composer 贴底。空线程 = EmptyState + soft `Surface` `padded` `interactive` starters（同 `#chat` / `#layouts-demo-chat-product`）。需要时再用可选 header/footer（内容定高）。禁止把 EmptyState / Composer 当 Chat 兄弟堆叠（会留下空白带）。aside 气泡 100% 仍用 .fynns-chat-host--fill / EndAside。",
   "layouts.fillColumnEmptyTitle": "暂无消息",
   "layouts.fillColumnEmptyBody":
     "在下方发送一条笔记。composer 贴底，thread 填满本列剩余高度。",
@@ -4136,21 +4121,6 @@ const zh: Record<MessageKey, string> = {
   "globals.bannerHelp":
     "M3 Banner：顶栏下全宽条（文案 + 操作 + 关闭）。多行 supportingText 时 leading 图标与 dismiss X 相对整行垂直居中（core `align-items: center`）— 用条内 `onDismiss`，勿在圆角条外再放关闭。面板内严重度请用 InlineAlert（轻底色；fynns 工具，非 M3）。",
   "globals.snackbarShortBtn": "短时 Snackbar",
-  "globals.snackbarinfoBtn": "信息 Toast",
-  "globals.snackbarwarningBtn": "警告 Toast",
-  "globals.snackbarerrorBtn": "错误 Toast",
-  "globals.snackbarsuccessBtn": "成功 Toast",
-  "globals.snackbarinfoTextBtn": "信息 · 无图标",
-  "globals.snackbarwarningTextBtn": "警告 · 无图标",
-  "globals.snackbarerrorTextBtn": "错误 · 无图标",
-  "globals.snackbarsuccessTextBtn": "成功 · 无图标",
-  "globals.snackbarinfoMsg": "草稿已准备好，可供审阅",
-  "globals.snackbarwarningMsg": "连接不稳定，请稍后重试。",
-  "globals.snackbarerrorMsg": "请求失败，请重试。",
-  "globals.snackbarsuccessMsg": "修改已成功保存",
-  "layouts.fillColumnNoticeToggle": "持续会话提示",
-  "layouts.fillColumnNotice": "此会话即将达到容量上限。",
-  "layouts.fillColumnRequestError": "模拟请求错误",
   "globals.snackbarUndoBtn": "带 Undo 的 Snackbar",
   "globals.snackbarActionDismissBtn": "胶囊操作 + 关闭",
   "globals.snackbarActionOnlyBtn": "仅胶囊操作",
@@ -4164,7 +4134,7 @@ const zh: Record<MessageKey, string> = {
   "globals.snackbarIndefiniteMsg": "等待确认…",
   "globals.snackbarDismiss": "关闭",
   "globals.snackbarHelp":
-    "命令式 `snackbar(message, opts?)` + 根级 `<SnackbarHost />`。同时只显示一条，从底部居中向上出现（减少动效时仅淡入）。默认普通底色 + info 图标；severity=warning/error/success 复用 InlineAlert 状态色与对应图标。icon=false/null 只保留颜色与文字，自定义 ReactNode 可替换图标。错误以 alert 播报，其余为 status。瞬时请求失败用此入口；持续会话提示留在自带留白的 FillColumn 井内。单个 action：label / onClick / variant（默认 ghost，tonal 为胶囊）。dismissible 控制 X。带操作默认 indefinite + X；无 X 用 duration=long、dismissible=false（10 秒后自动关闭）。点击操作只关闭当前条，不会清掉回调中新弹出的条。",
+    "命令式 `snackbar(message, opts?)` + 根级 `<SnackbarHost />`。同时只显示一条（底部居中）。单个 action：label / onClick / variant（默认 ghost，tonal 为浅色胶囊按钮）。dismissible 控制关闭 X。带操作默认 indefinite + X；无 X 用 duration=long、dismissible=false（10 秒后自动关闭）。点击操作只关闭当前条，不会清掉回调中新弹出的条。勿使用已删除的 toast API。",
   "globals.snackbarHostNote":
     "`SnackbarHost` 挂在 SandboxShell 一次（companion API）— 本行不重复挂载。",
   "globals.chatSystem": "演示会话 — 未连接任何模型。",

@@ -175,7 +175,6 @@ export type {
   SnackbarDuration,
   SnackbarHostProps,
   SnackbarOptions,
-  SnackbarSeverity,
 } from "./primitives/Snackbar";
 export { FullscreenDialog, Dialog, DialogShell, ConfirmDialog } from "./primitives/Dialog";
 export type {
