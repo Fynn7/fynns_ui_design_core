@@ -1233,11 +1233,9 @@ function OverflowBoundsDemo() {
 export type GlobalsPageProps = {
   /** Increment from shell topbar Search to focus the catalog SearchBar. */
   searchFocusTick?: number;
-  snackbarInline?: boolean;
-  onSnackbarInlineChange?: (value: boolean) => void;
 };
 
-export function GlobalsPage({ searchFocusTick = 0, snackbarInline = false, onSnackbarInlineChange }: GlobalsPageProps) {
+export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const { t, locale } = useLocale();
   const [openCategories, setOpenCategories] = useState<
     Partial<Record<GlobalsCategoryId, boolean>>
@@ -3455,9 +3453,6 @@ export function GlobalsPage({ searchFocusTick = 0, snackbarInline = false, onSna
         <SandboxHelp text={t("globals.envCheckHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="snackbar">
-        <ControlRow label={t("globals.snackbarInline")}>
-          <Switch label={null} ariaLabel={t("globals.snackbarInline")} checked={snackbarInline} onCheckedChange={(checked) => onSnackbarInlineChange?.(checked)} />
-        </ControlRow>
         <div className="sandbox-globals-row">
           {(["default", "info", "success", "warning", "error"] as const).map((severity) => (
             <Button

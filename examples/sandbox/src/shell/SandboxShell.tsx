@@ -69,7 +69,6 @@ export function SandboxShell() {
     isFreshBootFocusArmed() ? 1 : 0,
   );
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
-  const [snackbarInline, setSnackbarInline] = useState(false);
   const [asideOpen, setAsideOpen] = useState(
     () => initialSessionRef.current?.asideOpen ?? defaultAsideOpen(),
   );
@@ -264,8 +263,7 @@ export function SandboxShell() {
   );
 
   return (
-    <div className="sandbox-frame">
-      <div className="sandbox-shell-frame">
+    <>
       <ClippedNavShell
         ref={shellRef}
         className="sandbox-root"
@@ -367,7 +365,7 @@ export function SandboxShell() {
               </div>
             ) : null}
             {page === "globals" ? (
-              <GlobalsPage searchFocusTick={globalsSearchFocusTick} snackbarInline={snackbarInline} onSnackbarInlineChange={setSnackbarInline} />
+              <GlobalsPage searchFocusTick={globalsSearchFocusTick} />
             ) : null}
             {page === "layouts" ? <LayoutsPage /> : null}
             {page === "foundations" ? <FoundationsPage /> : null}
@@ -393,8 +391,7 @@ export function SandboxShell() {
           ) : null}
         </div>
       </ClippedNavShell>
-      </div>
-      <SnackbarHost placement={snackbarInline ? "inline" : "overlay"} />
-    </div>
+      <SnackbarHost />
+    </>
   );
 }

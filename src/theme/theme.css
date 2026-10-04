@@ -586,6 +586,7 @@
   --fynns-layout-list-well-max-height: 20rem;
   --fynns-layout-list-well-max-height-sm: 12rem;
   --fynns-layout-busy-region-backdrop-blur: 3px;
+  --fynns-layout-snackbar-backdrop-blur: 1rem;
   --fynns-layout-fill-column-header-max-height: min(52dvh, 28rem);
   --fynns-layout-list-pane-width: 18rem;
   --fynns-layout-nav-pane-width: 17.5rem;

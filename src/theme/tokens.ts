@@ -1548,6 +1548,8 @@ export const LAYOUT_TOKENS = {
    * read as a corrupted / glitchy frame (heavy blur → that risk).
    */
   "busy-region-backdrop-blur": "3px",
+  /** Transparent floating status feedback must not reveal underlying text. */
+  "snackbar-backdrop-blur": "1rem",
   /**
    * Soft cap for `FillColumn` `header` on `DestinationAppShell` canvas when the
    * preview band hosts a Card / PageScroll — keeps Chat visible in `main`.

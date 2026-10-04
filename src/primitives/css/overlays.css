@@ -1444,21 +1444,6 @@
     transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
-.fynns-snackbar-host--inline {
-  position: relative;
-  box-sizing: border-box;
-  flex: 0 0 auto;
-  left: auto;
-  bottom: auto;
-  width: 100%;
-  max-width: none;
-  padding: var(--fynns-layout-snackbar-inset);
-  /* This is an app footer surface; the snackbar itself retains its transparent fill. */
-  background: var(--fynns-color-app-bg);
-  transform: none;
-  pointer-events: auto;
-}
-
 .fynns-snackbar[data-state="open"] {
   opacity: 1;
   transform: translateY(0);
@@ -1484,6 +1469,8 @@
 
 .fynns-snackbar:not(.fynns-snackbar--default) {
   border-color: transparent;
+  /* Keep the original transparent fill while removing legible content beneath it. */
+  backdrop-filter: blur(var(--fynns-layout-snackbar-backdrop-blur));
 }
 
 .fynns-snackbar__icon {

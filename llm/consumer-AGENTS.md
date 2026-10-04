@@ -29,9 +29,10 @@ This app consumes the fynns design system from the sibling checkout
    on-surface text and matching icons. Never change InlineAlert or add an
    opaque pastel/backing layer. `icon: true` enables an icon on the default;
    `false` / `null` hides one. Persistent notices/recovery remain InlineAlert.
-   For composer apps, use one root `SnackbarHost placement="inline"` in a
-   full-height flex column with a flexible shell wrapper (`min-height: 0`)
-   so transparent feedback reserves a footer instead of revealing controls.
+   SnackbarHost always portals a fixed overlay. Do not add an in-flow host,
+   footer spacer or conditional app padding: showing/replacing/dismissing
+   feedback must leave shell, Chat/composer, nav and preview bounds and thread
+   scroll unchanged. Use core backdrop blur rather than moving the layout.
 3. Missing capability → say so and stop; it must land in `fynns_ui_design_core`
    first (never edit `node_modules/@fynn7/ui-design-core`).
 4. Keep `npm run build` green; run `node ../fynns_ui_design_core/scripts/install-as-npm.mjs --target . --check` when imports fail.
