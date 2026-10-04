@@ -4065,7 +4065,11 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   min-height: 100%;
   max-height: 100%;
   min-width: 0;
-  overflow: hidden;
+  /* Clip chrome without creating a scroll container. With hidden, focus /
+   * scrollIntoView can scroll the shell during layout overflow: the sticky
+   * bar stays at the top while nav + main lift away from the bottom edge.
+   * Scrolling belongs to the descendant canvas / drawer body only. */
+  overflow: clip;
   background: var(--fynns-color-app-bg);
   color: var(--fynns-color-text);
 }

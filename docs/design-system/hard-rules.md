@@ -571,6 +571,13 @@
   `Sessions: 50`, `每页 100 行`) — options are **digits only**; noun once via
   sibling `.fynns-table-meta` + `ariaLabel`. Live `#pagination`. Failure:
   CONSUMER_TREATY Pagination Select option repeats noun.
+- **DON'T** make the outer `ClippedNavShell` / `DestinationAppShell` a scroll
+  container. Core uses `overflow: clip`; `overflow: hidden` still permits
+  focus / `scrollIntoView` to scroll chrome during layout overflow, lifting
+  nav + main off the viewport bottom while the sticky TopAppBar stays put.
+  Keep scrolling inside the canvas / PageScroll / drawer body (`fynns-scroll`).
+  Live sandbox Components `#form-recipe` / `#layouts-demo-shell`. Failure:
+  CONSUMER_TREATY shell scrollIntoView leaves bottom gap.
 - **DON'T** hard-swap `ClippedNavShell` `nav` while `navMode` stays `"drawer"`
   for root ↔ drill-in / mode catalog — pass **`navKey`** + **`navDirection`**
   so the body Shared-Axis-X slides (core ≥ **0.5.183**; width stays open —

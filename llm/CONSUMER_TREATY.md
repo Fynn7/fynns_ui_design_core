@@ -67,6 +67,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | padded destination labels | DESIGN_SYSTEM hard-rules | `—` |
 | crushed command / menu chrome proportion | DESIGN_SYSTEM Hard rules | `#command-palette` |
 | wrong shell slot / “Clipped” misread | DESIGN_SYSTEM hard-rules | `—` |
+| shell scrollIntoView leaves bottom gap | DESIGN_SYSTEM hard-rules | `#form-recipe` / `#layouts-demo-shell` |
 | settings gear in TopAppBar / destination list | DESIGN_SYSTEM hard-rules | `#layouts-demo-shell` |
 | footer settings gear md disk / asymmetric inset | DESIGN_SYSTEM hard-rules | `#layouts-demo-shell` |
 | drawer footer Avatar/settings packed tight | DESIGN_SYSTEM hard-rules | `#layouts-demo-shell` |
