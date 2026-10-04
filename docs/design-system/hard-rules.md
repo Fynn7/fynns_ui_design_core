@@ -789,6 +789,21 @@
   `padding` / `margin` on `.fynns-chat-thread`, re-alias
   `pad-block-start` to a narrower token, or collapse both ends into one
   `padding-block` shorthand. Live `#chat` / `#layouts-demo-chat-product`.
+- **DON'T** reset `.fynns-fill-column-main` top or inline padding to zero.
+  Core always reserves `--fynns-layout-dialog-inset` at the top and both
+  sides of the main well, even with no header or when a new status block is
+  inserted. This outer well inset is separate from Chat's thread/composer
+  insets; keep their alignment and bottom docking. Consumers must not supply
+  one-off spacer wrappers or override these classes. Live
+  `#layouts-demo-fill-column` (toggle persistent conversation notice).
+- **DON'T** insert a transient request/submit error InlineAlert above Chat.
+  Call `snackbar(message, { severity: "error", duration: "long",
+  dismissible: true })` and mount `<SnackbarHost />` once at the app root.
+  Core owns bottom-center upward entry, severity color and matching icon.
+  Default snackbar = normal surface + info icon; `icon: false` / `null`
+  removes the icon without removing severity color. Persistent conversation
+  notices and pane failures that need inline recovery controls remain
+  InlineAlert. Live `#snackbar` / `#layouts-demo-fill-column`.
 - **DON'T** inset mode `--toolbar-end` Plus (or preference Switch) with Item
   `item-pad-inline-end` so it sits ~16dp short of destination **Item pill
   outer** — Plus / Switch / **pill outer** share one trailing edge (body

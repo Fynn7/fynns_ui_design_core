@@ -43,6 +43,8 @@ classes.
   | Parameter | Purpose / default |
   | --- | --- |
   | `message` | Feedback text (first argument) |
+  | `severity` | `"info"` (default, normal surface + info icon), `"warning"`, `"error"`, `"success"`; tonal variants share InlineAlert severity colors |
+  | `icon` | Matching severity icon by default; `false` / `null` for color + text only; custom ReactNode to replace it |
   | `action: { label, onClick, variant? }` | One labeled action; `variant: "tonal"` gives a filled capsule; omitted / `"ghost"` keeps the text action |
   | `dismissible` | Show / hide the trailing X; defaults to `true` for indefinite duration |
   | `dismissAriaLabel` | Localized accessible close label; defaults to `"Dismiss"` |
@@ -52,6 +54,13 @@ classes.
   import { snackbar, SnackbarHost } from "@fynns/ui";
 
   // Mount <SnackbarHost /> once next to the app shell.
+  // Transient request failure: core slides up from bottom-center.
+  snackbar("Request failed. Please try again.", {
+    severity: "error", duration: "long", dismissible: true,
+  });
+  // Color + text only (available for every severity).
+  snackbar("Changes saved", { severity: "success", icon: false });
+
   // Capsule action + close X; stays visible until acted on or dismissed.
   snackbar("Draft saved", {
     action: { label: "View draft", onClick: openDraft, variant: "tonal" },
@@ -72,6 +81,12 @@ classes.
   a finite duration; `indefinite` requires an action, `snackbar.dismiss(id)` or
   replacement to remove it. Consumers supply labels and callbacks; do not
   build another toast wrapper or override `.fynns-snackbar*` CSS.
+  Error uses `role="alert"` / assertive announcements; the other severities
+  use `role="status"` / polite announcements. Icons are decorative; message
+  text must convey the result even with `icon: false`. Reduced motion fades
+  without translation. Transient request/submit failures use this API, not
+  an InlineAlert appended above Chat. Persistent pane failures with recovery
+  controls and persistent conversation notices still use InlineAlert.
 
   **Loading placement (hard):**
 

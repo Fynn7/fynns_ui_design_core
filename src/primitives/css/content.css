@@ -4501,6 +4501,11 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-fill-column-main {
+  /* Core owns the well's outer breath, including newly inserted status strips.
+   * Chat keeps its separate thread/composer insets inside this well. */
+  box-sizing: border-box;
+  padding-block-start: var(--fynns-layout-dialog-inset);
+  padding-inline: var(--fynns-layout-dialog-inset);
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
