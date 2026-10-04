@@ -32,9 +32,9 @@ export type SnackbarAction = {
 };
 
 export type SnackbarOptions = {
-  /** Omit for normal surface + info icon; explicit severity uses InlineAlert's wash (info = blue). */
+  /** Omit for dark teal with no icon; explicit severity uses an opaque pastel background. */
   severity?: SnackbarSeverity;
-  /** Defaults to the severity icon. `false` or `null` hides the icon. */
+  /** Severity icons are on by default. `true` opts a neutral snackbar into an info icon; `false` / `null` hides it. */
   icon?: ReactNode;
   /** Optional single action (M3: at most one). */
   action?: SnackbarAction;
@@ -129,12 +129,15 @@ class SnackbarStore {
     const dismissible = opts.dismissible ?? duration === "indefinite";
     const id = `snackbar-${++this.seq}`;
     const severity = opts.severity ?? "info";
+    const tonal = opts.severity !== undefined;
     const next: SnackbarItem = {
       id,
       message,
       severity,
-      tonal: opts.severity !== undefined,
-      icon: opts.icon === undefined ? defaultIcon(severity) : opts.icon,
+      tonal,
+      icon: opts.icon === undefined
+        ? (tonal ? defaultIcon(severity) : null)
+        : opts.icon === true ? defaultIcon(severity) : opts.icon,
       action: opts.action,
       duration,
       dismissible,

@@ -800,10 +800,12 @@
   Call `snackbar(message, { severity: "error", duration: "long",
   dismissible: true })` and mount `<SnackbarHost />` once at the app root.
   Core owns bottom-center upward entry, severity color and matching icon.
-  Omitted severity = normal surface + info icon; explicit `severity: "info"`
-  gives a blue background. Info/warning/error/success share InlineAlert's
-  soft background tokens over an opaque canvas base; do not mix those
-  washes into the teal toast surface. `icon: false` / `null`
+  Exactly five backgrounds: omitted severity = dark teal, **no icon**;
+  error = light red, warning = orange-yellow, info = light blue, success =
+  light green. The four status variants share **opaque pastel** background
+  tokens with InlineAlert, dark copy and matching icons. Never replace them
+  with gray or transparent washes over a dark base. `icon: true` adds an info
+  icon to the default; `icon: false` / `null`
   removes the icon without removing severity color. Persistent conversation
   notices and pane failures that need inline recovery controls remain
   InlineAlert. Live `#snackbar` / `#layouts-demo-fill-column`.
