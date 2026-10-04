@@ -32,7 +32,7 @@ export type SnackbarAction = {
 };
 
 export type SnackbarOptions = {
-  /** Omit for normal surface + info icon; explicit severity uses InlineAlert's wash (info = blue). */
+  /** Defaults to `info` (normal surface); other severities use a tonal surface. */
   severity?: SnackbarSeverity;
   /** Defaults to the severity icon. `false` or `null` hides the icon. */
   icon?: ReactNode;
@@ -56,7 +56,6 @@ export type SnackbarItem = {
   id: string;
   message: ReactNode;
   severity: SnackbarSeverity;
-  tonal: boolean;
   icon: ReactNode;
   action?: SnackbarAction;
   duration: SnackbarDuration;
@@ -133,7 +132,6 @@ class SnackbarStore {
       id,
       message,
       severity,
-      tonal: opts.severity !== undefined,
       icon: opts.icon === undefined ? defaultIcon(severity) : opts.icon,
       action: opts.action,
       duration,
@@ -242,7 +240,6 @@ export function SnackbarHost({ className }: SnackbarHostProps) {
         role={item.severity === "error" ? "alert" : "status"}
         aria-live={item.severity === "error" ? "assertive" : "polite"}
         aria-atomic="true"
-        data-tone={item.tonal ? "severity" : "neutral"}
         data-state={open ? "open" : "closed"}
       >
         {item.icon != null && item.icon !== false ? (

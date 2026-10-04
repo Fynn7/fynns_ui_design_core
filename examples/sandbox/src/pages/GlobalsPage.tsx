@@ -3454,37 +3454,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="snackbar">
         <div className="sandbox-globals-row">
-          <Button
-            size="sm"
-            variant="tonal"
-            onClick={() => snackbar(t("globals.snackbarinfoMsg"), {
-              severity: "info",
-              duration: "long",
-              dismissible: true,
-              dismissAriaLabel: t("globals.snackbarDismiss"),
-            })}
-          >
-            {t("globals.snackbarBlueInfoBtn")}
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => snackbar(t("globals.snackbarinfoMsg"), {
-              severity: "info",
-              icon: false,
-              duration: "long",
-            })}
-          >
-            {t("globals.snackbarBlueInfoTextBtn")}
-          </Button>
           {(["info", "warning", "error", "success"] as const).map((severity) => (
             <Button
               key={severity}
               size="sm"
               variant="tonal"
               onClick={() => snackbar(t(`globals.snackbar${severity}Msg`), {
-                // The original info demo keeps the ordinary default surface.
-                severity: severity === "info" ? undefined : severity,
+                severity,
                 duration: "long",
                 dismissible: true,
                 dismissAriaLabel: t("globals.snackbarDismiss"),
@@ -3499,7 +3475,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               size="sm"
               variant="ghost"
               onClick={() => snackbar(t(`globals.snackbar${severity}Msg`), {
-                severity: severity === "info" ? undefined : severity,
+                severity,
                 icon: false,
                 duration: "long",
               })}

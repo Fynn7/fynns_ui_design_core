@@ -26,10 +26,8 @@ This app consumes the fynns design system from the sibling checkout
    Transient request failures → `snackbar(message, { severity: "error",
    duration: "long", dismissible: true })`, rising from bottom-center; no
    inline error strip above Chat. Persistent notices/recovery stay InlineAlert.
-   Omit severity for normal surface + info icon; explicit severity=`info`
-   gives blue, `warning`/`error`/`success` gives yellow/red/green backgrounds
-   shared with InlineAlert + matching icon; `icon: false` / `null` keeps
-   the same colored background + text only.
+   Snackbar defaults to info icon; severity=`warning`/`error`/`success` sets
+   color + matching icon; `icon: false` / `null` keeps color + text only.
 3. Missing capability → say so and stop; it must land in `fynns_ui_design_core`
    first (never edit `node_modules/@fynn7/ui-design-core`).
 4. Keep `npm run build` green; run `node ../fynns_ui_design_core/scripts/install-as-npm.mjs --target . --check` when imports fail.
