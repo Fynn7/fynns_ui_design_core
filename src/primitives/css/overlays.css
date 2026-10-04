@@ -1449,28 +1449,25 @@
   transform: translateY(0);
 }
 
-/* Match the original InlineAlert exactly: semantic color at 12%, transparent
- * remainder, on-surface body and a semantic icon. No opaque backing layer. */
+/* Match InlineAlert's rendered tone on the canvas with a uniform flat fill. */
 .fynns-snackbar--info {
-  background: color-mix(in srgb, var(--fynns-color-info) 12%, transparent);
+  background: var(--fynns-color-snackbar-info-surface);
 }
 
 .fynns-snackbar--success {
-  background: color-mix(in srgb, var(--fynns-color-success) 12%, transparent);
+  background: var(--fynns-color-snackbar-success-surface);
 }
 
 .fynns-snackbar--warning {
-  background: color-mix(in srgb, var(--fynns-color-warning) 12%, transparent);
+  background: var(--fynns-color-snackbar-warning-surface);
 }
 
 .fynns-snackbar--error {
-  background: color-mix(in srgb, var(--fynns-color-danger) 12%, transparent);
+  background: var(--fynns-color-snackbar-error-surface);
 }
 
 .fynns-snackbar:not(.fynns-snackbar--default) {
   border-color: transparent;
-  /* Keep the original transparent fill while removing legible content beneath it. */
-  backdrop-filter: blur(var(--fynns-layout-snackbar-backdrop-blur));
 }
 
 .fynns-snackbar__icon {

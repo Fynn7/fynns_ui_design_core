@@ -1667,7 +1667,7 @@ const en = {
   "globals.snackbarIndefiniteMsg": "Waiting for confirmation…",
   "globals.snackbarDismiss": "Dismiss",
   "globals.snackbarHelp":
-    "Imperative snackbar(message, opts?) + root SnackbarHost. Default = theme surface, no icon; icon=true enables an info icon. severity=info/success/warning/error copies the original InlineAlert background exactly: semantic color at 12%, transparent remainder, on-surface text, matching icon. The four original InlineAlert strips below are color references. No white pastel, opaque backing or teal mixing for status variants. icon=false/null removes the icon while retaining the fill. Error uses alert, others status. One at a time, rising from bottom-center; reduced motion fades only. Actions keep ghost/tonal capsule variants; dismissible controls X; action defaults to indefinite + X; duration=long without X auto-dismisses after 10s. Action callbacks dismiss only their own snackbar.",
+    "Imperative snackbar(message, opts?) + root SnackbarHost. Default = theme surface, no icon; icon=true enables an info icon. severity=info/success/warning/error uses uniform flat tones matching InlineAlert rendered on app-bg (12% semantic color, 88% canvas), on-surface text and matching icons. The four original InlineAlert strips below are color references and remain unchanged. No frosted glass, backdrop blur, see-through text or white pastel. icon=false/null removes the icon while retaining the fill. Error uses alert, others status. One fixed overlay at a time, rising from bottom-center; never resize or lift Chat. Reduced motion fades only. Actions keep ghost/tonal capsule variants; dismissible controls X; action defaults to indefinite + X; duration=long without X auto-dismisses after 10s. Action callbacks dismiss only their own snackbar.",
   "globals.snackbarHostNote":
     "`SnackbarHost` is mounted once in SandboxShell (companion API) — not duplicated in this row.",
   "globals.chatSystem": "This is a demo thread — no model is connected.",
@@ -4164,7 +4164,7 @@ const zh: Record<MessageKey, string> = {
   "globals.snackbarIndefiniteMsg": "等待确认…",
   "globals.snackbarDismiss": "关闭",
   "globals.snackbarHelp":
-    "命令式 snackbar(message, opts?) + 根级 SnackbarHost。默认主题背景、无图标；icon=true 可开启 info 图标。severity=info/success/warning/error 直接采用原 InlineAlert 背景：对应语义色 12%，其余透明，文字保持 on-surface，默认带对应图标。下方四条原 InlineAlert 为颜色参照。状态变式不加白色粉彩、不加不透明底层、不混入主题墨绿底色。icon=false/null 去掉图标但保留背景。错误以 alert 播报，其余 status。同时只显示一条，从底部向上出现，减少动效时仅淡入。操作仍支持 ghost/tonal 胶囊；dismissible 控制 X；带操作默认 indefinite + X；无 X 用 duration=long 为 10 秒后自动关闭。操作回调只关闭当前条。",
+    "命令式 snackbar(message, opts?) + 根级 SnackbarHost。默认主题背景、无图标；icon=true 可开启 info 图标。severity=info/success/warning/error 默认使用均匀淡色背景，与 InlineAlert 显示在 app-bg 上的颜色一致（语义色 12%、画布底色 88%），文字保持 on-surface，默认带对应图标。下方四条原 InlineAlert 为颜色参照，组件本身保持不变。不使用毛玻璃、背景模糊、透字或白色粉彩。icon=false/null 去掉图标但保留背景。错误以 alert 播报，其余 status。同时只显示一条固定浮层，从底部向上出现，不改变或抬高 Chat；减少动效时仅淡入。操作仍支持 ghost/tonal 胶囊；dismissible 控制 X；带操作默认 indefinite + X；无 X 用 duration=long 为 10 秒后自动关闭。操作回调只关闭当前条。",
   "globals.snackbarHostNote":
     "`SnackbarHost` 挂在 SandboxShell 一次（companion API）— 本行不重复挂载。",
   "globals.chatSystem": "演示会话 — 未连接任何模型。",

@@ -80,6 +80,11 @@ export const COLOR_TOKENS = {
   danger: "#f87171",
   "danger-border": "rgba(248, 113, 113, 0.5)",
   info: "#60a5fa",
+  /** Flat snackbar tones: InlineAlert's 12% semantic wash rendered on the app canvas. */
+  "snackbar-info-surface": "color-mix(in srgb, var(--fynns-color-info) 12%, var(--fynns-color-app-bg))",
+  "snackbar-success-surface": "color-mix(in srgb, var(--fynns-color-success) 12%, var(--fynns-color-app-bg))",
+  "snackbar-warning-surface": "color-mix(in srgb, var(--fynns-color-warning) 12%, var(--fynns-color-app-bg))",
+  "snackbar-error-surface": "color-mix(in srgb, var(--fynns-color-danger) 12%, var(--fynns-color-app-bg))",
   /** Keyboard ring fill — keep faint (fields use quiet border-mix instead). */
   focus: "rgba(45, 212, 191, 0.22)",
   overlay: "rgba(0, 0, 0, 0.48)",
@@ -1548,8 +1553,6 @@ export const LAYOUT_TOKENS = {
    * read as a corrupted / glitchy frame (heavy blur → that risk).
    */
   "busy-region-backdrop-blur": "3px",
-  /** Transparent floating status feedback must not reveal underlying text. */
-  "snackbar-backdrop-blur": "1rem",
   /**
    * Soft cap for `FillColumn` `header` on `DestinationAppShell` canvas when the
    * preview band hosts a Card / PageScroll — keeps Chat visible in `main`.

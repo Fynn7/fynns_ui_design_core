@@ -787,10 +787,11 @@
 - **DON'T** insert a transient request error as an InlineAlert above Chat.
   Use `snackbar(message, { severity: "error", duration: "long",
   dismissible: true })` with one root SnackbarHost. Default snackbar keeps
-  the theme surface without an icon; status variants use the **original
-  InlineAlert's transparent 12% semantic backgrounds**, on-surface text and
-  matching icons. Do not change InlineAlert to white pastel or add opaque
-  backing layers to status snackbars. `icon: true` enables an icon on the
+  the theme surface without an icon; status variants use **flat tonal fills
+  matching InlineAlert rendered on app-bg** (12% semantic color, 88% canvas),
+  on-surface text and matching icons. No frosted glass, backdrop blur,
+  see-through content or white pastel. Do not change InlineAlert.
+  `icon: true` enables an icon on the
   default; `false` / `null` hides one without changing the surface.
   Persistent notices/recovery remain InlineAlert. Live `#snackbar`.
 - **DON'T** let transient feedback lift or resize the chat suite or shell.
@@ -798,8 +799,8 @@
   replacing and dismissing it must not change nav / FillColumn / thread /
   composer / preview bounds, thread scroll position or bottom docking.
   No snackbar-specific spacer, padding, flex row or reserved shell height.
-  Core backdrop blur handles text behind transparent status fills; keep
-  InlineAlert and semantic colors intact. Live `#layouts-demo-fill-column`.
+  Core flat tonal fills prevent underlying text from showing through; keep
+  InlineAlert intact. Live `#layouts-demo-fill-column`.
 - **DON'T** let the first turn hug the thread ceiling: top inset is
   `--fynns-chat-thread-pad-block-start`, aliased to **`chat-thread-gap`**
   (**2rem**), so the opening bubble breathes exactly like the turns below it

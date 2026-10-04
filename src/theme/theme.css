@@ -41,6 +41,10 @@
   --fynns-color-danger: #f87171;
   --fynns-color-danger-border: rgba(248, 113, 113, 0.5);
   --fynns-color-info: #60a5fa;
+  --fynns-color-snackbar-info-surface: color-mix(in srgb, var(--fynns-color-info) 12%, var(--fynns-color-app-bg));
+  --fynns-color-snackbar-success-surface: color-mix(in srgb, var(--fynns-color-success) 12%, var(--fynns-color-app-bg));
+  --fynns-color-snackbar-warning-surface: color-mix(in srgb, var(--fynns-color-warning) 12%, var(--fynns-color-app-bg));
+  --fynns-color-snackbar-error-surface: color-mix(in srgb, var(--fynns-color-danger) 12%, var(--fynns-color-app-bg));
   --fynns-color-focus: rgba(45, 212, 191, 0.22);
   --fynns-color-overlay: rgba(0, 0, 0, 0.48);
   --fynns-color-busy-region-mask: rgba(0, 0, 0, 0.20);
@@ -586,7 +590,6 @@
   --fynns-layout-list-well-max-height: 20rem;
   --fynns-layout-list-well-max-height-sm: 12rem;
   --fynns-layout-busy-region-backdrop-blur: 3px;
-  --fynns-layout-snackbar-backdrop-blur: 1rem;
   --fynns-layout-fill-column-header-max-height: min(52dvh, 28rem);
   --fynns-layout-list-pane-width: 18rem;
   --fynns-layout-nav-pane-width: 17.5rem;

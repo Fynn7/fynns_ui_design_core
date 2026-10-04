@@ -33,7 +33,7 @@ for (const width of [1280, 640]) {
     expect(await host.evaluate(el => el.parentElement === document.body)).toBe(true);
     await expect(host.locator(".fynns-snackbar")).toHaveCSS("opacity", "1");
     expect(await measure()).toEqual(baseline);
-    await expect(host.locator(".fynns-snackbar")).toHaveCSS("backdrop-filter", "blur(16px)");
+    await expect(host.locator(".fynns-snackbar")).toHaveCSS("backdrop-filter", "none");
     await trigger.click();
     await expect(host.locator(".fynns-snackbar")).toHaveCSS("opacity", "1");
     expect(await measure()).toEqual(baseline);

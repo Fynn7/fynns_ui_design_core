@@ -20,16 +20,26 @@ test("default keeps its theme surface without an icon and supports an optional i
 });
 
 for (const severity of ["info", "success", "warning", "error"] as const) {
-  test(`${severity} uses the original InlineAlert transparent background, text and icon colors`, async ({ page }) => {
+  test(`${severity} matches InlineAlert's rendered tone as a flat fill with no glass`, async ({ page }) => {
     const label = severity[0].toUpperCase() + severity.slice(1);
     const demo = globalsDemo(page, "snackbar");
     const snack = page.locator(".fynns-snackbar");
     const reference = demo.locator(`#sandbox-snackbar-inline-reference .fynns-inline-alert--${severity}`);
-    const inline = await reference.evaluate((el) => ({
-      fill: getComputedStyle(el).backgroundColor,
-      text: getComputedStyle(el).color,
-      icon: getComputedStyle(el.querySelector(".fynns-inline-alert__icon")!).color,
-    }));
+    const inline = await reference.evaluate((el) => {
+      const css = getComputedStyle(el);
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = 1;
+      const context = canvas.getContext("2d")!;
+      context.fillStyle = css.getPropertyValue("--fynns-color-app-bg").trim();
+      context.fillRect(0, 0, 1, 1);
+      context.fillStyle = css.backgroundColor;
+      context.fillRect(0, 0, 1, 1);
+      return {
+        rendered: Array.from(context.getImageData(0, 0, 1, 1).data),
+        text: css.color,
+        icon: getComputedStyle(el.querySelector(".fynns-inline-alert__icon")!).color,
+      };
+    });
     await demo.getByRole("button", { name: `${label} snackbar`, exact: true }).click();
     await expect(snack).toHaveAttribute("data-state", "open");
     await expect(snack).toHaveAttribute("role", severity === "error" ? "alert" : "status");
@@ -43,21 +53,24 @@ for (const severity of ["info", "success", "warning", "error"] as const) {
       context.fillRect(0, 0, 1, 1);
       return {
         fill: css.backgroundColor, text: css.color, image: css.backgroundImage,
-        alpha: context.getImageData(0, 0, 1, 1).data[3],
+        pixel: Array.from(context.getImageData(0, 0, 1, 1).data),
+        backdrop: css.backdropFilter,
         icon: getComputedStyle(el.querySelector(".fynns-snackbar__icon")!).color,
       };
     });
-    expect(actual.fill).toBe(inline.fill);
+    // Compare painted colors, allowing one channel step for canvas alpha rounding.
+    for (let channel = 0; channel < 3; channel++) {
+      expect(Math.abs(actual.pixel[channel] - inline.rendered[channel])).toBeLessThanOrEqual(1);
+    }
     expect(actual.text).toBe(inline.text);
     expect(actual.icon).toBe(inline.icon);
     expect(actual.image).toBe("none");
-    // The existing InlineAlert is 12% transparent color, not an opaque fill.
-    expect(actual.alpha).toBeGreaterThanOrEqual(30);
-    expect(actual.alpha).toBeLessThanOrEqual(31);
+    expect(actual.pixel[3]).toBe(255);
+    expect(actual.backdrop).toBe("none");
     await expect(snack.locator(".fynns-snackbar__icon")).toHaveAttribute("aria-hidden", "true");
 
     await demo.getByRole("button", { name: `${label} without icon`, exact: true }).click();
     await expect(snack.locator(".fynns-snackbar__icon")).toHaveCount(0);
-    expect(await snack.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(inline.fill);
+    expect(await snack.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(actual.fill);
   });
 }

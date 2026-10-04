@@ -43,7 +43,7 @@ classes.
   | Parameter | Purpose / default |
   | --- | --- |
   | `message` | Feedback text (first argument) |
-  | `severity` | `"default"` / omitted = original theme surface; `"info"`, `"success"`, `"warning"`, `"error"` = the original InlineAlert's 12% semantic color + transparent remainder |
+  | `severity` | `"default"` / omitted = original theme surface; `"info"`, `"success"`, `"warning"`, `"error"` = flat tones matching InlineAlert rendered on app-bg (12% semantic color, 88% app canvas) |
   | `icon` | Default variant has no icon; status variants have matching icons. `true` enables the default info icon, `false` / `null` hides icons, a ReactNode replaces one |
   | `action: { label, onClick, variant? }` | One labeled action; `variant: "tonal"` gives a filled capsule; omitted / `"ghost"` keeps the text action |
   | `dismissible` | Show / hide the trailing X; defaults to `true` for indefinite duration |
@@ -81,9 +81,10 @@ classes.
   a finite duration; `indefinite` requires an action, `snackbar.dismiss(id)` or
   replacement to remove it. Consumers supply labels and callbacks; do not
   build another toast wrapper or override `.fynns-snackbar*` CSS.
-  Status backgrounds copy the original InlineAlert expression exactly; keep
-  on-surface body text and semantic icons. Do not add white pastel fills,
-  opaque backing layers, or mix status colors into the theme toast surface.
+  Status backgrounds use `--fynns-color-snackbar-*-surface`: the original
+  InlineAlert's 12% semantic wash rendered on app-bg, stored as a flat opaque
+  fill. Keep on-surface body text and semantic icons. No frosted glass,
+  backdrop blur, see-through content, white pastel or theme-toast mixing.
   InlineAlert itself is unchanged. Error snackbar uses `role="alert"` /
   assertive announcements; other variants use status / polite. Transient
   request failures use this API; persistent failures with recovery controls
@@ -92,9 +93,8 @@ classes.
   it portals a fixed overlay to `document.body`. Opening, replacing and
   dismissing feedback must leave shell, nav, FillColumn, thread, composer and
   preview geometry unchanged. Never reserve a footer row, spacer, dynamic
-  padding or reduced shell height for a snackbar. Transparent status fills
-  keep their existing colors and use core backdrop blur for readable text;
-  do not fix transparency by shifting the app or changing InlineAlert.
+  padding or reduced shell height for a snackbar. Flat status fills stay
+  uniform over text and controls; never shift the app or change InlineAlert.
 
   **Loading placement (hard):**
 

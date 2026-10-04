@@ -32,7 +32,7 @@ export type SnackbarAction = {
 };
 
 export type SnackbarOptions = {
-  /** `default` (omitted) keeps the theme surface; status variants match InlineAlert's transparent fill. */
+  /** `default` (omitted) keeps the theme surface; status variants use flat InlineAlert tones without glass. */
   severity?: SnackbarSeverity;
   /** Default variant has no icon; status variants have matching icons. `true` enables one, `false` / `null` hides it. */
   icon?: ReactNode;
