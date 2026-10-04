@@ -2,10 +2,10 @@ import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import {
-  CircularProgress,
   LinearProgress,
   type CircularProgressSize,
 } from "./Progress";
+import { LoadingSkeleton } from "./LoadingSkeleton";
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -18,7 +18,7 @@ function getFocusable(container: HTMLElement): HTMLElement[] {
   return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
 }
 
-export type BusyIndicator = "circular" | "linear";
+export type BusyIndicator = "skeleton" | "circular" | "linear";
 
 function BusyStack({
   label,
@@ -26,6 +26,7 @@ function BusyStack({
   value,
   size,
   indicator,
+  skeleton,
   messageId,
 }: {
   label: string;
@@ -33,19 +34,25 @@ function BusyStack({
   value?: number;
   size: CircularProgressSize;
   indicator: BusyIndicator;
+  skeleton?: ReactNode;
   messageId?: string;
 }) {
+  // Legacy indicator names normalize to skeletons until real progress exists.
+  const chrome = value != null ? "linear"
+    : indicator === "circular" || indicator === "linear" ? "skeleton" : indicator;
   return (
     <div
       className={join(
         "fynns-busy-stack",
-        indicator === "linear" && "fynns-busy-stack--linear",
+        chrome === "linear" && "fynns-busy-stack--linear",
       )}
     >
-      {indicator === "linear" ? (
+      {chrome === "linear" ? (
         <LinearProgress label={label} value={value} />
       ) : (
-        <CircularProgress label={label} value={value} size={size} />
+        <div className="fynns-busy-skeleton" aria-hidden="true">
+          {skeleton ?? <LoadingSkeleton size={size} aria-hidden="true" />}
+        </div>
       )}
       <div className="fynns-busy-message" id={messageId}>
         {message}
@@ -65,20 +72,22 @@ export type BusyScrimProps = {
   message?: ReactNode;
   /** Determinate progress in `[0, 1]`. Omit for indeterminate. */
   value?: number;
-  /** Ring size. Ignored when `indicator` is `linear`. @default "md" */
+  /** Skeleton size. Ignored with determinate `value`. @default "md" */
   size?: CircularProgressSize;
   /**
-   * One progress chrome per host. Known % / counts → `linear`;
-   * unknown wait → `circular` (default).
+   * Unknown wait → skeleton (default); a supplied `value` → linear progress.
+   * Legacy `circular` / `linear` values remain accepted and follow this policy.
    */
   indicator?: BusyIndicator;
+  /** Optional decorative LoadingSkeleton composition; ignored with `value`. */
+  skeleton?: ReactNode;
 };
 
 /**
  * Full-viewport blocking busy layer (M3 scrim + one progress chrome + message).
  * Non-dismissible: no Esc / scrim click. Prefer `BusyRegion` for sectional waits.
  * For heavy boots, open via `runBusyTask` / `useBusyTask` (with `timeoutMs` /
- * `signal` when the work can hang) so the ring can paint
+ * `signal` when the work can hang) so the skeleton can paint
  * before the main thread blocks (see AGENTS.md Feedback).
  */
 export function BusyScrim({
@@ -87,7 +96,8 @@ export function BusyScrim({
   message,
   value,
   size = "md",
-  indicator = "circular",
+  indicator = "skeleton",
+  skeleton,
 }: BusyScrimProps) {
   const messageId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -166,6 +176,7 @@ export function BusyScrim({
         value={value}
         size={size}
         indicator={indicator}
+        skeleton={skeleton}
         messageId={messageId}
       />
     </div>,
@@ -184,13 +195,15 @@ export type BusyRegionProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> &
   message?: ReactNode;
   /** Determinate progress in `[0, 1]`. Omit for indeterminate. */
   value?: number;
-  /** Ring size. Ignored when `indicator` is `linear`. @default "md" */
+  /** Skeleton size. Ignored with determinate `value`. @default "md" */
   size?: CircularProgressSize;
   /**
-   * One progress chrome per host. Known % / counts → `linear`;
-   * unknown wait → `circular` (default).
+   * Unknown wait → skeleton (default); a supplied `value` → linear progress.
+   * Legacy `circular` / `linear` values remain accepted and follow this policy.
    */
   indicator?: BusyIndicator;
+  /** Optional decorative LoadingSkeleton composition; ignored with `value`. */
+  skeleton?: ReactNode;
   /**
    * Stretch to a height-resolved parent (`FillColumn` children, shell main /
    * canvas) so the overlay centers in the **visible pane**. Required for
@@ -221,7 +234,8 @@ export function BusyRegion({
   message,
   value,
   size = "md",
-  indicator = "circular",
+  indicator = "skeleton",
+  skeleton,
   fill = false,
   children,
   className,
@@ -259,6 +273,7 @@ export function BusyRegion({
             value={value}
             size={size}
             indicator={indicator}
+            skeleton={skeleton}
             messageId={messageId}
           />
         </div>

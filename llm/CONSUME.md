@@ -189,7 +189,7 @@ Pick primitives by job (details: `node scripts/api.mjs <Name>`; catalog:
 | Forms | `FieldStack` → `FieldBlock` → `Input` / `Textarea` / `Switch` / `Checkbox` / `Radio`; discrete choices → `DropdownMenu` / `ToggleGroup` |
 | Modal | `Dialog` (`size="lg"` for forms; `size="viewport"` for a large inset code/config workspace) / `ConfirmDialog` / `FullscreenDialog` |
 | Feedback | `snackbar()` + root `<SnackbarHost />`; default theme surface/no icon; `severity: "info" / "success" / "warning" / "error"` uses flat tones matching InlineAlert rendered on app-bg + corresponding icon. No glass, backdrop blur or see-through text. `icon: true` enables an icon on the default; `false` / `null` hides it without changing color. Transient chat/request errors → fixed error snackbar rising from bottom-center; never shift Chat or reserve a footer. Persistent notices/recovery → InlineAlert. Capsule action: `action: { label, onClick, variant: "tonal" }`, `dismissible` toggles X, no X → `duration: "long"` ([recipe](../docs/design-system/catalog.md#snackbar-action-variants)); announcement → `Banner` |
-| Loading | pane cold-start `BusyRegion fill`; whole app `BusyScrim`; buttons `loading` + `runLoadingTask` |
+| Loading | unknown waits = sweep skeletons: pane `BusyRegion fill`, whole app `BusyScrim`, custom rows/preview `LoadingSkeleton`, buttons `loading` + `runLoadingTask`; real `value` = linear progress. [Convention](../docs/design-system/loading.md) |
 | Search / filter | `SearchBar` (requires `ariaLabel`); tags → `Chip` / `ChipSet` (never as status) |
 | Icons | `*Icon` from the barrel (`node scripts/api.mjs --search Icon$`) |
 

@@ -1256,7 +1256,7 @@
 }
 
 /* ---------- Toast ---------- */
-/* ---------- BusyScrim / BusyRegion (M3 scrim + progress + message) ---------- */
+/* ---------- BusyScrim / BusyRegion (skeleton or measured progress + message) ---------- */
 .fynns-busy-stack {
   display: flex;
   flex-direction: column;
@@ -1269,6 +1269,11 @@
   min-width: 0;
   padding: var(--fynns-space-lg);
   box-sizing: border-box;
+}
+
+.fynns-busy-skeleton {
+  width: 100%;
+  min-width: 0;
 }
 
 .fynns-busy-stack--linear {
@@ -1403,8 +1408,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fynns-loading-spinner-ring {
-    animation-duration: var(--fynns-duration-reduced-motion-spin);
+  .fynns-loading-skeleton-bar {
+    animation: none;
   }
 }
 

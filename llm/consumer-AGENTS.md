@@ -20,7 +20,11 @@ This app consumes the fynns design system from the sibling checkout
    `sonner`, native `<select>` / `<dialog>` / `alert()`.
 2. Default chrome `DestinationAppShell` → main `PageScroll` → `Card` / `List`
    / `EmptyState`. Modal = `Dialog`; feedback = `snackbar` + `<SnackbarHost />`;
-   loading = `BusyRegion` / `BusyScrim`.
+   loading = `BusyRegion` / `BusyScrim` sweep skeletons; custom placeholders =
+   `LoadingSkeleton`; real `value` = linear progress. Buttons keep `loading`
+   (compact skeleton). No local spinner/shimmer CSS. See
+   `docs/design-system/loading.md`; legacy circular indicators are accepted
+   but render skeletons for unknown waits.
    Chat = FillColumn → Chat; core owns main top + inline `dialog-inset`.
    Never reset `.fynns-fill-column-main`. Transient request errors use
    `snackbar(message, { severity: "error", duration: "long", dismissible: true })`.

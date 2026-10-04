@@ -17,7 +17,7 @@ export type LinearProgressProps = Omit<HTMLAttributes<HTMLDivElement>, "children
 /**
  * Linear progress — determinate active fill + remaining track (optional gap),
  * or indeterminate sliding segments. No end-stop / “dot” mark (removed —
- * see `llm/BREAKING_PURGE.md`). Prefer over `Spinner` for known % / long tasks.
+ * see `llm/BREAKING_PURGE.md`). Use for real percentages; unknown waits use LoadingSkeleton / BusyRegion.
  */
 export function LinearProgress({
   value,
@@ -88,8 +88,8 @@ const CIRCULAR_C = 2 * Math.PI * CIRCULAR_R;
 const CIRCULAR_GAP = (4 / 48) * CIRCULAR_C;
 
 /**
- * M3 circular progress — SVG ring with rounded caps + track gap. Prefer
- * `Spinner` for compact inline/button busy states.
+ * M3 circular progress — retained for compatibility. Loading convention:
+ * unknown waits use LoadingSkeleton / BusyRegion; real values use LinearProgress.
  */
 export function CircularProgress({
   value,

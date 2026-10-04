@@ -40,6 +40,8 @@ Color tokens (`--fynns-color-*`):
   `#e2f0ed`, `text-muted` `#7a9e98`.
 - Semantic: `success` `#4ade80`, `warning` `#fbbf24`, `danger` `#f87171`,
   `danger-border`, `info` `#60a5fa`.
+- Loading: `skeleton-base`, `skeleton-highlight` (theme-aware mixes);
+  `--fynns-layout-skeleton-*` geometry; shared `thinking-shimmer` duration.
 - Misc: `overlay`, `busy-region-mask` (BusyRegion sectional wash — not
   BusyScrim `overlay`), `toggle-track`, `toggle-track-hover`, `scrollbar-thumb*`
   (also under the `scrollbar` group).

@@ -41,7 +41,7 @@ Grep 必须限定目录（`src/primitives` / `docs/design-system` / `llm`）并�
 3. **勿改测试内容当判官**，以现有测试为准。
 4. 图标动作用 Tooltip + aria-label，**禁止 `title=`**（自明的关闭/清除可无 Tooltip）。
 5. 滚动容器必须 `fynns-scroll`（`PageScroll` 已封装），禁原生条。
-6. 加载 / 空 / 错误必显：`BusyRegion` / `BusyScrim` / `EmptyState` / `InlineAlert`；瞬时用 `snackbar` + `<SnackbarHost />`。
+6. 加载 / 空 / 错误必显：`BusyRegion` / `BusyScrim` / `EmptyState` / `InlineAlert`；未知进度用扫光骨架（可组合 `LoadingSkeleton`），真实 `value` 用线性进度；禁止消费侧加载圈或私造 shimmer；瞬时用 `snackbar` + `<SnackbarHost />`。
 7. Popover / Tooltip 定位走 `floatingBox`，勿手写 ad-hoc 几何。
 8. a11y 默认在线；动效用 motion token，勿随意写 ms。
 9. 消费侧 bug：**优先在本仓约束**（文档 / 条约 / CSS），再修消费者；勿只在消费仓打补丁。

@@ -25,13 +25,13 @@ classes.
   ChipSet (`assist`|`filter`|`input`|`suggestion` — never table-cell status),
   Slider, ToggleGroup, Tabs (M3 Primary underline)
 - **Feedback:** Banner, InlineAlert (phrasing copy only — never nest List /
-  FieldStack / CodeBlock inside), LinearProgress / CircularProgress,
-  BusyScrim `{ open, label, message?, value?, size?, indicator? }` /
+  FieldStack / CodeBlock inside), LoadingSkeleton / LinearProgress,
+  CircularProgress (compatibility only; not the loading convention),
+  BusyScrim `{ open, label, message?, value?, size?, indicator?, skeleton? }` /
   BusyRegion `{ busy, label, children?, message?, value?, size?, fill?,
-  indicator? }` (soft frosted blur + `--fynns-color-busy-region-mask` when
+  indicator?, skeleton? }` (soft frosted blur + `--fynns-color-busy-region-mask` when
   children are mounted; empty cold-start ≥ **0.5.191** = chrome only — no
-  content-sized mask island; `indicator` `circular`|`linear`; never stack
-  ring on bar; `fill` for height-resolved cold-start), EmptyState,
+  content-sized mask island; unknown waits use sweep skeletons; real `value` uses one linear bar; `fill` for height-resolved cold-start), EmptyState,
   **Chat** family (see below), Snackbar (`snackbar()` + `<SnackbarHost />`),
   Tooltip, InfoHint
 
@@ -96,7 +96,7 @@ classes.
   padding or reduced shell height for a snackbar. Flat status fills stay
   uniform over text and controls; never shift the app or change InlineAlert.
 
-  **Loading placement (hard):**
+  **Loading placement (hard):** [Sweep skeleton convention](loading.md).
 
   | Scene | Use | Do **not** |
   | --- | --- | --- |
@@ -104,10 +104,10 @@ classes.
   | Pane cold-start | `BusyRegion` `fill` as FillColumn/shell child **or** PageScroll → `.fynns-content-column` (direct / thin section wrapper hosting only the fill — core ≥ **0.5.136** stretches scrollport + pass-through wrappers so BusyStack centers, does not overflow a collapsed overlay); hide section FieldHint until ready; empty host ≥ **0.5.191** paints chrome without frosted mask island | Nest under content-sized unit-stack/Card; EmptyState as loading; FieldHint + busy in one well; bare `fill` inside PageScroll without the content-column height chain; empty BusyRegion painting a content-sized mask “贴图色块” (fixed in core ≥ **0.5.191**) |
   | Dialog/Card body load | `BusyRegion` (+ `fill` if height resolved); no pager siblings under empty overlay; drawer SearchBar **above** BusyRegion | Bare CircularProgress as body; wrap List+Select+Pagination so chrome flickers |
   | Refresh over existing | BusyRegion around List/table only | Unmount → EmptyState; consumer `surface-*` wash; wrap whole Card |
-  | Known % / unknown wait | `linear`+`value` / default `circular`; chrome `min(20rem,100%)` | Stack ring+bar; nest progress in `message` |
-  | Button/icon slot | Inline Spinner via `loading` + **`runLoadingTask` / `useLoadingTask`** (≥ **0.5.177**) | Page-level CircularProgress in the slot; bare `setLoading(true)` with no timeout/abort clear path |
-  | Multi-action footer | **At most one** `loading` in cluster | Twin `loading={busy}` rings |
-  | Card batch CTA + path List rows | **One** ring: batch → Card primary only; per-row → that IconButton only (≥ **0.5.265**) | Card `loading` **and** every row Refresh `loading` for the same run |
+  | Known % / unknown wait | real `value` → linear bar / omitted `value` → sweep skeleton; chrome `min(20rem,100%)` | Stack ring+bar; nest progress in `message` |
+  | Button/icon slot | Compact sweep skeleton via `loading` + **`runLoadingTask` / `useLoadingTask`** (≥ **0.5.177**) | Page-level CircularProgress in the slot; bare `setLoading(true)` with no timeout/abort clear path |
+  | Multi-action footer | **At most one** `loading` in cluster | Twin `loading={busy}` indicators |
+  | Card batch CTA + path List rows | **One** loading skeleton: batch → Card primary only; per-row → that IconButton only (≥ **0.5.265**) | Card `loading` **and** every row Refresh `loading` for the same run |
   | Section wait + chrome | BusyRegion only; header/foot `disabled` without `loading` | BusyRegion + chrome loading |
   | Zero-result catalog | `EmptyState` (`fill` if sole pane body) | EmptyState as loading; content-sized EmptyState as sole canvas child |
   | Hang / cancel guard | `runBusyTask` / `runLoadingTask` with `timeoutMs` and/or `signal` (+ `onError` for toast) | Forever BusyRegion/Scrim/`loading` when fetch never settles; empty catalog painted as BusyRegion |
@@ -131,8 +131,8 @@ classes.
   **paint-before-work:** `afterNextPaint` / `yieldToMain` /
   `runBusyTask(setBusy, task, options?)` / `useBusyTask()` /
   `runLoadingTask` / `useLoadingTask` (≥ **0.5.177**) — `flushSync` busy on →
-  wait one paint → then run the async task so `CircularProgress` can start
-  spinning. Does **not** keep the ring smooth through long sync / WASM compile
+  wait one paint → then run the async task so the skeleton can paint
+  before work. Does **not** keep the sweep smooth through long sync / WASM compile
   on the main thread (use a Worker or `yieldToMain` slices for that). Prefer
   over `setBusy(true)` then immediately blocking work.
   **Hang guards (≥ 0.5.177):** pass `timeoutMs` and/or `signal` so timeout /

@@ -58,7 +58,7 @@ export const DURATION_TOKENS = {
   activity: "720ms",
   "presentation-hint": "1200ms",
   /**
-   * Thinking / streaming status label shimmer sweep (ChatThinking /
+   * Loading skeleton / streaming status label shimmer sweep (ChatThinking /
    * ChatActivity). Industry modal ≈2s linear (VS Code Copilot, Nuxt
    * ChatShimmer, AI Elements Shimmer) — slower than `presentation-hint`.
    */

@@ -152,22 +152,25 @@
   `supportingText` — the strip row is cross-axis **center** (icon | body |
   trailing). Dismiss only via `onDismiss` **inside** the rounded host — never a
   sibling `IconButton` outside the strip. Live `#banner`.
-- **DON'T** put two+ `loading` spinners in one `.fynns-control-cluster`; leave
-  `IconButton` `loading` showing spinner **and** glyph (core ≥ **0.5.80** =
-  spinner-only for iconOnly); stack BusyRegion/BusyScrim with chrome `loading`
+- Unknown waits use [sweep skeletons](loading.md): BusyRegion / BusyScrim
+  default to skeletons; real `value` uses one linear bar. Button / IconButton
+  `loading` uses a compact skeleton. No consumer spinners or private shimmer CSS.
+- **DON'T** put two+ `loading` skeletons in one `.fynns-control-cluster`; leave
+  `IconButton` `loading` showing skeleton **and** glyph (core ≥ **0.5.80** =
+  skeleton-only for iconOnly); stack BusyRegion/BusyScrim with chrome `loading`
   on the same wait host — **one** progress chrome per wait. Live `#rhythm`
   end-align / `#busy-region`.
 - **DON'T** twin the same in-flight wait as **Card / Collapsible `actions`
   primary `loading`** **and** every (or many) path-catalog row rebuild
   `IconButton` `loading` — **information redundancy (hard)** (≥ **0.5.265**).
-  One shared batch task → **one** ring on the batch CTA; list rows stay
-  `disabled` **without** `loading`. One per-row rebuild → ring **only** on that
-  row's IconButton; Card primary stays `disabled` without a second ring. Never
+  One shared batch task → **one** skeleton on the batch CTA; list rows stay
+  `disabled` **without** `loading`. One per-row rebuild → skeleton **only** on that
+  row's IconButton; Card primary stays `disabled` without a second skeleton. Never
   `loading={busy === "run"}` on both the head Button and every row Refresh.
   Live `#sandbox-list-repo-path-actions`. Failure: CONSUMER_TREATY Card batch
   CTA + ListItem row twin loading rings.
 - **DON'T** swap `IconButton` children for a nested `CircularProgress` while
-  busy — use the stock **`loading`** prop (Spinner; iconOnly = spinner-only).
+  busy — use the stock **`loading`** prop (compact skeleton; iconOnly = skeleton-only).
   Nesting `CircularProgress` on `variant="primary"` / `danger` paints an
   accent ring on an accent fill (looks like a blank disk — core ≥ **0.5.217**
   retints nested rings to `currentColor` as a safety net, but the API is still

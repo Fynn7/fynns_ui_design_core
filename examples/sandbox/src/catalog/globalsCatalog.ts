@@ -585,7 +585,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
   {
     id: "busy-region",
     categoryId: "patterns",
-    label: "BusyRegion",
+    label: "BusyRegion / LoadingSkeleton",
     keywords: [
       "忙碌",
       "busy",

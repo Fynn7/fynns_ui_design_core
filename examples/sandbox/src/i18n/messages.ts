@@ -627,6 +627,7 @@ const en = {
     "Save something first, then return here. Pane sole EmptyState uses fill so copy centers in the canvas.",
   "globals.emptyFillHelp":
     "Pane sole zero-result (DestinationAppShell canvas / FillColumn children / shell main): EmptyState fill — centers like BusyRegion fill. Inside Card / List / ChatThread.empty keep the default (no fill).",
+  "globals.loadingSkeletonHelp": "Unknown waits use LoadingSkeleton: rounded text rows, preview block or compact control placeholder. The soft sweep shares ChatThinking timing and stops under reduced motion. BusyRegion / BusyScrim own the status; custom skeleton slots are decorative. Real value means one linear progress bar, never a ring.",
   "globals.busyRegionLabel": "Loading section",
   "globals.busyRegionTitle": "Section",
   "globals.busyRegionMessage": "Refreshing this block…",
@@ -635,13 +636,13 @@ const en = {
   "globals.busyRegionStart": "Show busy",
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
-    "BusyRegion wraps a section: relative soft blur + tokenized gray mask (`backdrop-filter` + `--fynns-color-busy-region-mask` — not a consumer `surface-*` wash or `--fynns-color-overlay` BusyScrim; default blur radius light so busy does not read as a glitchy frame) + one progress chrome + visible copy. Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress, and never invent a private centered progress shell (hub-progress-block) for section loads. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim. Dialog / Card / section body load → BusyRegion (fill when height-resolved) — never a bare default-md CircularProgress as the body. FieldBlock / Card header chrome while BusyRegion is busy → disabled without loading (see FieldBlock actions sample below).",
+    "BusyRegion uses a sweep skeleton for unknown waits and one linear progress bar when value is supplied. Legacy circular / linear indicator props follow the same policy. Keep message as phrasing only; use the skeleton slot for decorative LoadingSkeleton composition. Loaded content stays mounted under the soft blur and gray mask; empty cold-start has no mask island. Use fill only in a height-resolved pane. Header and footer actions stay disabled without loading while the body owns the wait.",
   "globals.busyRegionNarrowHelp":
     "Narrow host (NavigationDrawer / EndAside width): linear BusyStack must shrink to the host — never a fixed 20rem / 100vw bar that spills past the drawer seam. Live sample below.",
   "globals.busyRegionNarrowLabel": "Scanning samples",
   "globals.busyRegionNarrowMessage": "Scanning sample-files… 24/16099",
   "globals.busyRegionDrawerHelp":
-    "NavigationDrawer cold-start: SearchBar / tools stay **siblings above** BusyRegion (never wrap Search inside BusyRegion). Empty BusyRegion without fill paints chrome in normal flow — the ring must not overlap the SearchBar. Empty cold-start (≥ **0.5.191**) drops frosted mask so BusyStack is not a floating surface island on bare app-bg (no 贴图色块). Live `#sandbox-busy-region-empty-no-mask`.",
+    "NavigationDrawer cold-start: SearchBar / tools stay **siblings above** BusyRegion (never wrap Search inside BusyRegion). Empty BusyRegion without fill paints chrome in normal flow — the skeleton must not overlap the SearchBar. Empty cold-start (≥ **0.5.191**) drops frosted mask so BusyStack is not a floating surface island on bare app-bg (no 贴图色块). Live `#sandbox-busy-region-empty-no-mask`.",
   "globals.busyRegionDrawerSearchPh": "Search name / description…",
   "globals.busyRegionDrawerSearchAria": "Search catalog",
   "globals.busyRegionDrawerBusyLabel": "Loading…",
@@ -650,7 +651,7 @@ const en = {
   "globals.busyRegionFillStart": "Show fill busy",
   "globals.busyRegionFillStop": "Clear fill busy",
   "globals.busyRegionFillHelp":
-    "Pane cold-start: BusyRegion fill as FillColumn children (this stage) **or** PageScroll → `.fynns-content-column` (live `#sandbox-busy-region-page-scroll-fill`, ≥ **0.5.136**) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the ring parks at the top / overflows the overlay). Empty fill (≥ **0.5.191**) centers BusyStack **without** frosted mask island on bare app-bg; refresh-over-content keeps soft blur + gray mask. Do not use EmptyState + CircularProgress as a loading shell, and do not add a private `surface-*` colored loading wash.",
+    "Pane cold-start: BusyRegion fill as FillColumn children (this stage) **or** PageScroll → `.fynns-content-column` (live `#sandbox-busy-region-page-scroll-fill`, ≥ **0.5.136**) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the skeleton parks at the top / overflows the overlay). Empty fill (≥ **0.5.191**) centers BusyStack **without** frosted mask island on bare app-bg; refresh-over-content keeps soft blur + gray mask. Do not use EmptyState + CircularProgress as a loading shell, and do not add a private `surface-*` colored loading wash.",
   "globals.busyRegionPageScrollFillLabel": "Loading section",
   "globals.busyRegionPageScrollFillHelp":
     "PageScroll pane cold-start (≥ **0.5.136**): `.fynns-page-scroll` → `.fynns-content-column` (min-height fills the scrollport) → optional thin section wrapper → `BusyRegion` `fill`. BusyStack must **center** in the visible column — not park under TopAppBar or overflow a collapsed absolute overlay. Live host `#sandbox-busy-region-page-scroll-fill`. Failure mode: CONSUMER_TREATY **BusyRegion fill BusyStack top overflow in PageScroll**.",
@@ -673,15 +674,15 @@ const en = {
   "globals.busyRegionPaneLeadShowCold": "Simulate cold-start",
   "globals.busyRegionPaneLeadShowReady": "Simulate loaded",
   "globals.busyRegionPaneLeadHelp":
-    "Pane cold-start in one well: hide section FieldHint / SectionLead sub until data is ready — render only BusyRegion fill (no .fynns-unit-stack sibling hint). Never stack hint + fill busy in the same column (spinner overlaps scope copy). Failure mode: CONSUMER_TREATY section FieldHint + pane cold-start BusyRegion.",
+    "Pane cold-start in one well: hide section FieldHint / SectionLead sub until data is ready — render only BusyRegion fill (no .fynns-unit-stack sibling hint). Never stack hint + fill busy in the same column (loading placeholder overlaps scope copy). Failure mode: CONSUMER_TREATY section FieldHint + pane cold-start BusyRegion.",
   "globals.busyRegionDialogOpen": "Open Dialog body load",
   "globals.busyRegionDialogTitle": "Pick an item",
   "globals.busyRegionDialogLabel": "Loading catalog",
   "globals.busyRegionDialogMessage": "Fetching the list…",
   "globals.busyRegionDialogHelp":
-    "Dialog / section body load: put BusyRegion in the body (add fill when the host height is resolved — see fill sample above). Never park a bare default-md CircularProgress in the Dialog or unit-stack. CircularProgress sm stays for IconButton / Button slots only.",
+    "Dialog / section body load: put BusyRegion in the body (add fill when the host height is resolved — see fill sample above). Never park a bare default-md CircularProgress in the Dialog or unit-stack. Button / IconButton use the stock loading prop for compact skeletons.",
   "globals.busyRegionColdHelp":
-    "Card / section body cold-start: render BusyRegion only — do not also paint Sessions Select / Pagination as siblings under the empty overlay (mask covers the footer; spinner sits on the Select). After data loads, keep pager chrome outside BusyRegion and wrap only the List / table on refresh.",
+    "Card / section body cold-start: render BusyRegion only — do not also paint Sessions Select / Pagination as siblings under the empty overlay (mask covers the footer; loading placeholder sits on the Select). After data loads, keep pager chrome outside BusyRegion and wrap only the List / table on refresh.",
   "globals.busyRegionColdTitle": "Sessions catalog",
   "globals.busyRegionColdLabel": "Loading sessions",
   "globals.busyRegionColdMessage": "Fetching the catalog…",
@@ -691,7 +692,7 @@ const en = {
   "globals.busyRegionColdShow": "Show cold busy",
   "globals.busyRegionColdClear": "Show loaded catalog",
   "globals.busyRegionFieldHelp":
-    "FieldBlock body wait + label-row refresh: wrap the body in BusyRegion — while busy the header IconButton stays the glyph and is `disabled` **without** `loading` (soft blur + gray mask keep the body mounted and de-emphasize copy so busy message does not stack on mono preview). Never stack BusyRegion ring with a chrome `loading` spinner on the same host (information redundancy). Per-control wait with no BusyRegion may still use IconButton `loading` alone. Live sample below uses `CodeBlock` under refresh.",
+    "FieldBlock body wait + label-row refresh: wrap the body in BusyRegion — while busy the header IconButton stays the glyph and is `disabled` **without** `loading` (soft blur + gray mask keep the body mounted and de-emphasize copy so busy message does not stack on mono preview). Never stack BusyRegion skeleton with a chrome `loading` skeleton on the same host (information redundancy). Per-control wait with no BusyRegion may still use IconButton `loading` alone. Live sample below uses `CodeBlock` under refresh.",
   "globals.busyRegionFieldLabel": "Sample notice",
   "globals.busyRegionFieldRefreshTip": "Refresh sample",
   "globals.busyRegionFieldBusyLabel": "Refreshing sample",
@@ -739,13 +740,13 @@ const en = {
   "globals.busyScrimLabel": "Loading",
   "globals.busyScrimMessage": "Working — please wait…",
   "globals.busyScrimHelp":
-    "BusyScrim is a non-dismissible full-viewport scrim (same overlay token as Dialog) + one progress chrome + message. Determinate sample uses indicator=linear. Auto-closes here after 2s.",
+    "BusyScrim is a non-dismissible full-viewport scrim with a sweep skeleton and message. A supplied value replaces the skeleton with one linear progress bar. This sample closes after 2s.",
   "globals.busyPaintBad": "Anti-pattern: busy then stall",
   "globals.busyPaintGood": "runBusyTask then stall",
   "globals.busyPaintLabel": "Heavy work",
   "globals.busyPaintMessage": "Simulated 800ms main-thread stall…",
   "globals.busyPaintHelp":
-    "`runBusyTask` / `useBusyTask`: flushSync busy on → afterNextPaint → then work so the ring can start. Same sync stall can still hitch afterward; use a Worker for true smoothness.",
+    "`runBusyTask` / `useBusyTask`: flushSync busy on → afterNextPaint → then work so the skeleton can paint. Same sync stall can still hitch afterward; use a Worker for true smoothness.",
   "globals.stepperAria": "Setup progress",
   "globals.stepperHelp":
     "Stepper marks the active step; completed labels reuse Button ghost sm when onStepChange is set.",
@@ -1065,7 +1066,7 @@ const en = {
   "globals.rhythmCatalogRefresh": "Refresh list",
   "globals.rhythmCatalogAdd": "Add server",
   "globals.rhythmEndAlignHelp":
-    "Action footer with no visible name: one `.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`). Use `__grow` only when a leading Select / meta must fill leftover. Never `ControlRow` with empty `label=\"\"` (fake label column / mid-left island). **Busy (hard):** click either button — **at most one** `loading` ring; the sibling stays `disabled` without a second spinner. Never bind the same `busy` to every `loading`.",
+    "Action footer with no visible name: one `.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`). Use `__grow` only when a leading Select / meta must fill leftover. Never `ControlRow` with empty `label=\"\"` (fake label column / mid-left island). **Busy (hard):** click either button — **at most one** `loading` skeleton; the sibling stays `disabled` without a second skeleton. Never bind the same `busy` to every `loading`.",
   "globals.rhythmEndAlignIconHelp":
     "Icon-only end-align strip: Tooltip → IconButton siblings stay 40dp circles (not crushed ellipses on the full-width row).",
   "globals.rhythmEndAlignIconOpenTip": "Open destination folder",
@@ -1210,7 +1211,7 @@ const en = {
   "globals.formRecipeReset": "Reset",
   "globals.formRecipeSave": "Save",
   "globals.formRecipeHelp":
-    "Recipe hosts: `Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` intro → `FieldStack`(`FieldBlock` text…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → feedback / foot. Dialog foot: **one** `loading` (Extract); siblings `disabled` without rings. See AGENTS.md Toolbar / unit rhythm.",
+    "Recipe hosts: `Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` intro → `FieldStack`(`FieldBlock` text…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → feedback / foot. Dialog foot: **one** `loading` (Extract); siblings `disabled` without loading. See AGENTS.md Toolbar / unit rhythm.",
   "globals.btnSmall": "Small",
   "globals.btnApply": "Apply",
   "globals.btnRefresh": "Refresh",
@@ -1386,7 +1387,7 @@ const en = {
   "globals.progressLinearIndeterminate": "Linear progress (indeterminate)",
   "globals.progressLinearIndeterminateAria": "Loading",
   "globals.progressHelp":
-    "Determinate LinearProgress is active fill + remaining track (optional gap). The M3 end-stop / end “dot” is removed — do not revive stopIndicator or private end marks. Known-% section loads → BusyRegion indicator=linear; long tasks beside live content may use a strip LinearProgress.",
+    "Determinate LinearProgress is active fill + remaining track (optional gap). The M3 end-stop / end “dot” is removed — do not revive stopIndicator or private end marks. Known-% section loads → BusyRegion value; inline real progress → LinearProgress value. Unknown waits use BusyRegion / LoadingSkeleton. Circular and indeterminate bars below are compatibility demos only.",
   "globals.progressCircularAria": "Circular progress",
   "globals.progressCircularIndeterminateAria": "Working",
   "globals.avatarAda": "Ada Lovelace",
@@ -2383,7 +2384,7 @@ const en = {
   "globals.iconBtnLoading": "Loading icon button",
   "globals.iconBtnPrimaryLoading": "Primary loading icon button",
   "globals.iconBtnPrimaryLoadingHelp":
-    "IconButton busy (hard ≥ **0.5.217**): use stock **`loading`** — Spinner on primary/danger uses `currentColor` (visible on filled chrome). Do **not** swap children for nested `CircularProgress` (accent ring on accent fill = blank disk). Live `#sandbox-iconbutton-primary-loading`. Failure: CONSUMER_TREATY IconButton busy swaps CircularProgress instead of loading.",
+    "IconButton busy (hard ≥ **0.5.217**): use stock **`loading`** — Compact skeleton on primary/danger uses `currentColor` (visible on filled chrome). Do **not** swap children for nested `CircularProgress` (accent ring on accent fill = blank disk). Live `#sandbox-iconbutton-primary-loading`. Failure: CONSUMER_TREATY IconButton busy swaps CircularProgress instead of loading.",
   "globals.inputError": "This field is required.",
   "globals.inputFilledAria": "Filled small input with leading",
   "globals.inputFilledPlaceholder": "Filled sm + leading",
@@ -3128,6 +3129,7 @@ const zh: Record<MessageKey, string> = {
     "先保存内容再回到这里。画布唯一子级 EmptyState 用 fill，文案在可见区内居中。",
   "globals.emptyFillHelp":
     "栏目唯一零结果（DestinationAppShell canvas / FillColumn children / shell main）：EmptyState fill — 与 BusyRegion fill 同宿主契约居中。Card / List / ChatThread.empty 内保持默认（不要 fill）。",
+  "globals.loadingSkeletonHelp": "未知时长等待统一使用 LoadingSkeleton：圆角文字骨架、预览块或控件紧凑骨架。扫光与 ChatThinking 共用动效节奏，减少动态效果时停止。BusyRegion / BusyScrim 负责状态播报，自定义 skeleton 槽仅作装饰。真实 value 显示一条线性进度条，不显示加载圈。",
   "globals.busyRegionLabel": "区块加载中",
   "globals.busyRegionTitle": "区块",
   "globals.busyRegionMessage": "正在刷新此区域…",
@@ -3136,13 +3138,13 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionStart": "显示 busy",
   "globals.busyRegionStop": "清除 busy",
   "globals.busyRegionHelp":
-    "BusyRegion 包裹区块：相对定位轻模糊 + token 浅灰 mask（`backdrop-filter` + `--fynns-color-busy-region-mask` — 禁止消费仓 `surface-*` 洗底或复用 `--fynns-color-overlay` BusyScrim；默认模糊半径保持轻量）+ 一个进度件 + 可见文案。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress，也禁止私有居中进度壳（hub-progress-block）冒充区块加载。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。全屏染色 → BusyScrim。Dialog / Card / section 正文加载 → BusyRegion（已定高用 fill）— 禁止裸默认 md CircularProgress 当正文壳。BusyRegion busy 时 FieldBlock / Card 头栏 chrome 仅 disabled、不画 loading（见下方 FieldBlock actions 样例）。",
+    "BusyRegion 未知时长使用扫光骨架，传入真实 value 时只显示一条线性进度条。旧 circular / linear indicator 遵循相同规则。message 仅放文案；定制占位结构用 skeleton 槽组合 LoadingSkeleton。已有内容在轻模糊与灰色遮罩下保持挂载；空冷启动不显示遮罩色块。fill 仅用于宿主已定高的栏目。正文负责加载时，头栏和脚栏动作只 disabled，不叠 loading。",
   "globals.busyRegionNarrowHelp":
     "窄宿主（NavigationDrawer / EndAside 宽）：linear BusyStack 必须随宿主收缩 — 禁止固定 20rem / 100vw 进度条溢出抽屉缝。下方为活样例。",
   "globals.busyRegionNarrowLabel": "扫描样例",
   "globals.busyRegionNarrowMessage": "正在扫描 sample-files… 24/16099",
   "globals.busyRegionDrawerHelp":
-    "NavigationDrawer 冷启动：SearchBar / 工具条是 BusyRegion 的**上方兄弟**（禁止把 Search 包进 BusyRegion）。无 children 且无 fill 时 chrome 走正常文档流 — 圈不得叠在 SearchBar 上。空冷启动（≥ **0.5.191**）关掉 frosted mask，BusyStack 不再是裸 app-bg 上的浮空色块（贴图色块）。对照 `#sandbox-busy-region-empty-no-mask`。",
+    "NavigationDrawer 冷启动：SearchBar / 工具条是 BusyRegion 的**上方兄弟**（禁止把 Search 包进 BusyRegion）。无 children 且无 fill 时 chrome 走正常文档流 — 骨架不得叠在 SearchBar 上。空冷启动（≥ **0.5.191**）关掉 frosted mask，BusyStack 不再是裸 app-bg 上的浮空色块（贴图色块）。对照 `#sandbox-busy-region-empty-no-mask`。",
   "globals.busyRegionDrawerSearchPh": "搜索名称 / 描述…",
   "globals.busyRegionDrawerSearchAria": "搜索目录",
   "globals.busyRegionDrawerBusyLabel": "加载中…",
@@ -3151,7 +3153,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionFillStart": "显示 fill busy",
   "globals.busyRegionFillStop": "清除 fill busy",
   "globals.busyRegionFillHelp":
-    "栏目冷启动：BusyRegion fill 作为 FillColumn children（本舞台）**或** PageScroll → `.fynns-content-column`（对照 `#sandbox-busy-region-page-scroll-fill`，≥ **0.5.136**）— 禁止再塞进 .fynns-unit-stack / Card / List / Dialog unit-stack（内容定高，fill 拉不开，圈会贴顶 / 溢出遮罩）。空 fill（≥ **0.5.191**）在裸 app-bg 上居中 BusyStack **且无** frosted mask 色块；刷新已有内容时仍用轻模糊 + 浅灰 mask。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有 `surface-*` 彩色 loading 底。",
+    "栏目冷启动：BusyRegion fill 作为 FillColumn children（本舞台）**或** PageScroll → `.fynns-content-column`（对照 `#sandbox-busy-region-page-scroll-fill`，≥ **0.5.136**）— 禁止再塞进 .fynns-unit-stack / Card / List / Dialog unit-stack（内容定高，fill 拉不开，骨架会贴顶 / 溢出遮罩）。空 fill（≥ **0.5.191**）在裸 app-bg 上居中 BusyStack **且无** frosted mask 色块；刷新已有内容时仍用轻模糊 + 浅灰 mask。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有 `surface-*` 彩色 loading 底。",
   "globals.busyRegionPageScrollFillLabel": "加载栏目",
   "globals.busyRegionPageScrollFillHelp":
     "PageScroll 栏目冷启动（≥ **0.5.136**）：`.fynns-page-scroll` → `.fynns-content-column`（min-height 铺满滚口）→ 可选薄栏目包装 → `BusyRegion` `fill`。BusyStack 必须在可见列内**居中** — 禁止贴 TopAppBar 或溢出塌缩的 absolute 遮罩。对照 `#sandbox-busy-region-page-scroll-fill`。失败模式：CONSUMER_TREATY **BusyRegion fill BusyStack top overflow in PageScroll**。",
@@ -3180,7 +3182,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionDialogLabel": "加载目录",
   "globals.busyRegionDialogMessage": "正在拉取列表…",
   "globals.busyRegionDialogHelp":
-    "Dialog / section 正文加载：正文里放 BusyRegion（宿主已定高再加 fill — 见上方 fill 样例）。禁止把裸默认 md CircularProgress 塞进 Dialog 或 unit-stack。CircularProgress sm 仅用于 IconButton / Button 槽。",
+    "Dialog / section 正文加载：正文里放 BusyRegion（宿主已定高再加 fill — 见上方 fill 样例）。禁止把裸默认 md CircularProgress 塞进 Dialog 或 unit-stack。Button / IconButton 只用 stock loading 属性显示紧凑骨架。",
   "globals.busyRegionColdHelp":
     "Card / section 正文冷启动：只渲 BusyRegion — 禁止再并行渲 Sessions Select / Pagination 等脚栏兄弟（mask 遮罩会盖住脚栏，圈叠在 Select 上）。有数据后：脚栏留在 BusyRegion 外，翻页 / 刷新只包 List / 表。",
   "globals.busyRegionColdTitle": "会话目录",
@@ -3240,13 +3242,13 @@ const zh: Record<MessageKey, string> = {
   "globals.busyScrimLabel": "加载中",
   "globals.busyScrimMessage": "处理中，请稍候…",
   "globals.busyScrimHelp":
-    "BusyScrim 为不可关闭的全屏 scrim（与 Dialog 同 overlay token）+ 一个进度件 + 文案。确定进度样例用 indicator=linear。此处 2 秒后自动关闭。",
+    "BusyScrim 为不可关闭的全屏 scrim，显示扫光骨架与文案。传入真实 value 时改为一条线性进度条。此样例 2 秒后自动关闭。",
   "globals.busyPaintBad": "反例：busy 后立刻卡主线程",
   "globals.busyPaintGood": "runBusyTask 后再卡主线程",
   "globals.busyPaintLabel": "繁重工作",
   "globals.busyPaintMessage": "模拟主线程占用 800ms…",
   "globals.busyPaintHelp":
-    "`runBusyTask` / `useBusyTask`：flushSync 打开 busy → afterNextPaint → 再跑任务，圆环才有机会转起来。之后同样的同步卡顿仍可能顿一下；真正丝滑需 Worker。",
+    "`runBusyTask` / `useBusyTask`：flushSync 打开 busy → afterNextPaint → 再跑任务，骨架才有机会绘制。之后同样的同步卡顿仍可能顿一下；真正丝滑需 Worker。",
   "globals.stepperAria": "设置进度",
   "globals.stepperHelp":
     "Stepper 标出当前步；提供 onStepChange 时，已完成步骤的标签复用 Button ghost sm。",
@@ -3883,7 +3885,7 @@ const zh: Record<MessageKey, string> = {
   "globals.progressLinearIndeterminate": "线性进度（不确定）",
   "globals.progressLinearIndeterminateAria": "加载中",
   "globals.progressHelp":
-    "确定进度 LinearProgress = active 填充 + 剩余轨（可选 gap）。M3 末端 stop /「带点」已删除 — 禁止复活 stopIndicator 或私有末端圆点。已知 % 的区块加载 → BusyRegion indicator=linear；旁路长任务可用条带 LinearProgress。",
+    "确定进度 LinearProgress = active 填充 + 剩余轨（可选 gap）。M3 末端 stop /「带点」已删除 — 禁止复活 stopIndicator 或私有末端圆点。已知 % 的区块加载 → BusyRegion value；行内真实进度 → LinearProgress value。未知等待使用 BusyRegion / LoadingSkeleton。下方圆环与不确定条仅为兼容示例。",
   "globals.progressCircularAria": "环形进度",
   "globals.progressCircularIndeterminateAria": "处理中",
   "globals.avatarAda": "Ada Lovelace",
@@ -4504,7 +4506,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listShortcutCardUrlPath": "https://example.com/docs",
   "globals.listCatalogAria": "路径目录示例",
   "globals.listCatalogStaticHelp":
-    "**路径 / 仓目录（硬 ≥ 0.5.168；滚动轨 ≥ 0.5.171；防溢出 ≥ **0.5.224**；状态一次 ≥ **0.5.264**；批量 CTA ≥ **0.5.265**）：** `interactive={false}` 仍把 end 操作放在 trailing 兄弟槽 — 一个 `.fynns-control-cluster` 全是 ghost **md** IconButton（同 40dp 基线）。状态 / 空态 = **`overline` 一次** — **禁止**再在 `trailingSupportingText` 写同义状态（如「尚未运行」+「未构建」）。kind/wiki = 互补的 `trailingSupportingText` / `.fynns-table-meta` — **禁止** headline 里 Chip / 自造 badge。批量启用 = leading **`Checkbox`** — **禁止** Switch 夹在 IconButton 中间。删除 = ghost + ConfirmDialog — **禁止** `IconButton` `danger` 实心盘。批量运行（≥ **0.5.265**）：仅 Card primary Button `loading` — 行内 Refresh IconButton **只 disabled、不带 `loading`**（禁止双环）。单行 Refresh 可自带环。封顶井：`List` + `fynns-scroll` + `list-well-max-height*` — **overflow-y: auto**（行不得画出井外盖住下一段说明）+ meta 须离开 overlay Y 轨（core 预留 `--fynns-scrollbar-size`；勿自造消费仓 end pad）。失败：CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup / List scroll-well trailing meta kisses overlay rail / List scroll-well overflow-y spill overlaps siblings / ListItem overline restates trailing status / Card batch CTA + ListItem row twin loading rings。对照 `#sandbox-list-repo-path-actions`。",
+    "**路径 / 仓目录（硬 ≥ 0.5.168；滚动轨 ≥ 0.5.171；防溢出 ≥ **0.5.224**；状态一次 ≥ **0.5.264**；批量 CTA ≥ **0.5.265**）：** `interactive={false}` 仍把 end 操作放在 trailing 兄弟槽 — 一个 `.fynns-control-cluster` 全是 ghost **md** IconButton（同 40dp 基线）。状态 / 空态 = **`overline` 一次** — **禁止**再在 `trailingSupportingText` 写同义状态（如「尚未运行」+「未构建」）。kind/wiki = 互补的 `trailingSupportingText` / `.fynns-table-meta` — **禁止** headline 里 Chip / 自造 badge。批量启用 = leading **`Checkbox`** — **禁止** Switch 夹在 IconButton 中间。删除 = ghost + ConfirmDialog — **禁止** `IconButton` `danger` 实心盘。批量运行（≥ **0.5.265**）：仅 Card primary Button `loading` — 行内 Refresh IconButton **只 disabled、不带 `loading`**（禁止重复加载动效）。单行 Refresh 可自带紧凑骨架。封顶井：`List` + `fynns-scroll` + `list-well-max-height*` — **overflow-y: auto**（行不得画出井外盖住下一段说明）+ meta 须离开 overlay Y 轨（core 预留 `--fynns-scrollbar-size`；勿自造消费仓 end pad）。失败：CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup / List scroll-well trailing meta kisses overlay rail / List scroll-well overflow-y spill overlaps siblings / ListItem overline restates trailing status / Card batch CTA + ListItem row twin loading rings。对照 `#sandbox-list-repo-path-actions`。",
   "globals.listCatalogStaticAria": "带 end 操作的静态路径目录示例",
   "globals.listRepoPathCardTitle": "仓库",
   "globals.listRepoPathBatchRebuild": "立刻重建勾选",
@@ -4865,7 +4867,7 @@ const zh: Record<MessageKey, string> = {
   "globals.iconBtnLoading": "加载中图标按钮",
   "globals.iconBtnPrimaryLoading": "主色加载中图标按钮",
   "globals.iconBtnPrimaryLoadingHelp":
-    "IconButton 忙碌（硬 ≥ **0.5.217**）：用 stock **`loading`** — 主色 / danger 上 Spinner 走 `currentColor`（填色铬上可见）。**禁止**把 children 换成嵌套 `CircularProgress`（accent 环贴 accent 底 = 空白盘）。对照 `#sandbox-iconbutton-primary-loading`。失败模式：CONSUMER_TREATY IconButton busy swaps CircularProgress instead of loading。",
+    "IconButton 忙碌（硬 ≥ **0.5.217**）：用 stock **`loading`** — 主色 / danger 上紧凑骨架走 `currentColor`（填色铬上可见）。**禁止**把 children 换成嵌套 `CircularProgress`（accent 环贴 accent 底 = 空白盘）。对照 `#sandbox-iconbutton-primary-loading`。失败模式：CONSUMER_TREATY IconButton busy swaps CircularProgress instead of loading。",
   "globals.inputError": "此字段为必填。",
   "globals.inputFilledAria": "带前缀的 filled 小输入框",
   "globals.inputFilledPlaceholder": "Filled sm + 前缀",

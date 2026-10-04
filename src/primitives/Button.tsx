@@ -29,7 +29,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   danger?: boolean;
   /** Layout-only: renders a square icon button. */
   iconOnly?: boolean;
-  /** Shows a spinner and disables the control. */
+  /** Shows a compact sweep skeleton and disables the control. */
   loading?: boolean;
   children?: ReactNode;
 };

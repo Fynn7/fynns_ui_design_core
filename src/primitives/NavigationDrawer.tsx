@@ -571,7 +571,7 @@ export type NavigationDrawerNewChatProps = Omit<
    * `新会话` — ChatGPT sidebar grammar.
    */
   label: string;
-  /** Shows a spinner and disables the control. */
+  /** Shows a compact sweep skeleton and disables the control. */
   loading?: boolean;
   /**
    * Optional trailing chrome on the same row (typically `DropdownMenu`

@@ -1,4 +1,6 @@
-/** Internal busy glyph for Button / overlays — not part of the public barrel. */
+import { LoadingSkeleton } from "./LoadingSkeleton";
+
+/** Internal compatibility name for the compact loading skeleton. */
 export type SpinnerSize = "sm" | "md" | "lg";
 
 export function Spinner({
@@ -15,7 +17,10 @@ export function Spinner({
     .join(" ");
   return (
     <span className={classes} role="status" aria-label={label}>
-      <span className="fynns-loading-spinner-ring" aria-hidden />
+      {/* Preserve the legacy DOM hook while rendering a rectangular skeleton. */}
+      <span className="fynns-loading-spinner-ring" aria-hidden>
+        <LoadingSkeleton variant="compact" size={size} aria-hidden />
+      </span>
       <span className="fynns-sr-only">{label}</span>
     </span>
   );

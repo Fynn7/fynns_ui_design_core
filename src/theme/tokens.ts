@@ -95,6 +95,9 @@ export const COLOR_TOKENS = {
    * (full-viewport BusyScrim only — too dark for sectional wells).
    */
   "busy-region-mask": "rgba(0, 0, 0, 0.20)",
+  /** Quiet skeleton fill and ChatThinking-like accent-into-muted sweep. */
+  "skeleton-base": "color-mix(in srgb, var(--fynns-color-text-muted) 16%, var(--fynns-color-app-bg))",
+  "skeleton-highlight": "color-mix(in srgb, var(--fynns-color-accent) 24%, var(--fynns-color-skeleton-base))",
   /** Legacy toast surface; kept for backward compatibility. */
   "toast-surface": "#062126",
   "control-surface": "rgba(255, 255, 255, 0.02)",
@@ -1553,6 +1556,13 @@ export const LAYOUT_TOKENS = {
    * read as a corrupted / glitchy frame (heavy blur → that risk).
    */
   "busy-region-backdrop-blur": "3px",
+  "skeleton-line-sm": "0.5rem",
+  "skeleton-line-md": "0.75rem",
+  "skeleton-line-lg": "1rem",
+  "skeleton-block-height": "8rem",
+  "skeleton-compact-sm": "1rem",
+  "skeleton-compact-md": "1.5rem",
+  "skeleton-compact-lg": "2.5rem",
   /**
    * Soft cap for `FillColumn` `header` on `DestinationAppShell` canvas when the
    * preview band hosts a Card / PageScroll — keeps Chat visible in `main`.

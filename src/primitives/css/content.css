@@ -793,44 +793,84 @@ a.fynns-breadcrumb-link:visited {
 /* ---------- Loading ---------- */
 .fynns-loading-spinner {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
 }
 
-.fynns-loading-spinner--sm {
-  width: 1rem;
-  height: 1rem;
-}
-
-.fynns-loading-spinner--md {
-  width: 1.6rem;
-  height: 1.6rem;
-}
-
-.fynns-loading-spinner--lg {
-  width: 2.5rem;
-  height: 2.5rem;
-}
-
+/* Legacy DOM hooks retained for internal callers; there is no rotating ring. */
 .fynns-loading-spinner-ring {
-  width: 100%;
-  height: 100%;
-  border: 3px solid color-mix(in srgb, var(--fynns-color-accent) 20%, transparent);
-  border-top-color: var(--fynns-color-accent);
-  border-radius: var(--fynns-radius-round);
-  animation: fynns-spin var(--fynns-duration-loading-spin) linear infinite;
+  display: inline-flex;
+  color: inherit;
 }
 
-/* Filled buttons use accent/danger background — default accent ring is invisible there. */
-.fynns-btn--primary .fynns-loading-spinner-ring,
-.fynns-btn--danger .fynns-loading-spinner-ring {
-  border-color: color-mix(in srgb, currentColor 25%, transparent);
-  border-top-color: currentColor;
+.fynns-loading-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  --fynns-skeleton-height: var(--fynns-layout-skeleton-line-md);
+  --fynns-skeleton-fill: var(--fynns-color-skeleton-base);
+  --fynns-skeleton-peak: var(--fynns-color-skeleton-highlight);
+}
+
+.fynns-loading-skeleton--sm { --fynns-skeleton-height: var(--fynns-layout-skeleton-line-sm); }
+.fynns-loading-skeleton--lg { --fynns-skeleton-height: var(--fynns-layout-skeleton-line-lg); }
+
+.fynns-loading-skeleton-bar {
+  display: block;
+  flex-shrink: 0;
+  width: 100%;
+  height: var(--fynns-skeleton-height);
+  border-radius: var(--fynns-radius-pill);
+  background-color: var(--fynns-skeleton-fill);
+  background-image: linear-gradient(90deg,
+    var(--fynns-skeleton-fill) 0%, var(--fynns-skeleton-fill) 30%,
+    var(--fynns-skeleton-peak) 50%,
+    var(--fynns-skeleton-fill) 70%, var(--fynns-skeleton-fill) 100%);
+  background-size: 400% 100%;
+  animation: fynns-chat-thinking-shimmer var(--fynns-duration-thinking-shimmer) linear infinite;
+}
+
+.fynns-loading-skeleton--text > :nth-child(3n + 1) { width: 58%; }
+.fynns-loading-skeleton--text > :nth-child(3n + 2) { width: 82%; }
+.fynns-loading-skeleton--block > .fynns-loading-skeleton-bar {
+  height: var(--fynns-layout-skeleton-block-height);
+  border-radius: var(--fynns-radius-sm);
+}
+
+.fynns-loading-skeleton--compact {
+  width: var(--fynns-layout-skeleton-compact-md);
+  height: var(--fynns-layout-skeleton-compact-md);
+  justify-content: center;
+  gap: var(--fynns-space-2xs);
+  --fynns-skeleton-height: var(--fynns-space-2xs);
+  --fynns-skeleton-fill: color-mix(in srgb, currentColor 25%, transparent);
+  --fynns-skeleton-peak: currentColor;
+}
+.fynns-loading-skeleton--compact.fynns-loading-skeleton--sm {
+  width: var(--fynns-layout-skeleton-compact-sm);
+  height: var(--fynns-layout-skeleton-compact-sm);
+}
+.fynns-loading-skeleton--compact.fynns-loading-skeleton--lg {
+  width: var(--fynns-layout-skeleton-compact-lg);
+  height: var(--fynns-layout-skeleton-compact-lg);
+}
+.fynns-loading-skeleton--compact > :first-child { width: 60%; }
+.fynns-loading-skeleton--compact > :nth-child(3) { width: 80%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-loading-skeleton-bar {
+    animation: none;
+    background-image: none;
+  }
 }
 
 /*
  * Same trap for nested CircularProgress (consumer anti-pattern: swap IconButton
- * children instead of `loading`). Prefer `loading` — Spinner is the chrome glyph.
+ * children instead of `loading`). Prefer `loading` — compact skeleton is the chrome glyph.
  * ≥ **0.5.217**: on-accent / on-danger stroke so the ring is not accent-on-accent.
  */
 .fynns-btn--primary .fynns-circular-progress,

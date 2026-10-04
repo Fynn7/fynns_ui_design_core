@@ -8,6 +8,7 @@ import {
   BottomSheet,
   Breadcrumb,
   BusyRegion,
+  LoadingSkeleton,
   BusyScrim,
   Button,
   MessageSquareIcon,
@@ -7006,6 +7007,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="busy-region">
+        <div id="sandbox-loading-skeleton" className="fynns-unit-stack">
+          <SandboxHelp text={t("globals.loadingSkeletonHelp")} />
+          <LoadingSkeleton label={t("globals.busyRegionLabel")} lines={6} />
+          <LoadingSkeleton label={t("globals.busyRegionLabel")} variant="block" />
+          <LoadingSkeleton label={t("globals.busyRegionLabel")} variant="compact" />
+          <BusyRegion busy label={t("globals.busyRegionLabel")}
+            skeleton={<LoadingSkeleton lines={5} aria-hidden />} />
+        </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <BusyRegion
             busy={busyRegion}

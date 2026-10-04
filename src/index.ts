@@ -75,6 +75,8 @@ export {
 export type { IconProps } from "./primitives/icons";
 
 /* Primitives — named keep-list only */
+export { LoadingSkeleton } from "./primitives/LoadingSkeleton";
+export type { LoadingSkeletonProps } from "./primitives/LoadingSkeleton";
 export { Button } from "./primitives/Button";
 export type { ButtonProps, ButtonSize, ButtonVariant } from "./primitives/Button";
 export { SplitButton } from "./primitives/SplitButton";

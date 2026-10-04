@@ -50,7 +50,7 @@ day-to-day consume. Publish / optional Packages bumps:
 | Toolbar / ControlRow / end-align | `#rhythm` |
 | Provider Manage (active-only status) | `#provider-settings` |
 | Banner strip + dismiss center | `#banner` |
-| Busy / loading | `#busy-region`, `#sandbox-pane-load-error` |
+| Busy / loading ([skeleton convention](design-system/loading.md)) | `#sandbox-loading-skeleton`, `#busy-region`, `#sandbox-pane-load-error` |
 | Busy hang guards (timeout/abort) | `#busy-paint`, `#sandbox-busy-task-timeout`, `#sandbox-busy-task-abort`, `#sandbox-busy-task-generation`, `#sandbox-button-loading-task`, `#sandbox-confirm-loading-trap`, `#sandbox-chat-busy-no-stop` |
 | CodeBlock file body | `#code-block` |
 | Chat question / Other input / thinking variants / event order | `#chat-question` / `#thinking` ([contract](../llm/CHAT_SEQUENCE.md)) |

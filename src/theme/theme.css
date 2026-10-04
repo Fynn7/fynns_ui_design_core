@@ -48,6 +48,8 @@
   --fynns-color-focus: rgba(45, 212, 191, 0.22);
   --fynns-color-overlay: rgba(0, 0, 0, 0.48);
   --fynns-color-busy-region-mask: rgba(0, 0, 0, 0.20);
+  --fynns-color-skeleton-base: color-mix(in srgb, var(--fynns-color-text-muted) 16%, var(--fynns-color-app-bg));
+  --fynns-color-skeleton-highlight: color-mix(in srgb, var(--fynns-color-accent) 24%, var(--fynns-color-skeleton-base));
   --fynns-color-toast-surface: #062126;
   --fynns-color-control-surface: rgba(255, 255, 255, 0.02);
   --fynns-color-control-surface-hover: rgba(255, 255, 255, 0.05);
@@ -590,6 +592,13 @@
   --fynns-layout-list-well-max-height: 20rem;
   --fynns-layout-list-well-max-height-sm: 12rem;
   --fynns-layout-busy-region-backdrop-blur: 3px;
+  --fynns-layout-skeleton-line-sm: 0.5rem;
+  --fynns-layout-skeleton-line-md: 0.75rem;
+  --fynns-layout-skeleton-line-lg: 1rem;
+  --fynns-layout-skeleton-block-height: 8rem;
+  --fynns-layout-skeleton-compact-sm: 1rem;
+  --fynns-layout-skeleton-compact-md: 1.5rem;
+  --fynns-layout-skeleton-compact-lg: 2.5rem;
   --fynns-layout-fill-column-header-max-height: min(52dvh, 28rem);
   --fynns-layout-list-pane-width: 18rem;
   --fynns-layout-nav-pane-width: 17.5rem;
