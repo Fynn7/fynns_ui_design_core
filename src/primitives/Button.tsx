@@ -93,7 +93,10 @@ export const Button = forwardRef(function Button(
       type={type}
       className={classes}
       disabled={disabled || loading}
-      aria-busy={loading || undefined}
+      aria-busy={
+        (rest["aria-busy"] as boolean | "true" | "false" | undefined) ??
+        (loading || undefined)
+      }
       aria-pressed={active || undefined}
     >
       {loading ? (

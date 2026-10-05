@@ -160,4 +160,22 @@ describe("sweep skeleton loading convention", () => {
       expect(button.querySelector("svg")).toBeNull();
     } finally { dispose(); }
   });
+
+  it("a consumer aria-busy survives an idle button: disabled + aria-busy is the action wait", () => {
+    const { host, root, dispose } = mount();
+    try {
+      const render = (busy: boolean) => act(() => root.render(createElement(Button, {
+        disabled: busy, "aria-busy": busy, "aria-label": "Refresh models",
+      }, createElement("svg", { "data-test": "action-glyph" }))));
+      render(true);
+      const busyButton = host.querySelector("button")!;
+      expect(busyButton.disabled).toBe(true);
+      expect(busyButton.getAttribute("aria-busy")).toBe("true");
+      expect(busyButton.querySelector("[data-loading-appearance=archived-ring]")).toBeNull();
+      expect(busyButton.querySelector(".fynns-loading-spinner-ring")).toBeNull();
+      expect(busyButton.querySelector("svg")).not.toBeNull();
+      render(false);
+      expect(host.querySelector("button")?.getAttribute("aria-busy")).not.toBe("true");
+    } finally { dispose(); }
+  });
 });
