@@ -1503,6 +1503,8 @@ export const LAYOUT_TOKENS = {
   /** Plain Table text caps at a share of the viewport, with a desktop ceiling. */
   "table-text-max-width": "min(40vw, 32rem)",
   "dialog-max-width": "32rem",
+  /** Floating selection-reference input capsule; consumers may override its width. */
+  "selection-composer-width": "28rem",
   /** Within M3 basic dialog max (560dp). Ceiling only — panel is content-fit. */
   "dialog-max-width-sm": "24rem",
   "dialog-max-width-md": "32rem",

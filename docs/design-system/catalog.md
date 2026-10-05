@@ -24,6 +24,25 @@ classes.
   SearchBarResult, Switch (dense track; `labelSide`), Checkbox, Radio, Chip /
   ChipSet (`assist`|`filter`|`input`|`suggestion` — never table-cell status),
   Slider, ToggleGroup, Tabs (M3 Primary underline)
+- **Selection reference:** TextSelectionComposer wraps Textarea, CodeBlock or
+  rendered text with an optional floating input + upward Send icon. Core owns
+  selection capture, capsule chrome, floatingBox positioning and motion;
+  consumers supply labels and `onSubmit({ prompt, selection: { text, start, end } })`.
+  `reveal="hover"` (default) reveals after selecting and hovering the area;
+  `reveal="selection"` reveals immediately. Keyboard/touch selection reveals in
+  either mode; Tab enters the input, Enter sends (IME composition is respected),
+  Shift+Tab / Escape return to the source. Hover does not steal focus; moving
+  across the gap to the capsule keeps it open. Whitespace-only selections/prompts
+  are ignored. Input focus preserves the captured reference; a new selection
+  clears the draft. Source edits, outside click/focus and Escape dismiss it.
+  Offsets are UTF-16 into the selected control's value, or the wrapper's
+  `textContent` for rendered text; keep one logical source per wrapper. Async
+  submission uses BusyRegion, prevents duplicate sends, closes on success and
+  retains selection/draft with InlineAlert on rejection (`errorMessage`).
+  Set `disabled` to turn the variant off. Override the theme token
+  `--fynns-layout-selection-composer-width` for width. Live:
+  `#text-selection-composer`. Import from `@fynns/ui`; do not rebuild selection
+  geometry, send chrome or model calls inside the primitive.
 - **Feedback:** Banner, InlineAlert (phrasing copy only — never nest List /
   FieldStack / CodeBlock inside), LoadingSkeleton / LinearProgress,
   CircularProgress (permanent archive / deprecated; strongly discouraged),

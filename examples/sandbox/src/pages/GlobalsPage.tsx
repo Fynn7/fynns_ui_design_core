@@ -168,6 +168,7 @@ import { ChatTodoComposerDemo } from "../components/ChatTodoComposerDemo";
 import { ChatQuestionSequenceDemo } from "../components/ChatQuestionSequenceDemo";
 import { ChatThinkingReferenceDemo } from "../components/ChatThinkingReferenceDemo";
 import { ChatThinkingDetailsDemo } from "../components/ChatThinkingDetailsDemo";
+import { TextSelectionComposerDemo } from "../components/TextSelectionComposerDemo";
 import { ChatChevronDemo } from "../components/ChatChevronDemo";
 import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
@@ -2842,6 +2843,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
             <SandboxHelp text={t("globals.textareaHelp")} />
           </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="text-selection-composer">
+          <TextSelectionComposerDemo key={locale} />
         </GlobalsDemo>
         </div>
       </>

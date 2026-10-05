@@ -223,6 +223,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["多行", "textarea", "文本域"],
   },
   {
+    id: "text-selection-composer",
+    categoryId: "textInputs",
+    label: "TextSelectionComposer",
+    keywords: ["选区", "引用", "提及", "hover", "selection", "reference", "文本编辑"],
+  },
+  {
     id: "tabs",
     categoryId: "tabs",
     label: "Tabs",

@@ -195,6 +195,12 @@ export type { DrawerProps } from "./primitives/Drawer";
 export { BottomSheet } from "./primitives/BottomSheet";
 export type { BottomSheetProps, BottomSheetSize } from "./primitives/BottomSheet";
 export { Textarea } from "./primitives/Textarea";
+export { TextSelectionComposer } from "./primitives/TextSelectionComposer";
+export type {
+  TextSelectionComposerProps,
+  TextSelectionComposerSelection,
+  TextSelectionComposerSubmit,
+} from "./primitives/TextSelectionComposer";
 export type {
   TextareaProps,
   TextareaSize,
