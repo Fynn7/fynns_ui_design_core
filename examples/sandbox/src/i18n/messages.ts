@@ -1840,7 +1840,7 @@ const en = {
   "globals.thinkingActionCheck": "Executing layout checks…",
   "globals.thinkingActionDraft": "Drafting a reply…",
   "globals.thinkingActionsHelp":
-    "Dummy agent / LLM activity labels (streaming). Use progressive *-ing* copy (`Calling…`, `Searching…`); done → past (`Thought for Ns`). Label shimmer; swap `streamingLabel` to morph. Multi-step trees → **ChatActivity** (AGENTS.md Label tense).",
+    "Dummy agent / LLM activity labels (streaming). Use progressive *-ing* copy (`Calling…`, `Searching…`); done → past (`Thought for Ns`). Label shimmer; swap `streamingLabel` to morph. Multi-stage processing → one outer **ChatThinking** with muted text and indented **details**; actions stay outside.",
   "globals.thinkingBody":
     "Checked naming against CHATMESSAGE_TOKENS and kept the disclosure off the Collapsible card shell.",
   "globals.thinkingAnswer":
@@ -1848,7 +1848,7 @@ const en = {
   "globals.thinkingSimulate": "Simulate agent run",
   "globals.thinkingReset": "Reset done",
   "globals.thinkingHelp":
-    "**ChatThinking** — Wave 1 single-block reasoning / agent-activity disclosure (ChatGPT / Claude “Thinking / Thought for Ns”; Cursor-style tool status via `streamingLabel`). **Label tense (consumer):** streaming / activity = progressive (*Thinking*, *Calling the function…*, *Reading sample docs…*); done = past (*Thought for Ns*). Core does not rewrite copy — swap strings when streaming ends. Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open unless the user pinned closed (trigger stays enabled so it can collapse mid-run; a new run clears the pin) + label shimmer; remount on label change for swap enter. Done: auto-collapse the body once, retain the disclosure and completed children through later answer/status/error states; user expand sticks. The two completed messages above have different body/answer lengths but the same label; their chevrons must align with the label, not the message width. No children → static duration strip (no chevron). No default streaming orb — pass `icon` only for a custom leading glyph. No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*`. Multi-step tool / status tree → **ChatActivity** (Wave 2).",
+    "**ChatThinking** — Wave 1 single-block reasoning / agent-activity disclosure (ChatGPT / Claude “Thinking / Thought for Ns”; Cursor-style tool status via `streamingLabel`). **Label tense (consumer):** streaming / activity = progressive (*Thinking*, *Calling the function…*, *Reading sample docs…*); done = past (*Thought for Ns*). Core does not rewrite copy — swap strings when streaming ends. Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open unless the user pinned closed (trigger stays enabled so it can collapse mid-run; a new run clears the pin) + label shimmer; remount on label change for swap enter. Done: auto-collapse the body once, retain the disclosure and completed children through later answer/status/error states; user expand sticks. The two completed messages above have different body/answer lengths but the same label; their chevrons must align with the label, not the message width. No children → static duration strip (no chevron). No default streaming orb — pass `icon` only for a custom leading glyph. No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*`. Multi-stage processing → one outer **ChatThinking** with structured **details**: muted small text and indented nested thinking only. Keep actions, cards and results outside. Live **ChatThinking · nested details**.",
   "globals.activityHeaderStart": "Gathering context…",
   "globals.activityHeaderMemory": "Created memory file",
   "globals.activityHeaderPlan": "Updated plan with details",
@@ -4341,7 +4341,7 @@ const zh: Record<MessageKey, string> = {
   "globals.thinkingActionCheck": "正在执行布局检查…",
   "globals.thinkingActionDraft": "正在起草回复…",
   "globals.thinkingActionsHelp":
-    "假数据 Agent / LLM 活动标签（流式）。进行中用「正在…」；完成用「已… / 已思考 Ns」。标签 shimmer；切换 `streamingLabel` 可变形。多步骤树 → **ChatActivity**（AGENTS.md Label tense）。",
+    "假数据 Agent / LLM 活动标签（流式）。进行中用「正在…」；完成用「已… / 已思考 Ns」。标签 shimmer；切换 `streamingLabel` 可变形。多阶段处理 → 一个外层 **ChatThinking**，内含灰色小字与缩进 **details**；操作放在外面。",
   "globals.thinkingBody":
     "对照 CHATMESSAGE_TOKENS 核对命名，并避免套用 Collapsible 的卡片壳。",
   "globals.thinkingAnswer":
@@ -4349,7 +4349,7 @@ const zh: Record<MessageKey, string> = {
   "globals.thinkingSimulate": "模拟 Agent 运行",
   "globals.thinkingReset": "重置为完成",
   "globals.thinkingHelp":
-    "**ChatThinking** — Wave 1 单块推理 / Agent 活动披露（ChatGPT / Claude「Thinking / Thought for Ns」；Cursor 式工具状态经 `streamingLabel`）。**标签时态（消费仓）：** 流式 / 活动 = 进行时（*思考中*、*正在调用函数…*、*正在阅读样例文档…*）；完成 = 过去时（*已思考 Ns*）。core 不改写文案 — 流式结束时换字符串。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：默认展开，用户可收起（trigger 保持可点；新一轮 streaming 清 pin）+ 标签 shimmer；标签变更 remount 进入动画。完成：只自动收拢内容，保留组件和已完成内容，后续答案 / 状态 / 错误都不得清除；用户展开后粘住。上方两条完成消息的内容和答案长度不同、标签相同；chevron 必须跟着标签，不能跟着消息宽度走。无 children → 不可展开时长条（无 chevron）。默认无流式光点 — 仅在需要时传 `icon`。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`。多步骤工具 / 状态树 → **ChatActivity**（Wave 2）。",
+    "**ChatThinking** — Wave 1 单块推理 / Agent 活动披露（ChatGPT / Claude「Thinking / Thought for Ns」；Cursor 式工具状态经 `streamingLabel`）。**标签时态（消费仓）：** 流式 / 活动 = 进行时（*思考中*、*正在调用函数…*、*正在阅读样例文档…*）；完成 = 过去时（*已思考 Ns*）。core 不改写文案 — 流式结束时换字符串。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：默认展开，用户可收起（trigger 保持可点；新一轮 streaming 清 pin）+ 标签 shimmer；标签变更 remount 进入动画。完成：只自动收拢内容，保留组件和已完成内容，后续答案 / 状态 / 错误都不得清除；用户展开后粘住。上方两条完成消息的内容和答案长度不同、标签相同；chevron 必须跟着标签，不能跟着消息宽度走。无 children → 不可展开时长条（无 chevron）。默认无流式光点 — 仅在需要时传 `icon`。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`。多阶段处理 → 一个外层 **ChatThinking**，使用结构化 **details**：内部只放灰色小字与带缩进的 thinking。操作、卡片和结果放在外面。参见 **ChatThinking · nested details**。",
   "globals.activityHeaderStart": "正在收集上下文…",
   "globals.activityHeaderMemory": "已创建记忆文件",
   "globals.activityHeaderPlan": "已用细节更新计划",

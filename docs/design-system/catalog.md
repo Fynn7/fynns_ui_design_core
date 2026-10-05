@@ -219,7 +219,10 @@ classes.
   - **Message lifecycle:** `streaming` = last-glyph color pulse only while answer
     text exists + `aria-busy`; `error`/`onRetry` = failed-generation footer;
     `thinking`/`ChatThinking` = single-block reasoning (Wave 1), with
-    `variant="status"` / `"disclosure"`; `ChatThinkingStack` owns equal spacing
+    `variant="status"` / `"disclosure"`; structured `details` owns muted text
+    and nested disclosures with circular elbows and nesting guides (live
+    `#thinking-reference` / `#thinking-details`), with all actions
+    and results outside. `ChatThinkingStack` owns equal spacing
     for consecutive mixed rows. `ChatActivity` summaries and `ChatThinking`
     share a short label→chevron gap; intrinsic headers must not stretch with
     their bodies. Live `#chat-chevron`. Keep the

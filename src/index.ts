@@ -406,6 +406,9 @@ export {
   ChatThinkingStack,
 } from "./primitives/ChatThinking";
 export type {
+  ChatThinkingText,
+  ChatThinkingArtifact,
+  ChatThinkingDetail,
   ChatThinkingProps,
   ChatThinkingStackProps,
 } from "./primitives/ChatThinking";

@@ -618,6 +618,13 @@
   `"disclosure"` in `ChatThinkingStack` owns uniform quiet row rhythm;
   consumers must not clone or restyle this anatomy. Live `#chat-question` /
   `#thinking`; recipe: [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
+- **DON'T** place generic Collapsible/Card/Surface, Button, attempt tabs or a
+  timeline inside ChatThinking. Only muted small thought text and indented
+  nested ChatThinking belong there. Core adds short, faint curved connectors
+  and thin nesting guides with icon/dot columns, matching the reference
+  anatomy. Decorative dots are not status/accuracy signals. Inline code and
+  non-interactive artifact labels are core-owned text adornments. Prefer `details`;
+  results, questions and all actions stay outside. Live `#thinking-details`.
 - **DON'T** stretch ChatActivity tool-count headers or push their chevron to
   the body/panel end. `ChatActivity` and `ChatThinking` share the label→chevron
   token (`thinking-trigger-gap`, default 6dp; `activity-trigger-gap` aliases

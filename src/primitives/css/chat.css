@@ -548,7 +548,7 @@
   padding: 0;
   border: none;
   background: transparent;
-  color: var(--fynns-color-text-muted);
+  color: var(--fynns-chat-thinking-ink, var(--fynns-color-text-muted));
   font: inherit;
   font-size: var(--fynns-chatmessage-name-size);
   font-weight: var(--fynns-font-weight-medium);
@@ -603,16 +603,16 @@
    * white flash on dark teal). Sweep ≈2s linear (`thinking-shimmer`). */
   background-image: linear-gradient(
     90deg,
-    var(--fynns-color-text-muted) 0%,
-    var(--fynns-color-text-muted) 30%,
+    var(--fynns-chat-thinking-ink, var(--fynns-color-text-muted)) 0%,
+    var(--fynns-chat-thinking-ink, var(--fynns-color-text-muted)) 30%,
     color-mix(
       in srgb,
-      var(--fynns-color-accent) 55%,
-      var(--fynns-color-text-muted)
+      var(--fynns-chat-thinking-highlight, var(--fynns-color-accent)) 55%,
+      var(--fynns-chat-thinking-ink, var(--fynns-color-text-muted))
     )
       50%,
-    var(--fynns-color-text-muted) 70%,
-    var(--fynns-color-text-muted) 100%
+    var(--fynns-chat-thinking-ink, var(--fynns-color-text-muted)) 70%,
+    var(--fynns-chat-thinking-ink, var(--fynns-color-text-muted)) 100%
   );
   background-size: 400% 100%;
   background-clip: text;
@@ -633,8 +633,8 @@
   transition: transform var(--fynns-duration-base) var(--fynns-ease-out);
 }
 
-.fynns-chat-thinking--open .fynns-chat-thinking-chevron,
-.fynns-chat-thinking[data-state="open"] .fynns-chat-thinking-chevron {
+.fynns-chat-thinking--open > .fynns-chat-thinking-trigger > .fynns-chat-thinking-chevron,
+.fynns-chat-thinking[data-state="open"] > .fynns-chat-thinking-trigger > .fynns-chat-thinking-chevron {
   transform: rotate(90deg);
 }
 
@@ -643,9 +643,179 @@
   padding-inline: var(--fynns-chatmessage-thinking-body-pad-inline);
   font-size: var(--fynns-chatmessage-name-size);
   line-height: var(--fynns-line-height-snug);
-  color: var(--fynns-color-text-muted);
+  color: var(--fynns-chat-thinking-ink, var(--fynns-color-text-muted));
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+/* Copilot reference anatomy: a quiet root guide, icon rows, and one rounded
+ * branch into each child group. These are decorative nesting guides, not a
+ * ChatActivity rail or an independent timeline. CSS owns all dimensions. */
+.fynns-chat-thinking--structured,
+.fynns-chat-thinking--nested {
+  font-family: var(--fynns-chatmessage-thinking-font);
+  --fynns-chat-thinking-ink: var(--fynns-color-chat-thinking-text);
+  --fynns-chat-thinking-highlight: var(--fynns-color-chat-thinking-heading);
+  --fynns-chat-secondary-hover: var(--fynns-color-chat-thinking-heading);
+}
+
+.fynns-chat-thinking--structured > .fynns-chat-thinking-row,
+.fynns-chat-thinking--structured > .fynns-chat-thinking-trigger,
+.fynns-chat-thinking--nested > .fynns-chat-thinking-row,
+.fynns-chat-thinking--nested > .fynns-chat-thinking-trigger {
+  font-size: var(--fynns-chatmessage-thinking-detail-size);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-chatmessage-thinking-detail-line-height);
+  border-radius: 0;
+  min-height: calc(var(--fynns-chatmessage-thinking-detail-size) * var(--fynns-chatmessage-thinking-detail-line-height));
+}
+
+.fynns-chat-thinking--structured[data-thinking-depth="0"] > .fynns-chat-thinking-trigger,
+.fynns-chat-thinking--structured[data-thinking-depth="0"] > .fynns-chat-thinking-row {
+  color: var(--fynns-color-chat-thinking-heading);
+}
+
+.fynns-chat-thinking-body:has(> .fynns-chat-thinking--nested),
+.fynns-chat-thinking--structured > .fynns-expand > .fynns-expand-inner > .fynns-chat-thinking-body,
+.fynns-chat-thinking--nested > .fynns-expand > .fynns-expand-inner > .fynns-chat-thinking-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-chatmessage-thinking-child-gap);
+  padding-block: var(--fynns-chatmessage-thinking-detail-gap) 0;
+  padding-inline: var(--fynns-chatmessage-thinking-detail-indent) 0;
+  font-size: var(--fynns-chatmessage-thinking-detail-size);
+  line-height: var(--fynns-chatmessage-thinking-detail-line-height);
+  white-space: normal;
+  min-width: 0;
+}
+
+.fynns-chat-thinking--structured[data-thinking-depth="0"] > .fynns-expand > .fynns-expand-inner > .fynns-chat-thinking-body {
+  margin-block-start: var(--fynns-chatmessage-thinking-root-gap);
+  margin-inline-start: var(--fynns-chatmessage-thinking-guide-inset);
+  padding-inline-start: var(--fynns-chatmessage-thinking-group-inset);
+  padding-block-start: var(--fynns-chatmessage-thinking-group-top);
+  gap: var(--fynns-chatmessage-thinking-static-gap);
+  border-inline-start: var(--fynns-chatmessage-thinking-connector-stroke) solid var(--fynns-chatmessage-thinking-connector-color);
+}
+
+.fynns-chat-thinking--structured[data-thinking-depth="0"] > .fynns-expand > .fynns-expand-inner > .fynns-chat-thinking-body > .fynns-chat-thinking--open {
+  margin-block-end: calc(var(--fynns-chatmessage-thinking-group-gap) - var(--fynns-chatmessage-thinking-static-gap));
+}
+
+.fynns-chat-thinking--nested {
+  position: relative;
+  margin-block-end: 0;
+}
+
+/* Only the first child connects to its parent's icon center. The 8dp circular
+ * quarter-turn leaves a short straight stem and ends before the child's dot. */
+.fynns-chat-thinking--nested[data-thinking-marker="dot"]:first-child::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  inset-inline-start: calc(var(--fynns-chatmessage-thinking-icon-size) / 2 - var(--fynns-chatmessage-thinking-detail-indent));
+  inset-block-start: calc(-1 * var(--fynns-chatmessage-thinking-detail-gap));
+  width: var(--fynns-chatmessage-thinking-connector-width);
+  height: calc(var(--fynns-chatmessage-thinking-detail-gap) + var(--fynns-chatmessage-thinking-detail-size) * var(--fynns-chatmessage-thinking-detail-line-height) / 2);
+  border-inline-start: var(--fynns-chatmessage-thinking-connector-stroke) solid var(--fynns-chatmessage-thinking-connector-color);
+  border-block-end: var(--fynns-chatmessage-thinking-connector-stroke) solid var(--fynns-chatmessage-thinking-connector-color);
+  border-end-start-radius: var(--fynns-chatmessage-thinking-connector-radius);
+}
+
+.fynns-chat-thinking--nested > .fynns-chat-thinking-trigger,
+.fynns-chat-thinking--nested > .fynns-chat-thinking-row {
+  gap: var(--fynns-chatmessage-thinking-trigger-gap);
+}
+
+.fynns-chat-thinking--nested .fynns-chat-thinking-leading {
+  width: var(--fynns-chatmessage-thinking-icon-size);
+  height: var(--fynns-chatmessage-thinking-icon-size);
+  flex: 0 0 var(--fynns-chatmessage-thinking-icon-size);
+  margin-inline-end: calc(var(--fynns-chatmessage-thinking-label-inset) - var(--fynns-chatmessage-thinking-icon-size) - var(--fynns-chatmessage-thinking-trigger-gap));
+}
+
+.fynns-chat-thinking-leading > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.fynns-chat-thinking-dot {
+  width: var(--fynns-chatmessage-thinking-dot-size);
+  height: var(--fynns-chatmessage-thinking-dot-size);
+  flex: 0 0 var(--fynns-chatmessage-thinking-dot-size);
+  background: var(--fynns-color-chat-thinking-text);
+  border-radius: var(--fynns-radius-pill);
+  margin-inline-end: calc(var(--fynns-chatmessage-thinking-label-inset) - var(--fynns-chatmessage-thinking-dot-size) - var(--fynns-chatmessage-thinking-trigger-gap));
+}
+
+.fynns-chat-thinking[data-thinking-marker="dot"] > .fynns-chat-thinking-trigger,
+.fynns-chat-thinking[data-thinking-marker="dot"] > .fynns-chat-thinking-row {
+  font-weight: var(--fynns-font-weight-semibold);
+}
+
+.fynns-chat-thinking[data-thinking-marker="dot"] > .fynns-expand > .fynns-expand-inner > .fynns-chat-thinking-body {
+  margin-inline-start: var(--fynns-chatmessage-thinking-body-guide-inset);
+  padding-block-start: var(--fynns-chatmessage-thinking-text-top);
+  padding-inline-start: calc(var(--fynns-chatmessage-thinking-label-inset) - var(--fynns-chatmessage-thinking-body-guide-inset) - var(--fynns-chatmessage-thinking-connector-stroke));
+  border-inline-start: var(--fynns-chatmessage-thinking-connector-stroke) solid var(--fynns-chatmessage-thinking-connector-color);
+  font-weight: var(--fynns-font-weight-regular);
+}
+
+.fynns-chat-thinking--structured .fynns-chat-thinking-label { line-height: inherit; }
+.fynns-chat-thinking[data-thinking-depth="1"] > .fynns-chat-thinking-trigger .fynns-chat-thinking-title,
+.fynns-chat-thinking[data-thinking-depth="1"] > .fynns-chat-thinking-row .fynns-chat-thinking-title { color: var(--fynns-color-chat-thinking-heading); }
+.fynns-chat-thinking[data-thinking-marker="dot"] > .fynns-chat-thinking-trigger > .fynns-chat-thinking-chevron { display: none; }
+
+.fynns-chat-thinking-summary {
+  margin-inline-start: var(--fynns-space-xs);
+  color: var(--fynns-color-chat-thinking-text);
+}
+
+.fynns-chat-thinking-label:has(> .fynns-chat-thinking-artifact) {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+.fynns-chat-thinking-label:has(> .fynns-chat-thinking-artifact) > .fynns-chat-thinking-title { flex-shrink: 0; }
+
+.fynns-chat-thinking-artifact {
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
+  gap: var(--fynns-chatmessage-thinking-artifact-gap);
+  margin-inline-start: var(--fynns-chatmessage-thinking-artifact-gap);
+  padding: var(--fynns-chatmessage-thinking-artifact-pad-block) var(--fynns-chatmessage-thinking-artifact-pad-inline);
+  border: var(--fynns-chatmessage-thinking-connector-stroke) solid var(--fynns-chatmessage-thinking-connector-color);
+  border-radius: var(--fynns-chatmessage-thinking-artifact-radius);
+  line-height: var(--fynns-chatmessage-thinking-artifact-line-height);
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.fynns-chat-thinking-artifact-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: var(--fynns-chatmessage-thinking-icon-size);
+  height: var(--fynns-chatmessage-thinking-icon-size);
+}
+
+.fynns-chat-thinking-artifact-icon > svg { width: 100%; height: 100%; }
+.fynns-chat-thinking-artifact > span:last-child { overflow: hidden; text-overflow: ellipsis; }
+.fynns-chat-thinking-text {
+  margin: 0;
+  color: var(--fynns-color-chat-thinking-text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.fynns-chat-thinking-text > code {
+  font-family: var(--fynns-font-mono);
+  color: var(--fynns-color-chat-thinking-code);
+  background: var(--fynns-color-chat-inline-code-bg);
+  border-radius: var(--fynns-radius-xs);
+  padding: var(--fynns-chatmessage-thinking-inline-code-pad-block) var(--fynns-chatmessage-thinking-inline-code-pad-inline);
+  font-size: inherit;
+  font-weight: var(--fynns-font-weight-semibold);
 }
 
 @keyframes fynns-chat-thinking-mark-pulse {
@@ -685,8 +855,8 @@
     background-image: none;
     background-clip: border-box;
     -webkit-background-clip: border-box;
-    -webkit-text-fill-color: var(--fynns-color-text-muted);
-    color: var(--fynns-color-text-muted);
+    -webkit-text-fill-color: var(--fynns-chat-thinking-ink, var(--fynns-color-text-muted));
+    color: var(--fynns-chat-thinking-ink, var(--fynns-color-text-muted));
   }
 
   .fynns-chat-thinking-chevron {

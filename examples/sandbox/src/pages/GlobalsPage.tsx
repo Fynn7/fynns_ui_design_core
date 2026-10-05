@@ -166,6 +166,8 @@ import { ChatComposerModelMenuSections } from "../components/ChatComposerModelMe
 import { ChatComposerModeTogglesEndActions } from "../components/ChatComposerModeTogglesEndActions";
 import { ChatTodoComposerDemo } from "../components/ChatTodoComposerDemo";
 import { ChatQuestionSequenceDemo } from "../components/ChatQuestionSequenceDemo";
+import { ChatThinkingReferenceDemo } from "../components/ChatThinkingReferenceDemo";
+import { ChatThinkingDetailsDemo } from "../components/ChatThinkingDetailsDemo";
 import { ChatChevronDemo } from "../components/ChatChevronDemo";
 import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
@@ -4338,6 +4340,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="chat-question">
           <ChatQuestionSequenceDemo key={locale} />
+        </GlobalsDemo>
+        <GlobalsDemo id="thinking-reference">
+          <ChatThinkingReferenceDemo />
+        </GlobalsDemo>
+        <GlobalsDemo id="thinking-details">
+          <ChatThinkingDetailsDemo key={locale} />
         </GlobalsDemo>
         <GlobalsDemo id="thinking">
         <div className="sandbox-globals-row sandbox-globals-row--stack">

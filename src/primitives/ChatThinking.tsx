@@ -2,16 +2,51 @@ import {
   type HTMLAttributes,
   type ReactNode,
   useId,
+  createContext,
+  useContext,
 } from "react";
 import { resolveThinkingLabel } from "./chatThinkingPolicy";
 import { useStatusTreeOpen } from "./useStatusTreeOpen";
-import { ChevronRightIcon, ICON_SIZE } from "./icons";
+import { ChevronRightIcon, SparklesIcon, ICON_SIZE } from "./icons";
 import { OverflowTip } from "./OverflowTip";
+
+/** Text stays structured; inline code is display copy, never executable. */
+export type ChatThinkingText = string | readonly (string | { code: string })[];
+export type ChatThinkingArtifact = { label: string; icon?: ReactNode };
+
+/** Quiet reasoning content. Stable IDs retain nested disclosure state as text grows. */
+export type ChatThinkingDetail =
+  | { id: string; text: ChatThinkingText; label?: never; details?: never }
+  | {
+      id: string;
+      label: string;
+      summary?: string;
+      icon?: ReactNode;
+      marker?: "icon" | "dot" | "none";
+      artifact?: ChatThinkingArtifact;
+      details?: readonly ChatThinkingDetail[];
+      streaming?: boolean;
+      streamingLabel?: string;
+      defaultOpen?: boolean;
+      open?: boolean;
+      onOpenChange?: (open: boolean) => void;
+      text?: never;
+    };
+
+const ThinkingDepth = createContext(0);
 
 export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
   /** `status` = label only; `disclosure` = expandable when a body exists. @default "disclosure" */
   variant?: "status" | "disclosure";
-  /** Thought body (caller-owned summary — core does not parse markdown). */
+  /** Prefer details for structured work: only muted text and nested ChatThinking. */
+  details?: readonly ChatThinkingDetail[];
+  /** Muted continuation after the main heading. */
+  summary?: string;
+  /** Decorative nested mark; depth 2+ defaults to dot, depth 1 reserves an icon slot. */
+  marker?: "icon" | "dot" | "none";
+  /** Non-interactive inline artifact label, owned and styled by core. */
+  artifact?: ChatThinkingArtifact;
+  /** Thought text or nested ChatThinking. Keep cards, controls and results outside. */
   children?: ReactNode;
   /**
    * While true: streaming label + force-open (unless user pinned closed) +
@@ -71,7 +106,9 @@ function join(...parts: Array<string | false | null | undefined>) {
  * `variant="status"` renders a label strip without chevron or body.
  * Default `variant="disclosure"` expands only when `children` exists; without
  * a body it falls back to the same non-expandable strip. ChatThinkingStack
- * owns consecutive row spacing for both variants.
+ * owns consecutive row spacing for both variants. Structured details render only
+ * muted text and nested ChatThinking with decorative nesting guides and elbows. Keep cards, controls, artifact
+ * viewers and results outside. Legacy children follow the same content rule.
  * Do **not** pipe labels or thought text into a live region.
  *
  * @example
@@ -92,6 +129,10 @@ function join(...parts: Array<string | false | null | undefined>) {
 export function ChatThinking({
   variant = "disclosure",
   children,
+  details,
+  summary,
+  marker,
+  artifact,
   streaming = false,
   streamingLabel,
   label,
@@ -105,6 +146,9 @@ export function ChatThinking({
   ...rest
 }: ChatThinkingProps) {
   const bodyId = useId();
+  const depth = useContext(ThinkingDepth);
+  const structured = details !== undefined;
+  const nestedMarker = marker ?? (icon != null ? "icon" : depth > 1 ? "dot" : depth === 1 ? "icon" : "none");
   const { open: isOpen, setOpen } = useStatusTreeOpen({
     mode: "thinking",
     streaming,
@@ -113,7 +157,29 @@ export function ChatThinking({
     onOpenChange,
   });
 
-  const hasBody = variant === "disclosure" && children != null && children !== "";
+  const body = structured ? details.map((detail) =>
+    detail.text !== undefined ? (
+      <p key={detail.id} className="fynns-chat-thinking-text">{typeof detail.text === "string" ? detail.text : detail.text.map((part, index) => typeof part === "string" ? part : <code key={index}>{part.code}</code>)}</p>
+    ) : (
+      <ChatThinking
+        key={detail.id}
+        label={detail.label}
+        summary={detail.summary}
+        icon={detail.icon}
+        marker={detail.marker}
+        artifact={detail.artifact}
+        details={detail.details}
+        streaming={detail.streaming}
+        streamingLabel={detail.streamingLabel ?? detail.label}
+        defaultOpen={detail.defaultOpen}
+        open={detail.open}
+        onOpenChange={detail.onOpenChange}
+      />
+    ),
+  ) : children;
+  const hasBody = variant === "disclosure" && (structured
+    ? details.length > 0
+    : children != null && children !== "");
   const resolvedLabel = resolveThinkingLabel({
     streaming,
     durationMs,
@@ -125,23 +191,25 @@ export function ChatThinking({
   const toggle = () => setOpen(!isOpen);
 
   const leading =
-    icon != null ? (
+    depth > 0 && nestedMarker === "dot" ? <span className="fynns-chat-thinking-dot" aria-hidden /> : (icon != null && !(depth > 0 && nestedMarker === "none")) || (depth > 0 && nestedMarker === "icon") ? (
       <span className="fynns-chat-thinking-leading" aria-hidden>
-        {icon}
+        {icon ?? <SparklesIcon />}
       </span>
     ) : null;
 
   const labelNode = (
     <OverflowTip
       key={resolvedLabel}
-      content={resolvedLabel}
+      content={[resolvedLabel, summary, artifact?.label].filter(Boolean).join(" ")}
       className={join(
         "fynns-chat-thinking-label",
         streaming && "fynns-chat-thinking-label--streaming",
         "fynns-chat-thinking-label--swap",
       )}
     >
-      {resolvedLabel}
+      <span className="fynns-chat-thinking-title">{resolvedLabel}</span>
+      {summary && <>{" "}<span className="fynns-chat-thinking-summary">{summary}</span></>}
+      {artifact && <span className="fynns-chat-thinking-artifact">{" "}{artifact.icon && <span className="fynns-chat-thinking-artifact-icon" aria-hidden>{artifact.icon}</span>}<span>{artifact.label}</span></span>}
     </OverflowTip>
   );
 
@@ -151,10 +219,14 @@ export function ChatThinking({
         {...rest}
         className={join(
           "fynns-chat-thinking",
+          depth > 0 && "fynns-chat-thinking--nested",
+          structured && "fynns-chat-thinking--structured",
           "fynns-chat-thinking--static",
           streaming && "fynns-chat-thinking--streaming",
           className,
         )}
+        data-thinking-depth={depth}
+        data-thinking-marker={depth > 0 ? nestedMarker : undefined}
         data-streaming={streaming ? "true" : undefined}
         aria-busy={streaming || undefined}
       >
@@ -171,10 +243,14 @@ export function ChatThinking({
       {...rest}
       className={join(
         "fynns-chat-thinking",
+        depth > 0 && "fynns-chat-thinking--nested",
+        structured && "fynns-chat-thinking--structured",
         isOpen && "fynns-chat-thinking--open",
         streaming && "fynns-chat-thinking--streaming",
         className,
       )}
+      data-thinking-depth={depth}
+      data-thinking-marker={depth > 0 ? nestedMarker : undefined}
       data-streaming={streaming ? "true" : undefined}
       data-state={isOpen ? "open" : "closed"}
       aria-busy={streaming || undefined}
@@ -205,7 +281,7 @@ export function ChatThinking({
             className="fynns-chat-thinking-body"
             inert={isOpen ? undefined : true}
           >
-            {children}
+            <ThinkingDepth.Provider value={depth + 1}>{body}</ThinkingDepth.Provider>
           </div>
         </div>
       </div>

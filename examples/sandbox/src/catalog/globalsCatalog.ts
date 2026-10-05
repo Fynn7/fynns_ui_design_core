@@ -399,6 +399,18 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["问题卡片", "其他", "自由文本", "顺序", "question", "other", "chronological", "ChatThinkingStack"],
   },
   {
+    id: "thinking-reference",
+    categoryId: "communication",
+    label: "ChatThinking · Copilot reference",
+    keywords: ["thinking", "copilot", "curve", "弧线", "reference"],
+  },
+  {
+    id: "thinking-details",
+    categoryId: "communication",
+    label: "ChatThinking · nested details",
+    keywords: ["thinking", "nested", "details", "reasoning", "缩进", "灰色小字"],
+  },
+  {
     id: "thinking",
     categoryId: "communication",
     label: "ChatThinking",
