@@ -631,6 +631,8 @@ const en = {
   "globals.archivedLoadingHelp": "Permanently archived compatibility example. Explicit visible message or circular indicator restores a ring with text. Strongly discouraged in consumers; new loading screens use content-position skeletons without visible loading copy.",
   "globals.loadingSkeletonHelp":
     "Default: the large, full-width six-row text skeleton below, with the ChatThinking sweep, placed where text will appear. Keep this large text pattern; compact and small centered busy skeletons are removed. Explicit block is for images / iframes / canvas: Show busy / Clear busy replaces the preview at the same bounds. No visible loading copy; label stays accessible-only.",
+  "globals.loadingSkeletonPaneHelp":
+    "Pane / Chat cold-start: BusyRegion busy fill owns the inset even before Chat is mounted. Thick text rows adapt to the pane height and cover the content area. Do not fix lines to six in a filled pane or reset padding. Canonical FillColumn / PageScroll / ChatThread hosts keep their existing inset. The narrow sample uses ChatThread.empty. Show / Clear fill busy switches the large sample to a ready conversation.",
   "globals.busyRegionLabel": "Loading section",
   "globals.busyRegionTitle": "Section",
   "globals.busyRegionMessage": "Refreshing this block…",
@@ -639,7 +641,7 @@ const en = {
   "globals.busyRegionStart": "Show busy",
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
-    "Preferred: BusyRegion defaults to the large, full-width six-row text skeleton at the upcoming text position. Explicit block is for images / iframes / canvas. Use skeleton to match known content geometry. Label is accessible-only. Children stay mounted but hidden and inert while replaced. Real value uses one linear bar. Explicit message or circular is permanently archived and strongly discouraged; no compact or small centered busy skeletons.",
+    "Preferred: BusyRegion defaults to thick, full-width text rows at the upcoming content position. Without fill there are six rows; fill adapts the row count to the pane height. Core keeps cold-start insets. Explicit block is for images / iframes / canvas; skeleton matches known geometry. Label is accessible-only. Children stay mounted but hidden and inert. Real value uses one linear bar. Message / circular are permanently archived; no compact busy emblems.",
   "globals.busyRegionNarrowHelp":
     "Narrow host (NavigationDrawer / EndAside width): linear BusyStack must shrink to the host — never a fixed 20rem / 100vw bar that spills past the drawer seam. Live sample below.",
   "globals.busyRegionNarrowLabel": "Scanning samples",
@@ -654,10 +656,10 @@ const en = {
   "globals.busyRegionFillStart": "Show fill busy",
   "globals.busyRegionFillStop": "Clear fill busy",
   "globals.busyRegionFillHelp":
-    "Pane cold-start: BusyRegion fill as FillColumn children (this stage) **or** PageScroll → `.fynns-content-column` (live `#sandbox-busy-region-page-scroll-fill`, ≥ **0.5.136**) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the skeleton parks at the top / overflows the overlay). Empty fill (≥ **0.5.191**) centers BusyStack **without** frosted mask island on bare app-bg; refresh-over-content keeps soft blur + gray mask. Do not use EmptyState + CircularProgress as a loading shell, and do not add a private `surface-*` colored loading wash.",
+    "Pane cold-start: BusyRegion fill as FillColumn children or PageScroll → `.fynns-content-column`. Keep the resolved height chain; content-sized unit-stack / Card / List wrappers cannot fill a pane. Default thick text rows adapt to the height and span the content area with core-owned insets, without frosted mask or visible copy. Do not force six lines, clear padding, use EmptyState + CircularProgress as loading, or add private loading CSS.",
   "globals.busyRegionPageScrollFillLabel": "Loading section",
   "globals.busyRegionPageScrollFillHelp":
-    "PageScroll pane cold-start (≥ **0.5.136**): `.fynns-page-scroll` → `.fynns-content-column` (min-height fills the scrollport) → optional thin section wrapper → `BusyRegion` `fill`. BusyStack must **center** in the visible column — not park under TopAppBar or overflow a collapsed absolute overlay. Live host `#sandbox-busy-region-page-scroll-fill`. Failure mode: CONSUMER_TREATY **BusyRegion fill BusyStack top overflow in PageScroll**.",
+    "PageScroll pane cold-start: `.fynns-page-scroll` → `.fynns-content-column` (min-height fills the scrollport) → optional thin section wrapper → BusyRegion fill. Thick text rows adapt to cover the visible content area, retaining the column inset; no centered busy glyph, six-row ceiling strip, or collapsed overlay. Live `#sandbox-busy-region-page-scroll-fill`.",
   "globals.paneLoadErrorHelp":
     "Pane cold-start that times out or fails (≥ **0.5.178**): leave BusyRegion `fill` only while the fetch is in flight; on hang/fail **clear busy** and show InlineAlert + short FieldHint + end-align Retry — never permanent fill, never EmptyState as the load-fail shell, never silent empty. Pair with `runBusyTask` / fetch `timeoutMs` / `AbortSignal`. Live `#sandbox-pane-load-error`. Failure: CONSUMER_TREATY **pane cold-start hang without error surface**.",
   "globals.paneLoadErrorBusyLabel": "Loading pane",
@@ -743,7 +745,7 @@ const en = {
   "globals.busyScrimLabel": "Loading",
   "globals.busyScrimMessage": "Working — please wait…",
   "globals.busyScrimHelp":
-    "Preferred full-app loading defaults to the large, full-width six-row text skeleton at the upcoming text position. Use explicit block only for images / iframes / canvas. Label is accessible-only; no visible loading copy. Explicit message / circular restores the permanently archived ring. Real value uses one linear bar. This sample closes after 2s.",
+    "Preferred full-app loading uses thick, full-width text rows adapting to the viewport height, with core insets. Explicit block is only for images / iframes / canvas. Label is accessible-only; no visible loading copy. Message / circular restores the permanently archived ring. Real value uses one linear bar. This sample closes after 2s.",
   "globals.busyPaintBad": "Anti-pattern: busy then stall",
   "globals.busyPaintGood": "runBusyTask then stall",
   "globals.busyPaintLabel": "Heavy work",
@@ -3136,6 +3138,8 @@ const zh: Record<MessageKey, string> = {
   "globals.archivedLoadingHelp": "永久归档的兼容样例。显式 message 或 circular indicator 恢复加载圈与文字。强烈不推荐消费仓使用；新的加载画面用内容原位骨架，不显示 Loading 文案。",
   "globals.loadingSkeletonHelp":
     "默认使用下方最大的宽幅六行文字骨架，带 ChatThinking 扫光，放在文字即将出现的位置。保留这一大的文字样式，仅移除 compact 与小型居中 busy 骨架。显式 block 用于图片 / iframe / 画布：点击显示 / 清除 busy 可在同一位置、同一尺寸替换预览。无可见加载文案，label 仅供无障碍。",
+  "globals.loadingSkeletonPaneHelp":
+    "栏目 / Chat 冷启动：BusyRegion busy fill 在 Chat 尚未挂载时也自行保留内边距。加粗的文字条按窗格高度自动增加行数，覆盖正文区域。不要在 fill 窗格里固定六行或清零 padding。FillColumn / PageScroll / ChatThread 已有边距不重复添加。窄样例使用 ChatThread.empty；显示 / 清除 fill busy 会把大样例切换为已加载对话。",
   "globals.busyRegionLabel": "区块加载中",
   "globals.busyRegionTitle": "区块",
   "globals.busyRegionMessage": "正在刷新此区域…",
@@ -3144,7 +3148,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionStart": "显示 busy",
   "globals.busyRegionStop": "清除 busy",
   "globals.busyRegionHelp":
-    "推荐方式：BusyRegion 默认在文字即将出现的位置显示最大的宽幅六行文字骨架。图片 / iframe / 画布显式使用 block。通过 skeleton 对齐已知内容结构，label 仅供无障碍。已有 children 保持挂载，加载时隐藏并 inert。真实 value 显示一条线性进度条。显式 message 或 circular 永久归档，强烈不推荐；禁止 compact 和小型居中 busy 骨架。",
+    "推荐方式：BusyRegion 默认在内容即将出现的位置显示加粗宽幅文字条，非 fill 六行，fill 按窗格高度自适应增加行数。core 保留冷启动内边距。图片 / iframe / 画布显式用 block，已知结构用 skeleton 对齐。label 仅供无障碍；children 保持挂载但隐藏并 inert。真实 value 用线性进度。message / circular 永久归档，禁 compact busy 徽记。",
   "globals.busyRegionNarrowHelp":
     "窄宿主（NavigationDrawer / EndAside 宽）：linear BusyStack 必须随宿主收缩 — 禁止固定 20rem / 100vw 进度条溢出抽屉缝。下方为活样例。",
   "globals.busyRegionNarrowLabel": "扫描样例",
@@ -3159,10 +3163,10 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionFillStart": "显示 fill busy",
   "globals.busyRegionFillStop": "清除 fill busy",
   "globals.busyRegionFillHelp":
-    "栏目冷启动：BusyRegion fill 作为 FillColumn children（本舞台）**或** PageScroll → `.fynns-content-column`（对照 `#sandbox-busy-region-page-scroll-fill`，≥ **0.5.136**）— 禁止再塞进 .fynns-unit-stack / Card / List / Dialog unit-stack（内容定高，fill 拉不开，骨架会贴顶 / 溢出遮罩）。空 fill（≥ **0.5.191**）在裸 app-bg 上居中 BusyStack **且无** frosted mask 色块；刷新已有内容时仍用轻模糊 + 浅灰 mask。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有 `surface-*` 彩色 loading 底。",
+    "栏目冷启动：BusyRegion fill 放在 FillColumn children 或 PageScroll → `.fynns-content-column`。保留定高链；内容定高的 unit-stack / Card / List 包装无法铺满窗格。默认加粗文字条按高度自适应铺满内容区，内边距由 core 保留，无 frosted mask 或可见文案。禁止固定六行、清零 padding、EmptyState + CircularProgress loading 壳或私有加载 CSS。",
   "globals.busyRegionPageScrollFillLabel": "加载栏目",
   "globals.busyRegionPageScrollFillHelp":
-    "PageScroll 栏目冷启动（≥ **0.5.136**）：`.fynns-page-scroll` → `.fynns-content-column`（min-height 铺满滚口）→ 可选薄栏目包装 → `BusyRegion` `fill`。BusyStack 必须在可见列内**居中** — 禁止贴 TopAppBar 或溢出塌缩的 absolute 遮罩。对照 `#sandbox-busy-region-page-scroll-fill`。失败模式：CONSUMER_TREATY **BusyRegion fill BusyStack top overflow in PageScroll**。",
+    "PageScroll 栏目冷启动：`.fynns-page-scroll` → `.fynns-content-column`（min-height 铺满滚口）→ 可选薄栏目包装 → BusyRegion fill。加粗文字条自适应铺满可见内容区，沿用列内边距；无居中 busy 图标、仅顶端六行或塌缩遮罩。对照 `#sandbox-busy-region-page-scroll-fill`。",
   "globals.paneLoadErrorHelp":
     "栏目冷启动超时/失败（≥ **0.5.178**）：仅在请求进行中保留 BusyRegion `fill`；挂起或失败时**先清 busy**，再画 InlineAlert + 短 FieldHint + 末端对齐 Retry — 禁止永久 fill、禁止用 EmptyState 当加载失败壳、禁止静默空态。与 `runBusyTask` / 请求 `timeoutMs` / `AbortSignal` 配对。对照 `#sandbox-pane-load-error`。失败模式：CONSUMER_TREATY **pane cold-start hang without error surface**。",
   "globals.paneLoadErrorBusyLabel": "加载栏目",
@@ -3248,7 +3252,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyScrimLabel": "加载中",
   "globals.busyScrimMessage": "处理中，请稍候…",
   "globals.busyScrimHelp":
-    "推荐全屏加载：默认在文字将出现的位置显示最大的宽幅六行文字骨架；图片 / iframe / 画布显式使用 block。label 仅供无障碍，不显示加载文案。显式 message / circular 恢复永久归档的加载圈。真实 value 显示一条线性进度条。本样例 2 秒后关闭。",
+    "推荐全屏加载：加粗宽幅文字条按视口高度自适应铺满，保留 core 内边距。图片 / iframe / 画布才显式用 block。label 仅供无障碍，无可见加载文案。message / circular 恢复永久归档加载圈。真实 value 用线性进度，本样例 2 秒后关闭。",
   "globals.busyPaintBad": "反例：busy 后立刻卡主线程",
   "globals.busyPaintGood": "runBusyTask 后再卡主线程",
   "globals.busyPaintLabel": "繁重工作",

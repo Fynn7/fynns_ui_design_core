@@ -144,6 +144,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | twin Button loading rings in one control-cluster | DESIGN_SYSTEM form-rhythm | `#rhythm` |
 | Card batch CTA + ListItem row twin loading rings | DESIGN_SYSTEM Hard rules / Loading placement | `#sandbox-list-repo-path-actions` |
 | Skeleton as compact busy mark / small centered text emblem / visible loading copy; block used as default text placeholder | [Content-position skeleton convention](../docs/design-system/loading.md) | `#sandbox-loading-skeleton` |
+| Chat / pane loading skeleton flush to well edges or fixed six thin rows in a tall pane | [Adaptive pane skeleton geometry](../docs/design-system/loading.md#chat--pane-cold-start-geometry) | `#sandbox-loading-chat-pane` / `#sandbox-loading-chat-thread` |
 | New consumer uses archived ring / consumer shimmer CSS | [Loading skeleton convention](../docs/design-system/loading.md) | `#sandbox-loading-skeleton` / `#busy-region` |
 | BusyRegion + chrome loading stack | DESIGN_SYSTEM hard-rules | `#busy-region` |
 | runBusyTask hang forever (no timeout/signal) | DESIGN_SYSTEM paint-before-work | `#sandbox-busy-task-timeout` / `#busy-paint` |

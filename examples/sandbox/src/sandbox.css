@@ -1779,6 +1779,17 @@
  * Narrow × tall stage (~45% width of a typical laptop pane, full demo height)
  * to prove FillColumn docks Chat composer without a dead band below.
  */
+.sandbox-loading-chat-stage {
+  height: 75dvh;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-app-bg);
+}
+
 .sandbox-fill-column-stage {
   box-sizing: border-box;
   width: min(100%, 22rem);

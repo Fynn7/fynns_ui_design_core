@@ -593,8 +593,9 @@
   --fynns-layout-list-well-max-height-sm: 12rem;
   --fynns-layout-busy-region-backdrop-blur: 3px;
   --fynns-layout-skeleton-line-sm: 0.5rem;
-  --fynns-layout-skeleton-line-md: 0.75rem;
-  --fynns-layout-skeleton-line-lg: 1rem;
+  --fynns-layout-skeleton-line-md: 1.25rem;
+  --fynns-layout-skeleton-line-lg: 1.5rem;
+  --fynns-layout-skeleton-row-gap: 1.75rem;
   --fynns-layout-skeleton-block-height: 8rem;
   --fynns-layout-loading-ring-sm: 1rem;
   --fynns-layout-loading-ring-md: 1.6rem;

@@ -155,7 +155,9 @@
 - [Content-position skeletons](loading.md) reserve exactly the UI / text that
   will appear there. Loading screens have no visible loading copy; labels are
   accessible-only. BusyRegion / BusyScrim default to the large, full-width
-  six-row text skeleton. Explicit block is for images / iframes / canvas.
+  thick text skeleton: six rows without fill, adaptive rows with fill and
+  omitted lines. Pane cold-start retains core dialog-inset; no zero-padding
+  well or fixed six-row whole-pane wait. Explicit block is for images / iframes / canvas.
   Keep the large text pattern; no compact busy skeletons or small centered text emblems. Ring styles,
   CircularProgress, explicit busy `message` / `circular`, and Button `loading`
   are permanently archived / deprecated and strongly discouraged in consumers.

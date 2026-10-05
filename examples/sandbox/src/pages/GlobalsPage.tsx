@@ -7018,6 +7018,23 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Surface>
           </BusyRegion>
         </div>
+        <div className="fynns-unit-stack">
+          <SandboxHelp text={t("globals.loadingSkeletonPaneHelp")} />
+          <div id="sandbox-loading-chat-pane" className="sandbox-loading-chat-stage">
+            {busyRegionFill ? <BusyRegion busy fill label={t("globals.busyRegionLabel")} /> : (
+              <Chat>
+                <ChatThread>
+                  <ChatMessage role="assistant">{t("globals.busyRegionBody")}</ChatMessage>
+                </ChatThread>
+              </Chat>
+            )}
+          </div>
+          <div id="sandbox-loading-chat-thread" className="sandbox-fill-column-stage">
+            <Chat>
+              <ChatThread empty={<BusyRegion busy fill label={t("globals.busyRegionLabel")} />} />
+            </Chat>
+          </div>
+        </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Collapsible title={t("globals.archivedLoadingTitle")}>
           <BusyRegion

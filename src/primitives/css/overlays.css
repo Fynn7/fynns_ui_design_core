@@ -1296,6 +1296,27 @@
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
+/* Bare pane cold-start has no Chat / PageScroll content inset yet. Core owns
+ * this breathing room; explicit slots and refreshes keep their exact bounds. */
+.fynns-busy-region--fill.fynns-busy-region--default-skeleton
+  > .fynns-busy-region-content:empty
+  + .fynns-busy-region-overlay--skeleton {
+  padding: var(--fynns-layout-dialog-inset);
+}
+/* These canonical hosts already reserve the content inset. */
+.fynns-fill-column-main
+  .fynns-busy-region--fill.fynns-busy-region--default-skeleton
+  > .fynns-busy-region-content:empty
+  + .fynns-busy-region-overlay--skeleton {
+  padding: 0;
+  padding-block-end: var(--fynns-layout-dialog-inset);
+}
+:is(.fynns-content-column, .fynns-chat-thread-inner)
+  .fynns-busy-region--fill.fynns-busy-region--default-skeleton
+  > .fynns-busy-region-content:empty
+  + .fynns-busy-region-overlay--skeleton {
+  padding: 0;
+}
 .fynns-busy-region:not(.fynns-busy-region--fill)
   > .fynns-busy-region-content:empty
   + .fynns-busy-region-overlay--skeleton {

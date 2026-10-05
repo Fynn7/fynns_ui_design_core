@@ -13,7 +13,7 @@ the placeholder visible. Do not write consumer shimmer CSS or keyframes.
 
 | Upcoming content | Placement |
 | --- | --- |
-| Text / document / content body | `LoadingSkeleton` defaults to the large, full-width six-row text skeleton, placed where the text will appear |
+| Text / document / content body | `LoadingSkeleton` defaults to the large, full-width text skeleton; six rows without `fill`, adaptive rows with `fill` |
 | Image / iframe / canvas / similar whole component | Explicit `variant="block"` in that component's footprint |
 | Known text layout | Use the default text variant and set `lines` to the expected rows |
 | Pane / section / Dialog body | `BusyRegion busy label` with a matching `skeleton` slot; `fill` only for a height-resolved pane |
@@ -23,9 +23,17 @@ the placeholder visible. Do not write consumer shimmer CSS or keyframes.
 | Chat reasoning / tool activity | Existing ChatThinking / ChatActivity lifecycle |
 
 `LoadingSkeleton` supports `variant="block" | "text"`, `fill`, `lines`, text
-`size` and an accessible `label`. The default is the **large six-row text
-skeleton** from the sandbox: it spans the content column, with repeating
-58% / 82% / 100% row widths. `BusyRegion` and `BusyScrim` use this same default.
+`size` and an accessible `label`. The default is the **large text skeleton**
+from the sandbox: it spans the content column, with repeating
+58% / 82% / 100% row widths. Without `fill` it has six rows. With `fill` and
+omitted `lines`, core measures the available height and adds enough rows to
+cover the pane, including after resize. Do not freeze a whole pane to six rows.
+Default row thickness is `--fynns-layout-skeleton-line-md` (1.25rem); row
+spacing is `--fynns-layout-skeleton-row-gap` (1.75rem). Filled text patterns
+spread the fitted rows across the available height. `BusyRegion fill` and
+`BusyScrim` use this adaptive default, rather than a tall empty box containing
+only six thin lines at its top. Explicit `lines` still describes a known text
+layout and stays clamped to 1–12; automatic pane rows may exceed twelve.
 Keep this large text pattern; only the smaller busy emblems were removed.
 The block variant is for whole media / embedded components, not the default
 for a text body. Consumers place either shape at its upcoming content position
@@ -53,6 +61,27 @@ loading message or frosted mask accompanies a content skeleton. A cold-start
 without children uses the large text skeleton; provide matching layout when its shape
 is known. `fill` preserves the existing FillColumn / PageScroll height chain.
 Do not overlay a new region skeleton on top of an existing nested placeholder.
+
+## Chat / pane cold-start geometry
+
+`<BusyRegion busy fill label="Loading conversation" />` is the complete bare
+canvas cold-start. Before Chat is mounted, core reserves
+`--fynns-layout-dialog-inset` around the default skeleton; consumers must not
+remove it or add private loading padding. Existing FillColumn / PageScroll /
+ChatThread insets are retained without duplication. FillColumn also reserves
+the skeleton's bottom clearance. A custom skeleton slot or refresh over
+mounted children keeps its content's exact bounds instead.
+
+Inside Chat, use `ChatThread.empty={<BusyRegion busy fill label="Loading conversation" />}`
+for a loading thread, or a direct `BusyRegion fill` child while the thread is
+absent. Core gives the loading region the remaining thread height. Keep any
+composer as a sibling in Chat so its dock is excluded from the skeleton.
+Never use a content-sized unit-stack around a whole-pane wait, clear the
+chat well's padding, or force `lines={6}` in a filled loading screen.
+
+Live examples: `#sandbox-loading-chat-pane` reproduces the bare canvas before
+Chat mounts; `#sandbox-loading-chat-thread` exercises `ChatThread.empty` in
+a narrow host. Both use core geometry with no consumer padding / shimmer CSS.
 
 ## Permanently archived loading rings
 

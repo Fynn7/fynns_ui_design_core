@@ -1557,8 +1557,9 @@ export const LAYOUT_TOKENS = {
    */
   "busy-region-backdrop-blur": "3px",
   "skeleton-line-sm": "0.5rem",
-  "skeleton-line-md": "0.75rem",
-  "skeleton-line-lg": "1rem",
+  "skeleton-line-md": "1.25rem",
+  "skeleton-line-lg": "1.5rem",
+  "skeleton-row-gap": "1.75rem",
   "skeleton-block-height": "8rem",
   /** Permanently archived loading ring geometry (legacy calls only). */
   "loading-ring-sm": "1rem",

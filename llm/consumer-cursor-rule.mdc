@@ -59,7 +59,9 @@ ASCII `-`。
 ## 加载与忙碌（硬）
 
 骨架必须在即将出现的 UI / 文字原位占位，加载画面无可见 Loading 文案；
-label 仅供无障碍。BusyRegion / BusyScrim 默认最大的宽幅六行文字骨架，skeleton 槽匹配实际内容。
+label 仅供无障碍。BusyRegion fill / BusyScrim 默认加粗的宽幅文字骨架，省略 lines 按高度自适应铺满；非 fill 默认六行。
+core 保留裸画布冷启动的 dialog-inset，已在 FillColumn / PageScroll / ChatThread 内则沿用现有边距；禁止 padding 清零或整窗格固定六行。
+ChatThread.empty 内用 BusyRegion busy fill，或 Chat 中直接放 fill BusyRegion；不要用内容定高包装截断高度链。skeleton 槽匹配实际内容。
 LoadingSkeleton 默认 text；显式 block 仅用于图片 / iframe / 画布等整块内容。保留大的文字骨架；compact 已删除，
 禁止小型居中文字徽记和把骨架当 busy 图标。按钮优先 disabled + aria-busy，
 正文骨架负责等待。真实 value 用线性进度。显式 message / circular 与按钮 loading

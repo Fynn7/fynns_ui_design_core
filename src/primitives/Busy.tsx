@@ -38,6 +38,7 @@ function BusyStack({
   indicator,
   skeleton,
   messageId,
+  fillSkeleton = false,
 }: {
   label: string;
   message: ReactNode;
@@ -46,6 +47,7 @@ function BusyStack({
   indicator: BusyIndicator;
   skeleton?: ReactNode;
   messageId?: string;
+  fillSkeleton?: boolean;
 }) {
   const chrome = value != null ? "linear"
     : isContentSkeleton(value, indicator, message, skeleton) ? "skeleton" : "circular";
@@ -61,7 +63,7 @@ function BusyStack({
       {chrome === "skeleton" ? (
         <>
           <div className="fynns-busy-skeleton" aria-hidden="true">
-            {hasVisibleContent(skeleton) ? skeleton : <LoadingSkeleton fill aria-hidden="true" />}
+            {hasVisibleContent(skeleton) ? skeleton : <LoadingSkeleton fill={fillSkeleton} aria-hidden="true" />}
           </div>
           <span className="fynns-sr-only" id={messageId}>{label}</span>
         </>
@@ -203,6 +205,7 @@ export function BusyScrim({
         indicator={indicator}
         skeleton={skeleton}
         messageId={messageId}
+        fillSkeleton
       />
     </div>,
     document.body,
@@ -232,7 +235,7 @@ export type BusyRegionProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> &
   skeleton?: ReactNode;
   /**
    * Stretch to a height-resolved parent (`FillColumn` children, shell main /
-   * canvas) so the overlay centers in the **visible pane**. Required for
+   * canvas) so the text skeleton fills the **visible pane**. Required for
    * cold-start (no content yet). Do not pair with `EmptyState`.
    */
   fill?: boolean;
@@ -272,6 +275,7 @@ export function BusyRegion({
         "fynns-busy-region",
         busy && "fynns-busy-region--busy",
         busy && skeletonMode && "fynns-busy-region--skeleton",
+        busy && skeletonMode && !hasVisibleContent(skeleton) && "fynns-busy-region--default-skeleton",
         fill && "fynns-busy-region--fill",
         className,
       )}
@@ -297,6 +301,7 @@ export function BusyRegion({
             indicator={indicator}
             skeleton={skeleton}
             messageId={messageId}
+            fillSkeleton={fill || hasVisibleContent(children)}
           />
         </div>
       ) : null}

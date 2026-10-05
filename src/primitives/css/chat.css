@@ -1670,6 +1670,20 @@ a.fynns-chat-activity-artifact:hover {
   grid-area: composer;
 }
 
+/* A cold thread must keep the same resolved pane as the ready conversation. */
+.fynns-chat > .fynns-busy-region--fill {
+  grid-area: thread;
+  min-width: 0;
+}
+.fynns-chat-thread:has(> .fynns-chat-thread-inner > .fynns-busy-region--fill.fynns-busy-region--skeleton) {
+  display: flex;
+  flex-direction: column;
+}
+.fynns-chat-thread-inner:has(> .fynns-busy-region--fill.fynns-busy-region--skeleton) {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 .fynns-chat-composer {
   width: 100%;
   max-width: var(--fynns-layout-chat-max-width);

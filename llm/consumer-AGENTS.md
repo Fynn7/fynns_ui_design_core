@@ -22,7 +22,11 @@ This app consumes the fynns design system from the sibling checkout
    / `EmptyState`. Modal = `Dialog`; feedback = `snackbar` + `<SnackbarHost />`;
    loading = large content-position `BusyRegion` / `BusyScrim` skeletons,
    `LoadingSkeleton` slots matching the upcoming UI/text. Default = the large,
-   full-width six-row text skeleton; explicit block = image / iframe / canvas.
+   full-width thick text skeleton; six rows without fill, adaptive rows with
+   fill and omitted lines. Whole-pane waits must not freeze six rows or clear
+   padding: core owns the bare cold-start dialog-inset and retains canonical
+   FillColumn / PageScroll / ChatThread insets. ChatThread.empty uses BusyRegion
+   busy fill; avoid content-sized wrappers. Explicit block = image / iframe / canvas.
    Labels are accessible-only; no visible Loading copy, compact busy marks or
    small centered text emblems. Keep the large text skeleton.
    Actions prefer disabled + aria-busy with the content skeleton owning the wait.
