@@ -362,7 +362,8 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
         return;
       }
       // Match the 26rem composer-host container query's content box. The form
-      // width stays fixed when the toolbar wraps, so this cannot oscillate.
+      // width stays fixed when the draft moves above the single action row,
+      // so this cannot oscillate. Hosts own the controls' minimum width.
       const sync = () => {
         const formStyle = getComputedStyle(form);
         const contentWidth =

@@ -101,20 +101,52 @@ Live `#sandbox-chat-composer-leading-menus-narrow` /
 `#sandbox-chat-composer-thinking-toggle` (wide &gt; 36rem, labeled) /
 `#sandbox-chat-composer-thinking-toggle-narrow` (≤ 36rem icon-only).
 
+### Single action row and host width (hard)
+
 When a composer with `endActions` becomes ≤ **26rem** wide, core moves the
-draft above a wrapping toolbar even if the draft is empty. The leading group
-and end actions can occupy separate rows; the end actions wrap again when
-needed. Every control keeps its hit target instead of disappearing behind the
-capsule's clipping edge. A browser page cannot impose a minimum width on its
-window; native hosts must set their own window minimum if they need that
-behavior.
+draft above the toolbar even if the draft is empty. **All leading buttons,
+menu triggers, mode toggles and Send/Stop remain on one horizontal row.**
+Only the editor may grow onto multiple lines. Never wrap either action group,
+stack leading above end actions, clip a control, shrink its hit target, or add
+a horizontal scrollbar to make an undersized composer appear to fit.
+
+Core keeps the form at least `--fynns-layout-chat-min-width` (default 20rem,
+including the form's inline insets). This is a baseline, **not a guarantee for
+an arbitrary number of controls**. Consumers must reserve a larger minimum
+when their actual action row requires it. Budget both action groups together:
+fixed hit targets + menu label floors + all gaps + expanded shell padding and
+borders + both `--fynns-chat-composer-inset-inline` insets. Check the longest
+localized labels and all Send/Stop/Dictate, toggle and attachment states.
+Core's menu ellipsis and icon-only mode pills are allowed; hiding actions or
+moving mode switches into the + Menu is not a width workaround.
+
+- **Resizable panes:** prevent pointer **and keyboard** resizing below the
+  required chat-host width; clamp restored and programmatic sizes too.
+  `SplitPane` uses `minStart` / `minEnd`; `EndAside` uses
+  `--fynns-layout-end-aside-min-width`; a main chat column also reserves
+  `--fynns-layout-main-min-width`. Set existing `--fynns-*` layout tokens on
+  the app host; do not override private composer CSS. Account for every
+  ancestor inset between pane and form.
+- **Native windows:** enforce a window minimum containing the chat minimum
+  plus every simultaneously visible drawer, preview/aside, separator and
+  outer inset. Adding controls must update that budget before shipping.
+- **Browser windows:** a page cannot prevent browser-window resizing. Before
+  the chat column reaches its minimum, collapse navigation or move the
+  preview/aside to the core overlay/sheet layout. If the viewport still cannot
+  fit the chat alone, show an explicit unsupported-width state with a recovery
+  action rather than rendering a clipped or wrapped composer. CSS `min-width`
+  alone inside an `overflow: hidden` parent is not a complete solution.
+
+Live narrow recipes: `#sandbox-chat-composer-leading-menus-narrow` and
+`#sandbox-chat-composer-thinking-toggle-narrow`; test the last permitted pane
+width, attempts below it, and native/browser window resizing.
 
 ## Compact vs expanded (`data-expanded`)
 
 | State | When | Layout |
 | --- | --- | --- |
 | **Collapsed** (default) | Empty draft and no attachments or todo list (clearing the value collapses) | Body is a horizontal flex row. Toolbar uses `display: contents` so leading / field / primary share one line (`order` 1 / 2 / 3). |
-| **Expanded** | Measured height &gt; one line (+tolerance), `attachments` or `todoList` present, or an `endActions` composer ≤26rem wide | Body is a column. Textarea full width on top. Toolbar is a real flex row (`justify-content: space-between`) — tools start, Send end; crowded narrow controls wrap. |
+| **Expanded** | Measured height &gt; one line (+tolerance), `attachments` or `todoList` present, or an `endActions` composer ≤26rem wide | Body is a column. Textarea full width on top. Toolbar is a single flex row (`justify-content: space-between`, `nowrap`) — tools start, Send end; the host prevents further compression below the complete action row's width. |
 
 Detection runs inside the JS auto-grow (`resize`). Expand freely when content
 needs it. **Do not auto-collapse a non-empty draft** when height would fit one

@@ -490,10 +490,20 @@
   (≥ **0.5.288**). Do **not** invent consumer `max-width` / manual `slice` /
   private chip-label CSS. Live `#sandbox-chat-composer-leading-menus` /
   `#chat`. Failure: CONSUMER_TREATY ChatComposer leading Menu label hard-clips.
-- **DON'T** shrink `ChatComposer` `endActions` until buttons disappear behind
-  the capsule edge. Core promotes crowded ≤26rem composers to a full-width
-  draft and wrapping action rows. Keep icon hit targets whole; let menu labels
-  ellipsize inside their own triggers.
+- **DON'T** compress a chat host until `ChatComposer` buttons or menu triggers
+  wrap, stack, clip or lose their hit targets. **The complete action toolbar
+  always stays on one horizontal row**, including leading + model + mode
+  switches + Send/Stop. Core may move the draft above that row at ≤26rem;
+  only editor text becomes multiline. Reserve at least
+  `--fynns-layout-chat-min-width`, increasing the host minimum for the actual
+  controls, menu floors, gaps and all insets. Clamp pane drag/keyboard and
+  restored sizes; enforce native window minima. Browser hosts must collapse
+  navigation / preview into the core overlay or sheet before crowding chat.
+  Never hide the problem with horizontal scrolling, shell clipping or private
+  `.fynns-*` CSS. See `llm/CHAT_COMPOSER_LAYOUT.md` single action row contract.
+  Live `#sandbox-chat-composer-thinking-toggle-narrow` /
+  `#sandbox-chat-composer-leading-menus-narrow`. Failure: CONSUMER_TREATY
+  ChatComposer action toolbar wraps under pane/window compression.
 - **DON'T** park the **model** picker in `ChatComposer` `leading` (stays
   start-clustered) — put it in `endActions` (end / right, before Send) with
   `align="end"` (≥ **0.5.288**). Volume / tools stay in `leading`. Do **not**

@@ -72,6 +72,13 @@ This app consumes the fynns design system from the sibling checkout
    `ControlRow label`, Switch alone in children. Allow core label wrapping and
    choose a fitting Dialog `size` (usually `md` for several long rows). Never
    hide a collision with clipping, absolute offsets, or local `.fynns-*` CSS.
+8. ChatComposer buttons, menu triggers, mode toggles and Send/Stop always share
+   **one horizontal action row**. Prevent pane/window compression below the
+   complete row's minimum (controls + menu floors + gaps + shell/form/host
+   insets); `--fynns-layout-chat-min-width` is only the baseline. Clamp drag,
+   keyboard and restored pane sizes; enforce native window minima. In browsers,
+   collapse nav/preview into core overlay/sheet before crowding chat. Never wrap,
+   stack, clip or horizontally scroll actions. Read `llm/CHAT_COMPOSER_LAYOUT.md`.
 
 ## Token discipline (local models)
 
