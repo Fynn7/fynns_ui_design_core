@@ -58,6 +58,9 @@ ASCII `-`。
 
 ## 加载与忙碌（硬）
 
+整个应用启动 / 重开：AppLoadingScreen open label，不透明主题底、居中标记及扫光，无文字骨架或透出的应用 UI。
+图标优先级：已配置 logoSrc / 页面 icon / apple-touch-icon / manifest → 缩写 Avatar（name 或 application-name / 页面标题）→ core 标记。默认自动检测；禁止另造产品 logo。
+BusyScrim 只用于已启动应用内显式阻塞的内容等待；普通正文仍用 BusyRegion。
 骨架必须在即将出现的 UI / 文字原位占位，加载画面无可见 Loading 文案；
 label 仅供无障碍。BusyRegion fill / BusyScrim 默认加粗的宽幅文字骨架，省略 lines 按高度自适应铺满；非 fill 默认六行。
 core 保留裸画布冷启动的 dialog-inset，已在 FillColumn / PageScroll / ChatThread 内则沿用现有边距；禁止 padding 清零或整窗格固定六行。

@@ -10,6 +10,7 @@ import {
   BusyRegion,
   LoadingSkeleton,
   BusyScrim,
+  AppLoadingScreen,
   Button,
   MessageSquareIcon,
   useBusyTask,
@@ -1331,6 +1332,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [busyRegionColdBody, setBusyRegionColdBody] = useState(true);
   const [busyRegionFieldBusy, setBusyRegionFieldBusy] = useState(false);
   const [busyScrimOpen, setBusyScrimOpen] = useState(false);
+  const [appLoadingOpen, setAppLoadingOpen] = useState(false);
+  const [appLoadingCustomLogo, setAppLoadingCustomLogo] = useState(false);
+  const [appLoadingName, setAppLoadingName] = useState<string | undefined>();
   const [busyScrimDeterminateOpen, setBusyScrimDeterminateOpen] = useState(false);
   const [busyPaintBad, setBusyPaintBad] = useState(false);
   const busyPaintGood = useBusyTask();
@@ -1520,6 +1524,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     experimental: formExperimental,
     onExperimentalChange: setFormExperimental,
   };
+
+  useEffect(() => {
+    if (!appLoadingOpen) return;
+    const timer = window.setTimeout(() => setAppLoadingOpen(false), 2000);
+    return () => window.clearTimeout(timer);
+  }, [appLoadingOpen]);
 
   useEffect(() => {
     if (!busyScrimOpen) return;
@@ -7528,6 +7538,30 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="busy-scrim">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <SandboxHelp text={t("globals.appLoadingScreenHelp")} />
+          <Button id="sandbox-app-loading-open" onClick={() => {
+            setAppLoadingCustomLogo(false);
+            setAppLoadingName(undefined);
+            setAppLoadingOpen(true);
+          }}>{t("globals.appLoadingScreenOpen")}</Button>
+          <Button id="sandbox-app-loading-custom-open" variant="tonal" onClick={() => {
+            setAppLoadingCustomLogo(true);
+            setAppLoadingName(undefined);
+            setAppLoadingOpen(true);
+          }}>{t("globals.appLoadingScreenCustomOpen")}</Button>
+          <Button id="sandbox-app-loading-core-open" variant="ghost" onClick={() => {
+            setAppLoadingCustomLogo(false);
+            setAppLoadingName("");
+            setAppLoadingOpen(true);
+          }}>{t("globals.appLoadingScreenCoreOpen")}</Button>
+          <AppLoadingScreen
+            open={appLoadingOpen}
+            label={t("globals.appLoadingScreenLabel")}
+            name={appLoadingName}
+            logoSrc={appLoadingCustomLogo ? `data:image/svg+xml,${encodeURIComponent(
+              '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M32 8 56 32 32 56 8 32Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/></svg>',
+            )}` : undefined}
+          />
           <Button onClick={() => setBusyScrimOpen(true)}>
             {t("globals.busyScrimOpen")}
           </Button>

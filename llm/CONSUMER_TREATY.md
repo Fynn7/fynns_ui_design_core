@@ -146,6 +146,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Skeleton as compact busy mark / small centered text emblem / visible loading copy; block used as default text placeholder | [Content-position skeleton convention](../docs/design-system/loading.md) | `#sandbox-loading-skeleton` |
 | Chat / pane loading skeleton flush to well edges or fixed six thin rows in a tall pane | [Adaptive pane skeleton geometry](../docs/design-system/loading.md#chat--pane-cold-start-geometry) | `#sandbox-loading-chat-pane` / `#sandbox-loading-chat-thread` |
 | New consumer uses archived ring / consumer shimmer CSS | [Loading skeleton convention](../docs/design-system/loading.md) | `#sandbox-loading-skeleton` / `#busy-region` |
+| Application startup uses whole-window skeleton rows, translucent BusyScrim, or ignores configured project icon | [Logo startup screen](../docs/design-system/loading.md#application-startup-logo-screen) | `#busy-scrim` / `#sandbox-app-loading-open` |
 | BusyRegion + chrome loading stack | DESIGN_SYSTEM hard-rules | `#busy-region` |
 | runBusyTask hang forever (no timeout/signal) | DESIGN_SYSTEM paint-before-work | `#sandbox-busy-task-timeout` / `#busy-paint` |
 | overlapping runBusyTask clears busy early | DESIGN_SYSTEM paint-before-work | `#sandbox-busy-task-generation` |

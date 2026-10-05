@@ -1,5 +1,5 @@
-import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
-import { useEffect, useId, useRef } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
+import { useId } from "react";
 import { createPortal } from "react-dom";
 import {
   CircularProgress,
@@ -7,16 +7,10 @@ import {
   type CircularProgressSize,
 } from "./Progress";
 import { LoadingSkeleton } from "./LoadingSkeleton";
+import { useBlockingLoading } from "./useBlockingLoading";
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
-}
-
-const FOCUSABLE_SELECTOR =
-  'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
-function getFocusable(container: HTMLElement): HTMLElement[] {
-  return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
 }
 
 export type BusyIndicator = "skeleton" | "circular" | "linear";
@@ -110,10 +104,11 @@ export type BusyScrimProps = {
 };
 
 /**
- * Full-viewport blocking layer: content skeletons and an accessible-only label.
+ * In-app blocking content wait: skeletons and an accessible-only label.
+ * Application startup uses AppLoadingScreen, never whole-window text rows.
  * Explicit message / circular retains the permanently archived ring presentation.
  * Non-dismissible: no Esc / scrim click. Prefer `BusyRegion` for sectional waits.
- * For heavy boots, open via `runBusyTask` / `useBusyTask` (with `timeoutMs` /
+ * For heavy work, open via `runBusyTask` / `useBusyTask` (with `timeoutMs` /
  * `signal` when the work can hang) so the skeleton can paint
  * before the main thread blocks (see AGENTS.md Feedback).
  */
@@ -127,62 +122,8 @@ export function BusyScrim({
   skeleton,
 }: BusyScrimProps) {
   const messageId = useId();
-  const rootRef = useRef<HTMLDivElement>(null);
+  const { rootRef, onKeyDown } = useBlockingLoading(open);
   const skeletonMode = isContentSkeleton(value, indicator, message, skeleton);
-
-  useEffect(() => {
-    if (!open) return;
-    const previous = document.activeElement as HTMLElement | null;
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    rootRef.current?.focus();
-
-    const onWindowKeyDown = (event: globalThis.KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    };
-    window.addEventListener("keydown", onWindowKeyDown, true);
-
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      window.removeEventListener("keydown", onWindowKeyDown, true);
-      previous?.focus?.();
-    };
-  }, [open]);
-
-  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Escape") {
-      event.preventDefault();
-      event.stopPropagation();
-      return;
-    }
-    if (event.key !== "Tab") return;
-    const container = rootRef.current;
-    if (!container) return;
-    const focusable = getFocusable(container);
-    if (focusable.length === 0) {
-      event.preventDefault();
-      container.focus();
-      return;
-    }
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    const active = document.activeElement as HTMLElement | null;
-    if (!active || !container.contains(active)) {
-      event.preventDefault();
-      first.focus();
-      return;
-    }
-    if (event.shiftKey && (active === first || active === container)) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && active === last) {
-      event.preventDefault();
-      first.focus();
-    }
-  };
 
   if (!open || typeof document === "undefined") return null;
 

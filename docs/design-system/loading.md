@@ -1,11 +1,56 @@
-# Content-position loading skeletons
+# Application startup and content loading
 
 ← back to [Design system index](../DESIGN_SYSTEM.md)
 
 A skeleton means **UI or text will appear at this exact position**. It is a
-placeholder for upcoming content, never a generic busy glyph. Loading screens
+placeholder for upcoming content, never a generic busy glyph. Content waits
 show large, correctly placed skeleton UI without visible `Loading…` copy.
 Keep an accessible-only `label` for screen readers.
+
+## Application startup: logo screen
+
+Opening / starting / reinitializing the whole application uses
+`AppLoadingScreen`, **never a whole-window text skeleton**. It covers the app
+with an opaque theme background and centers one quiet identity mark. A soft
+ChatThinking sweep is clipped to the logo silhouette or avatar initials.
+No app chrome shines through, and no loading copy or ring accompanies it.
+The dedicated startup layer also covers portaled scroll rails and tooltips.
+Reduced motion keeps the mark visible without animation.
+
+Identity priority is automatic:
+
+1. Configured project icon: explicit `logoSrc`, then page `link rel="icon"`
+   (including shortcut icon), apple-touch-icon, then manifest icons.
+2. Initials `Avatar`: `name` if supplied; otherwise `application-name` meta
+   content, then the page title. Uses the same initials rules as Avatar.
+3. Neutral core mark when neither an icon nor initials identity is available.
+
+Image / manifest failures fall through, and live head configuration changes
+are observed while open. Prefer the existing project icon; never invent a new
+product logo just to add startup loading. For a logo held in JS configuration
+rather than page metadata, pass that existing asset URL through `logoSrc`.
+Transparent SVG / PNG / WebP assets allow silhouette-only shimmer. A whole
+screen screenshot is not a logo asset. `name=""` represents unavailable identity;
+it does not override a configured project icon.
+
+```tsx
+import { AppLoadingScreen } from "@fynns/ui";
+
+// Render at the earliest available bootstrap boundary, before app chrome.
+<AppLoadingScreen open={starting} label="Starting application" />
+// Existing configuration can also supply logoSrc / name; discovery is default.
+```
+
+Close on initialization success, failure, cancellation or timeout; show the
+normal error / Retry surface afterward. Use real initialization completion,
+not a cosmetic delay. Keep existing runBusyTask / useBusyTask / AbortSignal /
+timeout handling. If heavy work blocks the main thread, yield after opening
+the screen so it can paint. Do not retain the startup screen during ordinary
+section fetches, Chat thinking, message streaming or preview rendering.
+
+Sandbox: `#busy-scrim` → `#sandbox-app-loading-open` (automatic project identity),
+`#sandbox-app-loading-custom-open` (configured asset) and
+`#sandbox-app-loading-core-open` (identity unavailable). Demo-only close = 2s.
 
 Core owns the theme-aware fill and soft ChatThinking sweep
 (`--fynns-duration-thinking-shimmer`). Reduced motion stops the sweep and keeps
@@ -17,7 +62,8 @@ the placeholder visible. Do not write consumer shimmer CSS or keyframes.
 | Image / iframe / canvas / similar whole component | Explicit `variant="block"` in that component's footprint |
 | Known text layout | Use the default text variant and set `lines` to the expected rows |
 | Pane / section / Dialog body | `BusyRegion busy label` with a matching `skeleton` slot; `fill` only for a height-resolved pane |
-| Full app | `BusyScrim open label` with the upcoming layout in `skeleton` |
+| Application startup / reopening | `AppLoadingScreen open label`; automatic configured icon → initials Avatar → core mark |
+| Explicit blocking content wait after startup | `BusyScrim` with matching content layout; prefer sectional BusyRegion |
 | Real percentage | `value` in `[0, 1]` or `LinearProgress value`; no fabricated progress |
 | Existing action during a content wait | Keep its label / glyph; set `disabled` and `aria-busy`, with the content skeleton owning the wait |
 | Chat reasoning / tool activity | Existing ChatThinking / ChatActivity lifecycle |
@@ -31,7 +77,7 @@ cover the pane, including after resize. Do not freeze a whole pane to six rows.
 Default row thickness is `--fynns-layout-skeleton-line-md` (1.25rem); row
 spacing is `--fynns-layout-skeleton-row-gap` (1.75rem). Filled text patterns
 spread the fitted rows across the available height. `BusyRegion fill` and
-`BusyScrim` use this adaptive default, rather than a tall empty box containing
+explicit in-app `BusyScrim` waits use this adaptive default, rather than a tall empty box containing
 only six thin lines at its top. Explicit `lines` still describes a known text
 layout and stays clamped to 1–12; automatic pane rows may exceed twelve.
 Keep this large text pattern; only the smaller busy emblems were removed.

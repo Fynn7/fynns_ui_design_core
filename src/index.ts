@@ -263,6 +263,8 @@ export type {
   LinearProgressProps,
 } from "./primitives/Progress";
 export { BusyScrim, BusyRegion } from "./primitives/Busy";
+export { AppLoadingScreen } from "./primitives/AppLoadingScreen";
+export type { AppLoadingScreenProps } from "./primitives/AppLoadingScreen";
 export type {
   BusyScrimProps,
   BusyRegionProps,

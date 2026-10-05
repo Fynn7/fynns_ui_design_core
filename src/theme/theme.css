@@ -50,6 +50,8 @@
   --fynns-color-busy-region-mask: rgba(0, 0, 0, 0.20);
   --fynns-color-skeleton-base: color-mix(in srgb, var(--fynns-color-text-muted) 16%, var(--fynns-color-app-bg));
   --fynns-color-skeleton-highlight: color-mix(in srgb, var(--fynns-color-accent) 24%, var(--fynns-color-skeleton-base));
+  --fynns-color-app-loading-logo-base: color-mix(in srgb, var(--fynns-color-text-muted) 40%, var(--fynns-color-app-bg));
+  --fynns-color-app-loading-logo-highlight: var(--fynns-color-text-muted);
   --fynns-color-toast-surface: #062126;
   --fynns-color-control-surface: rgba(255, 255, 255, 0.02);
   --fynns-color-control-surface-hover: rgba(255, 255, 255, 0.05);
@@ -176,6 +178,7 @@
   --fynns-z-scroll-overlay-flyout: 66;
   --fynns-z-toast: 70;
   --fynns-z-tooltip: 8000;
+  --fynns-z-app-loading: 8100;
   --fynns-duration-instant: 1ms;
   --fynns-duration-tooltip: 120ms;
   --fynns-duration-tooltip-show-delay: 500ms;
@@ -597,6 +600,7 @@
   --fynns-layout-skeleton-line-lg: 1.5rem;
   --fynns-layout-skeleton-row-gap: 1.75rem;
   --fynns-layout-skeleton-block-height: 8rem;
+  --fynns-layout-app-loading-logo-size: 3rem;
   --fynns-layout-loading-ring-sm: 1rem;
   --fynns-layout-loading-ring-md: 1.6rem;
   --fynns-layout-loading-ring-lg: 2.5rem;

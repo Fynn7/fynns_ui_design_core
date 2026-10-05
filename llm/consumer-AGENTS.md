@@ -20,7 +20,12 @@ This app consumes the fynns design system from the sibling checkout
    `sonner`, native `<select>` / `<dialog>` / `alert()`.
 2. Default chrome `DestinationAppShell` → main `PageScroll` → `Card` / `List`
    / `EmptyState`. Modal = `Dialog`; feedback = `snackbar` + `<SnackbarHost />`;
-   loading = large content-position `BusyRegion` / `BusyScrim` skeletons,
+   app startup / reopening = `AppLoadingScreen` (opaque theme background,
+   centered logo sweep; configured project icon → initials Avatar → core mark).
+   Icon discovery is automatic; pass existing JS brand assets through logoSrc.
+   Never show whole-window text skeletons or translucent app chrome at startup.
+   Content loading = large content-position BusyRegion skeletons; BusyScrim
+   only for explicit in-app blocking content waits,
    `LoadingSkeleton` slots matching the upcoming UI/text. Default = the large,
    full-width thick text skeleton; six rows without fill, adaptive rows with
    fill and omitted lines. Whole-pane waits must not freeze six rows or clear

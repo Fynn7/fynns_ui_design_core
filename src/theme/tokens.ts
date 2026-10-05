@@ -98,6 +98,8 @@ export const COLOR_TOKENS = {
   /** Quiet skeleton fill and ChatThinking-like accent-into-muted sweep. */
   "skeleton-base": "color-mix(in srgb, var(--fynns-color-text-muted) 16%, var(--fynns-color-app-bg))",
   "skeleton-highlight": "color-mix(in srgb, var(--fynns-color-accent) 24%, var(--fynns-color-skeleton-base))",
+  "app-loading-logo-base": "color-mix(in srgb, var(--fynns-color-text-muted) 40%, var(--fynns-color-app-bg))",
+  "app-loading-logo-highlight": "var(--fynns-color-text-muted)",
   /** Legacy toast surface; kept for backward compatibility. */
   "toast-surface": "#062126",
   "control-surface": "rgba(255, 255, 255, 0.02)",
@@ -379,6 +381,8 @@ export const Z_TOKENS = {
   "scroll-overlay-flyout": "66",
   toast: "70",
   tooltip: "8000",
+  /** Opaque startup covers every application layer, including portaled rails / tips. */
+  "app-loading": "8100",
 } as const;
 
 /**
@@ -1561,6 +1565,7 @@ export const LAYOUT_TOKENS = {
   "skeleton-line-lg": "1.5rem",
   "skeleton-row-gap": "1.75rem",
   "skeleton-block-height": "8rem",
+  "app-loading-logo-size": "3rem",
   /** Permanently archived loading ring geometry (legacy calls only). */
   "loading-ring-sm": "1rem",
   "loading-ring-md": "1.6rem",

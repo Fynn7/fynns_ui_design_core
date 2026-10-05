@@ -100,7 +100,8 @@ classes.
 
   | Scene | Use | Do **not** |
   | --- | --- | --- |
-  | Full-app block | `BusyScrim` | `EmptyState` + ring; revived `BlockingLoadingOverlay` |
+  | Application startup / reopen | `AppLoadingScreen` with automatic configured icon → initials Avatar → core mark, opaque theme background and logo sweep | Whole-window text skeleton; translucent startup overlay; invented product logo; visible loading copy / ring |
+  | Explicit in-app blocking content wait | `BusyScrim` with matching content layout; prefer sectional BusyRegion | Reuse as application startup; EmptyState + ring; revived BlockingLoadingOverlay |
   | Pane / Chat cold-start | `BusyRegion busy fill` as shell / FillColumn child, PageScroll → `.fynns-content-column`, or ChatThread.empty; thick text rows adapt to the resolved pane height with core-owned insets; omit `lines`, hide section FieldHint until ready; no frosted mask | Clear well padding; fixed six-row ceiling strip; content-sized unit-stack/Card around a pane wait; EmptyState as loading; FieldHint + busy in one well; broken PageScroll height chain |
   | Dialog/Card body load | `BusyRegion` (+ `fill` if height resolved); no pager siblings under empty overlay; drawer SearchBar **above** BusyRegion | Bare CircularProgress as body; wrap List+Select+Pagination so chrome flickers |
   | Refresh over existing | BusyRegion around List/table only | Unmount → EmptyState; consumer `surface-*` wash; wrap whole Card |

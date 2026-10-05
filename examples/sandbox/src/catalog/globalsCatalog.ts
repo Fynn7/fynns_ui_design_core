@@ -671,7 +671,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
   {
     id: "busy-scrim",
     categoryId: "patterns",
-    label: "BusyScrim",
+    label: "AppLoadingScreen / BusyScrim",
     keywords: ["遮罩", "scrim", "blocking", "busy"],
   },
   {

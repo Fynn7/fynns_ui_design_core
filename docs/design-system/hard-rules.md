@@ -153,7 +153,11 @@
   trailing). Dismiss only via `onDismiss` **inside** the rounded host — never a
   sibling `IconButton` outside the strip. Live `#banner`.
 - [Content-position skeletons](loading.md) reserve exactly the UI / text that
-  will appear there. Loading screens have no visible loading copy; labels are
+  will appear there. Whole-application startup / reopening uses AppLoadingScreen
+  instead: opaque theme background, centered icon and clipped sweep. Identity
+  priority = configured project icon → initials Avatar → core mark. Never use
+  whole-window text rows or translucent startup chrome.
+  Content waits have no visible loading copy; labels are
   accessible-only. BusyRegion / BusyScrim default to the large, full-width
   thick text skeleton: six rows without fill, adaptive rows with fill and
   omitted lines. Pane cold-start retains core dialog-inset; no zero-padding
