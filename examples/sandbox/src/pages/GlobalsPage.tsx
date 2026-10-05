@@ -72,6 +72,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuRemovableItem,
   DropdownMenuSeparator,
   DropdownMenuSub,
   Dropzone,
@@ -1223,6 +1224,41 @@ function OverflowBoundsDemo() {
           right: String(Math.round(boundsOverflow.delta.right)),
         })}
       />
+    </div>
+  );
+}
+
+function MenuRemovalDemo() {
+  const { t } = useLocale();
+  const [items, setItems] = useState<Array<"A" | "B" | "C">>(["A", "B", "C"]);
+  const rows = items.map((id) => {
+    const label = t(`globals.menuSubItem${id}`);
+    return (
+      <DropdownMenuRemovableItem
+        key={id}
+        icon={<FolderOpenIcon />}
+        removeLabel={`${t("globals.menuRowActionDeleteAria")}: ${label}`}
+        onRemove={() => setItems((current) => current.filter((item) => item !== id))}
+      >
+        {label}
+      </DropdownMenuRemovableItem>
+    );
+  });
+  const body = items.length ? rows : <EmptyState title={t("globals.menuRowActionEmpty")} />;
+  return (
+    <div id="sandbox-menu-row-action" className="sandbox-globals-row">
+      <DropdownMenu trigger={t("globals.menuRowActionTrigger")} ariaLabel={t("globals.menuRowActionAria")}>
+        {body}
+      </DropdownMenu>
+      <DropdownMenu trigger={t("globals.menuTrigger")} ariaLabel={t("globals.menuAria")}>
+        <DropdownMenuSub trigger={t("globals.menuSubTrigger")} ariaLabel={t("globals.menuSubAria")}>
+          {body}
+        </DropdownMenuSub>
+      </DropdownMenu>
+      <Button variant="ghost" onClick={() => setItems(["A", "B", "C"])}>
+        {t("globals.menuRowActionReset")}
+      </Button>
+      <SandboxHelp text={t("globals.menuRowActionHelp")} />
     </div>
   );
 }
@@ -2385,47 +2421,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </DropdownMenu>
           <SandboxHelp text={t("globals.menuSubHelp")} />
         </div>
-        <div id="sandbox-menu-row-action" className="sandbox-globals-row">
-          <DropdownMenu
-            trigger={t("globals.menuRowActionTrigger")}
-            ariaLabel={t("globals.menuRowActionAria")}
-          >
-            <DropdownMenuItem icon={<FileIcon />}>
-              {t("globals.menuSubItemA")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              icon={<FolderOpenIcon />}
-              trailing={
-                <Tooltip content={t("globals.menuRowActionDeleteTip")}>
-                  <IconButton
-                    size="sm"
-                    variant="ghost"
-                    aria-label={t("globals.menuRowActionDeleteAria")}
-                  >
-                    <TrashIcon aria-hidden />
-                  </IconButton>
-                </Tooltip>
-              }
-            >
-              {t("globals.menuSubItemB")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              icon={<FolderOpenIcon />}
-              trailing={
-                <IconButton
-                  size="sm"
-                  variant="ghost"
-                  aria-label={t("globals.menuRowActionDeleteAria")}
-                >
-                  <TrashIcon aria-hidden />
-                </IconButton>
-              }
-            >
-              {t("globals.menuSubItemC")}
-            </DropdownMenuItem>
-          </DropdownMenu>
-          <SandboxHelp text={t("globals.menuRowActionHelp")} />
-        </div>
+        <MenuRemovalDemo />
         <div id="sandbox-scroll-menu-stack">
           <SandboxHelp text={t("globals.scrollMenuStackHelp")} />
           <div className="sandbox-scroll-menu-stack fynns-scroll">

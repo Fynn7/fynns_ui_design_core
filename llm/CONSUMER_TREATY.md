@@ -199,6 +199,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | FieldBlock Menu tip-wrap shrinks trigger | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.290**) | `#sandbox-menu-field-match` / `#menu` |
 | labeled DropdownMenu missing chevron | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.253**) | `#menu` / `#sandbox-menu-field-match` |
 | DropdownMenu missing nested submenu | DESIGN_SYSTEM Hard rules / CHAT_COMPOSER_LAYOUT (≥ **0.5.288**) | `#sandbox-menu-submenu` / `#menu` |
+| menu trash closes menu | DESIGN_SYSTEM Hard rules (`DropdownMenuRemovableItem`: built-in trash + Tooltip; `onRemove` updates data, root/submenu stay open, focus stays in menu) | `#sandbox-menu-row-action` |
 | DropdownMenu panel left-shifted vs trigger | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.254**) | `#sandbox-menu-field-match` / `#menu` |
 | Menu chevron optically high | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.254**) | `#menu` / `#sandbox-menu-field-match` |
 | Ellipsis label clips descenders | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.302**; was snug ≥ **0.5.294**; Menu ≥ **0.5.255**) | `#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-leading-menus` / `#sandbox-menu-field-match` / `#menu` / `#chat` |

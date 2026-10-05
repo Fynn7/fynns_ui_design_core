@@ -146,6 +146,7 @@ export {
   DropdownMenuCheckboxItem,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuRemovableItem,
   DropdownMenuSeparator,
   DropdownMenuSub,
 } from "./primitives/DropdownMenu";
@@ -153,6 +154,7 @@ export type {
   DropdownMenuCheckboxItemProps,
   DropdownMenuGroupProps,
   DropdownMenuItemProps,
+  DropdownMenuRemovableItemProps,
   DropdownMenuProps,
   DropdownMenuSeparatorProps,
   DropdownMenuSubProps,

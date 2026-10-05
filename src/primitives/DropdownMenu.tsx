@@ -15,7 +15,9 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { Button, type ButtonSize, type ButtonVariant } from "./Button";
-import { CheckIcon, ChevronDownIcon, ChevronRightIcon } from "./icons";
+import { CheckIcon, ChevronDownIcon, ChevronRightIcon, TrashIcon } from "./icons";
+import { IconButton } from "./IconButton";
+import { Tooltip } from "./Tooltip";
 import { useFloatingBoxPosition, type Align } from "./floatingBox";
 import { OverflowTip, overflowTipText } from "./OverflowTip";
 
@@ -133,7 +135,10 @@ export function MenuSurface({
     const items = itemSelector(menuEl);
     if (items.length === 0) return;
     const current = document.activeElement as HTMLElement | null;
-    const index = current ? items.indexOf(current) : -1;
+    // Row actions share their row's place in vertical keyboard navigation.
+    const currentItem = current?.closest(".fynns-menu-item-host")
+      ?.querySelector<HTMLElement>(".fynns-menu-item") ?? current;
+    const index = currentItem ? items.indexOf(currentItem) : -1;
 
     if (event.key === "ArrowDown") {
       event.preventDefault();
@@ -175,6 +180,7 @@ export function MenuSurface({
         ref={setPanelRef}
         id={menuId}
         role="menu"
+        tabIndex={-1}
         aria-label={ariaLabel}
         aria-hidden={!presenting}
         {...(!presenting ? { inert: true } : {})}
@@ -482,6 +488,7 @@ export type DropdownMenuItemProps = ButtonHTMLAttributes<HTMLButtonElement> & {
    * `focus-within` (coarse pointer keeps it visible); the row's inline pad
    * expands on reveal so the label never runs under the glyph. Activating the
    * slot closes the whole menu like a normal pick. Prefer `size="sm"` ghost.
+   * For trash removal that keeps the menu open, use `DropdownMenuRemovableItem`.
    * ≥ **0.5.307**. Live: `#sandbox-menu-row-action`.
    */
   trailing?: ReactNode;
@@ -542,6 +549,82 @@ export function DropdownMenuItem({
 }
 
 DropdownMenuItem.displayName = "DropdownMenuItem";
+
+export type DropdownMenuRemovableItemProps = Omit<DropdownMenuItemProps, "trailing"> & {
+  /** Update the owned collection to remove this item. Does not close any menu. */
+  onRemove: () => void;
+  /** Localized, item-specific accessible name, also used as the trash tooltip. */
+  removeLabel: string;
+  /** Disable only removal (for example while a deletion request is pending). */
+  removeDisabled?: boolean;
+};
+
+/** Menu row with a built-in trash action. Selection keeps normal row semantics;
+ * removal keeps root and nested menus open and moves focus to a nearby row.
+ * The owner removes the item from its data in `onRemove`; failed requests must
+ * keep the item and expose an error. Live: `#sandbox-menu-row-action`.
+ */
+export function DropdownMenuRemovableItem({
+  onRemove,
+  removeLabel,
+  removeDisabled = false,
+  disabled,
+  onKeyDown,
+  ...rest
+}: DropdownMenuRemovableItemProps) {
+  const ctx = useMenuContext(true);
+  const removeRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <DropdownMenuItem
+      {...rest}
+      disabled={disabled}
+      onKeyDown={(event) => {
+        onKeyDown?.(event);
+        if (!event.defaultPrevented && event.key === "ArrowRight" && !removeDisabled) {
+          event.preventDefault();
+          event.stopPropagation();
+          removeRef.current?.focus();
+        }
+      }}
+      trailing={
+        <Tooltip content={removeLabel}>
+          <IconButton
+            ref={removeRef}
+            size="sm"
+            variant="ghost"
+            aria-label={removeLabel}
+            disabled={disabled || removeDisabled}
+            onKeyDown={(event) => {
+              if (event.key === "ArrowLeft") {
+                event.preventDefault();
+                event.stopPropagation();
+                event.currentTarget.closest(".fynns-menu-item-host")
+                  ?.querySelector<HTMLButtonElement>(".fynns-menu-item")?.focus();
+              }
+            }}
+            onClick={(event) => {
+              // Do not let the generic trailing slot close the root or select the row.
+              event.stopPropagation();
+              const panel = ctx ? document.getElementById(ctx.menuId) : null;
+              const row = event.currentTarget.closest(".fynns-menu-item-host")
+                ?.querySelector<HTMLElement>(".fynns-menu-item");
+              const items = itemSelector(panel);
+              const index = row ? items.indexOf(row) : -1;
+              // Focus before the owner unmounts the action; an empty menu stays focusable.
+              (items[index + 1] ?? items[index - 1] ?? panel)?.focus();
+              onRemove();
+            }}
+          >
+            <TrashIcon aria-hidden />
+          </IconButton>
+        </Tooltip>
+      }
+    />
+  );
+}
+
+DropdownMenuRemovableItem.displayName = "DropdownMenuRemovableItem";
 
 export type DropdownMenuCheckboxItemProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,

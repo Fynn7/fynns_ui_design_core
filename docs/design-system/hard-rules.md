@@ -448,6 +448,15 @@
   rows — use keep-set `DropdownMenuSub` (hover / ArrowRight; panel docks end
   via floatingBox). Live `#sandbox-menu-submenu`. Failure: CONSUMER_TREATY
   DropdownMenu missing nested submenu.
+- **DO** use `DropdownMenuRemovableItem` for a menu row with a trash action:
+  `removeLabel` supplies the item-specific Tooltip and accessible name;
+  `onRemove` updates the owned collection. Removal keeps root and submenu
+  open, does not select the row, and focuses the next enabled row, previous
+  row, or empty menu. ArrowRight enters the trash action; ArrowLeft returns
+  to the row. Pending deletion may use `removeDisabled`; keep failed rows
+  and show `InlineAlert`. Show `EmptyState` after the last removal.
+  Ordinary `DropdownMenuItem.trailing` still closes the menu. Live
+  `#sandbox-menu-row-action`. Failure: CONSUMER_TREATY menu trash closes menu.
 - **DON'T** leave Menu / Button icons riding the inline SVG baseline strut
   (chevron looks 高 / 歪) — core icons default `.fynns-icon { display: block }`
   (≥ **0.5.254**); Menu chevron lives in `.fynns-menu-trigger-trailing`. Do
