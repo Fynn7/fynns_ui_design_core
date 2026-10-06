@@ -9,6 +9,8 @@
 }
 
 [data-fynns-selection-scope] .fynns-nav-drawer-item-host:has(> [data-fynns-selected]) {
+  /* The trailing-action host paints selection too; match the navigation pill. */
+  border-radius: var(--fynns-radius-3xl);
   background: var(--fynns-color-secondary-container);
 }
 

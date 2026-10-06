@@ -9,6 +9,8 @@ export function ChatSessionsDrawerDemo() {
   const { t } = useLocale();
   const [ids, setIds] = useState(["a", "b", "c", "d", "e", "f", "g"]);
   const [active, setActive] = useState<string | null>("a");
+  // Standard and modal views share selection, including its rounded trailing host.
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -33,7 +35,7 @@ export function ChatSessionsDrawerDemo() {
     labels, busy,
     error: failed ? t("globals.navDrawerModeCatalogFailAlert") : null,
     reveal: { resetKey: epoch },
-    selection: { resetKey: epoch },
+    selection: { resetKey: epoch, selectedIds, onSelectionChange: setSelectedIds },
     ariaLabel: t("globals.navDrawerSessionAria"),
     footer: <NavDrawerFooterAccount accountLabel={t("layouts.chatProductAccountLabel")}
       settingsLabel={t("globals.appBarSettings")} />,
