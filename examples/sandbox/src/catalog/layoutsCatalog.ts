@@ -66,6 +66,11 @@ export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
     ],
   },
   {
+    id: "chat-sessions-drawer",
+    label: "ChatSessionsDrawer",
+    keywords: ["session", "会话", "sidebar", "右键菜单", "context menu", "rename", "delete"],
+  },
+  {
     id: "chat-aside",
     label: "Chat aside host",
     keywords: [

@@ -6,6 +6,7 @@
  */
 import "./theme/theme.css";
 import "./primitives/primitives.css";
+export * from "./primitives/ChatSessionsDrawer";
 import { ensureOverlayScrollbars } from "./theme/overlayScrollbar";
 
 ensureOverlayScrollbars();

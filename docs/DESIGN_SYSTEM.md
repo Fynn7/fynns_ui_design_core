@@ -59,6 +59,7 @@ day-to-day consume. Publish / optional Packages bumps:
 | Card head Select / draft / chrome icons | `#sandbox-card-head-select`, `#sandbox-card-draft-actions`, `#sandbox-card-chrome-icon-actions`, `#sandbox-card-head-primary-end` |
 | Destination shell / EndAside | `#layouts-demo-shell`, `#layouts-demo-drill-in`, `#layouts-demo-fill-column` |
 | Mode drawer / bulk | `#layouts-demo-navigation-drawer` |
+| Session sidebar / context menus | `#sandbox-chat-sessions-drawer` / `#layouts-demo-chat-sessions-drawer` |
 | Mode drawer catalog load fail | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` |
 | Command chrome proportion | `#command-palette` |
 | Flush-start overlay | `#fullscreen-flush` |

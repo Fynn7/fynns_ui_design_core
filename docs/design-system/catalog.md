@@ -191,6 +191,20 @@ classes.
     (`--fynns-duration-base` / `--fynns-ease-emphasized`); reduced-motion =
     instant. `interactive` = Button-grammar state-layer hover/press. Do **not**
     use `Chip`/`ChipSet` or a dedicated starter primitive. Live `#chat` Empty.
+  - **Session-history menus:** use **`ChatSessionsDrawer`** (a composed
+    `NavigationDrawer` variant; defaults to `standard`, also supports `modal`).
+    Pass `{ id, label, disabled? }` sessions, controlled `activeSessionId`,
+    localized `labels`, and `onNewChat` / `onSelect` / `onRename` / `onDelete` /
+    `onDeleteAll` callbacks. Row right-click = Rename + danger Delete;
+    blank scroll-body right-click = New chat + danger Delete all. Top More
+    exposes Delete all; row More exposes the same row actions. Core owns
+    mutually exclusive menus, Shift+F10 / Menu key, footer pinning, skeleton /
+    empty / error states, and RevealMore (5 / 5; optional `reveal` window).
+    Identity order is caller-owned; use `reveal.resetKey` only when the source
+    changes, not on every poll. Right-click never selects a session. Consumers
+    own rename / confirmation dialogs and persistence; do not duplicate menu
+    state, DOM target lookup, coordinates, or row action CSS. Live:
+    `#sandbox-chat-sessions-drawer` / `#layouts-demo-chat-sessions-drawer`.
   - **Product / session host (default for chat-like UIs):** compose
     **`ClippedNavShell`** (or drill-in with `navKey`; omit TopAppBar on
     new-chat landing) + session **`NavigationDrawer`**

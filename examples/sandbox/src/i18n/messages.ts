@@ -110,6 +110,10 @@ const en = {
   "layouts.chatProductTitle": "Sample chat",
   "layouts.chatProductNavMode": "Show session drawer",
   "layouts.chatProductSessionsEmpty": "No sessions in drawer",
+  "layouts.sessionsDrawerBusy": "Loading sessions",
+  "layouts.sessionsDrawerError": "Session load failure",
+  "layouts.sessionsDrawerModal": "Open session overlay",
+  "layouts.sessionsDrawerHelp": "ChatSessionsDrawer: right-click a row for Rename / Delete, or the blank list area for New chat / Delete all. More buttons and Shift+F10 provide the same actions. Rename reports the requested identity; deletion updates sample data. Consumers own dialogs and persistence.",
   "layouts.chatProductSessionsEmptyTitle": "No conversations",
   "layouts.chatProductSessionsEmptyBody":
     "Conversations appear here after you start. Tap New chat above.",
@@ -2638,6 +2642,10 @@ const zh: Record<MessageKey, string> = {
   "layouts.chatProductTitle": "示例对话",
   "layouts.chatProductNavMode": "显示会话抽屉",
   "layouts.chatProductSessionsEmpty": "侧栏无会话",
+  "layouts.sessionsDrawerBusy": "会话加载中",
+  "layouts.sessionsDrawerError": "会话加载失败",
+  "layouts.sessionsDrawerModal": "打开会话浮层",
+  "layouts.sessionsDrawerHelp": "ChatSessionsDrawer：右键会话行可重命名或删除，右键列表空白处可新建会话或删除全部。More 按钮和 Shift+F10 提供相同动作。重命名演示回传目标标识，删除更新示例数据；弹窗与持久化由消费侧负责。",
   "layouts.chatProductSessionsEmptyTitle": "暂无会话",
   "layouts.chatProductSessionsEmptyBody":
     "开始后对话会出现在这里。点上方「新会话」即可。",

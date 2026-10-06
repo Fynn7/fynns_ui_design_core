@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { MenuSurface } from "./DropdownMenu";
+import { resolveFloatingBox, type FloatingBoxPosition } from "./floatingBox";
 
 export type ContextMenuProps = {
   /** Controlled open state. Parent owns open / x / y — no document listener required. */
@@ -22,8 +23,6 @@ export type ContextMenuProps = {
   ariaLabel?: string;
   className?: string;
 };
-
-const VIEWPORT_MARGIN = 8;
 
 /**
  * Controlled context menu at client coordinates. Reuses `DropdownMenuItem` /
@@ -41,12 +40,12 @@ export function ContextMenu({
 }: ContextMenuProps) {
   const menuId = useId();
   const [menuEl, setMenuEl] = useState<HTMLDivElement | null>(null);
-  const [pos, setPos] = useState({ left: x, top: y });
+  const [pos, setPos] = useState<Pick<FloatingBoxPosition, "left" | "top" | "side">>({ left: x, top: y, side: "bottom" });
   const restoreFocusRef = useRef<HTMLElement | null>(null);
 
   const close = useCallback(() => onOpenChange(false), [onOpenChange]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (open) {
       const active = document.activeElement;
       if (active instanceof HTMLElement) restoreFocusRef.current = active;
@@ -54,26 +53,30 @@ export function ContextMenu({
     }
     const prev = restoreFocusRef.current;
     restoreFocusRef.current = null;
-    if (prev && document.contains(prev)) {
+    // A callback may already have focused a rename/confirmation dialog.
+    if (prev && document.contains(prev) &&
+      (document.activeElement === document.body || document.getElementById(menuId)?.contains(document.activeElement))) {
       prev.focus();
     }
-  }, [open]);
+  }, [open, x, y, menuId]);
 
   useLayoutEffect(() => {
     if (!open) return;
-    let left = x;
-    let top = y;
-    if (menuEl) {
-      const { width, height } = menuEl.getBoundingClientRect();
-      const maxLeft = window.innerWidth - width - VIEWPORT_MARGIN;
-      const maxTop = window.innerHeight - height - VIEWPORT_MARGIN;
-      left = Math.min(Math.max(VIEWPORT_MARGIN, x), Math.max(VIEWPORT_MARGIN, maxLeft));
-      top = Math.min(Math.max(VIEWPORT_MARGIN, y), Math.max(VIEWPORT_MARGIN, maxTop));
-    } else {
-      left = Math.min(Math.max(VIEWPORT_MARGIN, x), window.innerWidth - VIEWPORT_MARGIN);
-      top = Math.min(Math.max(VIEWPORT_MARGIN, y), window.innerHeight - VIEWPORT_MARGIN);
-    }
-    setPos({ left, top });
+    const sync = () => {
+      const point = new DOMRect(x, y, 0, 0);
+      const box = resolveFloatingBox(point, menuEl?.getBoundingClientRect() ?? null, {
+        side: "bottom", align: "start", offset: 0, sides: ["bottom", "top"],
+      });
+      setPos({ left: box.left, top: box.top, side: box.side });
+    };
+    sync();
+    const observer = new ResizeObserver(sync);
+    if (menuEl) observer.observe(menuEl);
+    window.addEventListener("resize", sync);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", sync);
+    };
   }, [open, x, y, menuEl]);
 
   useEffect(() => {
@@ -103,7 +106,7 @@ export function ContextMenu({
       id={menuId}
       ariaLabel={ariaLabel}
       className={className}
-      dataSide="bottom"
+      dataSide={pos.side}
       onPanelElement={setMenuEl}
       style={{ top: pos.top, left: pos.left }}
     >

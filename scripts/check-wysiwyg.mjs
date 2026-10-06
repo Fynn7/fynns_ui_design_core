@@ -29,6 +29,7 @@ const DEMO_FILES = [
   // Live ChatComposer endActions recipe (Thinking/Vision toggles + model Menu).
   "examples/sandbox/src/components/ChatComposerModeTogglesEndActions.tsx",
   "examples/sandbox/src/components/ChatQuestionSequenceDemo.tsx",
+  "examples/sandbox/src/components/ChatSessionsDrawerDemo.tsx",
   "examples/sandbox/src/components/TextSelectionComposerDemo.tsx",
 ];
 
