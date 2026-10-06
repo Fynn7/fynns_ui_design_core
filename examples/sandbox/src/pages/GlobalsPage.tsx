@@ -1,3 +1,4 @@
+import { ContentRhythmDemo } from "./ContentRhythmDemo";
 import {
   Autocomplete,
   ArchiveIcon,
@@ -8720,6 +8721,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Button size="sm" variant="default">{t("globals.rhythmGridD")}</Button>
         </Grid>
         <SandboxHelp text={t("globals.rhythmAgentHint")} />
+        <ContentRhythmDemo />
         </GlobalsDemo>
 
         <GlobalsDemo id="provider-settings">

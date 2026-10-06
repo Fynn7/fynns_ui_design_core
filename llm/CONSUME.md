@@ -9,6 +9,11 @@ Short user prompts (“build X with @fynns/ui”) still mean: read **this file**
 first, then look props up with `node scripts/api.mjs <Name>` (never read whole
 source files).
 
+For media/caption/prose layouts, use the shipped CSS recipe from
+[`Content rhythm`](../docs/design-system/content-rhythm.md): body line height,
+8dp image→caption, 16dp gallery/block gaps. Re-copy the always-apply consumer
+rule after updates; existing copied rules are not automatically overwritten.
+
 ## 1. Quickstart (zero-token sibling, ~2 min)
 
 Day-to-day consume = public sibling checkout `../fynns_ui_design_core` +

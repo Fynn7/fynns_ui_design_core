@@ -18,6 +18,16 @@ ASCII `-`。
 
 ## 安装与 API
 
+**图文间距（硬）：** 正文和图注必须用 `--fynns-line-height-body`（1.45），
+禁止 tight/snug/compact 压缩正文。图文流用 `.fynns-content-flow`；图集用
+`.fynns-media-gallery` + `figure.fynns-media-figure` + `figcaption`。
+图→图注固定 `--fynns-layout-media-caption-gap`（8dp），图集行列固定
+`--fynns-layout-media-grid-gap`（16dp），图集→正文→动作固定
+`--fynns-layout-unit-stack-gap`（16dp）。禁止本地覆盖、负 margin、零 gap、
+用 `<br>` 补空白或缩小 token 塞更多内容。窄屏 + 长图注 + 多行正文必须
+检查实际几何。详见 `docs/design-system/content-rhythm.md`，sandbox
+`#rhythm` → `#sandbox-content-rhythm`。更新条约后重新复制已安装规则。
+
 1. **零 token 日常消费（默认）**：`@fynn7/ui-design-core` 来自同级
    `../fynns_ui_design_core` 的 **`file:`**；Vite/tsconfig `@fynns/ui` →
    `node_modules/@fynn7/ui-design-core/src/index.ts`。禁止要求

@@ -1816,6 +1816,10 @@ export const LAYOUT_TOKENS = {
    * smaller than section gaps (24dp+).
    */
   "unit-stack-gap": "1rem",
+  /** Content rhythm: image→caption 8dp; tiles and prose blocks 16dp. */
+  "media-caption-gap": "var(--fynns-space-sm)",
+  "media-grid-gap": "var(--fynns-layout-unit-stack-gap)",
+  "media-min-width": "12rem",
   /**
    * Max inline size for `Switch` `labelSide="end"` captions (7rem).
    * Ellipsis when the ControlStack / Card host is narrower than the label —

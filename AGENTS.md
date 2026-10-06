@@ -48,6 +48,7 @@ Grep 必须限定目录（`src/primitives` / `docs/design-system` / `llm`）并�
 10. Sandbox / 文档不得含消费产品文案（`npm run check:no-consumer`）。
 11. **永久跳过**：TimePicker dial / LoadingIndicator / ButtonGroup / RangeSlider（已有数字 TimePicker 足够）。
 12. 勿 git commit / push，除非用户明确要求。
+13. 正文 / 图注用 `--fynns-line-height-body`；图文流用 `.fynns-content-flow`，图集用 `.fynns-media-gallery` + `figure.fynns-media-figure`。图→图注固定 8dp，图集行列与正文块间固定 16dp。禁止 tight/snug 压正文、清零 gap、负 margin 或 `<br>` 补间距。详见 `docs/design-system/content-rhythm.md` 与 sandbox `#sandbox-content-rhythm`。
 
 密度与列表条约以 sandbox + `docs/DESIGN_SYSTEM.md` Hard rules 为准；不确定就 Read 对应小节，勿猜测。
 

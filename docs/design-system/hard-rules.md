@@ -1,5 +1,9 @@
 # Hard rules (Do / Don't)
 
+Body, captions and media streams must follow [Content rhythm](content-rhythm.md):
+body line height, 8dp media→caption, 16dp gallery and content-block gaps.
+Use the core CSS recipe; never compress these with local margins or line heights.
+
 ← back to [Design system index](../DESIGN_SYSTEM.md)
 
 - **DO** build UI from `@fynns/ui` components. Reach for an existing primitive

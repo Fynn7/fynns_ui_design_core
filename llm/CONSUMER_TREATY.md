@@ -32,6 +32,10 @@ Local install gate: `consume --check` — see [`CONSUME.md`](CONSUME.md).
 
 ## Core-first loop (when a consumer screen is wrong)
 
+Media/caption/prose crowding: [Content rhythm](../docs/design-system/content-rhythm.md),
+sandbox `#rhythm` → `#sandbox-content-rhythm`. Use the shipped CSS recipe
+and re-copy the always-apply rule into existing consumers after this update.
+
 Same task — **all three**, not pick-one:
 
 1. **Core constraint** — token / primitive / CSS in `fynns_ui_design_core`.

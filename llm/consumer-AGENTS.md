@@ -15,6 +15,12 @@ This app consumes the fynns design system from the sibling checkout
 
 ## Hard rules
 
+Body/captions: `--fynns-line-height-body` (1.45). Media streams use
+`.fynns-content-flow` → `.fynns-media-gallery` → `figure.fynns-media-figure`.
+Core owns 8dp media→caption and 16dp gallery/block gaps. Never override these
+locally or compress prose with tight/snug/compact. See
+`docs/design-system/content-rhythm.md`; verify narrow widths and long captions.
+
 1. Build UI only from `@fynns/ui` exports; style only with `var(--fynns-*)`.
    Never restyle `.fynns-*`, never hardcode hex / px, never add `@radix-ui/*`,
    `sonner`, native `<select>` / `<dialog>` / `alert()`.

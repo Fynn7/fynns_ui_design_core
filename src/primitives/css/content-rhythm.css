@@ -1,0 +1,43 @@
+/* Content recipe, deliberately scoped away from compact control chrome. */
+.fynns-content-flow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
+  min-width: 0;
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-content-flow > * {
+  margin: 0;
+  min-width: 0;
+}
+
+.fynns-media-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--fynns-layout-media-min-width)), 1fr));
+  gap: var(--fynns-layout-media-grid-gap);
+  align-items: start;
+  min-width: 0;
+}
+
+.fynns-media-figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-media-caption-gap);
+  margin: 0;
+  min-width: 0;
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-media-figure > :is(img, video, canvas, svg) {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+.fynns-media-figure > figcaption {
+  margin: 0;
+  line-height: var(--fynns-line-height-body);
+  overflow-wrap: anywhere;
+}

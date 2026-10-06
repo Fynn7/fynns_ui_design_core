@@ -35,6 +35,7 @@ day-to-day consume. Publish / optional Packages bumps:
 | Component catalog (Keep set) | [`design-system/catalog.md`](design-system/catalog.md) |
 | Platform targeting | [`design-system/platform.md`](design-system/platform.md) |
 | Content density | [`design-system/content-density.md`](design-system/content-density.md) |
+| Body / caption / gallery spacing | [`design-system/content-rhythm.md`](design-system/content-rhythm.md) |
 | Chrome type & row proportion | [`design-system/chrome-proportion.md`](design-system/chrome-proportion.md) |
 | Form rhythm (toolbar / FieldStack / inset) | [`design-system/form-rhythm.md`](design-system/form-rhythm.md) |
 | Icons | [`design-system/icons.md`](design-system/icons.md) |
