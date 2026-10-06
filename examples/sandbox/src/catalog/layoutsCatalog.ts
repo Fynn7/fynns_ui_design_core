@@ -71,6 +71,11 @@ export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
     keywords: ["session", "会话", "sidebar", "右键菜单", "context menu", "rename", "delete"],
   },
   {
+    id: "list-selection",
+    label: "SelectionArea",
+    keywords: ["selection", "多选", "全选", "Ctrl+A", "Ctrl+Shift", "range", "context menu"],
+  },
+  {
     id: "chat-aside",
     label: "Chat aside host",
     keywords: [

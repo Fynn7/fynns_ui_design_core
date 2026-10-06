@@ -1,16 +1,16 @@
-import { useEffect, useState, type KeyboardEvent, type MouseEvent } from "react";
+import type { ReactNode } from "react";
 import { BusyRegion } from "./Busy";
-import { ContextMenu } from "./ContextMenu";
-import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from "./DropdownMenu";
+import { DropdownMenuItem, DropdownMenuSeparator } from "./DropdownMenu";
 import { EmptyState } from "./EmptyState";
 import { InlineAlert } from "./InlineAlert";
 import {
   NavigationDrawer, NavigationDrawerItem, NavigationDrawerNewChat,
   type NavigationDrawerProps,
 } from "./NavigationDrawer";
-import { MoreHorizontalIcon, PencilIcon, PlusIcon, TrashIcon } from "./icons";
+import { PencilIcon, PlusIcon, TrashIcon } from "./icons";
 import { RevealMore } from "./RevealMore";
-import { Tooltip } from "./Tooltip";
+import { SelectionArea, type SelectionMenuContext } from "./SelectionArea";
+import type { UseListSelectionOptions } from "./useListSelection";
 import {
   useRevealMore, REVEAL_MORE_LIST_DEFAULT_INITIAL, REVEAL_MORE_LIST_DEFAULT_STEP,
   type UseRevealMoreOptions,
@@ -30,6 +30,8 @@ export type ChatSessionsDrawerLabels = {
   rename: string;
   delete: string;
   deleteAll: string;
+  /** Required together with onDeleteSelected for the built-in bulk action. */
+  deleteSelected?: string;
   sessionMenu: string;
   listMenu: string;
   emptyTitle: string;
@@ -39,42 +41,34 @@ export type ChatSessionsDrawerLabels = {
   revealMore: string;
 };
 
-export type ChatSessionsDrawerProps = Omit<NavigationDrawerProps, "children" | "onContextMenu"> & {
+export type ChatSessionsDrawerProps = Omit<NavigationDrawerProps, "children" | "onContextMenu" | "bodyProps"> & {
   sessions: readonly ChatSessionsDrawerSession[];
   activeSessionId?: string | null;
   labels: ChatSessionsDrawerLabels;
-  /** Disables mutations and paints a content-position skeleton. */
   busy?: boolean;
-  /** A short load failure. Takes precedence over the empty state. */
   error?: string | null;
-  /** Optional pagination window; defaults to list density (5 / 5). */
+  /** Pagination defaults to list density (5 / 5). Selection covers the full dataset. */
   reveal?: Omit<UseRevealMoreOptions, "total">;
+  /** Selection is separate from the active conversation; optional controlled bindings. */
+  selection?: Omit<UseListSelectionOptions, "items">;
+  /** Overrides single / multiple / area menus with core menu items. */
+  renderMenu?: (context: SelectionMenuContext) => ReactNode;
   onNewChat: () => void;
   onSelect: (sessionId: string) => void;
   /** Requests only: the consumer owns dialogs, confirmation and persistence. */
   onRename: (sessionId: string) => void;
   onDelete: (sessionId: string) => void;
   onDeleteAll: () => void;
+  /** Bulk target snapshot; never confused with onDeleteAll. */
+  onDeleteSelected?: (sessionIds: readonly string[]) => void;
 };
 
-type Target = { kind: "list" } | { kind: "session"; id: string };
-type Flyout = { mode: "more"; target: Target } | { mode: "context"; target: Target; x: number; y: number };
-
-function sameTarget(a: Target, b: Target) {
-  return a.kind === b.kind && (a.kind === "list" || (b.kind === "session" && a.id === b.id));
-}
-
-/**
- * Session-history NavigationDrawer variant: row and blank-area context menus,
- * keyboard equivalents, hover-reveal More, one open flyout, and list states.
- * Live: #sandbox-chat-sessions-drawer. No product data or mutation UI is owned here.
- */
+/** Session-history drawer with scoped selection and shared context / More menus. */
 export function ChatSessionsDrawer({
-  sessions, activeSessionId, labels, busy = false, error, reveal,
-  onNewChat, onSelect, onRename, onDelete, onDeleteAll,
+  sessions, activeSessionId, labels, busy = false, error, reveal, selection, renderMenu,
+  onNewChat, onSelect, onRename, onDelete, onDeleteAll, onDeleteSelected,
   variant = "standard", open, onClose, ...drawerProps
 }: ChatSessionsDrawerProps) {
-  const [flyout, setFlyout] = useState<Flyout | null>(null);
   const listWindow = useRevealMore({
     initial: REVEAL_MORE_LIST_DEFAULT_INITIAL,
     step: REVEAL_MORE_LIST_DEFAULT_STEP,
@@ -83,111 +77,56 @@ export function ChatSessionsDrawer({
   });
   const visible = sessions.slice(0, listWindow.visible);
   const unavailable = busy || Boolean(error);
-  const canDeleteAll = sessions.length > 0 && !unavailable;
-  const menuTarget = flyout?.target;
-  const menuSession = menuTarget?.kind === "session"
-    ? visible.find((session) => session.id === menuTarget.id)
-    : undefined;
-  const menuAvailable = !unavailable && (variant !== "modal" || open) &&
-    (flyout?.target.kind === "list" || (menuSession != null && !menuSession.disabled));
-
-  useEffect(() => {
-    if (!menuAvailable) setFlyout(null);
-  }, [menuAvailable]);
-
-  const run = (action: () => void) => {
-    setFlyout(null);
-    action();
-  };
-  const newChat = () => { if (!unavailable) run(onNewChat); };
-  const deleteAll = () => { if (canDeleteAll) run(onDeleteAll); };
-  const sessionActions = (id: string) => {
-    const disabled = unavailable || !sessions.some((session) => session.id === id && !session.disabled);
+  const menu = (context: SelectionMenuContext) => {
+    if (renderMenu) return renderMenu(context);
+    if (context.kind === "selection") {
+      if (!onDeleteSelected || !labels.deleteSelected) return null;
+      return <DropdownMenuItem icon={<TrashIcon />} tone="danger" disabled={unavailable}
+        onClick={() => onDeleteSelected(context.selectedIds)}>{labels.deleteSelected}</DropdownMenuItem>;
+    }
+    if (context.kind === "item" && context.targetId != null) {
+      const id = context.targetId;
+      return <>
+        <DropdownMenuItem icon={<PencilIcon />} disabled={unavailable}
+          onClick={() => onRename(id)}>{labels.rename}</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem icon={<TrashIcon />} tone="danger" disabled={unavailable}
+          onClick={() => onDelete(id)}>{labels.delete}</DropdownMenuItem>
+      </>;
+    }
+    if (context.trigger === "more") return <DropdownMenuItem icon={<TrashIcon />} tone="danger"
+      disabled={unavailable || sessions.length === 0} onClick={onDeleteAll}>{labels.deleteAll}</DropdownMenuItem>;
     return <>
-      <DropdownMenuItem icon={<PencilIcon />} disabled={disabled} onClick={() => {
-        if (!disabled) run(() => onRename(id));
-      }}>{labels.rename}</DropdownMenuItem>
+      <DropdownMenuItem icon={<PlusIcon />} disabled={unavailable}
+        onClick={onNewChat}>{labels.newChat}</DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem icon={<TrashIcon />} tone="danger" disabled={disabled} onClick={() => {
-        if (!disabled) run(() => onDelete(id));
-      }}>{labels.delete}</DropdownMenuItem>
+      <DropdownMenuItem icon={<TrashIcon />} tone="danger" disabled={unavailable || sessions.length === 0}
+        onClick={onDeleteAll}>{labels.deleteAll}</DropdownMenuItem>
     </>;
   };
-  const more = (target: Target) => <Tooltip content={labels.more}>
-    <DropdownMenu
-      trigger={<MoreHorizontalIcon />} ariaLabel={labels.more} align="end"
-      iconOnly size="sm" variant="ghost"
-      disabled={unavailable || (target.kind === "session" && sessions.find((s) => s.id === target.id)?.disabled)}
-      open={Boolean(menuAvailable && flyout?.mode === "more" && sameTarget(flyout.target, target))}
-      onOpenChange={(next) => setFlyout((prev) => next ? { mode: "more", target }
-        : prev?.mode === "more" && sameTarget(prev.target, target) ? null : prev)}
-    >
-      {target.kind === "session" ? sessionActions(target.id) :
-        <DropdownMenuItem icon={<TrashIcon />} tone="danger" disabled={!canDeleteAll} onClick={deleteAll}>
-          {labels.deleteAll}
-        </DropdownMenuItem>}
-    </DropdownMenu>
-  </Tooltip>;
 
-  const openContext = (target: Target, x: number, y: number) => {
-    if (unavailable || (target.kind === "session" && !visible.some((s) => s.id === target.id && !s.disabled))) {
-      setFlyout(null);
-      return;
-    }
-    setFlyout({ mode: "context", target, x, y });
-  };
-  const bodyContext = (event: MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    if (event.target === event.currentTarget) {
-      openContext({ kind: "list" }, event.clientX, event.clientY);
-      return;
-    }
-    const target = event.target as Element;
-    const row = target.closest(".fynns-nav-drawer-item-host")
-      ?.querySelector<HTMLButtonElement>("[data-chat-session-id]");
-    const id = row?.getAttribute("data-chat-session-id");
-    if (id != null && row && event.currentTarget.contains(row)) {
-      row.focus();
-      openContext({ kind: "session", id }, event.clientX, event.clientY);
-    } else setFlyout(null);
-  };
-  const rowKey = (event: KeyboardEvent<HTMLButtonElement>, id: string) => {
-    if (event.key !== "ContextMenu" && !(event.shiftKey && event.key === "F10")) return;
-    event.preventDefault();
-    event.stopPropagation();
-    const rect = event.currentTarget.getBoundingClientRect();
-    openContext({ kind: "session", id }, rect.left, rect.bottom);
-  };
-
-  return <>
-    <NavigationDrawer {...drawerProps} variant={variant} open={open}
-      onClose={() => { setFlyout(null); onClose?.(); }} onContextMenu={bodyContext}>
+  return <SelectionArea {...selection} items={sessions}
+    label={labels.listMenu} menuLabel={labels.sessionMenu} moreLabel={labels.more}
+    disabled={unavailable || (variant === "modal" && !open)} renderMenu={menu}>
+    {(scope) => <NavigationDrawer {...drawerProps} variant={variant} open={open}
+      bodyProps={scope.areaProps}
+      onClose={() => { scope.closeMenu(); onClose?.(); }}>
       <NavigationDrawerNewChat label={labels.newChat} disabled={unavailable}
-        onClick={newChat} trailing={more({ kind: "list" })} />
+        onClick={() => { scope.closeMenu(); scope.clear(); onNewChat(); }}
+        trailing={scope.menuTrigger(null)} />
       {busy ? <BusyRegion busy label={labels.loading} /> : error ?
         <InlineAlert severity="error" message={error} /> : sessions.length === 0 ?
         <EmptyState size="sm" title={labels.emptyTitle} description={labels.emptyDescription} /> : <>
           {visible.map((session) => <NavigationDrawerItem key={session.id}
+            {...scope.getItemProps(session.id)}
             data-chat-session-id={session.id} label={session.label}
             active={session.id === activeSessionId} disabled={session.disabled}
-            aria-haspopup="menu" onKeyDown={(event) => rowKey(event, session.id)}
-            onClick={() => run(() => onSelect(session.id))}
-            trailing={more({ kind: "session", id: session.id })} />)}
+            aria-haspopup="menu"
+            onClick={() => { scope.closeMenu(); onSelect(session.id); }}
+            trailing={scope.menuTrigger(session.id)} />)}
           <RevealMore canRevealMore={listWindow.canRevealMore} label={labels.revealMore}
-            onRevealMore={() => run(listWindow.revealMore)} />
+            onRevealMore={() => { scope.closeMenu(); listWindow.revealMore(); }} />
         </>}
-    </NavigationDrawer>
-    <ContextMenu open={Boolean(menuAvailable && flyout?.mode === "context")}
-      x={flyout?.mode === "context" ? flyout.x : 0}
-      y={flyout?.mode === "context" ? flyout.y : 0}
-      ariaLabel={flyout?.target.kind === "session" ? labels.sessionMenu : labels.listMenu}
-      onOpenChange={(next) => { if (!next) setFlyout((prev) => prev?.mode === "context" ? null : prev); }}>
-      {menuSession ? sessionActions(menuSession.id) : <>
-        <DropdownMenuItem icon={<PlusIcon />} disabled={unavailable} onClick={newChat}>{labels.newChat}</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem icon={<TrashIcon />} tone="danger" disabled={!canDeleteAll} onClick={deleteAll}>{labels.deleteAll}</DropdownMenuItem>
-      </>}
-    </ContextMenu>
-  </>;
+    </NavigationDrawer>}
+  </SelectionArea>;
 }

@@ -60,6 +60,7 @@ day-to-day consume. Publish / optional Packages bumps:
 | Destination shell / EndAside | `#layouts-demo-shell`, `#layouts-demo-drill-in`, `#layouts-demo-fill-column` |
 | Mode drawer / bulk | `#layouts-demo-navigation-drawer` |
 | Session sidebar / context menus | `#sandbox-chat-sessions-drawer` / `#layouts-demo-chat-sessions-drawer` |
+| Scoped list selection / Ctrl+A / batch menus | `#sandbox-list-selection` / `#layouts-demo-list-selection` ([contract](../llm/LIST_SELECTION.md)) |
 | Mode drawer catalog load fail | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` |
 | Command chrome proportion | `#command-palette` |
 | Flush-start overlay | `#fullscreen-flush` |

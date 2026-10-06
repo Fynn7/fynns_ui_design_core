@@ -1,0 +1,23 @@
+/* Shared row selection. Active navigation remains aria-current; selection is aria-pressed. */
+[data-fynns-selection-scope] [data-fynns-selection-id] {
+  user-select: none;
+}
+
+[data-fynns-selection-scope] :is(.fynns-nav-drawer-item, .fynns-list-item)[data-fynns-selected] {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+[data-fynns-selection-scope] .fynns-nav-drawer-item-host:has(> [data-fynns-selected]) {
+  background: var(--fynns-color-secondary-container);
+}
+
+[data-fynns-selection-scope] .fynns-list-item-host:has(> [data-fynns-selected]) {
+  background: var(--fynns-color-secondary-container);
+  border-radius: var(--fynns-radius-3xl);
+}
+
+[data-fynns-selection-scope]:focus-visible {
+  outline: var(--fynns-border-hairline) solid var(--fynns-color-accent);
+  outline-offset: calc(-1 * var(--fynns-border-hairline));
+}

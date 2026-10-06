@@ -6,6 +6,11 @@
   "human": "llm/AGENT_INTERFACES.md",
   "documentation": [
     {
+      "path": "llm/LIST_SELECTION.md",
+      "role": "list-selection",
+      "summary": "Scoped Ctrl+A, modifier range selection and customizable batch menus for lists, session drawers and grouped navigation."
+    },
+    {
       "path": "llm/CHAT_SEQUENCE.md",
       "role": "chat-sequence",
       "summary": "Reusable ChatQuestion with Other/Input, ChatThinking variants/stack rhythm, chronological event append contract."

@@ -84,6 +84,7 @@ import { NavDrawerFooterAccount } from "../components/NavDrawerFooterAccount";
 import { ChatEmptySurfaceStarters } from "../components/ChatEmptySurfaceStarters";
 import { ChatProductLayoutsDemo } from "../components/ChatProductLayoutsDemo";
 import { ChatSessionsDrawerDemo } from "../components/ChatSessionsDrawerDemo";
+import { ListSelectionDemo } from "../components/ListSelectionDemo";
 import { ChatAsideLayoutsDemo } from "../components/ChatAsideLayoutsDemo";
 import { TokenList } from "../components/TokenList";
 import { layoutsDemoElementId } from "../catalog/layoutsCatalog";
@@ -424,6 +425,10 @@ export function LayoutsPage() {
 
           <LayoutsDemo id="chat-sessions-drawer">
             <ChatSessionsDrawerDemo />
+          </LayoutsDemo>
+
+          <LayoutsDemo id="list-selection">
+            <ListSelectionDemo />
           </LayoutsDemo>
 
           <LayoutsDemo id="chat-aside">

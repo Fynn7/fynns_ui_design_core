@@ -19,6 +19,7 @@ export function ChatSessionsDrawerDemo() {
     rename: t("globals.navDrawerModeEntryRename"),
     delete: t("globals.navDrawerModeEntryDelete"),
     deleteAll: t("globals.navDrawerSessionDeleteAll"),
+    deleteSelected: t("layouts.selectionDelete"),
     sessionMenu: t("globals.navDrawerSessionMore"),
     listMenu: t("globals.navDrawerSessionToolsAria"),
     emptyTitle: t("layouts.chatProductSessionsEmptyTitle"),
@@ -32,6 +33,7 @@ export function ChatSessionsDrawerDemo() {
     labels, busy,
     error: failed ? t("globals.navDrawerModeCatalogFailAlert") : null,
     reveal: { resetKey: epoch },
+    selection: { resetKey: epoch },
     ariaLabel: t("globals.navDrawerSessionAria"),
     footer: <NavDrawerFooterAccount accountLabel={t("layouts.chatProductAccountLabel")}
       settingsLabel={t("globals.appBarSettings")} />,
@@ -43,6 +45,10 @@ export function ChatSessionsDrawerDemo() {
       if (active === id) setActive(null);
     },
     onDeleteAll: () => { setIds([]); setActive(null); },
+    onDeleteSelected: (selectedIds: readonly string[]) => {
+      setIds((prev) => prev.filter((id) => !selectedIds.includes(id)));
+      if (active != null && selectedIds.includes(active)) setActive(null);
+    },
   };
   return <div id="sandbox-chat-sessions-drawer">
     <div className="sandbox-globals-row">

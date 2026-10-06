@@ -123,6 +123,8 @@ export type NavigationDrawerProps = {
    * `stopPropagation` keep their own row menus.
    */
   onContextMenu?: HTMLAttributes<HTMLDivElement>["onContextMenu"];
+  /** Optional list host bindings, e.g. SelectionArea.areaProps. Core keeps scroll geometry. */
+  bodyProps?: HTMLAttributes<HTMLDivElement>;
 };
 
 function DrawerSheet({
@@ -131,6 +133,7 @@ function DrawerSheet({
   className,
   children,
   onContextMenu,
+  bodyProps,
   ...navRest
 }: {
   headline?: ReactNode;
@@ -138,6 +141,7 @@ function DrawerSheet({
   className?: string;
   children?: ReactNode;
   onContextMenu?: HTMLAttributes<HTMLDivElement>["onContextMenu"];
+  bodyProps?: HTMLAttributes<HTMLDivElement>;
 } & HTMLAttributes<HTMLElement>) {
   const bodyRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
@@ -204,9 +208,13 @@ function DrawerSheet({
         <div className="fynns-nav-drawer-headline">{headline}</div>
       ) : null}
       <div
+        {...bodyProps}
         ref={bodyRef}
-        className="fynns-nav-drawer-body fynns-scroll"
-        onContextMenu={onContextMenu}
+        className={["fynns-nav-drawer-body fynns-scroll", bodyProps?.className].filter(Boolean).join(" ")}
+        onContextMenu={(event) => {
+          bodyProps?.onContextMenu?.(event);
+          if (!event.defaultPrevented) onContextMenu?.(event);
+        }}
       >
         {children}
       </div>
@@ -242,6 +250,7 @@ export function NavigationDrawer({
   className,
   children,
   onContextMenu,
+  bodyProps,
 }: NavigationDrawerProps) {
   if (variant === "standard") {
     return (
@@ -253,6 +262,7 @@ export function NavigationDrawer({
           .join(" ")}
         aria-label={ariaLabel}
         onContextMenu={onContextMenu}
+        bodyProps={bodyProps}
       >
         {children}
       </DrawerSheet>
@@ -281,6 +291,7 @@ export function NavigationDrawer({
         headline={headline}
         footer={footer}
         onContextMenu={onContextMenu}
+        bodyProps={bodyProps}
       >
         {children}
       </DrawerSheet>

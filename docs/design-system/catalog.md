@@ -192,7 +192,17 @@ classes.
     instant. `interactive` = Button-grammar state-layer hover/press. Do **not**
     use `Chip`/`ChipSet` or a dedicated starter primitive. Live `#chat` Empty.
   - **Session-history menus:** use **`ChatSessionsDrawer`** (a composed
-    `NavigationDrawer` variant; defaults to `standard`, also supports `modal`).
+    `NavigationDrawer` with scoped Ctrl / Cmd+A, Ctrl click, Shift range and
+    Ctrl+Shift additive range selection). Full selection uses the same batch
+    menu path as partial selection, including unrevealed rows. Pass
+    `labels.deleteSelected` + `onDeleteSelected`, or `renderMenu(context)` for
+    custom item / selection / area actions. Selection stays separate from the
+    active conversation. General lists and grouped sidebars use
+    **`SelectionArea`** + `scope.getItemProps` / `scope.menuTrigger`;
+    drawer host bindings go through `bodyProps`. Contract and recipes:
+    [`LIST_SELECTION.md`](../../llm/LIST_SELECTION.md). Live:
+    `#sandbox-list-selection`. The drawer defaults to `standard` and also
+    supports `modal`.
     Pass `{ id, label, disabled? }` sessions, controlled `activeSessionId`,
     localized `labels`, and `onNewChat` / `onSelect` / `onRename` / `onDelete` /
     `onDeleteAll` callbacks. Row right-click = Rename + danger Delete;

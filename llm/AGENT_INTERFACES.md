@@ -31,6 +31,7 @@ Read by role; do not duplicate specs across files — follow the links.
 | Consumer `AGENTS.md` template | [`llm/consumer-AGENTS.md`](consumer-AGENTS.md) | Written into consumer apps by the installer (OpenCode / local models) |
 | Pasteable consumer rule | [`llm/consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) | Detailed treaty pasted into consumer `.cursor/rules/` |
 | Consumer failure slug index | [`llm/CONSUMER_TREATY.md`](CONSUMER_TREATY.md) | Failure-mode slug → sandbox / DESIGN_SYSTEM |
+| Scoped list selection | [`llm/LIST_SELECTION.md`](LIST_SELECTION.md) | Ctrl+A / modifier selection, batch context menus, flat sessions and grouped sidebars |
 | Breaking purge | [`llm/BREAKING_PURGE.md`](BREAKING_PURGE.md) | Deleted / restored public APIs + recent behavioral breaks (older history: git log) |
 | Frontend performance | [`llm/PERF.md`](PERF.md) | Shells, inspectors, catalogs, live token drafts |
 | Local LLM | [`llm/LOCAL_LLM.md`](LOCAL_LLM.md) | LM Studio + OpenCode profile, budgets, why compaction happened |
