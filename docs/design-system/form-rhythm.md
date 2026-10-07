@@ -107,6 +107,11 @@ inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges of heads
 `content-inset` for **block** pad and stacks direct children with
 `unit-stack-gap`. **`Surface` `padded`** (≥ **0.5.157**): equal `content-inset`
 on **all** edges — same as Card body; never mix `content-pad-block` or rem/`px`.
+`Surface` defaults to **unpadded** for canvas / iframe wells. A saved-text
+preview or form inside a Surface must opt into `padded`: rounded overflow
+otherwise clips edge glyphs and leaves labels/actions against the frame.
+Use `.fynns-content-flow` for preview prose so wrapped lines inherit
+`--fynns-line-height-body`; keep labels/actions outside text-selection wrappers.
 Nested surface-owning child → **`chrome="plain"`**: body pad =
 `content-inset`; column gap = `nest-gap` so the child reads as a secondary inset
 frame — **plain ≠ flush** (never cancel with negative margins, zero body pad, or
