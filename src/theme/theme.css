@@ -383,7 +383,7 @@
   --fynns-chatmessage-thinking-guide-inset: 0.5rem;
   --fynns-chatmessage-thinking-group-inset: 1.125rem;
   --fynns-chatmessage-thinking-group-gap: 2.125rem;
-  --fynns-chatmessage-thinking-group-top: 1.125rem;
+  --fynns-chatmessage-thinking-group-top: 0;
   --fynns-chatmessage-thinking-root-gap: 0.875rem;
   --fynns-chatmessage-thinking-child-gap: 0.75rem;
   --fynns-chatmessage-thinking-icon-size: 0.875rem;

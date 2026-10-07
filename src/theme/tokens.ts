@@ -845,7 +845,8 @@ export const CHATMESSAGE_TOKENS = {
   "thinking-guide-inset": "0.5rem",
   "thinking-group-inset": "1.125rem",
   "thinking-group-gap": "2.125rem",
-  "thinking-group-top": "1.125rem",
+  /** Root gap owns heading-to-first-row spacing; do not stack another top inset. */
+  "thinking-group-top": "0",
   "thinking-root-gap": "0.875rem",
   "thinking-child-gap": "0.75rem",
   "thinking-icon-size": "0.875rem",

@@ -265,7 +265,10 @@ classes.
     `variant="status"` / `"disclosure"`; structured `details` owns muted text
     and nested disclosures with circular elbows and nesting guides (live
     `#thinking-reference` / `#thinking-details`), with all actions
-    and results outside. `ChatThinkingStack` owns equal spacing
+    and results outside. The structured root heading-to-first-row gap is
+    14dp (`thinking-root-gap`); `thinking-group-top` defaults to zero so
+    the first nested row does not receive a second top inset.
+    `ChatThinkingStack` owns equal spacing
     for consecutive mixed rows. `ChatActivity` summaries and `ChatThinking`
     share a short label→chevron gap; intrinsic headers must not stretch with
     their bodies. Live `#chat-chevron`. Keep the
