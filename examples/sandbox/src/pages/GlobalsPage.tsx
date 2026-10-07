@@ -135,6 +135,7 @@ import {
   TableHeaderCell,
   TableRow,
   RevealMore,
+  ExpandToggle,
   useRevealMore,
   REVEAL_MORE_DEFAULT_INITIAL,
   REVEAL_MORE_DEFAULT_STEP,
@@ -1439,6 +1440,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmDisabled, setConfirmDisabled] = useState(false);
   const [codeLangDialogOpen, setCodeLangDialogOpen] = useState(false);
+  const [codePreviewExpanded, setCodePreviewExpanded] = useState(false);
   const [codeBlockHiddenTabOpen, setCodeBlockHiddenTabOpen] = useState(false);
   const [codeLangDemo, setCodeLangDemo] = useState<"py" | "ts" | "cpp">("ts");
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
@@ -8098,6 +8100,23 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
         </GlobalsDemo>
         <GlobalsDemo id="code-block">
+        <div id="sandbox-content-expand" className="fynns-content-flow">
+          <CodeBlock
+            id="sandbox-expand-preview"
+            label={t("globals.codeBlockLabel")}
+            language="text"
+            code={Array(24).fill(t("globals.codeBlockLongLine")).join("\n")}
+            maxHeight={codePreviewExpanded ? "none" : "calc(var(--fynns-font-size-sm) * var(--fynns-line-height-body) * 5 + var(--fynns-space-lg))"}
+            copyAriaLabel={t("globals.codeBlockCopy")}
+          />
+          <ExpandToggle
+            expanded={codePreviewExpanded}
+            onExpandedChange={setCodePreviewExpanded}
+            controls="sandbox-expand-preview"
+            expandLabel={t("globals.chatExpand")}
+            collapseLabel={t("globals.chatCollapse")}
+          />
+        </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <CodeBlock
             label={t("globals.codeBlockLabel")}

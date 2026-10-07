@@ -4705,3 +4705,48 @@ a.fynns-breadcrumb-link:visited {
   ):not(:has(> .fynns-empty-state--fill)) {
   flex-shrink: 0;
 }
+
+/* Content-preview disclosure, shared with ChatMessage. */
+.fynns-expand-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-2xs);
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--fynns-color-accent);
+  font: inherit;
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-body);
+  cursor: pointer;
+}
+
+.fynns-expand-toggle:hover {
+  color: var(--fynns-color-accent-hover);
+}
+
+.fynns-expand-toggle:focus {
+  outline: none;
+}
+
+.fynns-expand-toggle:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+  border-radius: var(--fynns-radius-sm);
+}
+
+.fynns-expand-toggle-chevron {
+  flex-shrink: 0;
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-expand-toggle[aria-expanded="true"]
+  .fynns-expand-toggle-chevron {
+  transform: rotate(180deg);
+}
+
+
+.fynns-expand-toggle { align-self: flex-start; }
+.fynns-expand-toggle:disabled { color: var(--fynns-color-text-muted); cursor: default; }

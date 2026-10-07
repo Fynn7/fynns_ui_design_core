@@ -17,7 +17,7 @@ import {
   type ChatCitationsProps,
 } from "./ChatCitation";
 import { ChatMarkdown } from "./ChatMarkdown";
-import { ChevronDownIcon } from "./icons";
+import { ExpandToggle } from "./ExpandToggle";
 import {
   CHAT_MESSAGE_COLLAPSE_AFTER_CHARS,
   resolveChatCollapse,
@@ -383,20 +383,14 @@ export function ChatMessage({
             </div>
             {showCollapseToggle ? (
               <div className="fynns-chat-message-collapse">
-                <button
-                  type="button"
+                <ExpandToggle
                   className="fynns-chat-message-collapse-toggle"
-                  aria-expanded={expanded}
-                  aria-controls={bodyId}
-                  onClick={() => setExpanded((v) => !v)}
-                >
-                  {expanded ? collapseLabel : expandLabel}
-                  <ChevronDownIcon
-                    size={14}
-                    aria-hidden
-                    className="fynns-chat-message-collapse-chevron"
-                  />
-                </button>
+                  expanded={expanded}
+                  controls={bodyId}
+                  onExpandedChange={setExpanded}
+                  expandLabel={expandLabel}
+                  collapseLabel={collapseLabel}
+                />
               </div>
             ) : null}
           </div>

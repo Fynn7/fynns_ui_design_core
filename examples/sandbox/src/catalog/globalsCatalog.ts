@@ -758,7 +758,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "code-block",
     categoryId: "patterns",
     label: "CodeBlock",
-    keywords: ["代码", "code", "syntax", "高亮"],
+    keywords: ["代码", "code", "syntax", "高亮", "ExpandToggle", "Show more", "Show less", "展开", "收起"],
   },
   {
     id: "diff-view",

@@ -476,6 +476,8 @@ export type {
   TableRowProps,
 } from "./primitives/Table";
 export { RevealMore } from "./primitives/RevealMore";
+export { ExpandToggle } from "./primitives/ExpandToggle";
+export type { ExpandToggleProps } from "./primitives/ExpandToggle";
 export type { RevealMoreProps } from "./primitives/RevealMore";
 export {
   REVEAL_MORE_DEFAULT_INITIAL,

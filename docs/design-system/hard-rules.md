@@ -686,6 +686,7 @@ Use the core CSS recipe; never compress these with local margins or line heights
   sheet-max / content-sized settings column with dead gutters. Live
   `#page-scroll` / `#overlays`. ≥ **0.5.142** names chat/dialog misuse
   explicitly.
+- **Content-preview disclosure:** use `ExpandToggle` directly below long prose / readonly code previews at the content start edge. It is plain text + a flipping chevron, with semantic button behavior and focus feedback; never use `Button` chrome or put it in an action cluster. Keep download / submit actions separate. `ChatMessage` uses the same primitive internally. The host controls preview height; preserve full Copy data. This toggles existing content; `RevealMore` adds catalog rows and retains its tonal Button. Live `#code-block` / `#sandbox-content-expand`.
 - **DON'T** dump every row of a Card / PageScroll **data Table** when the
   catalog can grow past ~10 rows — use `useRevealMore` + `RevealMore` (default
   **10** / step **10**, ≥ **0.5.144**): slice in the app; foot = **tonal**

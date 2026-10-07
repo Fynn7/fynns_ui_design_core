@@ -187,6 +187,7 @@ Pick primitives by job (details: `node scripts/api.mjs <Name>`; catalog:
 
 | Job | Primitive |
 | --- | --- |
+| Long text / readonly code preview | `ExpandToggle` (`expanded`, `onExpandedChange`, `controls`, localized `expandLabel` / `collapseLabel`) directly below content at start edge; separate from action clusters; preserve full Copy. Live `#sandbox-content-expand`. ChatMessage already owns this behavior. |
 | Record collection (posts, paths, bookmarks) | one `List` of `ListItem` (`headline` / `supportingText` / `trailingSupportingText`), `Pagination` or `useRevealMore` + `RevealMore` for long lists |
 | Titled section | `Card` (static) / `Collapsible`; untitled well → `Surface` |
 | Markdown body | `ChatMarkdown source={md}` (GFM subset); source code → `CodeBlock language="ts" label="file.ts"` |
