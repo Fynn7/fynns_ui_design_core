@@ -347,8 +347,10 @@ classes.
   only — drill-in / dynamic drawer body → hand-compose `ClippedNavShell`
   (`#layouts-demo-drill-in`) and pass **`navKey`** + **`navDirection`**
   (root vs mode / catalog identity; `"back"` on mode exit) so the drawer
-  body runs **Shared Axis X** (short slide + fade) while track **width stays
-  open** — do **not** hard-swap `nav` or close→reopen the track. Low-level **`ClippedNavShell`**: full-bleed
+  body runs **Shared Axis X** (short slide + fade) while the docked track **width stays
+  open** — do **not** hard-swap `nav` or close→reopen the track. An overlay drawer
+  closes after navigation or Back via `onNavCrowded`; search, disclosure and
+  menu triggers keep it open. Low-level **`ClippedNavShell`**: full-bleed
   TopAppBar + `nav | main`; `navMode` `drawer`|`rail`|`hidden` must match the
   `nav` slot (shell never auto-swaps). Drawer seam resizable (rAF live width;
   commit on pointerup). Crowding watches main-column overflow too; predict

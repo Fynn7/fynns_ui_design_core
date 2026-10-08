@@ -17,6 +17,7 @@ import { ChevronRightIcon, ICON_SIZE, PlusIcon } from "./icons";
 import { Spinner } from "./Loading";
 import { OverflowTip, overflowTipText } from "./OverflowTip";
 import { syncScrollEdgeFade } from "./scrollEdgeFade";
+import { isNavigationDrawerActivation } from "./navigationDrawerActivation";
 
 /** True when any nested destination (or nested group) reports `active`. */
 function hasActiveDestination(node: ReactNode): boolean {
@@ -57,7 +58,8 @@ export type NavigationDrawerVariant = "modal" | "standard";
 export type NavigationDrawerProps = {
   /**
    * - `modal` — slides over content with scrim (default). Requires `open` /
-   *   `onClose`.
+   *   `onClose`. Navigation / new-chat / footer actions request closure;
+   *   search, group disclosure and menu triggers stay open.
    * - `standard` — permanent / always-visible sheet (no overlay). Prefer for
    *   medium+ layouts; use `NavigationRail` when space is tighter.
    */
@@ -292,6 +294,13 @@ export function NavigationDrawer({
         footer={footer}
         onContextMenu={onContextMenu}
         bodyProps={bodyProps}
+        onClickCapture={(event) => {
+          if (!open || !isNavigationDrawerActivation(event.target, event.currentTarget)) return;
+          if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          queueMicrotask(() => {
+            if (!event.nativeEvent.defaultPrevented) onClose();
+          });
+        }}
       >
         {children}
       </DrawerSheet>

@@ -618,7 +618,7 @@ Use the core CSS recipe; never compress these with local margins or line heights
   CONSUMER_TREATY shell scrollIntoView leaves bottom gap.
 - **DON'T** hard-swap `ClippedNavShell` `nav` while `navMode` stays `"drawer"`
   for root ↔ drill-in / mode catalog — pass **`navKey`** + **`navDirection`**
-  so the body Shared-Axis-X slides (core ≥ **0.5.183**; width stays open —
+  so the docked body Shared-Axis-X slides (core ≥ **0.5.183**; width stays open —
   not close→swap→open).   Core ≥ **0.5.198** finishes the morph without leaving
   an outgoing catalog / second Y rail ghost on Back; ≥ **0.5.201** hides
   `--out` on the first prepare paint (not only `--out-run`); ≥ **0.5.202**
@@ -626,6 +626,14 @@ Use the core CSS recipe; never compress these with local margins or line heights
   the whole morph, and `refreshOverlayScrollbars` updates **synchronously**
   (no rAF defer — stale rails for one paint = Back Y flash). Live
   `#layouts-demo-drill-in`. (≥ **0.5.202**/ **0.5.203**)
+- **DO** dismiss an overlay navigation drawer after a destination, New chat,
+  footer navigation action, or Back to root. Core `ClippedNavShell` detects the
+  nav slot's actual absolute/fixed layout and requests `onNavCrowded` closure;
+  keep that callback wired to the controlled open state. Back uses a changed
+  `navKey` with `navDirection="back"`. Docked columns retain their open state
+  and Shared Axis X swap. `NavigationDrawer variant="modal"` requests `onClose`
+  after the same navigation actions. Search, group disclosure, menu triggers,
+  disabled actions and cancelled clicks keep the drawer open.
 - **DO** use `ChatQuestion` for in-thread questions: concise radio choices +
   final Other with inline Input by default. Only explicit special structures
   may omit Other or add detailed copy. `ChatThinking variant="status"` /
