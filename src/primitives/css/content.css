@@ -4750,3 +4750,48 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-expand-toggle { align-self: flex-start; }
 .fynns-expand-toggle:disabled { color: var(--fynns-color-text-muted); cursor: default; }
+
+/* Preview disclosure: complete shells and a shared 16dp footer rhythm. */
+.fynns-expandable-content,
+.fynns-expandable-content-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: var(--fynns-layout-unit-stack-gap);
+}
+.fynns-expandable-content-body[hidden] { display: none; }
+.fynns-expandable-content > * { flex-shrink: 0; }
+.fynns-expandable-text {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: var(--fynns-line-height-body);
+}
+.fynns-expandable-text[data-collapsed] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--fynns-preview-lines);
+  overflow: hidden;
+}
+
+.fynns-expand-toggle { max-width: 100%; text-align: start; }
+
+.fynns-expandable-code .fynns-code-block-pre { box-sizing: border-box; }
+
+/* One visual shell owns the code preview and its disclosure footer. */
+.fynns-expandable-code {
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-1);
+  overflow: hidden;
+  gap: 0;
+}
+.fynns-expandable-code > .fynns-code-block {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.fynns-expandable-code-foot {
+  padding-inline: var(--fynns-layout-content-inset);
+  padding-block-end: var(--fynns-layout-content-pad-block);
+}

@@ -521,3 +521,10 @@ export type {
   CodeTokenKind,
   SimpleHighlightProfile,
 } from "./primitives/codeHighlight";
+
+export { ExpandableContent } from "./primitives/ExpandableContent";
+export type { ExpandableContentProps } from "./primitives/ExpandableContent";
+export { ExpandableText } from "./primitives/ExpandableText";
+export type { ExpandableTextProps } from "./primitives/ExpandableText";
+export { ExpandableCodeBlock } from "./primitives/ExpandableCodeBlock";
+export type { ExpandableCodeBlockProps } from "./primitives/ExpandableCodeBlock";

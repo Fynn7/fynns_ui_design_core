@@ -136,6 +136,9 @@ import {
   TableRow,
   RevealMore,
   ExpandToggle,
+  ExpandableContent,
+  ExpandableText,
+  ExpandableCodeBlock,
   useRevealMore,
   REVEAL_MORE_DEFAULT_INITIAL,
   REVEAL_MORE_DEFAULT_STEP,
@@ -1280,6 +1283,7 @@ export type GlobalsPageProps = {
 
 export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const { t, locale } = useLocale();
+  const [toggleDemoExpanded, setToggleDemoExpanded] = useState(false);
   const [openCategories, setOpenCategories] = useState<
     Partial<Record<GlobalsCategoryId, boolean>>
   >(() => loadSandboxUiSession()?.openCategories ?? {});
@@ -1440,7 +1444,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmDisabled, setConfirmDisabled] = useState(false);
   const [codeLangDialogOpen, setCodeLangDialogOpen] = useState(false);
-  const [codePreviewExpanded, setCodePreviewExpanded] = useState(false);
   const [codeBlockHiddenTabOpen, setCodeBlockHiddenTabOpen] = useState(false);
   const [codeLangDemo, setCodeLangDemo] = useState<"py" | "ts" | "cpp">("ts");
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
@@ -8101,21 +8104,40 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="code-block">
         <div id="sandbox-content-expand" className="fynns-content-flow">
-          <CodeBlock
+          <ExpandableCodeBlock
             id="sandbox-expand-preview"
             label={t("globals.codeBlockLabel")}
             language="text"
-            code={Array(24).fill(t("globals.codeBlockLongLine")).join("\n")}
-            maxHeight={codePreviewExpanded ? "none" : "calc(var(--fynns-font-size-sm) * var(--fynns-line-height-body) * 5 + var(--fynns-space-lg))"}
+            code={Array.from({ length: 24 }, (_, i) => `export const field${i + 1} = "var(--fynns-color-text)";`).join("\n")}
             copyAriaLabel={t("globals.codeBlockCopy")}
-          />
-          <ExpandToggle
-            expanded={codePreviewExpanded}
-            onExpandedChange={setCodePreviewExpanded}
-            controls="sandbox-expand-preview"
             expandLabel={t("globals.chatExpand")}
             collapseLabel={t("globals.chatCollapse")}
           />
+        </div>
+        <div id="sandbox-content-expand-text" className="fynns-content-flow">
+          <SandboxHelp text="ExpandableText: measured line preview; short text needs no disclosure." />
+          <ExpandableText text={"Supporting information helps readers explore a topic without losing their place. The opening lines remain visible, and the complete description can be revealed when more context is useful. A short description needs no extra control. ".repeat(8)}
+            expandLabel={t("globals.chatExpand")} collapseLabel={t("globals.chatCollapse")} />
+          <ExpandableText text={t("globals.codeBlockLabel")}
+            expandLabel={t("globals.chatExpand")} collapseLabel={t("globals.chatCollapse")} />
+        </div>
+        <div id="sandbox-content-expand-units" className="fynns-content-flow">
+          <SandboxHelp text="ExpandableContent: the preview, extra fields and disclosure share one card shell." />
+          <Card title={t("globals.codeBlockLabel")}>
+            <ExpandableContent
+              expandLabel={t("globals.chatExpand")} collapseLabel={t("globals.chatCollapse")}
+              preview={<p>{t("globals.codeBlockLongLine")}</p>}>
+              <CodeBlock variant="plain" language="ts" code="export const ready = true;"
+                copyAriaLabel={t("globals.codeBlockCopy")} />
+              <Input aria-label={t("globals.codeBlockLabel")} defaultValue={t("globals.codeBlockLabel")} />
+            </ExpandableContent>
+          </Card>
+        </div>
+        <div className="fynns-content-flow">
+          <ExpandToggle expanded={toggleDemoExpanded} onExpandedChange={setToggleDemoExpanded}
+            controls="sandbox-expand-toggle-detail" expandLabel={t("globals.chatExpand")}
+            collapseLabel={t("globals.chatCollapse")} />
+          <p id="sandbox-expand-toggle-detail" hidden={!toggleDemoExpanded}>{t("globals.codeBlockLongLine")}</p>
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <CodeBlock

@@ -187,7 +187,8 @@ Pick primitives by job (details: `node scripts/api.mjs <Name>`; catalog:
 
 | Job | Primitive |
 | --- | --- |
-| Long text / readonly code preview | `ExpandToggle` (`expanded`, `onExpandedChange`, `controls`, localized `expandLabel` / `collapseLabel`) directly below content at start edge; separate from action clusters; preserve full Copy. Live `#sandbox-content-expand`. ChatMessage already owns this behavior. |
+| Long text / readonly code preview | `ExpandableText text={fullText}` / `ExpandableCodeBlock code={fullCode}` (`previewLines`, controlled `expanded` / `onExpandedChange`, localized `expandLabel` / `collapseLabel`). No consumer heights, masks or toggle state. Full Copy; short content has no toggle. Framed code owns its toggle inside the frame; do not add a border between code and toggle. Live `#sandbox-content-expand` / `#sandbox-content-expand-text`. ChatMessage already owns its behavior. |
+| Mixed components / rich content | `ExpandableContent preview={completeVisibleUnits}` with additional complete units as `children`; hidden children stay mounted and leave keyboard/accessibility traversal. Place inside the owning Card so preview, detail and toggle share one shell. Never clip Card, fields, tables, or media. Live `#sandbox-content-expand-units`. |
 | Record collection (posts, paths, bookmarks) | one `List` of `ListItem` (`headline` / `supportingText` / `trailingSupportingText`), `Pagination` or `useRevealMore` + `RevealMore` for long lists |
 | Titled section | `Card` (static) / `Collapsible`; untitled well → `Surface` |
 | Markdown body | `ChatMarkdown source={md}` (GFM subset); source code → `CodeBlock language="ts" label="file.ts"` |

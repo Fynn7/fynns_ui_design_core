@@ -15,7 +15,8 @@ export type ExpandToggleProps = Omit<
 /**
  * Content-preview disclosure: plain text + chevron, never action Button chrome.
  * Place directly below the controlled content at its start edge, outside an
- * action cluster. The host owns preview clipping; keep full copy data intact.
+ * action cluster. Prefer ExpandableText / ExpandableCodeBlock / ExpandableContent
+ * for core-owned preview behavior; keep full copy data intact.
  * For progressive catalog rows use RevealMore instead. Live: #code-block.
  */
 export function ExpandToggle({
