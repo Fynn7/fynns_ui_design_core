@@ -137,6 +137,8 @@ auto margin 或私写几何。对照 `#chat-chevron`，不得在消费仓覆盖 
 其余细节 → `llm/CONSUMER_TREATY.md` + `docs/design-system/hard-rules.md` +
 sandbox `#anchor`。
 
+- **labeled action row / Toolbar Button Menu gaps crushed** — 操作组用 Toolbar / `.fynns-control-cluster`；含文字 Button 或 Menu 的整行固定 8dp（含 Button↔Menu、Button↔IconButton、Tooltip 包装），纯图标 4dp。禁止私人 0/2/4dp gap、按钮 margin 或用 Toolbar 外层 gap 修内层；SplitButton 内段保持相连。`#sandbox-action-spacing`
+- **drawer section title crowds chrome / Divider** — body section title 用 NavigationDrawerHeadline，折叠用 Group；标题行框距 sheet 上缘 / 顶栏分割线 24dp，内部 Divider→标题 16dp；禁止清零 body/headline padding 或负 margin。DestinationAppShell 勿传重复 drawerHeadline。`#sandbox-navdrawer-title-spacing`
 - **sandbox-only aesthetics** — 勿只改 sandbox overrides；token 进 `tokens.ts`。
 - **squashed drawer / icon-only rail densify** — 拥挤 → `hidden`，勿假 rail。
 - **drawer sheet headline under TopAppBar** — DestinationAppShell 勿传 `drawerHeadline`。

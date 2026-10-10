@@ -86,6 +86,7 @@ import { ChatProductLayoutsDemo } from "../components/ChatProductLayoutsDemo";
 import { ChatSessionsDrawerDemo } from "../components/ChatSessionsDrawerDemo";
 import { ListSelectionDemo } from "../components/ListSelectionDemo";
 import { ChatAsideLayoutsDemo } from "../components/ChatAsideLayoutsDemo";
+import { ActionSpacingDemo, DrawerTitleSpacingDemo } from "../components/ChromeSpacingDemo";
 import { TokenList } from "../components/TokenList";
 import { layoutsDemoElementId } from "../catalog/layoutsCatalog";
 import { DrillInLayoutsDemo } from "./DrillInLayoutsDemo";
@@ -715,6 +716,7 @@ export function LayoutsPage() {
           </LayoutsDemo>
 
           <LayoutsDemo id="navigation-drawer">
+            <DrawerTitleSpacingDemo />
             <div
               className="sandbox-globals-row"
               style={{ alignItems: "stretch", flexWrap: "wrap" }}
@@ -1687,6 +1689,7 @@ export function LayoutsPage() {
           </LayoutsDemo>
 
           <LayoutsDemo id="toolbar">
+            <ActionSpacingDemo />
             <div className="sandbox-globals-toolbar">
               <Toolbar
                 variant="docked"

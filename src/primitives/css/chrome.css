@@ -725,70 +725,6 @@
   gap: var(--fynns-layout-action-cluster-gap);
 }
 
-/*
- * Form hosts above already set action-cluster gap — suppress stacked 0.5.80 margin
- * on labeled Buttons (12dp lesson; ≥ **0.5.124**).
- */
-.fynns-dialog-panel--centered
-  .fynns-control-stack
-  > .fynns-control-row
-  > .fynns-control-row__controls
-  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
-  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
-.fynns-card-body
-  > .fynns-control-row
-  > .fynns-control-row__controls
-  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
-  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
-.fynns-card-body
-  .fynns-control-stack
-  > .fynns-control-row
-  > .fynns-control-row__controls
-  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
-  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
-.fynns-surface--padded
-  > .fynns-control-row
-  > .fynns-control-row__controls
-  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
-  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
-.fynns-surface--padded
-  .fynns-control-stack
-  > .fynns-control-row
-  > .fynns-control-row__controls
-  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
-  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
-.fynns-collapsible-body
-  > .fynns-control-row
-  > .fynns-control-row__controls
-  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
-  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
-.fynns-collapsible-body
-  .fynns-control-stack
-  > .fynns-control-row
-  > .fynns-control-row__controls
-  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
-  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
-.fynns-collapsible-body
-  > .fynns-control-block
-  .fynns-control-stack
-  > .fynns-control-row
-  > .fynns-control-row__controls
-  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
-  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
-.fynns-dialog-panel--centered
-  > .fynns-control-row
-  > .fynns-control-row__controls
-  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
-  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
-.fynns-collapsible-body
-  > .fynns-control-block
-  .fynns-control-row
-  > .fynns-control-row__controls
-  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
-  > .fynns-btn:not(.fynns-btn--icon):not(:first-child) {
-  margin-inline-start: 0;
-}
-
 .fynns-dialog-panel--centered
   > .fynns-control-row
   > .fynns-control-row__controls
@@ -2026,6 +1962,10 @@
   box-sizing: border-box;
   flex: 0 0 auto;
   padding-block: var(--fynns-navdrawer-headline-pad-block);
+  /* Include the sheet block pad: the title clears chrome by 24dp. */
+  padding-block-start: max(0px, calc(
+    var(--fynns-navdrawer-title-edge-inset) - var(--fynns-navdrawer-pad-block)
+  ));
   /*
    * Match section-headline start: body pad-inline + headline-pad-inline.
    * No scrollbar-gutter here — sheet title is outside the scrollport.
@@ -2485,6 +2425,23 @@
   font-weight: var(--fynns-font-weight-semibold);
   line-height: var(--fynns-navdrawer-headline-line);
   color: var(--fynns-color-text-muted);
+}
+
+/* First body section titles share the sheet title's 24dp edge clearance.
+ * Count sheet and scrollport pads exactly once. */
+.fynns-nav-drawer-body > .fynns-nav-drawer-section-headline:first-child {
+  padding-block-start: max(0px, calc(
+    var(--fynns-navdrawer-title-edge-inset) - var(--fynns-navdrawer-pad-block) -
+      var(--fynns-navdrawer-body-pad-block-start)
+  ));
+}
+
+/* Divider -> title is a section boundary, not a 4dp destination gap.
+ * Headline padding participates in the total 16dp line-box clearance. */
+.fynns-nav-drawer-body > .fynns-divider + .fynns-nav-drawer-section-headline {
+  margin-block-start: max(0px, calc(
+    var(--fynns-navdrawer-title-divider-gap) - var(--fynns-navdrawer-headline-pad-block)
+  ));
 }
 
 /* Collapsible Cursor-style group: trigger matches item geometry; leaf items nest. */
@@ -3369,6 +3326,14 @@
   color: inherit;
 }
 
+/* Labeled actions, including Menu / Tooltip wrappers, use 8dp throughout
+ * the row. Outer Toolbar gap cannot reach this inner host. SplitButton's
+ * internal joined segments retain their own geometry. */
+.fynns-toolbar-actions:has(.fynns-btn:not(.fynns-btn--icon)) {
+  flex-wrap: wrap;
+  gap: var(--fynns-layout-action-cluster-gap);
+}
+
 .fynns-toolbar--docked .fynns-toolbar-actions {
   flex: 1 1 auto;
   justify-content: flex-start;
@@ -3380,6 +3345,7 @@
 }
 
 .fynns-toolbar--vertical .fynns-toolbar-actions {
+  flex-wrap: nowrap;
   flex-direction: column;
 }
 

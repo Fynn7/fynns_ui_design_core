@@ -173,6 +173,8 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | snackbar lifts / shrinks Chat, nav or preview | DESIGN_SYSTEM Hard rules: fixed body portal; no in-flow host, reserved footer, snackbar spacer or dynamic app padding. Bounds and thread scroll stay identical on show / replace / dismiss; core flat tones keep status feedback readable | `#layouts-demo-fill-column` / `#snackbar` |
 | text-only consumer action Button / inconsistent icon-label gap | DESIGN_SYSTEM Hard rules / Icons / Content density | `#globals-demo-button-icon-label-matrix` |
 | tight labeled Button gaps in end-align footers | DESIGN_SYSTEM form-rhythm | `#timeline` |
+| labeled action row / Toolbar Button Menu gaps crushed | DESIGN_SYSTEM form-rhythm | `#sandbox-action-spacing` |
+| drawer section title crowds chrome / Divider | DESIGN_SYSTEM form-rhythm | `#sandbox-navdrawer-title-spacing` |
 | private labeled Button cluster gap | DESIGN_SYSTEM form-rhythm | `#rhythm` |
 | labeled Button cluster gap stacked to 12dp | DESIGN_SYSTEM form-rhythm | `#rhythm` |
 | service control status Chip + label (information redundancy) | DESIGN_SYSTEM forms / FieldStack | `#rhythm` |

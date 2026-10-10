@@ -50,6 +50,8 @@ Grep 必须限定目录（`src/primitives` / `docs/design-system` / `llm`）并�
 12. 勿 git commit / push，除非用户明确要求。
 13. 正文 / 图注用 `--fynns-line-height-body`；图文流用 `.fynns-content-flow`，图集用 `.fynns-media-gallery` + `figure.fynns-media-figure`。图→图注固定 8dp，图集行列与正文块间固定 16dp。禁止 tight/snug 压正文、清零 gap、负 margin 或 `<br>` 补间距。详见 `docs/design-system/content-rhythm.md` 与 sandbox `#sandbox-content-rhythm`。
 
+按钮操作组用 Toolbar / `.fynns-control-cluster`：含文字 Button / Menu 的整行 8dp，纯图标 4dp；禁止私人紧凑 gap / 按钮 margin，Toolbar 外层 gap 不控制内层。抽屉 section title 用 NavigationDrawerHeadline / Group；首标题距 sheet 上缘 24dp，内部 Divider→标题 16dp，禁止清零 body/headline padding。见 `docs/design-system/form-rhythm.md`。
+
 密度与列表条约以 sandbox + `docs/DESIGN_SYSTEM.md` Hard rules 为准；不确定就 Read 对应小节，勿猜测。
 
 ## 何时读长文

@@ -41,7 +41,7 @@ edges, and adjacent rows must not intersect. Live:
 | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
 | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
 | Sibling IconButtons in one cluster | `--fynns-layout-control-cluster-gap` (**4dp**). List short text meta → first `--with-end` IconButton uses optical `--fynns-list-end-actions-gap` (≥ **0.5.62**) |
-| Labeled Buttons in one cluster / Dialog foot | `--fynns-layout-action-cluster-gap` (**8dp**, ≥ **0.5.52**/80) |
+| Labeled Buttons / Menu triggers in a Toolbar, cluster or Dialog foot | `--fynns-layout-action-cluster-gap` (**8dp**, ≥ **0.5.52**/80) |
 | TopAppBar IconButtons + NavigationRail destinations | `--fynns-layout-chrome-icon-gap` |
 | Control → supporting / error hint; FieldBlock control→FieldHint | `--fynns-layout-field-hint-gap` (**8dp**) |
 | FieldHeader / FieldBlock label→control | `field-label-control-gap` (**12dp**) |
@@ -51,6 +51,30 @@ edges, and adjacent rows must not intersect. Live:
 | Adjacent FieldStacks (fields → switches) | `form-cluster-gap` (**32dp**) + Divider |
 | Unit siblings / `.fynns-unit-stack` | `unit-stack-gap` (**16dp**) |
 | Nested surface frames (`chrome="plain"`, `.fynns-nest`) | `nest-gap` |
+
+**Action row (hard):** use `Toolbar` for docked or floating tools and
+`.fynns-control-cluster` for other action groups. If a row contains any
+labeled Button or DropdownMenu trigger, the whole row uses
+`--fynns-layout-action-cluster-gap` (**8dp**) in both directions, including
+Button↔Menu, Button↔IconButton and wrapped Tooltip triggers. Icon-only rows
+use `--fynns-layout-control-cluster-gap` (**4dp**). Core owns these gaps;
+never use private 0/2/4dp action containers, per-button margins or outer
+Toolbar `gap` overrides. SplitButton's joined internal segments remain
+flush; neighboring independent controls still need 8dp. On narrow hosts,
+wrap or adapt the composition instead of compressing the gap. Live:
+`#sandbox-action-spacing`.
+
+**Drawer title boundary (hard):** a title line box clears the sheet's top
+edge / app-bar divider by `--fynns-navdrawer-title-edge-inset`
+(aliases `dialog-inset`, **24dp**). An internal Divider→section title uses
+`--fynns-navdrawer-title-divider-gap` (aliases `unit-stack-gap`, **16dp**).
+Core counts sheet/body/headline padding once; destination Item↔Item remains
+4dp and tools↔destinations remains 8dp. Use `NavigationDrawerHeadline`
+for a static body section title, Group for a collapsible section. Reserve
+sheet `headline` for standalone drawers; omit `drawerHeadline` on
+DestinationAppShell where TopAppBar already owns the title. Do not add bare
+headings, negative margins or reset drawer body/headline padding. Live:
+`#sandbox-navdrawer-title-spacing`.
 
 ## FieldStack semantic clusters
 

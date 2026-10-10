@@ -26,7 +26,8 @@ export type ToolbarProps = HTMLAttributes<HTMLElement> & {
    * beside the capsule (not inside it).
    */
   floatingActionButton?: ReactNode;
-  /** Action controls — typically `IconButton`s with Tooltip + aria-label. */
+  /** Action controls: icon-only rows use 4dp; any labeled Button / Menu
+   * makes the whole inner row 8dp. Do not override gap on the outer host. */
   children: ReactNode;
 };
 

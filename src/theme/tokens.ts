@@ -633,7 +633,8 @@ export const TOOLBAR_TOKENS = {
   height: "var(--fynns-layout-bar-height)",
   "pad-inline": "0.5rem",
   "pad-block": "0.25rem",
-  "actions-gap": "0.125rem",
+  /** Pure icon actions share the canonical 4dp cluster rhythm. */
+  "actions-gap": "var(--fynns-layout-control-cluster-gap)",
   /** IconButton / Fab sm hit target inside the bar. */
   "action-size": "2.5rem",
   /** Matches `--fynns-size-icon` (16dp). */
@@ -1448,6 +1449,10 @@ export const NAVDRAWER_TOKENS = {
   "headline-size": "0.875rem",
   "headline-line": "1.25",
   "headline-pad-block": "0.5rem",
+  /** Sheet edge / chrome divider to the first title line box: 24dp. */
+  "title-edge-inset": "var(--fynns-layout-dialog-inset)",
+  /** Internal Divider to section title line box: 16dp. */
+  "title-divider-gap": "var(--fynns-layout-unit-stack-gap)",
   /** Section / sheet title inset past body pad (aligns with item icon column). */
   "headline-pad-inline": "1rem",
   /**

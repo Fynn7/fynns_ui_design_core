@@ -313,6 +313,8 @@ export type NavigationDrawerHeadlineProps = HTMLAttributes<HTMLDivElement>;
 /**
  * Static **section** label inside the drawer body (M3 headline) — not the
  * sheet `headline` prop, and not a place for IconButtons / counts.
+ * First body title clears the sheet edge by 24dp; Divider→title is 16dp.
+ * Core owns this clearance: do not add margins or reset body/headline padding.
  * For collapsible Cursor-style folders use `NavigationDrawerGroup`.
  */
 export function NavigationDrawerHeadline({

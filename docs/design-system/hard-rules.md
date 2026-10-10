@@ -204,6 +204,17 @@ Use the core CSS recipe; never compress these with local margins or line heights
   meta text; failure detail → **`InfoHint`** on the row — **never** a sibling
   `FieldHint` that repeats `tool：error…`. Prefer short status + Button;
   do not teach multi-row OK/Fail walls in Globals.
+- **DON'T** squeeze independent labeled action controls into 0/2/4dp gaps.
+  Use Toolbar or `.fynns-control-cluster`: the whole labeled/mixed row is
+  8dp, including Button↔Menu and Button↔IconButton; icon-only rows are 4dp.
+  SplitButton is joined internally. Core owns Toolbar **inner** spacing;
+  outer `gap` cannot repair it. See [form rhythm](form-rhythm.md), live
+  `#sandbox-action-spacing`.
+- **DON'T** crowd drawer section titles against chrome / Dividers: first
+  title line box clears the sheet edge by 24dp (`title-edge-inset`), internal
+  Divider→title by 16dp (`title-divider-gap`). Use NavigationDrawerHeadline
+  for body sections; never reset body/headline padding or use negative margins.
+  See [form rhythm](form-rhythm.md), live `#sandbox-navdrawer-title-spacing`.
 - **DON'T** left-pack ControlRow / `.fynns-control-cluster` **Buttons** (or
   action+meta strips) under the label — clusters **default end-pack**
   (`justify-content: flex-end`, ≥ **0.5.158**). Start packing is **opt-in

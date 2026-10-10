@@ -370,29 +370,13 @@
 }
 
 /*
- * IconButton strip + labeled CTA (ControlRow morph, posting import, …): keep
- * icon↔icon at control-cluster-gap (4dp); widen only before the labeled pill
- * to action-cluster-gap (8dp) — ≥ **0.5.80**. End-align strips set gap on the
- * whole cluster separately.
+ * Any labeled action makes this an 8dp action row, in both directions.
+ * Menu / Tooltip / helper wrappers participate. Per-Button start margins
+ * missed Button -> Menu and first Button -> IconButton boundaries.
  */
-.fynns-control-cluster:not(.fynns-control-cluster--end-align):not(
-    :has(> .fynns-select)
-  )
-  > .fynns-btn:not(.fynns-btn--icon):not(:first-child) {
-  margin-inline-start: calc(
-    var(--fynns-layout-action-cluster-gap) - var(--fynns-layout-control-cluster-gap)
-  );
-}
-
-/*
- * When the cluster gap is already action-cluster (8dp), do not stack the 0.5.80
- * margin bump — otherwise Card service rows / dialog feet read 12dp (≥ 0.5.124).
- */
-.fynns-control-cluster--end-align
-  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
-.fynns-control-cluster:has(> .fynns-select)
-  > .fynns-btn:not(.fynns-btn--icon):not(:first-child) {
-  margin-inline-start: 0;
+.fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-control-row__controls:has(.fynns-btn:not(.fynns-btn--icon)) {
+  gap: var(--fynns-layout-action-cluster-gap);
 }
 
 /*

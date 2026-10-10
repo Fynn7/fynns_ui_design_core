@@ -14,6 +14,13 @@ For media/caption/prose layouts, use the shipped CSS recipe from
 8dp image→caption, 16dp gallery/block gaps. Re-copy the always-apply consumer
 rule after updates; existing copied rules are not automatically overwritten.
 
+For action rows and drawer section titles, follow the shipped
+[Form rhythm](../docs/design-system/form-rhythm.md) recipe: Toolbar / public
+control-cluster owns 8dp labeled/mixed rows and 4dp icon-only rows; first drawer
+title clears chrome by 24dp, internal Divider→title by 16dp. Do not tune private
+gaps or reset core padding. Live references: `#sandbox-action-spacing` and
+`#sandbox-navdrawer-title-spacing`.
+
 ## 1. Quickstart (zero-token sibling, ~2 min)
 
 Day-to-day consume = public sibling checkout `../fynns_ui_design_core` +

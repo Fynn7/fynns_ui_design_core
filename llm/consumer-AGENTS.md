@@ -65,6 +65,13 @@ locally or compress prose with tight/snug/compact. See
    Put both directly inside `Button`, set the icon `aria-hidden`, and never add
    local icon margin / gap / literal spaces; core owns the spacing. Use
    `IconButton` + Tooltip + `aria-label` only for compact self-evident chrome.
+   Action groups use Toolbar or `.fynns-control-cluster`: any labeled Button
+   or Menu makes the entire row 8dp (including wrapped triggers); icon-only
+   rows are 4dp. No private tight gaps or per-button margins. Outer Toolbar
+   gap does not reach its action row. SplitButton stays joined internally.
+   Drawer body sections use NavigationDrawerHeadline / Group, with 24dp first
+   title edge clearance and 16dp internal Divider→title. Preserve core padding;
+   omit redundant DestinationAppShell drawerHeadline. See form-rhythm.md.
 6. Every ellipsized or line-clamped UI label must reveal its exact full text in
    a hover/focus Tooltip. Prefer string props that core wraps automatically;
    wrap custom `ReactNode` text with `OverflowTip` at the call site. This also

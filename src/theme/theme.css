@@ -309,7 +309,7 @@
   --fynns-toolbar-height: var(--fynns-layout-bar-height);
   --fynns-toolbar-pad-inline: 0.5rem;
   --fynns-toolbar-pad-block: 0.25rem;
-  --fynns-toolbar-actions-gap: 0.125rem;
+  --fynns-toolbar-actions-gap: var(--fynns-layout-control-cluster-gap);
   --fynns-toolbar-action-size: 2.5rem;
   --fynns-toolbar-action-icon-size: 1rem;
   --fynns-toolbar-fab-gap: 0.75rem;
@@ -548,6 +548,8 @@
   --fynns-navdrawer-headline-size: 0.875rem;
   --fynns-navdrawer-headline-line: 1.25;
   --fynns-navdrawer-headline-pad-block: 0.5rem;
+  --fynns-navdrawer-title-edge-inset: var(--fynns-layout-dialog-inset);
+  --fynns-navdrawer-title-divider-gap: var(--fynns-layout-unit-stack-gap);
   --fynns-navdrawer-headline-pad-inline: 1rem;
   --fynns-navdrawer-section-gap: 0.25rem;
   --fynns-navdrawer-search-gap: var(--fynns-layout-control-stack-gap);
