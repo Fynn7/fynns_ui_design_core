@@ -1632,6 +1632,7 @@ const en = {
   "globals.bottomAppBarDelete": "Delete",
   "globals.bottomAppBarHelp":
     "[mobile-first] BottomAppBar — bottom action chrome (56dp) with optional FAB. Destinations → NavigationBar. Not a duplicate of NavigationBar.",
+  "globals.statusBarInspector": "Inspector",
   "globals.statusBarAria": "Sample status bar",
   "globals.statusBarBranch": "main*",
   "globals.statusBarWorkspace": "sample-project",
@@ -1640,7 +1641,7 @@ const en = {
   "globals.statusBarEncoding": "UTF-8",
   "globals.statusBarCursor": "Ln 42, Col 7",
   "globals.statusBarHelp":
-    "IDE status strip (Cursor / VS Code) — dock at the **bottom of the app shell** under main / EndAside. ~22dp, edge-flush, muted caption. Clickable chips via StatusBarItem `onClick`. **Not** BottomAppBar (actions + FAB) and **not** Banner (severity). Live: Components `#status-bar` (Navigation) and Layout templates `#layouts-demo-status-bar`.",
+    "IDE status strip (Cursor / VS Code) — dock at the **bottom of the app shell** under main / EndAside. 22dp, 12dp type, vertically centered with breathing room above and below. Workspace status / problems on the left; contextual values on the right. Full-height rectangular actions via StatusBarItem `onClick`; narrow labels truncate. Do not override height, padding, line-height or add text margins. **Not** BottomAppBar (actions + FAB) and **not** Banner (severity). Live: Components `#status-bar` (Navigation) and Layout templates `#layouts-demo-status-bar`.",
   "globals.toolbarDockedAria": "Sample docked toolbar",
   "globals.toolbarFloatingAria": "Sample floating toolbar",
   "globals.toolbarVibrantAria": "Sample vibrant floating toolbar",
@@ -4157,6 +4158,7 @@ const zh: Record<MessageKey, string> = {
   "globals.bottomAppBarDelete": "删除",
   "globals.bottomAppBarHelp":
     "[偏移动端] BottomAppBar — 底部操作栏（56dp），可选 FAB。目的地请用 NavigationBar。与 NavigationBar 不是同一组件。",
+  "globals.statusBarInspector": "属性面板",
   "globals.statusBarAria": "示例状态栏",
   "globals.statusBarBranch": "main*",
   "globals.statusBarWorkspace": "sample-project",
@@ -4165,7 +4167,7 @@ const zh: Record<MessageKey, string> = {
   "globals.statusBarEncoding": "UTF-8",
   "globals.statusBarCursor": "第 42 行，第 7 列",
   "globals.statusBarHelp":
-    "IDE 状态栏（Cursor / VS Code）— 贴在**应用壳底**（main / EndAside 下方）。约 22dp、顶天、弱字号。可点条目用 StatusBarItem `onClick`。**不是** BottomAppBar（操作 + FAB），**也不是** Banner（严重度条）。样例：Components `#status-bar`（Navigation）与布局模板 `#layouts-demo-status-bar`。",
+    "IDE 状态栏（Cursor / VS Code）— 贴在**应用壳底**（main / EndAside 下方）。22dp 高、12dp 字号，文字垂直居中并保留上下留白。全局状态和诊断在左，上下文信息在右。可点条目用 StatusBarItem `onClick`，整高矩形命中区；窄屏文字省略。禁止覆盖高度、内边距、行高或另加文字 margin。**不是** BottomAppBar（操作 + FAB），**也不是** Banner（严重度条）。样例：Components `#status-bar`（Navigation）与布局模板 `#layouts-demo-status-bar`。",
   "globals.toolbarDockedAria": "示例停靠工具栏",
   "globals.toolbarFloatingAria": "示例浮动工具栏",
   "globals.toolbarVibrantAria": "示例鲜艳浮动工具栏",

@@ -6,6 +6,17 @@ Use the core CSS recipe; never compress these with local margins or line heights
 
 ← back to [Design system index](../DESIGN_SYSTEM.md)
 
+- **DO** use `StatusBar` + `StatusBarItem` for desktop workspace bottom
+  status. Place one full-width bar after the main/inspector row. Core owns
+  22dp height, 12dp type, vertically centered text with top/bottom breathing
+  room, 8dp item padding, rectangular full-height actions and narrow-label
+  ellipsis. Workspace status/diagnostics go left; contextual values go right.
+  **DON'T** build a private footer, use bare text in the slots, override height,
+  padding or line-height, add text margins, pills or consumer color overrides.
+  Live `#status-bar` / `#layouts-demo-status-bar`. Reference:
+  [VS Code status-bar CSS](https://github.com/microsoft/vscode/blob/main/src/vs/workbench/browser/parts/statusbar/media/statusbarpart.css)
+  and [placement guidelines](https://code.visualstudio.com/api/ux-guidelines/status-bar);
+  keep the core dark-teal theme and canonical spacing tokens.
 - **DO** build UI from `@fynns/ui` components. Reach for an existing primitive
   before writing a new control.
 - **DO** style with `--fynns-*` tokens only: `var(--fynns-color-accent)`,

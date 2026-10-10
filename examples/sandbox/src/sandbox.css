@@ -2186,3 +2186,36 @@
   }
 }
 
+
+/* StatusBar owns the full width below both workspace panes. */
+.sandbox-status-workbench {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  background: var(--fynns-color-app-bg);
+}
+
+.sandbox-status-workbench-body {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 1fr);
+  min-height: calc(var(--fynns-statusbar-height) * 10);
+}
+
+.sandbox-status-workbench-canvas,
+.sandbox-status-workbench-aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  gap: var(--fynns-space-md);
+  border: 0;
+  border-radius: 0;
+  line-height: var(--fynns-line-height-body);
+}
+
+.sandbox-status-workbench-aside {
+  border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  background: var(--fynns-color-surface-1);
+}

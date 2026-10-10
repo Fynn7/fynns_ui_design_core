@@ -1652,19 +1652,22 @@ export function LayoutsPage() {
           </LayoutsDemo>
 
           <LayoutsDemo id="status-bar">
-            <div className="sandbox-globals-status-bar">
+            <div className="sandbox-globals-status-bar sandbox-status-workbench">
+              <div className="sandbox-status-workbench-body">
+                <Surface padded className="sandbox-status-workbench-canvas">
+                  <FileIcon aria-hidden />
+                  <span>{t("globals.statusBarWorkspace")}</span>
+                </Surface>
+                <Surface padded className="sandbox-status-workbench-aside">
+                  <span>{t("globals.statusBarInspector")}</span>
+                  <span>{t("globals.statusBarEncoding")}</span>
+                </Surface>
+              </div>
               <StatusBar
                 aria-label={t("globals.statusBarAria")}
                 leading={
                   <>
                     <StatusBarItem>{t("globals.statusBarBranch")}</StatusBarItem>
-                    <StatusBarItem>
-                      {t("globals.statusBarWorkspace")}
-                    </StatusBarItem>
-                  </>
-                }
-                trailing={
-                  <>
                     <StatusBarItem
                       onClick={() =>
                         snackbar(t("globals.statusBarProblemsToast"), {
@@ -1675,6 +1678,13 @@ export function LayoutsPage() {
                     >
                       {t("globals.statusBarProblems")}
                     </StatusBarItem>
+                    <StatusBarItem>
+                      {t("globals.statusBarWorkspace")}
+                    </StatusBarItem>
+                  </>
+                }
+                trailing={
+                  <>
                     <StatusBarItem>
                       {t("globals.statusBarEncoding")}
                     </StatusBarItem>

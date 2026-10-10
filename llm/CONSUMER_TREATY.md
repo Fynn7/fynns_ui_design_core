@@ -69,6 +69,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | main-canvas list\|detail split (hub-split) | DESIGN_SYSTEM hard-rules | `#layouts-demo-drill-in` |
 | Card title count glued (OpenSpec8) | DESIGN_SYSTEM Card / Collapsible | `#card` |
 | padded destination labels | DESIGN_SYSTEM hard-rules | `—` |
+| workspace status footer text touches top / private footer | DESIGN_SYSTEM Hard rules | `#status-bar` / `#layouts-demo-status-bar` |
 | crushed command / menu chrome proportion | DESIGN_SYSTEM Hard rules | `#command-palette` |
 | wrong shell slot / “Clipped” misread | DESIGN_SYSTEM hard-rules | `—` |
 | shell scrollIntoView leaves bottom gap | DESIGN_SYSTEM hard-rules | `#form-recipe` / `#layouts-demo-shell` |

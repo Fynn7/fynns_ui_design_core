@@ -8478,13 +8478,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               leading={
                 <>
                   <StatusBarItem>{t("globals.statusBarBranch")}</StatusBarItem>
-                  <StatusBarItem>
-                    {t("globals.statusBarWorkspace")}
-                  </StatusBarItem>
-                </>
-              }
-              trailing={
-                <>
                   <StatusBarItem
                     onClick={() =>
                       snackbar(t("globals.statusBarProblemsToast"), {
@@ -8495,6 +8488,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   >
                     {t("globals.statusBarProblems")}
                   </StatusBarItem>
+                  <StatusBarItem>
+                    {t("globals.statusBarWorkspace")}
+                  </StatusBarItem>
+                </>
+              }
+              trailing={
+                <>
                   <StatusBarItem>
                     {t("globals.statusBarEncoding")}
                   </StatusBarItem>

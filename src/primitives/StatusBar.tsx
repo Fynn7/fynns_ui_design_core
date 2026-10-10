@@ -6,12 +6,12 @@ import type {
 
 export type StatusBarProps = HTMLAttributes<HTMLElement> & {
   /**
-   * Start-aligned status chips (branch, language, path…). Prefer
+   * Start-aligned workspace status (branch, diagnostics, sync…). Prefer
    * `StatusBarItem` children.
    */
   leading?: ReactNode;
   /**
-   * End-aligned status chips (diagnostics, encoding, line:col…). Prefer
+   * End-aligned contextual status (language, encoding, line:col…). Prefer
    * `StatusBarItem` children.
    */
   trailing?: ReactNode;
@@ -44,7 +44,7 @@ export type StatusBarItemProps = StatusBarItemShared &
 
 /**
  * IDE-style status strip (Cursor / VS Code bottom bar) — ~22dp, edge-flush,
- * muted caption type. Put at the **bottom of the app shell** (under main /
+ * vertically centered caption type. Put at the **bottom of the app shell** (under main /
  * EndAside), not inside a Card.
  *
  * **Not** `BottomAppBar` (56dp actions + optional FAB) and **not** `Banner`
@@ -90,7 +90,7 @@ export function StatusBar({
 }
 
 /**
- * One status chip inside `StatusBar`. Interactive when `onClick` is set
+ * One rectangular, full-height item inside `StatusBar`. Interactive when `onClick` is set
  * (opens problems panel, switches encoding, …).
  */
 export function StatusBarItem(props: StatusBarItemProps) {
@@ -110,7 +110,7 @@ export function StatusBarItem(props: StatusBarItemProps) {
         className={itemClass}
         {...(rest as HTMLAttributes<HTMLSpanElement>)}
       >
-        {children}
+        <span className="fynns-status-bar-item-label">{children}</span>
       </span>
     );
   }
@@ -122,7 +122,7 @@ export function StatusBarItem(props: StatusBarItemProps) {
       className={itemClass}
       onClick={onClick}
     >
-      {children}
+      <span className="fynns-status-bar-item-label">{children}</span>
     </button>
   );
 }

@@ -16,6 +16,10 @@ alwaysApply: true
 `trailingSupportingText`（`2025-10 - 2026-03`）。禁止 `Org · dates`。空 trail 用
 ASCII `-`。
 
+## 底部状态栏
+
+桌面工作区底栏必须复用 `StatusBar` + `StatusBarItem`，放在主画布与侧栏整行之后，贯穿应用宽度。22dp 高、12dp 字号、文字上下留白与垂直居中、8dp 条目内边距、整高矩形交互和窄屏省略由 core 管理；全局状态和诊断在左，上下文信息在右。禁止私人 footer、slot 裸文字、覆盖高度/padding/line-height、文字 margin、药丸按钮和消费侧颜色覆盖。参照 sandbox `#status-bar` / `#layouts-demo-status-bar`。
+
 ## 安装与 API
 
 **图文间距（硬）：** 正文和图注必须用 `--fynns-line-height-body`（1.45），
