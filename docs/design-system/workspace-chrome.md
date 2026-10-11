@@ -72,6 +72,25 @@ banner. InlineAlert owns these defaults:
   IconButton**, without visible text. Do not embed a Button in `message`/children.
   The familiar X needs an aria-label; it may omit a Tooltip like other closes.
 
+Dismissal and recovery have different jobs. For unavailable in-flow content,
+keep the persistent error visible and put Retry in a sibling action row; keep
+its existing disabled state and callback. Use the stack in a canvas instead.
+
+```tsx
+<div className="fynns-unit-stack">
+  <InlineAlert severity="error" message={errorMessage} />
+  <div className="fynns-control-cluster">
+    <Button variant="ghost" disabled={retrying} onClick={retry}>
+      <RefreshIcon aria-hidden />{retryLabel}
+    </Button>
+  </div>
+</div>
+```
+
+Never replace a Retry handler with `onDismiss`, clear a business error on close,
+or remove recovery to pass a gate. Cancel in Dialog feet explicitly uses
+`variant="ghost"`; the rightmost confirm action retains `variant="primary"`.
+
 ## Canvas tools and persistent notice stacks
 
 Each canvas workspace has **one editing toolbar**. Document-level commands
@@ -141,6 +160,20 @@ It also rejects multiple toolbars in a shared canvas and standalone command
 toolbars in the shared pane row/canvas ClippedNavShell, including same-file
 helpers. Conditional alternatives count as one surface. Unknown cross-file
 wrappers and private layout classes still require rendered verification.
+
+Consumer diagnostics distinguish `workspace-contract`, `workspace-tooling`,
+`missing-exports`, `linked-core-missing` and `dev-cache` in the gate's JSON
+`issues` array. A wrapper must show those diagnostics rather than describe every
+exit 1 as stale core. Workspace violations require consumer source edits;
+pulling core or skipping sibling sync does not repair them.
+
+Existing consumers can explicitly run `check-ui-exports.mjs --target <app> --fix`
+and review the diff. This migrates literal Cancel variants and simple,
+unconditional InlineAlert retry rows, preserving callbacks, disabled state,
+icons and localized copy. Dynamic variants, spreads, conditional recovery and
+message slots remain manual migrations. It then runs the complete strict gate;
+unresolved problems still exit 1. Checks without `--fix` never write source.
+Keep the original tests and the gate enabled after migration.
 
 Static success is necessary, not sufficient: cross-file wrappers, dynamic props,
 translated copy, navigation behavior, duplicate controls, CSS transforms and

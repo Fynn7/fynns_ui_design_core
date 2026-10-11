@@ -420,3 +420,11 @@ All greenfield consumers follow this recipe; static export gate + browser review
 | All-cap UI headings / uppercase decoration | workspace-chrome | `#layouts-demo-workspace-chrome` |
 | Transient failure defaults to persistent InlineAlert | workspace-chrome / Error feedback | `#sandbox-inline-alert-dismiss` |
 | InlineAlert full-width / off-center icon-text / labeled filled dismiss | workspace-chrome / Error feedback | `#sandbox-inline-alert-dismiss` |
+| Retry embedded in InlineAlert / retry accidentally replaced with dismiss | workspace-chrome / sibling recovery action row | `#sandbox-inline-alert-dismiss` |
+
+Gate diagnostics are actionable by cause: `workspace-contract` requires consumer
+JSX migration, not a core pull. Use `check-ui-exports.mjs --target <app> --fix`
+for simple legacy Cancel/retry rows, review the diff, and rerun the strict gate.
+Preserve recovery handlers/disabled state; dynamic cases stay manual. Gate
+wrappers must preserve the actual diagnostics or JSON `issues`, rather than
+turning every nonzero exit into a stale-core message. See [CONSUME.md](CONSUME.md).

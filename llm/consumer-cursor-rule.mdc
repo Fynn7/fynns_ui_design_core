@@ -61,6 +61,12 @@ ASCII `-`。
 3. Vite：`resolve.dedupe: ["react", "react-dom"]`；开发服务器
    `server.headers: { "Cache-Control": "no-store" }`，防内置浏览器复用旧 ESM；
    `tsconfig` ≥ **ES2022**。
+3b. **门禁失败按原因修复**：`workspace-contract` = 消费 JSX，勿误报 sibling
+   过期或建议跳过同步。门禁 JSON `issues[].code/message` 必须由自定义 wrapper
+   保留；仅缺 core/导出才需链接/同步。旧取消/重试行可显式运行
+   `check-ui-exports.mjs --target <app> --fix`，审 diff 后重跑严格门禁。
+   检查默认只读；复杂/动态用法仍须手改。重试保留回调与 disabled，移至
+   InlineAlert 旁的 `.fynns-control-cluster`，勿改为 onDismiss 或移除恢复入口。
 4. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止
    `@radix-ui/*` / `sonner`、禁止复活已 purge API。缺能力 → 先在 core 加，再刷新
    sibling / bump。

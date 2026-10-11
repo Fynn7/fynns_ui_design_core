@@ -17,7 +17,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { hasNoStoreDevHeader } from "./vite-dev-cache.mjs";
-import { checkWorkspaceFiles } from "./check-workspace-ui.mjs";
+import { checkWorkspaceFiles, fixWorkspaceFiles } from "./check-workspace-ui.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PKG_NAME = "@fynn7/ui-design-core";
@@ -35,7 +35,7 @@ const SKIP_DIRS = new Set([
 ]);
 
 function usage() {
-  return `Usage: node scripts/check-ui-exports.mjs --target <dir> [--json]
+  return `Usage: node scripts/check-ui-exports.mjs --target <dir> [--json] [--fix]
 
 Scan consumer sources for named imports from ${ALIAS} and verify each symbol
 exists on the linked ${PKG_NAME} barrel (${ENTRY_REL}).
@@ -43,12 +43,14 @@ exists on the linked ${PKG_NAME} barrel (${ENTRY_REL}).
 Options:
   --target <dir>  Consumer package root (default: cwd)
   --json          Machine-readable result on stdout
+  --fix           Migrate literal Cancel variants and simple InlineAlert retry rows,
+                  then run the full gate. Review the source diff before shipping.
   -h, --help
 `;
 }
 
 function parseArgs(argv) {
-  const out = { target: process.cwd(), json: false, help: false };
+  const out = { target: process.cwd(), json: false, fix: false, help: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     const next = () => {
@@ -59,6 +61,7 @@ function parseArgs(argv) {
     if (a === "-h" || a === "--help") out.help = true;
     else if (a === "--target") out.target = next();
     else if (a === "--json") out.json = true;
+    else if (a === "--fix") out.fix = true;
     else throw new Error(`Unknown argument: ${a}\n${usage()}`);
   }
   return out;
@@ -312,6 +315,7 @@ export function checkUiExports(pkgRoot) {
       imports: [],
       exports: [],
       barrelPath: null,
+      issues: [{ code: "linked-core-missing", message: `Linked ${PKG_NAME} barrel not found. Run ensure-sibling --install.` }],
     };
   }
 
@@ -323,14 +327,19 @@ export function checkUiExports(pkgRoot) {
     .find((file) => fs.existsSync(file));
   const staleBrowserCache = viteConfig && !hasNoStoreDevHeader(fs.readFileSync(viteConfig, "utf8"));
   const errors = [];
+  const issues = [];
+  const addIssue = (code, message) => { issues.push({ code, message }); errors.push(message); };
   let workspaceViolations = [];
   try {
     workspaceViolations = checkWorkspaceFiles([...files.keys()], pkgRoot);
-    if (workspaceViolations.length) errors.push("Workspace UI contract violations (docs/design-system/workspace-chrome.md):\n" +
-      workspaceViolations.map(v => `${path.relative(pkgRoot, v.file)}:${v.line} [${v.rule}] ${v.message}`).join("\n"));
-  } catch (error) { errors.push(error.message); }
+    if (workspaceViolations.length) addIssue("workspace-contract", "Consumer source violates the Workspace UI contract (docs/design-system/workspace-chrome.md):\n" +
+      workspaceViolations.map(v => `${path.relative(pkgRoot, v.file)}:${v.line} [${v.rule}] ${v.message}`).join("\n") +
+      `\nFix consumer JSX, not the sibling checkout. Run safe migrations, then review the source diff:\n` +
+      `  node "${path.join(__dirname, "check-ui-exports.mjs")}" --target "${pkgRoot}" --fix\n` +
+      `Unsupported/dynamic cases remain errors; then rerun this gate. Pulling core or skipping sibling sync cannot fix consumer source.`);
+  } catch (error) { addIssue("workspace-tooling", error.message); }
   if (missing.length) {
-    errors.push(`${ALIAS} imports missing from linked ${PKG_NAME}: ${missing.join(", ")}\n` +
+    addIssue("missing-exports", `${ALIAS} imports missing from linked ${PKG_NAME}: ${missing.join(", ")}\n` +
       `Barrel: ${barrelPath}\n` +
       `Fix: sync sibling UI core then retry:\n` +
       `  node node_modules/@fynn7/ui-design-core/scripts/ensure-sibling-ui-core.mjs --target "${pkgRoot}" --update\n` +
@@ -338,9 +347,9 @@ export function checkUiExports(pkgRoot) {
       `Skip auto-sync only while editing core locally: FYNNS_UI_SKIP_SIBLING_SYNC=1`);
   }
   if (staleBrowserCache) {
-    errors.push(`Vite dev config lacks server.headers Cache-Control: no-store: ${viteConfig}\n` +
+    addIssue("dev-cache", `Vite dev config lacks server.headers Cache-Control: no-store: ${viteConfig}\n` +
       `An embedded browser can serve an old ${ALIAS} barrel and crash despite a valid export.\n` +
-      `Fix: run node node_modules/@fynn7/ui-design-core/scripts/install-as-npm.mjs --target "${pkgRoot}" --wire-only`);
+      `Fix: run node node_modules/@fynn7/ui-design-core/scripts/install-as-npm.mjs --target "${pkgRoot}" --dev-cache-only`);
   }
 
   return {
@@ -351,6 +360,7 @@ export function checkUiExports(pkgRoot) {
     barrelPath,
     viteConfig: viteConfig ?? null,
     workspaceViolations,
+    issues,
     files: Object.fromEntries(
       [...files.entries()].map(([f, names]) => [path.relative(pkgRoot, f) || f, names]),
     ),
@@ -372,16 +382,27 @@ function main() {
   }
 
   const pkgRoot = findPkgRoot(opts.target);
-  const result = checkUiExports(pkgRoot);
+  let fixes = [];
+  let result;
+  try {
+    if (opts.fix && resolveLinkedBarrel(pkgRoot)) fixes = fixWorkspaceFiles([...scanConsumerImports(pkgRoot).files.keys()], pkgRoot);
+    result = checkUiExports(pkgRoot);
+  } catch (error) {
+    const message = String(error.message || error);
+    result = { ok: false, error: message, issues: [{ code: opts.fix ? "workspace-migration" : "gate-tooling", message }] };
+  }
 
   if (opts.json) {
-    process.stdout.write(`${JSON.stringify({ pkgRoot, ...result }, null, 2)}\n`);
+    process.stdout.write(`${JSON.stringify({ pkgRoot, ...result, ...(opts.fix ? { fixes } : {}) }, null, 2)}\n`);
   } else if (result.ok) {
     console.log(
       `[fynns-ui] export gate ok: ${result.imports.length} @fynns/ui import(s) match barrel (${result.exportsCount} symbols)`,
     );
   } else {
     console.error(`[fynns-ui] ${result.error}`);
+  }
+  if (opts.fix && !opts.json) {
+    for (const fix of fixes) console.log(`[fynns-ui] migrated ${path.relative(pkgRoot, fix.file)} (${fix.rules.join(", ")})`);
   }
 
   process.exit(result.ok ? 0 : 1);

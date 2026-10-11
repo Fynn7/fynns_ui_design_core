@@ -30,6 +30,15 @@ template and onDismiss/dismissAriaLabel ghost X; never embed labeled controls or
 force full width. The installed export gate also checks workspace composition;
 dynamic copy/props and cross-file behavior still require browser review.
 
+An InlineAlert recovery Button belongs in a sibling `.fynns-control-cluster`,
+not the message. Preserve retry callbacks and disabled state; `onDismiss` is
+only the X. Dialog Cancel explicitly uses ghost, Save stays primary. On gate
+failure read the file/rule or JSON `issues[].code`: `workspace-contract` means
+edit consumer JSX, never pull/skip-sync as its remedy. For simple legacy rows,
+run `check-ui-exports.mjs --target <app> --fix` from core, review the diff, then
+rerun the strict gate. Read-only checks never modify sources; complex cases
+remain manual. Custom gate wrappers must preserve the actual diagnostic.
+
 Canvas recipe: `#layouts-demo-canvas-workspace`. Use `.fynns-workspace-canvas`
 and `.fynns-workspace-tools` with floating Toolbar, 16dp clearance, ghost X and
 a top-bar restore icon. Place the canvas inside `.fynns-workspace-panes`

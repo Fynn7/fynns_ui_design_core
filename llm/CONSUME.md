@@ -31,6 +31,19 @@ content-width centered ghost-X template (`#sandbox-inline-alert-dismiss`).
 The installed export gate checks static workspace composition as well as exports;
 dynamic/localized behavior still requires browser verification.
 
+**Gate failure recovery:** read the actual file/rule diagnostics first. A
+`workspace-contract` failure is consumer JSX, not a stale sibling. Run
+`node ../fynns_ui_design_core/scripts/check-ui-exports.mjs --target <app> --fix`
+to migrate simple legacy Cancel/retry rows, review the diff and rerun the gate.
+Complex/dynamic cases still require source edits. Checks without `--fix` are
+read-only. Keep Retry callbacks/disabled state reachable in a sibling
+`.fynns-control-cluster`; `onDismiss` only dismisses presentation. See the
+[error recovery recipe](../docs/design-system/workspace-chrome.md).
+Wrappers must preserve JSON `issues[].code` / `message` (or the CLI diagnostic),
+never label every nonzero exit as stale core or suggest skipping sibling sync.
+Only missing core/exports calls for linking/sync; `dev-cache` calls for
+`install-as-npm.mjs --dev-cache-only`, tooling failures for installing TypeScript.
+
 **Canvas workspaces (≥ 0.5.310):** use `.fynns-workspace-canvas` and
 `.fynns-workspace-tools` → floating Toolbar, with core 16dp clearance and a
 restore icon after closing. In-flow page tools use `.fynns-docked-tools-inset`.

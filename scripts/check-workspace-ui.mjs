@@ -63,6 +63,41 @@ export function checkWorkspaceSource(text, filename = "sample.tsx", ts = compile
     if (opening(node) && definitions.has(tag(node))) expanded(definitions.get(tag(node)), fn, seen);
     ts.forEachChild(node, child => expanded(child, fn, seen));
   };
+  // Alert content must not include controls. Event handlers and other JSX slots
+  // are not rendered content, even if they happen to construct JSX.
+  const rendered = (node, fn, seen = new Set()) => {
+    if (!node || seen.has(node)) return;
+    seen.add(node);
+    fn(node);
+    if (ts.isIdentifier(node) && definitions.has(node.text)) return rendered(definitions.get(node.text), fn, seen);
+    if (opening(node)) {
+      if (definitions.has(tag(node))) rendered(definitions.get(tag(node)), fn, seen);
+      for (const child of children(node)) rendered(child, fn, seen);
+      return;
+    }
+    if (ts.isFunctionLike(node)) {
+      if (node.body && !ts.isBlock(node.body)) rendered(node.body, fn, seen);
+      else {
+        const returns = item => {
+          if (ts.isReturnStatement(item)) rendered(item.expression, fn, seen);
+          else if (!ts.isFunctionLike(item)) ts.forEachChild(item, returns);
+        };
+        if (node.body) ts.forEachChild(node.body, returns);
+      }
+      return;
+    }
+    if (ts.isCallExpression(node)) {
+      if (ts.isIdentifier(node.expression) && definitions.has(node.expression.text)) rendered(definitions.get(node.expression.text), fn, seen);
+      // Array render callbacks are part of the output; handler attributes were
+      // already excluded by the JSX branch above.
+      if (ts.isPropertyAccessExpression(node.expression) && ["map", "flatMap"].includes(node.expression.name.text)) {
+        for (const arg of node.arguments) if (ts.isFunctionLike(arg) || ts.isIdentifier(arg)) rendered(arg, fn, seen);
+      }
+      return;
+    }
+    if (ts.isPropertyAccessExpression(node)) return;
+    ts.forEachChild(node, child => rendered(child, fn, seen));
+  };
   const icons = node => {
     const names = new Set();
     for (const child of children(node)) expanded(child, item => { if (tag(item).endsWith("Icon")) names.add(tag(item)); });
@@ -173,12 +208,12 @@ export function checkWorkspaceSource(text, filename = "sample.tsx", ts = compile
     }
     if (kind === "InlineAlert") {
       const embedded = new Set();
-      for (const child of children(node)) expanded(child, item => {
+      for (const child of children(node)) rendered(child, item => {
         if (["Button", "IconButton"].includes(tag(item))) embedded.add(tag(item));
       });
       const message = attribute(node, "message");
-      if (message) expanded(message, item => { if (["Button", "IconButton"].includes(tag(item))) embedded.add(tag(item)); });
-      if (embedded.size) report(node, "inline-dismiss", "InlineAlert message contains controls. Use onDismiss + dismissAriaLabel for the built-in ghost X; errors default to snackbar.");
+      if (message) rendered(message.initializer, item => { if (["Button", "IconButton"].includes(tag(item))) embedded.add(tag(item)); });
+      if (embedded.size) report(node, "inline-dismiss", "InlineAlert message contains controls. Dismiss with onDismiss + dismissAriaLabel; keep retry/recovery in a sibling fynns-control-cluster (canvas: WorkspaceNoticeStack). Transient errors default to snackbar.");
       const style = attribute(node, "style")?.getText(source) ?? "";
       if (/width\s*:\s*["']100%["']|alignItems\s*:\s*["']flex-start["']/.test(style)) report(node, "inline-geometry", "Preserve InlineAlert content width and cross-axis center; do not override core geometry.");
     }
@@ -200,6 +235,119 @@ export function checkWorkspaceFiles(files, target) {
   if (!jsx.length) return [];
   const ts = compiler(target);
   return jsx.flatMap(file => checkWorkspaceSource(fs.readFileSync(file, "utf8"), file, ts).map(error => ({ file, ...error })));
+}
+
+/** Conservative source migration. Never runs during a read-only gate. Only
+ * literal Cancel variants and simple, unconditional retry rows are safe here;
+ * arbitrary render functions/slots/dismiss handlers require a human edit. */
+export function fixWorkspaceSource(text, filename = "sample.tsx", ts = compiler()) {
+  const source = ts.createSourceFile(filename, text, ts.ScriptTarget.Latest, true,
+    /\.jsx$/.test(filename) ? ts.ScriptKind.JSX : ts.ScriptKind.TSX);
+  if (source.parseDiagnostics.length) return { source: text, rules: [] };
+  const aliases = new Map();
+  for (const node of source.statements) {
+    if (!ts.isImportDeclaration(node) || node.moduleSpecifier.text !== "@fynns/ui") continue;
+    for (const spec of node.importClause?.namedBindings?.elements ?? []) aliases.set(spec.name.text, spec.propertyName?.text ?? spec.name.text);
+    if (node.importClause?.namedBindings && ts.isNamespaceImport(node.importClause.namedBindings)) aliases.set(node.importClause.namedBindings.name.text, "@fynns/ui");
+  }
+  const opening = node => ts.isJsxElement(node) ? node.openingElement : ts.isJsxSelfClosingElement(node) ? node : null;
+  const tag = node => {
+    const raw = opening(node)?.tagName.getText(source) ?? "";
+    const parts = raw.split(".");
+    return aliases.get(raw) ?? (aliases.get(parts[0]) === "@fynns/ui" ? parts.at(-1) : undefined);
+  };
+  const attribute = (node, name) => opening(node)?.attributes.properties.find(prop => ts.isJsxAttribute(prop) && prop.name.getText(source) === name);
+  const spread = node => opening(node)?.attributes.properties.some(ts.isJsxSpreadAttribute);
+  const children = node => ts.isJsxElement(node) ? node.children : [];
+  const meaningful = node => children(node).filter(child => !ts.isJsxText(child) || child.text.trim());
+  const edits = [];
+  const violations = checkWorkspaceSource(text, filename, ts);
+  const violates = (node, rule) => violations.some(error => error.rule === rule && error.line === source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1);
+  const add = (start, end, replacement, rule) => edits.push({ start, end, replacement, rule });
+  const retry = node => tag(node) === "Button" && !spread(node) && children(node).some(child =>
+    /\b(retry|refresh|recover|reload)\b|重试|重新加载|恢复|刷新/i.test(child.getText(source)));
+  const containsControl = node => {
+    if (["Button", "IconButton"].includes(tag(node))) return true;
+    let found = false;
+    ts.forEachChild(node, child => { if (containsControl(child)) found = true; });
+    return found;
+  };
+  function visit(node) {
+    if (tag(node) === "InlineAlert" && ts.isJsxElement(node) && !spread(node) && !attribute(node, "message") && !attribute(node, "children") && violates(node, "inline-dismiss")) {
+      let container = node;
+      const only = meaningful(node);
+      if (only.length === 1 && ts.isJsxElement(only[0]) && only[0].openingElement.tagName.getText(source) === "div") {
+        const wrapper = only[0];
+        const cls = attribute(wrapper, "className")?.initializer;
+        if (wrapper.openingElement.attributes.properties.length === 1 && cls && ts.isStringLiteral(cls) && cls.text === "fynns-unit-stack") container = wrapper;
+      }
+      const content = meaningful(container);
+      const buttons = content.filter(retry);
+      const rest = content.filter(child => !buttons.includes(child));
+      if (buttons.length && rest.length && !rest.some(containsControl)) {
+        const start = node.getStart(source);
+        const indent = text.slice(text.lastIndexOf("\n", start - 1) + 1, start).match(/^\s*/)[0];
+        const eol = text.includes("\r\n") ? "\r\n" : "\n";
+        const shift = (fragment, from, to) => fragment.split(/\r?\n/).map((line, index) =>
+          index === 0 ? line : to + (line.startsWith(from) ? line.slice(from.length) : line)).join(eol);
+        let alert = text.slice(start, node.end);
+        for (const button of [...buttons].sort((a, b) => b.pos - a.pos)) {
+          let removeStart = button.getStart(source);
+          let removeEnd = button.end;
+          const lineStart = text.lastIndexOf("\n", removeStart - 1) + 1;
+          const lineEnd = text.indexOf("\n", removeEnd);
+          if (lineEnd !== -1 && /^\s*$/.test(text.slice(lineStart, removeStart)) && /^\s*$/.test(text.slice(removeEnd, lineEnd))) {
+            removeStart = lineStart;
+            removeEnd = lineEnd + 1;
+          }
+          alert = alert.slice(0, removeStart - start) + alert.slice(removeEnd - start);
+        }
+        // Retain exact handlers, disabled state, labels, icons and content.
+        const row = buttons.map(button => {
+          const buttonStart = button.getStart(source);
+          const from = text.slice(text.lastIndexOf("\n", buttonStart - 1) + 1, buttonStart).match(/^\s*/)[0];
+          return shift(text.slice(buttonStart, button.end), from, indent + "    ");
+        }).join(eol + indent + "    ");
+        alert = shift(alert, indent, indent + "  ");
+        add(start, node.end, `<div className="fynns-unit-stack">${eol}${indent}  ${alert}${eol}${indent}  <div className="fynns-control-cluster">${eol}${indent}    ${row}${eol}${indent}  </div>${eol}${indent}</div>`, "inline-dismiss");
+        return; // Do not create overlapping edits inside the migrated alert.
+      }
+    }
+    if (tag(node) === "Button" && !spread(node) && /\bcancel\b|取消/i.test(children(node).map(child => child.getText(source)).join(" ")) && violates(node, "cancel-ghost")) {
+      const variant = attribute(node, "variant");
+      if (!variant) add(opening(node).tagName.end, opening(node).tagName.end, ' variant="ghost"', "cancel-ghost");
+      else {
+        const literal = variant.initializer && ts.isJsxExpression(variant.initializer) ? variant.initializer.expression : variant.initializer;
+        if (literal && ts.isStringLiteralLike(literal)) add(variant.getStart(source), variant.end, 'variant="ghost"', "cancel-ghost");
+      }
+    }
+    ts.forEachChild(node, visit);
+  }
+  visit(source);
+  let result = text;
+  for (const edit of edits.sort((a, b) => b.start - a.start)) result = result.slice(0, edit.start) + edit.replacement + result.slice(edit.end);
+  return { source: result, rules: [...new Set(edits.map(edit => edit.rule))] };
+}
+
+export function fixWorkspaceFiles(files, target) {
+  const jsx = files.filter(file => /\.[jt]sx$/.test(file) && !/\.(test|spec)\.[jt]sx$/.test(file));
+  if (!jsx.length) return [];
+  const ts = compiler(target);
+  const pending = [];
+  for (const file of jsx) {
+    // Do not mutate sources reached through a link to a different checkout.
+    if (fs.lstatSync(file).isSymbolicLink()) continue;
+    const text = fs.readFileSync(file, "utf8");
+    const result = fixWorkspaceSource(text, file, ts);
+    if (result.source === text) continue;
+    pending.push({ file, text, ...result });
+  }
+  // Compute all edits first; do not overwrite a concurrent editor change.
+  for (const change of pending) {
+    if (fs.readFileSync(change.file, "utf8") !== change.text) throw new Error(`Source changed during migration: ${change.file}. Retry from the current source.`);
+  }
+  for (const change of pending) fs.writeFileSync(change.file, change.source, "utf8");
+  return pending.map(({ file, rules }) => ({ file, rules }));
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

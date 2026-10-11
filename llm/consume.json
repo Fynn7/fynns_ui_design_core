@@ -57,8 +57,12 @@
       "argv": ["node", "scripts/install-as-npm.mjs", "--target", "<CONSUMER_ROOT>", "--dev-cache-only", "--json"]
     },
     "checkExports": {
-      "description": "Hard gate: every named @fynns/ui import must exist on the linked barrel.",
+      "description": "Read-only hard gate: named @fynns/ui imports, Vite dev cache policy and consumer workspace composition; JSON issues[].code/message distinguishes each failure.",
       "argv": ["node", "scripts/check-ui-exports.mjs", "--target", "<CONSUMER_ROOT>", "--json"]
+    },
+    "repairWorkspace": {
+      "description": "Explicitly migrate literal Cancel variants and simple InlineAlert retry rows, review the source diff, then run the full strict gate. Dynamic cases remain manual; recovery behavior is preserved.",
+      "argv": ["node", "scripts/check-ui-exports.mjs", "--target", "<CONSUMER_ROOT>", "--fix", "--json"]
     },
     "api": {
       "description": "Print props / signatures / token names on demand instead of reading source files.",
