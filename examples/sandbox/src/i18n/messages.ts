@@ -27,9 +27,9 @@ const en = {
   "nav.globalsHint":
     "M3 component catalog (collapsed sections) plus keyword search to jump to a demo; shape / radius inspector on the right.",
   "nav.layoutsHint":
-    "Default app chrome for greenfield: DestinationAppShell first, then TopAppBar / Drawer / Rail / Bar and related strips. Not the Settings Templates page.",
+    "Default greenfield chrome: workspace recipe with Home, New menu, one inspector toggle and context actions. Fixed destination, chat and layout primitives follow.",
   "layouts.lead":
-    "Greenfield default: copy DestinationAppShell (first demo) as the desktop main UI. Catalog drill-in (second demo): swap the drawer body to the item list and keep main full-width — do not hub-split the canvas. Destinations are binary (labeled drawer or hidden) — NavigationRail alone is an intentional phone part, not DestinationAppShell densify. Small nav helpers (Breadcrumb / Pagination / SkipLink) stay on Components.",
+    "Greenfield default: copy the first workspace recipe. Home and Back are ghost icons, navigation starts with a New menu, one inspector icon toggles both states, and resource rename belongs to its context menu. Routine actions stay horizontal; errors default to snackbar. Fixed destination and chat templates follow. Destinations are a labeled drawer or hidden; never densify to a rail.",
   "layouts.shellMainTitle": "Main canvas",
   "layouts.shellMainBody":
     "Children of DestinationAppShell — any page content. Aside is optional and not required to be Chat.",
@@ -2573,9 +2573,9 @@ const zh: Record<MessageKey, string> = {
   "nav.globalsHint":
     "按 M3 分类的组件样例（分区默认收起），可用关键词搜索跳转到具体 demo；右侧是圆角 / 形状检查器。",
   "nav.layoutsHint":
-    "Greenfield 默认应用壳：首屏 DestinationAppShell，另有 TopAppBar / 抽屉 / Rail / 底栏等。不是底部「模板」设置页。",
+    "Greenfield 默认工作区：主页、新建菜单、单一侧栏 toggle 与右键操作。后续为固定目的地、会话与布局组件模板。",
   "layouts.lead":
-    "Greenfield 默认：抄首屏 DestinationAppShell 做桌面主界面。目录钻入（第二项）：侧栏换成条目列表、主区全宽详情 — 禁止主画布 hub-split。目的地二态（全宽抽屉或收起）— 单独的 NavigationRail 仅作有意的手机样例，不是 DestinationAppShell densify。小导航（Breadcrumb / Pagination / SkipLink）仍在「组件」。",
+    "Greenfield 默认：抄首个工作区模板。主页与返回为 ghost 纯图标，导航首项为新建菜单，同一个检查器图标切换开关，资源重命名只从其右键菜单进入。常规操作保持水平，错误默认用 snackbar。后续为固定目的地与会话模板。导航仅有完整抽屉或隐藏两态，禁止压缩成 rail。",
   "layouts.shellMainTitle": "主画布",
   "layouts.shellMainBody":
     "DestinationAppShell 的 children — 任意页面内容。右侧 aside 可选，且不必是 Chat。",

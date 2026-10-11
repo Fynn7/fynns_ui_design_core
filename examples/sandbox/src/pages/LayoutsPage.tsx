@@ -90,6 +90,7 @@ import { ActionSpacingDemo, DrawerTitleSpacingDemo } from "../components/ChromeS
 import { TokenList } from "../components/TokenList";
 import { layoutsDemoElementId } from "../catalog/layoutsCatalog";
 import { DrillInLayoutsDemo } from "./DrillInLayoutsDemo";
+import { WorkspaceChromeDemo } from "../components/WorkspaceChromeDemo";
 
 type RailId = "home" | "search" | "charts" | "all";
 
@@ -181,6 +182,7 @@ export function LayoutsPage() {
         <p className="sandbox-globals-lead">{t("layouts.lead")}</p>
 
         <div className="sandbox-globals-section-body">
+          <LayoutsDemo id="workspace-chrome"><WorkspaceChromeDemo /></LayoutsDemo>
           <LayoutsDemo id="shell">
             <div className="sandbox-globals-row sandbox-globals-row--stack">
               <Switch

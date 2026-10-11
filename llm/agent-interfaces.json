@@ -6,6 +6,11 @@
   "human": "llm/AGENT_INTERFACES.md",
   "documentation": [
     {
+      "path": "docs/design-system/workspace-chrome.md",
+      "role": "workspace-chrome",
+      "summary": "Mandatory greenfield Home/Back/inspector icons, New menu, context rename, action emphasis and snackbar-first error feedback with content-width InlineAlert."
+    },
+    {
       "path": "llm/LIST_SELECTION.md",
       "role": "list-selection",
       "summary": "Scoped Ctrl+A, modifier range selection and customizable batch menus for lists, session drawers and grouped navigation."

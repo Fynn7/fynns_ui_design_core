@@ -97,7 +97,7 @@ export const Button = forwardRef(function Button(
         (rest["aria-busy"] as boolean | "true" | "false" | undefined) ??
         (loading || undefined)
       }
-      aria-pressed={active || undefined}
+      aria-pressed={rest["aria-pressed"] ?? (active || undefined)}
     >
       {loading ? (
         iconOnly ? (

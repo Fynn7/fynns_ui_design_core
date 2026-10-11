@@ -31,7 +31,8 @@
     "scripts/vite-dev-cache.mjs",
     "scripts/ensure-sibling-ui-core.mjs",
     "scripts/api.mjs",
-    "scripts/check-thinking-content.mjs"
+    "scripts/check-thinking-content.mjs",
+    "scripts/check-workspace-ui.mjs"
   ],
   "bin": {
     "fynns-ui-check-update": "./scripts/check-ui-update.mjs",
@@ -46,12 +47,13 @@
     "check:perf-sandbox": "node scripts/check-perf-sandbox.mjs",
     "check:pagination-select": "node scripts/check-pagination-select.mjs",
     "check:menu-trigger-chevron": "node scripts/check-menu-trigger-chevron.mjs",
+    "check:workspace-ui": "node scripts/check-workspace-ui.mjs",
     "check:no-consumer": "node scripts/check-no-consumer.mjs",
     "check:doc-links": "node scripts/check-doc-links.mjs",
     "api": "node scripts/api.mjs",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
-    "check": "npm run typecheck && npm run check:thinking-content && npm run check:wysiwyg && npm run check:perf-sandbox && npm run check:no-consumer && npm run check:doc-links && npm run check:pagination-select && npm run check:menu-trigger-chevron && npm run test:unit && npm run test:e2e",
+    "check": "npm run typecheck && npm run check:workspace-ui && npm run check:thinking-content && npm run check:wysiwyg && npm run check:perf-sandbox && npm run check:no-consumer && npm run check:doc-links && npm run check:pagination-select && npm run check:menu-trigger-chevron && npm run test:unit && npm run test:e2e",
     "lint": "eslint .",
     "sandbox": "vite --config examples/sandbox/vite.config.ts",
     "sandbox:build": "vite build --config examples/sandbox/vite.config.ts",

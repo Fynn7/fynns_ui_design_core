@@ -54,6 +54,13 @@ classes.
   **Chat** family (see below), Snackbar (`snackbar()` + `<SnackbarHost />`),
   Tooltip, InfoHint
 
+  Error feedback defaults to `snackbar`, then persistent `InlineAlert` only.
+  InlineAlert is content-width and centers icon/text/close; pass `onDismiss`
+  and localized `dismissAriaLabel` for its ghost X (16dp after the message).
+  Never embed action Buttons or force full width. See
+  [Workspace chrome and error feedback](workspace-chrome.md), live
+  `#sandbox-inline-alert-dismiss`.
+
   <a id="snackbar-action-variants"></a>
   **Snackbar action variants:** mount `<SnackbarHost />` once at the app root;
   call `snackbar(message, options)` from `@fynns/ui`. Core owns the surface,
@@ -104,7 +111,7 @@ classes.
   InlineAlert's 12% semantic wash rendered on app-bg, stored as a flat opaque
   fill. Keep on-surface body text and semantic icons. No frosted glass,
   backdrop blur, see-through content, white pastel or theme-toast mixing.
-  InlineAlert itself is unchanged. Error snackbar uses `role="alert"` /
+  InlineAlert's semantic tones remain the reference. Error snackbar uses `role="alert"` /
   assertive announcements; other variants use status / polite. Transient
   request failures use this API; persistent failures with recovery controls
   remain InlineAlert. Reduced motion fades without translation.

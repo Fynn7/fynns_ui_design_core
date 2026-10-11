@@ -18,6 +18,11 @@ export const LAYOUTS_LEAD_KEY: MessageKey = "layouts.lead";
 
 export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
   {
+    id: "workspace-chrome",
+    label: "Workspace chrome",
+    keywords: ["home", "new", "rename", "inspector", "InlineAlert", "snackbar", "工作区", "重命名", "错误提示"],
+  },
+  {
     id: "shell",
     label: "DestinationAppShell",
     keywords: [

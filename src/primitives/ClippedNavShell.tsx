@@ -113,6 +113,14 @@ type NavAxisSwap = {
   toKey: string;
 };
 
+/** Nested workspaces own their inspectors; they must not crowd this shell. */
+function shellOwnedElement(root: Element, selector: string): Element | null {
+  const owner = root.closest(".fynns-clipped-nav-shell");
+  return Array.from(root.querySelectorAll(selector)).find(
+    element => element.closest(".fynns-clipped-nav-shell") === owner,
+  ) ?? null;
+}
+
 /**
  * Whether a **target** labeled-drawer width would starve main / EndAside floors
  * (or force EndAside overlay) in `host` — ignores CSS transition mid-frames.
@@ -136,7 +144,8 @@ export function wouldClippedNavDrawerCrowd(
     drawerWidthPx ?? (readVarPx(root, "--fynns-navdrawer-width") || 280);
   const mainMin = readVarPx(root, "--fynns-layout-main-min-width") || 160;
   const main = root.querySelector(".fynns-clipped-nav-shell-main");
-  const aside = main?.querySelector(
+  const aside = main && shellOwnedElement(
+    main,
     ".fynns-end-aside-track:not([data-state='closing'])",
   );
   const asideMin = aside
@@ -507,7 +516,8 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
       if (body && main) {
         const mainW = main.clientWidth;
         const mainMin = readVarPx(root, "--fynns-layout-main-min-width");
-        const aside = main.querySelector(
+        const aside = shellOwnedElement(
+          main,
           ".fynns-end-aside-track:not([data-state='closing'])",
         );
         const asideMin = aside
@@ -621,9 +631,9 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     const tokenMax = readVarPx(root, "--fynns-navdrawer-max-width") || 448;
     const mainMin = readVarPx(root, "--fynns-layout-main-min-width") || 160;
     const main = root.querySelector(".fynns-clipped-nav-shell-main");
-    const hasAside = !!main?.querySelector(
+    const hasAside = !!(main && shellOwnedElement(main,
       ".fynns-end-aside-track:not([data-state='closing'])",
-    );
+    ));
     const asideMin = hasAside
       ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 280
       : 0;
@@ -718,9 +728,9 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     const tokenMax = readVarPx(root, "--fynns-navdrawer-max-width") || 448;
     const mainMin = readVarPx(root, "--fynns-layout-main-min-width") || 160;
     const main = root.querySelector(".fynns-clipped-nav-shell-main");
-    const hasAside = !!main?.querySelector(
+    const hasAside = !!(main && shellOwnedElement(main,
       ".fynns-end-aside-track:not([data-state='closing'])",
-    );
+    ));
     const asideMin = hasAside
       ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 280
       : 0;

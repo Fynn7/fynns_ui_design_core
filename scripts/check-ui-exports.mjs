@@ -17,6 +17,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { hasNoStoreDevHeader } from "./vite-dev-cache.mjs";
+import { checkWorkspaceFiles } from "./check-workspace-ui.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PKG_NAME = "@fynn7/ui-design-core";
@@ -280,7 +281,6 @@ export function scanConsumerImports(pkgRoot) {
     }
     if (!source.includes(ALIAS)) continue;
     const names = collectFynnsUiImports(source);
-    if (names.size === 0) continue;
     byFile.set(file, [...names].sort());
     for (const n of names) all.add(n);
   }
@@ -323,6 +323,12 @@ export function checkUiExports(pkgRoot) {
     .find((file) => fs.existsSync(file));
   const staleBrowserCache = viteConfig && !hasNoStoreDevHeader(fs.readFileSync(viteConfig, "utf8"));
   const errors = [];
+  let workspaceViolations = [];
+  try {
+    workspaceViolations = checkWorkspaceFiles([...files.keys()], pkgRoot);
+    if (workspaceViolations.length) errors.push("Workspace UI contract violations (docs/design-system/workspace-chrome.md):\n" +
+      workspaceViolations.map(v => `${path.relative(pkgRoot, v.file)}:${v.line} [${v.rule}] ${v.message}`).join("\n"));
+  } catch (error) { errors.push(error.message); }
   if (missing.length) {
     errors.push(`${ALIAS} imports missing from linked ${PKG_NAME}: ${missing.join(", ")}\n` +
       `Barrel: ${barrelPath}\n` +
@@ -344,6 +350,7 @@ export function checkUiExports(pkgRoot) {
     exportsCount: exports.size,
     barrelPath,
     viteConfig: viteConfig ?? null,
+    workspaceViolations,
     files: Object.fromEntries(
       [...files.entries()].map(([f, names]) => [path.relative(pkgRoot, f) || f, names]),
     ),

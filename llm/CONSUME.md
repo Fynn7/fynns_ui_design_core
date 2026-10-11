@@ -21,6 +21,16 @@ title clears chrome by 24dp, internal Divider→title by 16dp. Do not tune priva
 gaps or reset core padding. Live references: `#sandbox-action-spacing` and
 `#sandbox-navdrawer-title-spacing`.
 
+**Mandatory greenfield defaults:** read
+[Workspace chrome and error feedback](../docs/design-system/workspace-chrome.md)
+before choosing chrome. Live `#layouts-demo-workspace-chrome` includes top-bar
+ghost Home/Back/one inspector toggle, a first New resource menu, targeted
+right-click/keyboard rename, horizontal ghost object actions and Dialog Cancel.
+Errors default to snackbar. Persistent InlineAlert uses `onDismiss` and a
+content-width centered ghost-X template (`#sandbox-inline-alert-dismiss`).
+The installed export gate checks static workspace composition as well as exports;
+dynamic/localized behavior still requires browser verification.
+
 ## 1. Quickstart (zero-token sibling, ~2 min)
 
 Day-to-day consume = public sibling checkout `../fynns_ui_design_core` +
@@ -95,11 +105,15 @@ do not fight Packages auth or patch installers in-session.
 
 ## 2. Greenfield skeleton (generic content app)
 
-Default chrome is **`DestinationAppShell`** (labeled destinations drawer +
-TopAppBar + optional `EndAside`). Main canvas = **`PageScroll`** → Cards /
+Explicitly requested fixed destinations can use **`DestinationAppShell`** (labeled drawer +
+TopAppBar + optional `EndAside`); resource menus/context callbacks use the
+existing **`ClippedNavShell`** composition below. Main canvas = **`PageScroll`** → Cards /
 List / EmptyState (the inner `.fynns-content-column` already has gap + inset;
 never add your own padding or scroll containers). Props below are verified with
-`node scripts/api.mjs DestinationAppShell PageScroll Card ListItem Dialog`.
+`node scripts/api.mjs ClippedNavShell NavigationDrawer DropdownMenu TopAppBar PageScroll Dialog`.
+For per-resource rename and inspector actions copy the small
+[live workspace recipe](../examples/sandbox/src/components/WorkspaceChromeDemo.tsx),
+replacing its sandbox localization/data with the app's own.
 
 ```tsx
 // src/main.tsx
@@ -112,9 +126,11 @@ createRoot(document.getElementById("root")!).render(<App />);
 // src/App.tsx
 import { useState } from "react";
 import {
-  Button, Card, ChatMarkdown, DestinationAppShell, Dialog, EmptyState,
+  Button, Card, ChatMarkdown, ClippedNavShell, Dialog, EmptyState,
   FieldBlock, FieldStack, FileIcon, Input, List, ListItem, PageScroll,
-  PersonIcon, SnackbarHost, Textarea, snackbar,
+  PersonIcon, SnackbarHost, Textarea, snackbar, CheckIcon, CloseIcon,
+  HomeIcon, IconButton, PanelLeftIcon, NavigationDrawer, NavigationDrawerItem,
+  DropdownMenu, DropdownMenuItem, PlusIcon, TopAppBar, Tooltip,
 } from "@fynns/ui";
 
 const destinations = [
@@ -125,19 +141,27 @@ const destinations = [
 export function App() {
   const [active, setActive] = useState("entries");
   const [open, setOpen] = useState(false);
+  const [navOpen, setNavOpen] = useState(true);
   const entries = [{ id: "a", title: "Sample entry", date: "2026-09", body: "# Hello\n\nMarkdown body." }];
 
   return (
     <>
-      <DestinationAppShell
-        title="Sample app"
-        destinations={destinations}
-        activeId={active}
-        onActiveIdChange={setActive}
-        navAriaLabel="Sections"
-        expandNavLabel="Open navigation"
-        collapseNavLabel="Close navigation"
-        trailing={<Button variant="primary" size="sm" onClick={() => setOpen(true)}>New</Button>}
+      <ClippedNavShell
+        navMode={navOpen ? "drawer" : "hidden"}
+        onNavCrowded={() => setNavOpen(false)}
+        topBar={<TopAppBar title="Sample app" leading={<>
+          <Tooltip content="Navigation"><IconButton variant="ghost" aria-label="Navigation"
+            aria-pressed={navOpen} onClick={() => setNavOpen(!navOpen)}><PanelLeftIcon /></IconButton></Tooltip>
+          <Tooltip content="Home"><IconButton variant="ghost" aria-label="Home"
+            onClick={() => setActive("entries")}><HomeIcon /></IconButton></Tooltip>
+        </>} />}
+        nav={navOpen ? <NavigationDrawer variant="standard" ariaLabel="Sections">
+          <DropdownMenu trigger="New entry" leadingIcon={<PlusIcon />} variant="ghost" ariaLabel="New entry">
+            <DropdownMenuItem icon={<FileIcon />} onClick={() => setOpen(true)}>Blank entry</DropdownMenuItem>
+          </DropdownMenu>
+          {destinations.map(d => <NavigationDrawerItem key={d.id} icon={d.icon} label={d.label}
+            active={active === d.id} onClick={() => setActive(d.id)} />)}
+        </NavigationDrawer> : null}
       >
         <PageScroll>
           {active === "entries" ? (
@@ -163,7 +187,7 @@ export function App() {
             </Card>
           )}
         </PageScroll>
-      </DestinationAppShell>
+      </ClippedNavShell>
 
       <Dialog
         open={open}
@@ -173,8 +197,8 @@ export function App() {
         showCloseButton
         feet={
           <div className="fynns-control-cluster fynns-control-cluster--end-align">
-            <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button variant="primary" size="sm" onClick={() => { setOpen(false); snackbar("Saved"); }}>Save</Button>
+            <Button variant="ghost" size="sm" onClick={() => setOpen(false)}><CloseIcon />Cancel</Button>
+            <Button variant="primary" size="sm" onClick={() => { setOpen(false); snackbar("Saved"); }}><CheckIcon />Save</Button>
           </div>
         }
       >
@@ -218,7 +242,8 @@ Pick primitives by job (details: `node scripts/api.mjs <Name>`; catalog:
    ([`BREAKING_PURGE.md`](BREAKING_PURGE.md)). `Select` / `Autocomplete` are
    soft-deprecated — use `DropdownMenu` / `SearchBar`.
 3. **Every state visible:** startup (`AppLoadingScreen`), content loading (`BusyRegion` / `BusyScrim`), empty
-   (`EmptyState`), error (`InlineAlert` + Retry, or `snackbar`).
+   (`EmptyState`), error (default `snackbar`; persistent recovery only:
+   `InlineAlert` + Retry).
 4. **Chrome:** destinations only in the shell nav; inspector = `EndAside`
    (toggle `open`, keep mounted); page scroll only via `PageScroll`.
 5. **Copy:** no `·` / `—` glue in titles or list rows; org → `supportingText`,

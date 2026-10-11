@@ -47,6 +47,7 @@ export {
   FileIcon,
   FolderOpenIcon,
   GlobeIcon,
+  HomeIcon,
   ICON_SIZE,
   InfoIcon,
   LayoutGridIcon,

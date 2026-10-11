@@ -25,6 +25,7 @@ Read by role; do not duplicate specs across files — follow the links.
 | Agent interfaces (JSON) | [`llm/agent-interfaces.json`](agent-interfaces.json) | Machine catalog of docs + technical exports |
 | Design system SoT (index) | [`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md) | Hard rules / catalog / density — start here, then open **one** subpage |
 | Design system chapters | [`docs/design-system/`](../docs/design-system/) | Split SoT chapters (philosophy, hard-rules, catalog, content-density, form-rhythm, tokens, icons, platform, chrome-proportion, contributing) |
+| Workspace / error feedback | [`docs/design-system/workspace-chrome.md`](../docs/design-system/workspace-chrome.md) | Mandatory greenfield navigation/actions, context rename, snackbar-first failures and InlineAlert geometry |
 | Agent always-on slim | [`AGENTS.md`](../AGENTS.md) | OpenCode resident summary + token discipline — not full SoT |
 | Consume install + greenfield | [`llm/CONSUME.md`](CONSUME.md) | Zero-token sibling `file:` + Vite alias, app skeleton, primitive-by-job table |
 | Consume install (JSON) | [`llm/consume.json`](consume.json) | Machine install / check / api contract |

@@ -394,3 +394,20 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | **Full documentation catalog** (+ CodeBlock highlight + `api.mjs`) |
 | [`PERF.md`](PERF.md) | Shells / inspectors / catalogs |
 | [`LOCAL_LLM.md`](LOCAL_LLM.md) | LM Studio + OpenCode local-model budgets |
+
+## Workspace defaults (mandatory)
+
+Authority: [Workspace chrome and error feedback](../docs/design-system/workspace-chrome.md).
+All greenfield consumers follow this recipe; static export gate + browser review.
+
+| Failure mode | Authority | Live reference |
+| --- | --- | --- |
+| Stacked full-width inspector primary/danger actions | workspace-chrome / Form rhythm | `#layouts-demo-workspace-chrome` |
+| Labeled filled sidebar button / duplicate collapse X | workspace-chrome | `#layouts-demo-workspace-chrome` |
+| Global home hidden as ordinary destination / labeled back pill | workspace-chrome | `#layouts-demo-workspace-chrome` |
+| Nav starts with slogan instead of New resource menu | workspace-chrome | `#layouts-demo-workspace-chrome` |
+| Toolbar title opens rename / right-click targets active item | workspace-chrome | `#layouts-demo-workspace-chrome` |
+| Cancel primary / multiple primary actions | workspace-chrome / Dialog feet | `#layouts-demo-workspace-chrome` |
+| All-cap UI headings / uppercase decoration | workspace-chrome | `#layouts-demo-workspace-chrome` |
+| Transient failure defaults to persistent InlineAlert | workspace-chrome / Error feedback | `#sandbox-inline-alert-dismiss` |
+| InlineAlert full-width / off-center icon-text / labeled filled dismiss | workspace-chrome / Error feedback | `#sandbox-inline-alert-dismiss` |

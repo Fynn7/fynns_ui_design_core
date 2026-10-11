@@ -31,6 +31,7 @@ day-to-day consume. Publish / optional Packages bumps:
 | --- | --- |
 | Design philosophy & UX principles | [`design-system/philosophy.md`](design-system/philosophy.md) |
 | Hard rules (Do / Don't) | [`design-system/hard-rules.md`](design-system/hard-rules.md) |
+| Workspace defaults / error feedback | [`design-system/workspace-chrome.md`](design-system/workspace-chrome.md) |
 | Tokens | [`design-system/tokens.md`](design-system/tokens.md) |
 | Component catalog (Keep set) | [`design-system/catalog.md`](design-system/catalog.md) |
 | Platform targeting | [`design-system/platform.md`](design-system/platform.md) |
@@ -52,6 +53,7 @@ day-to-day consume. Publish / optional Packages bumps:
 | Toolbar / ControlRow / end-align | `#rhythm` |
 | Provider Manage (active-only status) | `#provider-settings` |
 | Banner strip + dismiss center | `#banner` |
+| Workspace chrome / persistent InlineAlert | `#layouts-demo-workspace-chrome` / `#sandbox-inline-alert-dismiss` |
 | Busy / loading ([skeleton convention](design-system/loading.md)) | `#sandbox-loading-skeleton`, `#busy-region`, `#sandbox-pane-load-error` |
 | Busy hang guards (timeout/abort) | `#busy-paint`, `#sandbox-busy-task-timeout`, `#sandbox-busy-task-abort`, `#sandbox-busy-task-generation`, `#sandbox-button-loading-task`, `#sandbox-confirm-loading-trap`, `#sandbox-chat-busy-no-stop` |
 | CodeBlock file body | `#code-block` |

@@ -9,6 +9,16 @@ export type IconProps = Omit<SVGProps<SVGSVGElement>, "ref"> & { size?: number }
 /** Default glyph size in CSS pixels — matches `--fynns-size-icon` (16dp). */
 export const ICON_SIZE = 16;
 
+/** Global project/catalog home; always icon-only ghost chrome. */
+export function HomeIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" />
+      <path d="M9 21v-8h6v8" />
+    </svg>
+  );
+}
+
 function svgProps({ size = ICON_SIZE, className, ...rest }: IconProps) {
   return {
     width: size,

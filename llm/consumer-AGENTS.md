@@ -15,6 +15,21 @@ This app consumes the fynns design system from the sibling checkout
 
 ## Hard rules
 
+Workspace/greenfield defaults are mandatory: read
+`docs/design-system/workspace-chrome.md`, live `#layouts-demo-workspace-chrome`.
+One TopAppBar ghost icon toggles the inspector in both states; no second close.
+Global Home = top-bar HomeIcon, Back = ArrowLeftIcon, both ghost icon-only with
+Tooltip/aria-label. First nav element = New resource menu, not a domain slogan.
+Rename belongs to the targeted resource's context menu (right-click/Shift+F10),
+never a canvas-toolbar rename Button. Routine inspector actions are one horizontal
+ghost icon row (4dp); labeled/mixed rows use 8dp. At most one primary per group.
+Dialog.feet: labeled ghost Cancel then primary Save. No all-cap UI chrome or
+uppercase transforms. Unspecified error feedback defaults to error snackbar;
+InlineAlert is second, for persistent recovery. Use its content-width centered
+template and onDismiss/dismissAriaLabel ghost X; never embed labeled controls or
+force full width. The installed export gate also checks workspace composition;
+dynamic copy/props and cross-file behavior still require browser review.
+
 Body/captions: `--fynns-line-height-body` (1.45). Media streams use
 `.fynns-content-flow` → `.fynns-media-gallery` → `figure.fynns-media-figure`.
 Core owns 8dp media→caption and 16dp gallery/block gaps. Never override these

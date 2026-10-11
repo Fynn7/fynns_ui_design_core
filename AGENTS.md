@@ -54,6 +54,8 @@ Grep 必须限定目录（`src/primitives` / `docs/design-system` / `llm`）并�
 
 密度与列表条约以 sandbox + `docs/DESIGN_SYSTEM.md` Hard rules 为准；不确定就 Read 对应小节，勿猜测。
 
+工作区与所有 greenfield 默认强制遵守 [workspace-chrome.md](docs/design-system/workspace-chrome.md)：顶栏一个 ghost 纯图标侧栏 toggle（同一按钮开/关，禁侧栏内第二个关闭）；Home 为顶栏 HomeIcon，返回为 ghost ArrowLeftIcon，均无可见文字；导航首项为“新建资源”菜单；重命名只从目标导航项右键菜单进入并支持键盘，禁画布顶栏重命名按钮。常规检查器操作为水平 ghost 图标组，禁整宽纵向 primary/danger 堆叠；每组最多一个 primary；Dialog feet 的取消为 ghost、保存为右侧唯一 primary。禁止全大写 UI 文案/uppercase 装饰。用户未指定反馈方式时错误优先 snackbar，其次持久 InlineAlert；InlineAlert 保留内容宽度、居中与 16dp 文字→关闭间距，用 onDismiss + dismissAriaLabel 内置 ghost X，禁 message 内嵌按钮。活例 `#layouts-demo-workspace-chrome` / `#sandbox-inline-alert-dismiss`，静态门禁 `npm run check:workspace-ui` 及消费 export gate；动态/跨文件行为仍须浏览器验证。
+
 ## 何时读长文
 
 | 需要 | 打开 |

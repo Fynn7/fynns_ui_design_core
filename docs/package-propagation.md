@@ -45,6 +45,12 @@ Do **not** commit `_authToken=${NODE_AUTH_TOKEN}` (empty env → E401).
    soft-skip with commit/stash/discard guidance (not hard-reset); committing
    the consumer does not clear sibling dirt. Dev continues; export check still
    runs.
+   The same export gate now checks static workspace composition (ghost chrome,
+   action emphasis, Cancel, natural-case copy and InlineAlert controls). It uses
+   TypeScript tooling from core or the consumer; parser absence fails closed.
+   See [workspace contract](design-system/workspace-chrome.md). Refresh copied
+   consumer rules with `--sync-consumer-rule`; existing custom AGENTS.md remains
+   consumer-owned, so merge the new rules there explicitly.
    `FYNNS_UI_STRICT_SIBLING_SYNC=1` hard-fails those cases (CI). Also
    fails closed on failed fetch, missing `@fynns/ui` barrel symbols, or a Vite
    dev config without `Cache-Control: no-store`. The last check prevents a

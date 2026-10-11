@@ -26,6 +26,7 @@ const DEMO_FILES = [
   "examples/sandbox/src/pages/CollapsiblePreviewCanvas.tsx",
   "examples/sandbox/src/shell/SandboxShell.tsx",
   "examples/sandbox/src/components/IconsLibraryDemo.tsx",
+  "examples/sandbox/src/components/WorkspaceChromeDemo.tsx",
   // Live ChatComposer endActions recipe (Thinking/Vision toggles + model Menu).
   "examples/sandbox/src/components/ChatComposerModeTogglesEndActions.tsx",
   "examples/sandbox/src/components/ChatQuestionSequenceDemo.tsx",

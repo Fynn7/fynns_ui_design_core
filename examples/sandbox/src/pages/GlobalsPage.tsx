@@ -181,6 +181,7 @@ import { SandboxHelp } from "../components/SandboxHelp";
 import { ChartAnalyticsDemo } from "../components/ChartAnalyticsDemo";
 import { ChatEmptySurfaceStarters } from "../components/ChatEmptySurfaceStarters";
 import { IconsLibraryDemo } from "../components/IconsLibraryDemo";
+import { InlineAlertDemo } from "../components/WorkspaceChromeDemo";
 import { ProviderSettingsManageShell } from "../components/ProviderSettingsManageShell";
 import { TokenList } from "../components/TokenList";
 import {
@@ -3416,6 +3417,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="inline-alert">
+        <InlineAlertDemo />
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <InlineAlert severity="info" message={t("globals.inlineAlertInfo")} />
           <InlineAlert severity="success" message={t("globals.inlineAlertSuccess")} />
