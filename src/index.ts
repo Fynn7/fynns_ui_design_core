@@ -178,6 +178,8 @@ export type {
 export { InfoHint } from "./primitives/InfoHint";
 export type { InfoHintProps, InfoHintTone } from "./primitives/InfoHint";
 export { snackbar, SnackbarHost } from "./primitives/Snackbar";
+export { WorkspaceNoticeStack } from "./primitives/WorkspaceNoticeStack";
+export type { WorkspaceNotice, WorkspaceNoticeAction, WorkspaceNoticeStackProps } from "./primitives/WorkspaceNoticeStack";
 export type {
   SnackbarAction,
   SnackbarDuration,

@@ -6,6 +6,11 @@ const imports = 'import { Button, IconButton, Toolbar, TopAppBar, PanelRightIcon
 const rules = (source: string) => checkWorkspaceSource(imports + source).map((v: { rule: string }) => v.rule);
 
 describe("workspace consumer contract", () => {
+  it("rejects docked canvas tools by semantic label or shared overlay host", () => {
+    expect(rules('const sample = <Toolbar variant="docked" aria-label="画布工具栏"><Button variant="ghost">Arrange</Button></Toolbar>;')).toContain("canvas-tools-floating");
+    expect(rules('const sample = <div className="fynns-workspace-tools"><Toolbar variant="docked" aria-label={labels.tools}><Button variant="ghost">Arrange</Button></Toolbar></div>;')).toContain("canvas-tools-floating");
+    expect(rules('const sample = <><div className="fynns-workspace-tools"><Toolbar variant="floating" aria-label="Canvas tools"><Button variant="ghost">Arrange</Button></Toolbar></div><div className="fynns-docked-tools-inset"><Toolbar variant="docked" aria-label="Page tools"><Button variant="ghost">Arrange</Button></Toolbar></div></>;')).toEqual([]);
+  });
   it("rejects competing default and explicit primary buttons through wrappers/helpers", () => {
     expect(rules('const extra = <Button>Duplicate</Button>; const sample = <Toolbar><span><Button variant="primary">Front</Button></span>{extra}</Toolbar>;')).toContain("action-emphasis");
     expect(rules('function Actions(){return <><Button>Front</Button><Button>Back</Button></>;} const sample = <div className="fynns-control-cluster"><Actions/></div>;')).toContain("action-emphasis");

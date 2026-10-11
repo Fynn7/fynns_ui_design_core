@@ -8,7 +8,17 @@
     {
       "path": "docs/design-system/workspace-chrome.md",
       "role": "workspace-chrome",
-      "summary": "Mandatory greenfield Home/Back/inspector icons, New menu, context rename, action emphasis and snackbar-first error feedback with content-width InlineAlert."
+      "summary": "Mandatory greenfield chrome, floating canvas tools, snackbar-first errors and core WorkspaceNoticeStack top/end stacking with recovery and motion."
+    },
+    {
+      "path": "llm/UI_REWARD_SIGNALS.md",
+      "role": "ui-quality-rewards",
+      "summary": "10-point evidence rubric for clean, complete, accessible UI; hard violations invalidate acceptance."
+    },
+    {
+      "path": "llm/WORKSPACE_MIGRATION_PROMPT.md",
+      "role": "workspace-migration-prompt",
+      "summary": "Pasteable consumer upgrade task for shared canvas overlays, persistent notice stacks and agent quality rewards."
     },
     {
       "path": "llm/LIST_SELECTION.md",

@@ -6,9 +6,10 @@ export type ToolbarColor = "standard" | "vibrant";
 
 export type ToolbarProps = HTMLAttributes<HTMLElement> & {
   /**
-   * `docked` — full-width page chrome (M3 Expressive replacement for many
-   * BottomAppBar uses). `floating` — wrap-content capsule over content
-   * (default).
+   * `docked` — full-width in-flow page tools, inside a 16dp inset host
+   * (`.fynns-docked-tools-inset`), never flush rounded canvas chrome.
+   * `floating` — content-width capsule over content (default); canvas tools
+   * belong in `.fynns-workspace-tools` over `.fynns-workspace-canvas`.
    */
   variant?: ToolbarVariant;
   /**

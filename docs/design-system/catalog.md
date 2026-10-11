@@ -43,7 +43,9 @@ classes.
   `--fynns-layout-selection-composer-width` for width. Live:
   `#text-selection-composer`. Import from `@fynns/ui`; do not rebuild selection
   geometry, send chrome or model calls inside the primitive.
-- **Feedback:** Banner, InlineAlert (phrasing copy only — never nest List /
+- **Feedback:** WorkspaceNoticeStack (persistent actionable workspace overlays;
+  core top/end stacking, ghost recovery/X, stable ids and enter/exit/reflow),
+  Banner, InlineAlert (phrasing copy only — never nest List /
   FieldStack / CodeBlock inside), LoadingSkeleton / LinearProgress,
   CircularProgress (permanent archive / deprecated; strongly discouraged),
   BusyScrim `{ open, label, message?, value?, size?, indicator?, skeleton? }` /
@@ -54,7 +56,8 @@ classes.
   **Chat** family (see below), Snackbar (`snackbar()` + `<SnackbarHost />`),
   Tooltip, InfoHint
 
-  Error feedback defaults to `snackbar`, then persistent `InlineAlert` only.
+  Error feedback defaults to `snackbar`. Persistent actionable canvas errors use
+  `WorkspaceNoticeStack`; plain persistent in-panel copy uses `InlineAlert`.
   InlineAlert is content-width and centers icon/text/close; pass `onDismiss`
   and localized `dismissAriaLabel` for its ghost X (16dp after the message).
   Never embed action Buttons or force full width. See

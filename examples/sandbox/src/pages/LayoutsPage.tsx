@@ -91,6 +91,7 @@ import { TokenList } from "../components/TokenList";
 import { layoutsDemoElementId } from "../catalog/layoutsCatalog";
 import { DrillInLayoutsDemo } from "./DrillInLayoutsDemo";
 import { WorkspaceChromeDemo } from "../components/WorkspaceChromeDemo";
+import { CanvasWorkspaceDemo } from "../components/CanvasWorkspaceDemo";
 
 type RailId = "home" | "search" | "charts" | "all";
 
@@ -177,11 +178,12 @@ export function LayoutsPage() {
     useState(false);
 
   return (
-    <div className="sandbox-globals">
+    <div className="sandbox-globals sandbox-layouts">
       <div className="sandbox-globals-content">
         <p className="sandbox-globals-lead">{t("layouts.lead")}</p>
 
         <div className="sandbox-globals-section-body">
+          <LayoutsDemo id="canvas-workspace"><CanvasWorkspaceDemo /></LayoutsDemo>
           <LayoutsDemo id="workspace-chrome"><WorkspaceChromeDemo /></LayoutsDemo>
           <LayoutsDemo id="shell">
             <div className="sandbox-globals-row sandbox-globals-row--stack">

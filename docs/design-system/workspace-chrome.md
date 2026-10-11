@@ -12,6 +12,10 @@ Live recipe: Layout templates `#layouts-demo-workspace-chrome` →
 Implementation: [WorkspaceChromeDemo.tsx](../../examples/sandbox/src/components/WorkspaceChromeDemo.tsx).
 Read that small recipe rather than the entire Globals page.
 
+Canvas reference: `#layouts-demo-canvas-workspace` →
+[CanvasWorkspaceDemo.tsx](../../examples/sandbox/src/components/CanvasWorkspaceDemo.tsx).
+Its overlay placement, notice stacking and motion are shipped core behavior.
+
 | Job | Required composition | Forbidden |
 | --- | --- | --- |
 | Inspector open/close | One stable TopAppBar trailing `IconButton variant="ghost"` with `PanelRightIcon`, Tooltip, localized aria-label and `aria-pressed`. Both states toggle the same boolean. | Labeled/filled “Sidebar” Button; a second close X inside the inspector; separate open and collapse controls. |
@@ -62,6 +66,45 @@ banner. InlineAlert owns these defaults:
   IconButton**, without visible text. Do not embed a Button in `message`/children.
   The familiar X needs an aria-label; it may omit a Tooltip like other closes.
 
+## Canvas tools and persistent notice stacks
+
+Canvas tools are `Toolbar variant="floating"` inside `.fynns-workspace-tools`
+over a `.fynns-workspace-canvas` host. The canvas is relative and retains its
+full geometry; tools have **16dp** edge clearance and a ghost X. Keep a
+top-bar ghost icon to restore closed tools. Never insert a full-width rounded
+toolbar into page flow above the canvas or glue docked corners to neighboring
+panes. In-flow tools belong to ordinary page content inside
+`.fynns-docked-tools-inset`, which preserves **16dp on all four sides**.
+
+Persistent actionable workspace errors use **`WorkspaceNoticeStack`** from
+`@fynns/ui`, mounted inside the affected canvas. Core anchors it at top/end
+(top right in left-to-right layouts), **16dp** from each edge. Cards align at the
+end, hug their content, wrap within available width and stack with **16dp** gaps.
+Each card owns its semantic icon, message, ghost X and ghost recovery actions.
+Do not create a sibling retry/save toolbar. Ordinary operation errors continue
+to use snackbar; plain non-actionable in-panel errors use InlineAlert.
+
+Pass `notices: WorkspaceNotice[]`, localized `ariaLabel`, and `onDismiss(id)`.
+Each notice supplies `id`, `severity`, `message`, localized `dismissAriaLabel`,
+and optional `actions: { label, icon?, onClick, disabled? }[]`. Use a stable
+condition/resource id: repeats update the existing card instead of flooding
+the stack. Existing entries keep their arrival order; new entries append.
+Keep the stack mounted when the array is empty, remove ids on dismissal, and
+remove repaired conditions after the actual recovery succeeds. Presentation
+dismissal must not reset unresolved business errors or resume paused saving.
+Keep recovery reachable through an existing menu after the card is dismissed.
+
+Core retains closing cards until their fade/height transition finishes, then
+reflows the remaining stack. Entry, exit and reflow use motion tokens;
+`prefers-reduced-motion` removes travel and skips delayed exit. Exiting controls
+are inert and hidden from assistive technology. Closing a focused card moves
+focus to another active notice, canvas tools or the focusable canvas host
+(`tabIndex={-1}`). No focus is stolen when a notice appears.
+
+The stack has a canvas-bounded `fynns-scroll` region for overflow. On squeezed
+canvases core moves tools to the bottom/start so top/end notices do not collide.
+Consumers must not copy positioning CSS, animation timers or private card styles.
+
 ## Enforcement and review
 
 The existing installed `fynns-ui:gate` calls `check-ui-exports.mjs`, which also
@@ -70,7 +113,8 @@ JSX/TSX files. The parser uses TypeScript tooling from core or the consumer;
 missing tooling fails with an install hint. The checker catches direct and
 aliased controls, same-file action helpers, multiple primaries in a group,
 labeled/filled sidebar/Home/Back chrome, filled Cancel, embedded InlineAlert
-controls, direct width/alignment overrides and literal all-cap UI copy.
+controls, direct width/alignment overrides, docked canvas tools inside the shared
+overlay host (or with literal canvas-tools labels), and literal all-cap UI copy.
 
 Static success is necessary, not sufficient: cross-file wrappers, dynamic props,
 translated copy, navigation behavior, duplicate controls, CSS transforms and
@@ -79,3 +123,8 @@ dark + light, long translated names, right-click on an inactive resource,
 keyboard context menu, Dialog Cancel/Save, inspector open/close and both short
 and wrapped notices. Never suppress the gate or rewrite tests to permit a bad UI.
 Core geometry and interactions are covered by workspace/InlineAlert treaty e2e.
+Canvas e2e additionally verifies top/end placement, stacking, independent
+recovery, deduplication, animated middle dismissal, focus and reduced motion.
+Agent review uses the positive evidence rubric in
+[UI reward signals](../../llm/UI_REWARD_SIGNALS.md): aim for 10/10; hard-rule
+failures cannot be compensated by decorative polish.

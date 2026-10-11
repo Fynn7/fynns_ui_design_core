@@ -30,6 +30,17 @@ template and onDismiss/dismissAriaLabel ghost X; never embed labeled controls or
 force full width. The installed export gate also checks workspace composition;
 dynamic copy/props and cross-file behavior still require browser review.
 
+Canvas recipe: `#layouts-demo-canvas-workspace`. Use `.fynns-workspace-canvas`
+and `.fynns-workspace-tools` with floating Toolbar, 16dp clearance, ghost X and
+a top-bar restore icon. In-flow page tools use `.fynns-docked-tools-inset`;
+never glue rounded docked bars to canvas/panes. Persistent actionable errors use
+core `WorkspaceNoticeStack`: top/end 16dp, content width, 16dp stacking, stable
+ids, independent ghost X/recovery and token-based entry/exit/reflow with reduced
+motion. Never open another retry toolbar or reset business errors on dismiss.
+Ordinary errors still prefer snackbar. Review clean design with
+`llm/UI_REWARD_SIGNALS.md`: target 10/10 from screenshots and interaction evidence;
+hard violations invalidate acceptance. Never award points for hiding useful UI.
+
 Body/captions: `--fynns-line-height-body` (1.45). Media streams use
 `.fynns-content-flow` → `.fynns-media-gallery` → `figure.fynns-media-figure`.
 Core owns 8dp media→caption and 16dp gallery/block gaps. Never override these

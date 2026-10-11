@@ -5,6 +5,12 @@ reaches consumer apps.
 
 **Install contract:** [`llm/CONSUME.md`](../llm/CONSUME.md).
 
+**Canvas migration ≥ 0.5.309:** consume `WorkspaceNoticeStack` plus core canvas
+overlay classes instead of copying sandbox positioning/motion CSS. The updated
+workspace gate rejects docked canvas toolbars in semantic/shared hosts. Re-sync
+the pasteable consumer rule and merge `UI_REWARD_SIGNALS.md` review requirements
+into consumer agent guidance. See [workspace contract](design-system/workspace-chrome.md).
+
 ## Model
 
 1. This **git repo is public**. Day-to-day consumers use a **sibling checkout**

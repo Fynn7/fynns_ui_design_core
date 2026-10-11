@@ -80,6 +80,15 @@ export function checkWorkspaceSource(text, filename = "sample.tsx", ts = compile
   visitAll(source, node => {
     if (!opening(node)) return;
     const kind = tag(node);
+    if (kind === "Toolbar") {
+      let canvasTools = /^(canvas (tools|toolbar)|画布工具(栏)?)$/i.test(value(node, "aria-label") ?? "");
+      for (let parent = node.parent; parent && !canvasTools; parent = parent.parent) {
+        canvasTools = /\bfynns-workspace-(tools|canvas)\b/.test(value(parent, "className") ?? "");
+      }
+      if (canvasTools && value(node, "variant") === "docked") {
+        report(node, "canvas-tools-floating", "Canvas tools must use floating Toolbar in fynns-workspace-tools with 16dp clearance, never a flush rounded docked row.");
+      }
+    }
     if (isRow(node)) {
       let primary = 0;
       // Descend through wrappers and same-file helpers, but not event handlers,
@@ -147,7 +156,7 @@ export function checkWorkspaceFiles(files, target) {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const targets = process.argv.slice(2);
-  if (!targets.length) targets.push("examples/sandbox/src/components/WorkspaceChromeDemo.tsx");
+  if (!targets.length) targets.push("examples/sandbox/src/components/WorkspaceChromeDemo.tsx", "examples/sandbox/src/components/CanvasWorkspaceDemo.tsx");
   const files = [];
   function walk(target) {
     if (fs.statSync(target).isDirectory()) {

@@ -397,6 +397,11 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 
 ## Workspace defaults (mandatory)
 
+Canvas authority: [workspace contract](../docs/design-system/workspace-chrome.md)
+and [UI reward signals](UI_REWARD_SIGNALS.md), live `#layouts-demo-canvas-workspace`.
+Use core `WorkspaceNoticeStack` for actionable persistent top/end feedback;
+keep floating tools inset, notice recovery in its card, and token-based motion.
+
 Authority: [Workspace chrome and error feedback](../docs/design-system/workspace-chrome.md).
 All greenfield consumers follow this recipe; static export gate + browser review.
 

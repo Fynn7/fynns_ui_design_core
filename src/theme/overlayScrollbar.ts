@@ -1001,7 +1001,12 @@ function attach(host: HTMLElement) {
 
   if (typeof MutationObserver !== "undefined") {
     state.mo = new MutationObserver(() => scheduleUpdate(host, state));
-    state.mo.observe(host, { childList: true, characterData: true, subtree: true });
+    // Inline direction/overflow changes may leave size and scrollLeft unchanged.
+    // Re-read fade metrics without observing our own data-fade/rail attributes.
+    state.mo.observe(host, {
+      childList: true, characterData: true, subtree: true,
+      attributes: true, attributeFilter: ["dir", "style"],
+    });
   }
 
   states.set(host, state);

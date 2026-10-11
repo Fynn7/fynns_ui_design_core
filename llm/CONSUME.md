@@ -31,6 +31,16 @@ content-width centered ghost-X template (`#sandbox-inline-alert-dismiss`).
 The installed export gate checks static workspace composition as well as exports;
 dynamic/localized behavior still requires browser verification.
 
+**Canvas workspaces (≥ 0.5.309):** use `.fynns-workspace-canvas` and
+`.fynns-workspace-tools` → floating Toolbar, with core 16dp clearance and a
+restore icon after closing. In-flow page tools use `.fynns-docked-tools-inset`.
+Persistent actionable errors use `WorkspaceNoticeStack`: top/end 16dp,
+content-sized independent cards, 16dp stacking, stable ids, ghost recovery/X,
+and built-in entry/exit/reflow + reduced motion. Do not rebuild this in local
+CSS or create another retry toolbar. Live `#layouts-demo-canvas-workspace`.
+Agent quality rewards: [UI_REWARD_SIGNALS.md](UI_REWARD_SIGNALS.md), target 10/10
+with actual visual/behavior evidence and no hard-contract violations.
+
 ## 1. Quickstart (zero-token sibling, ~2 min)
 
 Day-to-day consume = public sibling checkout `../fynns_ui_design_core` +
