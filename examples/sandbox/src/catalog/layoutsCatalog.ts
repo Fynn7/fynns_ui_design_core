@@ -20,7 +20,7 @@ export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
   {
     id: "canvas-workspace",
     label: "Canvas workspace",
-    keywords: ["canvas", "floating", "docked", "toolbar", "save", "retry", "画布", "浮层", "工具条", "保存", "重试"],
+    keywords: ["canvas", "floating", "docked", "toolbar", "menu", "inspector", "save", "retry", "画布", "浮层", "工具条", "菜单", "侧栏", "保存", "重试"],
   },
   {
     id: "workspace-chrome",

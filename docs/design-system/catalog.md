@@ -64,6 +64,11 @@ classes.
   [Workspace chrome and error feedback](workspace-chrome.md), live
   `#sandbox-inline-alert-dismiss`.
 
+  Canvas workspace: one floating editing Toolbar, one top-bar ghost icon
+  DropdownMenu for document commands, and `.fynns-workspace-panes` for a
+  continuous canvas/EndAside row directly below TopAppBar. No second toolbar
+  above the inspector. Live `#layouts-demo-canvas-workspace`.
+
   <a id="snackbar-action-variants"></a>
   **Snackbar action variants:** mount `<SnackbarHost />` once at the app root;
   call `snackbar(message, options)` from `@fynns/ui`. Core owns the surface,

@@ -77,9 +77,51 @@ export function checkWorkspaceSource(text, filename = "sample.tsx", ts = compile
     for (let parent = node.parent; parent; parent = parent.parent) if (tag(parent) === name) return true;
     return false;
   };
+  const hasClass = (node, name) => (value(node, "className") ?? "").split(/\s+/).includes(name);
+  // Inspect rendered children, never handlers or menu/dialog slots. Alternatives
+  // are mutually exclusive, so count their maximum rather than their sum.
+  const toolbarCount = (node, root, seen = new Set()) => {
+    if (!node || seen.has(node)) return 0;
+    const branch = new Set(seen).add(node);
+    if (ts.isIdentifier(node) && definitions.has(node.text)) return toolbarCount(definitions.get(node.text), root, branch);
+    if (ts.isConditionalExpression(node)) return Math.max(
+      toolbarCount(node.whenTrue, root, branch), toolbarCount(node.whenFalse, root, branch));
+    if (ts.isBinaryExpression(node)) {
+      if (node.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken) return toolbarCount(node.right, root, branch);
+      if ([ts.SyntaxKind.BarBarToken, ts.SyntaxKind.QuestionQuestionToken].includes(node.operatorToken.kind)) return Math.max(
+        toolbarCount(node.left, root, branch), toolbarCount(node.right, root, branch));
+    }
+    const name = tag(node);
+    if (["EndAside", "EndAsidePane", "NavigationDrawer", "TopAppBar", "DropdownMenu", "ContextMenu", "Dialog"].includes(name)) return 0;
+    if (node !== root && hasClass(node, "fynns-workspace-canvas")) return 0;
+    if (name === "Toolbar") return 1;
+    if (opening(node) && definitions.has(name)) return toolbarCount(definitions.get(name), root, branch);
+    if (opening(node)) return children(node).reduce((total, child) => total + toolbarCount(child, root, branch), 0);
+    if (ts.isFunctionDeclaration(node) || ts.isArrowFunction(node) || ts.isFunctionExpression(node)) {
+      const returns = [];
+      if (node.body && !ts.isBlock(node.body)) return toolbarCount(node.body, root, branch);
+      function collect(item) {
+        if (ts.isReturnStatement(item)) returns.push(item.expression);
+        else if (!ts.isFunctionLike(item)) ts.forEachChild(item, collect);
+      }
+      if (node.body) ts.forEachChild(node.body, collect);
+      return Math.max(0, ...returns.map(item => toolbarCount(item, root, branch)));
+    }
+    let count = 0;
+    ts.forEachChild(node, child => { count += toolbarCount(child, root, branch); });
+    return count;
+  };
   visitAll(source, node => {
     if (!opening(node)) return;
     const kind = tag(node);
+    if (hasClass(node, "fynns-workspace-canvas") && toolbarCount(node, node) > 1) {
+      report(node, "canvas-single-toolbar", "A canvas has only one floating editing Toolbar. Move document mode/layout/export commands into one top-bar ghost icon DropdownMenu, not a second toolbar.");
+    }
+    let canvasShell = false;
+    if (kind === "ClippedNavShell") for (const child of children(node)) expanded(child, item => { if (hasClass(item, "fynns-workspace-canvas")) canvasShell = true; });
+    if ((hasClass(node, "fynns-workspace-panes") || canvasShell) && toolbarCount(node, node)) {
+      report(node, "workspace-command-menu", "Workspace panes contain the canvas and EndAside in one full-height row. Move standalone document toolbars into a top-bar menu so the inspector begins directly below TopAppBar.");
+    }
     if (kind === "Toolbar") {
       let canvasTools = /^(canvas (tools|toolbar)|画布工具(栏)?)$/i.test(value(node, "aria-label") ?? "");
       for (let parent = node.parent; parent && !canvasTools; parent = parent.parent) {

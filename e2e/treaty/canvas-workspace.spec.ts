@@ -52,7 +52,9 @@ for (const theme of ["dark", "light"]) {
     await dismiss.click();
     await expect(recovery).toHaveCount(0);
     await expect(stage).toHaveAttribute("data-paused", "true");
-    await tools.getByRole("button", { name: "Export canvas" }).click();
+    // Document export now lives in the top-bar menu; recovery expectations stay unchanged.
+    await demo.locator(".fynns-top-app-bar").getByRole("button", { name: "Canvas menu" }).click();
+    await page.getByRole("menuitem", { name: "Export canvas" }).click();
     await page.getByRole("menuitem", { name: "Save a copy" }).click();
     await expect(stage).not.toHaveAttribute("data-paused");
     await demo.getByRole("button", { name: "Show persistent save conflict" }).click();

@@ -11,7 +11,7 @@ claims about cleanliness or from counting fewer lines of code.
 | Reward | Points | Evidence required |
 | --- | --- | --- |
 | Clear hierarchy with restrained emphasis | 2 | Routine controls are ghost; at most one primary per group. Canvas and content remain visually dominant in dark and light themes. |
-| Each surface has one useful purpose | 2 | Tools float on the canvas with 16dp clearance. Recovery actions and X belong to their notice. No extra retry toolbar, duplicate close control or decorative container. |
+| Each surface has one useful purpose | 2 | Exactly one editing toolbar floats on the canvas with 16dp clearance. Document commands live in one top-bar menu. Inspector and canvas span the same full-height row below TopAppBar; menus preserve their bounds. Recovery actions and X belong to their notice. No extra toolbar, duplicate close control or decorative container. |
 | Deliberate spacing and alignment | 2 | Icon rows 4dp, labeled rows 8dp, overlay/notice gaps 16dp. Icons/text/X share a centerline. Notices hug content, align at the top/end, wrap at narrow widths and avoid tools. |
 | Stable and complete behavior | 2 | Showing/hiding feedback leaves canvas bounds unchanged. Multiple notices have stable ids, independent actions and dismissal, deduplication and bounded scrolling. Dismiss does not claim resolution; real recovery remains reachable. |
 | Shared, accessible implementation | 2 | Use core APIs/classes and motion tokens. Browser evidence covers keyboard/focus, entry/exit/reflow, reduced motion, narrow widths and both themes. No private primitive CSS or copied animation timers. |
@@ -25,7 +25,8 @@ Target **10/10**; fix a lower score before calling the UI complete.
 
 Any hard-contract violation makes the result **not accepted**, regardless of its
 score: filled/labeled Home/Back/sidebar chrome; competing primaries; a rounded
-docked toolbar glued to canvas edges; duplicated recovery surfaces; full-width
+docked toolbar glued to canvas edges; two canvas toolbars; a document toolbar
+interrupting the inspector's top edge; duplicated recovery surfaces; full-width
 error strips; missing error/loading/empty states; inaccessible actions; hiding
 unresolved errors as successful recovery; suppressing gates; modifying tests to
 approve defects; or bypassing core with local primitive styles.

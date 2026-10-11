@@ -25,6 +25,7 @@ ASCII `-`。
 
 ## 干净画布与 Agent 奖励信号
 
+每个画布工作区仅一个浮动编辑 Toolbar。上方大工具栏的模式/方向/布局/导出必须收进顶栏一个 ghost 纯图标 DropdownMenu（MoreHorizontalIcon + Tooltip + aria-label），禁第二条浮动工具栏或多个并列菜单。用 `.fynns-workspace-panes` 将画布与 EndAside 放在同一整高行，直接连接顶栏下缘与工作区底部，禁上方额外工具行造成右栏断裂；菜单打开不改变画布和右栏尺寸。浏览器验证实际工具栏数量、菜单键盘操作及侧栏上下边缘。
 活例 `#layouts-demo-canvas-workspace`。画布用 `.fynns-workspace-canvas`，工具用 `.fynns-workspace-tools` 内 floating Toolbar，距边缘 16dp，可关闭并从顶栏恢复。页面内 docked 用 `.fynns-docked-tools-inset` 保留四周 16dp；禁贴边整宽圆角条和四角缝隙。
 持久可操作提示必须复用 `WorkspaceNoticeStack`：画布右上角 16dp、内容宽度、16dp 堆叠、稳定 id 更新去重、每条独立 ghost X 与同卡恢复动作，core 出现/退出/收拢动效及 reduced-motion。禁另开重试/另存工具条；关闭提示不能清除未解决的业务错误。普通错误仍首选 snackbar，不重复双通道反馈。
 按 `llm/UI_REWARD_SIGNALS.md` 对层级克制、容器各有用途、间距居中、完整稳定行为、共享且无障碍的实现给予证据加分，目标 10/10。没有截图/交互证据不计对应分，硬违规直接不通过；禁靠隐藏功能或错误状态获得“干净”评分。

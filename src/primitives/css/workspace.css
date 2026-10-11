@@ -1,4 +1,12 @@
 /* Canvas chrome is an overlay. Rounded toolbars never pretend to be flush shell rows. */
+.fynns-workspace-panes {
+  display: flex;
+  flex: 1 1 0;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
 .fynns-workspace-canvas {
   position: relative;
   isolation: isolate;

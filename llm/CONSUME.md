@@ -31,9 +31,13 @@ content-width centered ghost-X template (`#sandbox-inline-alert-dismiss`).
 The installed export gate checks static workspace composition as well as exports;
 dynamic/localized behavior still requires browser verification.
 
-**Canvas workspaces (≥ 0.5.309):** use `.fynns-workspace-canvas` and
+**Canvas workspaces (≥ 0.5.310):** use `.fynns-workspace-canvas` and
 `.fynns-workspace-tools` → floating Toolbar, with core 16dp clearance and a
 restore icon after closing. In-flow page tools use `.fynns-docked-tools-inset`.
+Only one editing toolbar per canvas; document mode/direction/arrange/export
+go in one top-bar ghost icon DropdownMenu. `.fynns-workspace-panes` keeps canvas
+and EndAside in one full-height row directly under TopAppBar. Never put a toolbar
+above that row and break the inspector's top edge. Opening menus preserves bounds.
 Persistent actionable errors use `WorkspaceNoticeStack`: top/end 16dp,
 content-sized independent cards, 16dp stacking, stable ids, ghost recovery/X,
 and built-in entry/exit/reflow + reduced motion. Do not rebuild this in local

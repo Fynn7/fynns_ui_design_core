@@ -68,6 +68,22 @@ banner. InlineAlert owns these defaults:
 
 ## Canvas tools and persistent notice stacks
 
+Each canvas workspace has **one editing toolbar**. Document-level commands
+(layout mode, layout direction, arrange once and export) belong in **one
+TopAppBar ghost icon-only DropdownMenu** with `MoreHorizontalIcon`, Tooltip
+and localized aria-label; use core submenus for choices/export formats. Do not
+replace the removed large toolbar with a second floating toolbar, a row of
+menu triggers, or duplicated commands in both surfaces. Editing tools stay in
+the single canvas toolbar. Do not remove business functions to satisfy this rule.
+
+Compose the main shell content as `.fynns-workspace-panes` containing the
+`.fynns-workspace-canvas` and `EndAside` as siblings. This shared full-height
+row begins directly below TopAppBar and ends at the workspace bottom (above
+StatusBar when present). The desktop inspector's top and bottom align with the
+canvas; no document toolbar row, header spacer or menu container precedes the
+pane row or spans above the inspector. Menu popups are overlays and must not
+change canvas/inspector bounds. Keep core's narrow-screen aside behavior.
+
 Canvas tools are `Toolbar variant="floating"` inside `.fynns-workspace-tools`
 over a `.fynns-workspace-canvas` host. The canvas is relative and retains its
 full geometry; tools have **16dp** edge clearance and a ghost X. Keep a
@@ -115,6 +131,10 @@ aliased controls, same-file action helpers, multiple primaries in a group,
 labeled/filled sidebar/Home/Back chrome, filled Cancel, embedded InlineAlert
 controls, direct width/alignment overrides, docked canvas tools inside the shared
 overlay host (or with literal canvas-tools labels), and literal all-cap UI copy.
+It also rejects multiple toolbars in a shared canvas and standalone command
+toolbars in the shared pane row/canvas ClippedNavShell, including same-file
+helpers. Conditional alternatives count as one surface. Unknown cross-file
+wrappers and private layout classes still require rendered verification.
 
 Static success is necessary, not sufficient: cross-file wrappers, dynamic props,
 translated copy, navigation behavior, duplicate controls, CSS transforms and
@@ -125,6 +145,8 @@ and wrapped notices. Never suppress the gate or rewrite tests to permit a bad UI
 Core geometry and interactions are covered by workspace/InlineAlert treaty e2e.
 Canvas e2e additionally verifies top/end placement, stacking, independent
 recovery, deduplication, animated middle dismissal, focus and reduced motion.
+Verify one editing toolbar, working document menu/keyboard submenus, and desktop
+canvas/inspector edges aligned below the top bar before and after menu opening.
 Agent review uses the positive evidence rubric in
 [UI reward signals](../../llm/UI_REWARD_SIGNALS.md): aim for 10/10; hard-rule
 failures cannot be compensated by decorative polish.

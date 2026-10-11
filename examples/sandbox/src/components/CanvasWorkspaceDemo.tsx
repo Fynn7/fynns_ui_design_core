@@ -1,10 +1,10 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import {
   AlertCircleIcon, ArrowLeftIcon, Button, ClippedNavShell, CloseIcon,
-  DownloadIcon, DropdownMenu, DropdownMenuItem, EmptyState, EndAside,
+  DownloadIcon, DropdownMenu, DropdownMenuItem, DropdownMenuSub, EmptyState, EndAside,
   FileIcon, HomeIcon, IconButton, LayoutGridIcon, NavigationDrawer,
   NavigationDrawerItem, PageScroll, PanelLeftIcon, PanelRightIcon, PlusIcon,
-  RefreshIcon, SaveIcon, Toolbar, Tooltip, TopAppBar, snackbar,
+  MoreHorizontalIcon, RefreshIcon, SaveIcon, Toolbar, Tooltip, TopAppBar, TrashIcon, snackbar,
   WorkspaceNoticeStack, wouldClippedNavDrawerCrowd, type WorkspaceNotice,
 } from "@fynns/ui";
 import { useLocale } from "../i18n";
@@ -16,6 +16,7 @@ const copy = {
     inspector: "Inspector", create: "New canvas", blank: "Blank canvas",
     name: "Sample canvas", tools: "Canvas tools", hide: "Hide canvas tools",
     layout: "Arrange nodes", export: "Export canvas", copy: "Save a copy",
+    menu: "Canvas menu", removeNode: "Remove second node",
     saved: "Copy saved", retry: "Retry save", recovered: "Saved successfully",
     fail: "Simulate save failure", persistent: "Show persistent save conflict",
     multiple: "Show three persistent notices", notices: "Workspace notices",
@@ -28,7 +29,7 @@ const copy = {
     dismiss: "Dismiss save conflict", node: "Sample node", next: "Next step",
     empty: "Select an object", emptyBody: "Object properties appear here.",
     controls: "Preview controls", docked: "Page tools", newNode: "Add node",
-    help: "Canvas tools float over the unchanged canvas with 16dp clearance. Close with X and restore from the top bar. Ordinary errors use snackbar with Retry. Persistent notices stack at the canvas top right with 16dp gaps, independent recovery and ghost X, and smooth entry, exit and reflow. Repeating the same condition updates its card. Narrow canvases move tools to the bottom left to prevent overlap. Dismissing a conflict does not resume saving; Save a copy remains in Export.",
+    help: "One editing toolbar floats over the unchanged canvas with 16dp clearance. Arrange and Export belong to the top-bar Canvas menu, never a second toolbar. The inspector spans from the top bar to the workspace bottom. Close tools with X and restore from the top bar. Ordinary errors use snackbar with Retry. Persistent notices stack at the canvas top right with 16dp gaps, independent recovery and ghost X, and smooth entry, exit and reflow. Repeating the same condition updates its card. Narrow canvases move tools to the bottom left to prevent overlap. Dismissing a conflict does not resume saving; Save a copy remains in Export.",
     dockedHelp: "For page content only: an in-flow docked toolbar keeps 16dp clearance on every side. Canvas tools use the floating recipe above.",
   },
   zh: {
@@ -36,6 +37,7 @@ const copy = {
     inspector: "检查器", create: "新建画布", blank: "空白画布",
     name: "示例画布", tools: "画布工具", hide: "关闭画布工具",
     layout: "排列节点", export: "导出画布", copy: "另存副本",
+    menu: "画布菜单", removeNode: "移除第二个节点",
     saved: "已保存副本", retry: "重试保存", recovered: "保存成功",
     fail: "模拟保存失败", persistent: "显示持久保存冲突",
     multiple: "显示三条持久提示", notices: "工作区提示",
@@ -48,7 +50,7 @@ const copy = {
     dismiss: "关闭保存冲突提示", node: "示例节点", next: "下一步",
     empty: "选择一个对象", emptyBody: "对象属性将显示在这里。",
     controls: "预览操作", docked: "页面工具", newNode: "添加节点",
-    help: "画布工具浮在画布上，四周保留 16dp，不挤占画布。X 关闭后可从顶栏恢复。普通错误用带重试的 snackbar。持久提示在画布右上角按 16dp 间距堆叠，每条有自己的恢复动作和 ghost X，并有出现、退出及收拢动效。同一问题重复出现只更新原卡。窄画布把工具条移到左下角以避免重叠。关闭冲突提示不会恢复保存，导出菜单仍保留另存副本。",
+    help: "画布只保留一个浮动编辑工具栏，四周保留 16dp，不挤占画布。排列与导出收进顶栏画布菜单，禁止第二条工具栏。检查器从顶栏下缘连续延伸到工作区底部。X 关闭工具后可从顶栏恢复。普通错误用带重试的 snackbar。持久提示在画布右上角按 16dp 间距堆叠，每条有自己的恢复动作和 ghost X，并有出现、退出及收拢动效。同一问题重复出现只更新原卡。窄画布把工具条移到左下角以避免重叠。关闭冲突提示不会恢复保存，导出菜单仍保留另存副本。",
     dockedHelp: "仅用于页面内容：占据文档流的 docked 工具条四周保留 16dp 间距。画布工具使用上方浮层模板。",
   },
 };
@@ -115,6 +117,13 @@ export function CanvasWorkspaceDemo() {
           <Tooltip content={c.back}><IconButton variant="ghost" aria-label={c.back}
             onClick={() => setArranged(false)}><ArrowLeftIcon /></IconButton></Tooltip>
         </>} trailing={<>
+          <Tooltip content={c.menu}><DropdownMenu trigger={<MoreHorizontalIcon />} iconOnly
+            variant="ghost" ariaLabel={c.menu} align="end">
+            <DropdownMenuItem icon={<RefreshIcon />} onClick={() => setArranged(!arranged)}>{c.layout}</DropdownMenuItem>
+            <DropdownMenuSub trigger={c.export} icon={<DownloadIcon />} ariaLabel={c.export}>
+              <DropdownMenuItem icon={<SaveIcon />} onClick={saveCopy}>{c.copy}</DropdownMenuItem>
+            </DropdownMenuSub>
+          </DropdownMenu></Tooltip>
           <Tooltip content={c.tools}><IconButton variant="ghost" aria-label={c.tools}
             aria-pressed={toolsOpen} onClick={() => setToolsOpen(!toolsOpen)}><LayoutGridIcon /></IconButton></Tooltip>
           <Tooltip content={c.inspector}><IconButton variant="ghost" aria-label={c.inspector}
@@ -127,7 +136,7 @@ export function CanvasWorkspaceDemo() {
           <NavigationDrawerItem label={c.name} icon={<FileIcon />} active
             onClick={() => setSecondNode(true)} />
         </NavigationDrawer> : null}>
-        <div className="sandbox-canvas-workspace-panes">
+        <div className="fynns-workspace-panes">
           <div className="fynns-workspace-canvas sandbox-canvas-stage" tabIndex={-1} aria-label={c.name}
             data-paused={conflict || undefined}>
             <div className="sandbox-canvas-scene" data-arranged={arranged}>
@@ -139,12 +148,8 @@ export function CanvasWorkspaceDemo() {
               <Toolbar variant="floating" aria-label={c.tools}>
                 <Tooltip content={c.newNode}><IconButton variant="ghost" aria-label={c.newNode}
                   onClick={addNode}><PlusIcon /></IconButton></Tooltip>
-                <Tooltip content={c.layout}><IconButton variant="ghost" aria-label={c.layout}
-                  onClick={() => setArranged(!arranged)}><RefreshIcon /></IconButton></Tooltip>
-                <Tooltip content={c.export}><DropdownMenu trigger={<DownloadIcon />} iconOnly
-                  variant="ghost" ariaLabel={c.export}>
-                  <DropdownMenuItem icon={<SaveIcon />} onClick={saveCopy}>{c.copy}</DropdownMenuItem>
-                </DropdownMenu></Tooltip>
+                <Tooltip content={c.removeNode}><IconButton variant="ghost" aria-label={c.removeNode}
+                  disabled={!secondNode} onClick={() => setSecondNode(false)}><TrashIcon /></IconButton></Tooltip>
                 <IconButton variant="ghost" aria-label={c.hide} onClick={() => setToolsOpen(false)}><CloseIcon /></IconButton>
               </Toolbar>
             </div>}

@@ -6,7 +6,7 @@ Paste the task below in the consumer repository.
 请完成当前消费仓的工作区 UI 重构，保持现有业务功能和数据完整。
 
 先确认实际 UI app package，再将同级 fynns_ui_design_core 更新到 origin/dev
-且版本至少为 0.5.309。保留 file: 依赖及 @fynns/ui alias，不改走 Packages。
+且版本至少为 0.5.310。保留 file: 依赖及 @fynns/ui alias，不改走 Packages。
 不要覆盖脏的 core 工作树。同步最新 consumer-cursor-rule.mdc，并把新增约束
 合并进消费仓现有 AGENTS.md；保留该仓自己的其他规则。
 在实际 UI app package 中刷新 file: 安装，确认其 node_modules 中的 core
@@ -28,6 +28,12 @@ Paste the task below in the consumer repository.
    floating Toolbar，保持 16dp 边距，可用 ghost X 关闭、从顶栏恢复。
    删除贴边整宽圆角 docked 工具条。普通页面的 docked 工具必须放入
    .fynns-docked-tools-inset，四周保留 16dp。
+   每个画布只留一个浮动编辑工具栏。将原上方大工具栏的模式/方向/
+   布局/导出全部收进 TopAppBar 的一个 ghost 纯图标 DropdownMenu，
+   使用 MoreHorizontalIcon + Tooltip + aria-label，选择项和导出格式用子菜单。
+   禁第二条浮动工具栏、多个并列菜单或重复命令；保留全部业务功能。
+   主区用 .fynns-workspace-panes 将画布和 EndAside 放在同一整高行，
+   直接从顶栏下缘延伸到底部状态栏上缘。禁上方额外工具行导致右栏断裂。
 3. 操作失败默认 error snackbar + 单一 SnackbarHost，按需带重试动作。
    持久可操作问题改用 core WorkspaceNoticeStack，放在受影响画布内：
    右上角、内容宽度、16dp 堆叠，每条 ghost X 和恢复动作放在同一卡内。
@@ -47,6 +53,8 @@ Paste the task below in the consumer repository.
 在浏览器验证深浅主题、桌面/窄屏、单条/多条/长提示、重复 id、关闭中间
 一条、恢复失败/成功、关闭后恢复入口、键盘焦点、减少动效设置。
 测量开关工具和提示前后的画布尺寸，确认未变，且无贴边、重叠或溢出。
+验证只有一个编辑工具栏，顶栏菜单和子菜单可用键盘操作；桌面右栏
+上下边缘与画布对齐，打开/关闭菜单不改变画布或右栏的尺寸。
 提供截图与交互证据，按 UI_REWARD_SIGNALS.md 自评 10 分；低分继续修复，
 硬违规不得用高分抵消。交付修改摘要、验证结果、截图和评分依据。
 ```

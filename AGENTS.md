@@ -58,6 +58,8 @@ Grep 必须限定目录（`src/primitives` / `docs/design-system` / `llm`）并�
 
 画布工具强制用 `.fynns-workspace-canvas` → `.fynns-workspace-tools` → floating Toolbar（四周 16dp，可关闭并由顶栏恢复）；禁贴边整宽圆角 docked 条。页面内 docked 用 `.fynns-docked-tools-inset` 保留四周 16dp。持久可操作错误用 `WorkspaceNoticeStack`：画布右上角 16dp、内容宽度、每条 ghost X 与恢复动作同卡、16dp 堆叠、稳定 id 去重、core 进出/收拢动效和 reduced-motion；禁另开重试工具条，关闭提示不得清除错误业务状态。活例 `#layouts-demo-canvas-workspace`。干净整洁设计按 [UI_REWARD_SIGNALS.md](llm/UI_REWARD_SIGNALS.md) 给予 10 分证据评分；目标 10/10，违反硬约束不得以高分抵消。
 
+画布工作区只允许一个浮动编辑 Toolbar。原上方整宽大工具栏的模式/方向/布局/导出全部收进 TopAppBar 的一个 ghost 纯图标 DropdownMenu（MoreHorizontalIcon + Tooltip + aria-label），禁换成第二条浮动工具栏或多个并列菜单。主区用 `.fynns-workspace-panes` 包含画布与 EndAside，同一整高行直接接顶栏下缘，延伸到底部状态栏上缘；禁在整行之前放工具栏/占位容器导致右栏上部断裂。菜单浮层不得改变画布/右栏尺寸。门禁检查共享 canvas/panes 与同文件封装，浏览器仍须验证实际数量与边缘。
+
 ## 何时读长文
 
 | 需要 | 打开 |

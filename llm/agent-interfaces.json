@@ -8,7 +8,7 @@
     {
       "path": "docs/design-system/workspace-chrome.md",
       "role": "workspace-chrome",
-      "summary": "Mandatory greenfield chrome, floating canvas tools, snackbar-first errors and core WorkspaceNoticeStack top/end stacking with recovery and motion."
+      "summary": "Mandatory greenfield chrome: one canvas editing toolbar, one top-bar document menu, continuous inspector panes, snackbar-first errors and core WorkspaceNoticeStack recovery/motion."
     },
     {
       "path": "llm/UI_REWARD_SIGNALS.md",

@@ -401,12 +401,16 @@ Canvas authority: [workspace contract](../docs/design-system/workspace-chrome.md
 and [UI reward signals](UI_REWARD_SIGNALS.md), live `#layouts-demo-canvas-workspace`.
 Use core `WorkspaceNoticeStack` for actionable persistent top/end feedback;
 keep floating tools inset, notice recovery in its card, and token-based motion.
+One editing toolbar per canvas; move document mode/direction/arrange/export to
+one top-bar ghost icon menu. `.fynns-workspace-panes` keeps canvas and EndAside
+aligned from TopAppBar's bottom to the workspace bottom; no second header row.
 
 Authority: [Workspace chrome and error feedback](../docs/design-system/workspace-chrome.md).
 All greenfield consumers follow this recipe; static export gate + browser review.
 
 | Failure mode | Authority | Live reference |
 | --- | --- | --- |
+| Two canvas toolbars / document row interrupts inspector top | workspace-chrome / one top-bar command menu | `#layouts-demo-canvas-workspace` |
 | Stacked full-width inspector primary/danger actions | workspace-chrome / Form rhythm | `#layouts-demo-workspace-chrome` |
 | Labeled filled sidebar button / duplicate collapse X | workspace-chrome | `#layouts-demo-workspace-chrome` |
 | Global home hidden as ordinary destination / labeled back pill | workspace-chrome | `#layouts-demo-workspace-chrome` |

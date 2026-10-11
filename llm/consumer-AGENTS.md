@@ -32,7 +32,13 @@ dynamic copy/props and cross-file behavior still require browser review.
 
 Canvas recipe: `#layouts-demo-canvas-workspace`. Use `.fynns-workspace-canvas`
 and `.fynns-workspace-tools` with floating Toolbar, 16dp clearance, ghost X and
-a top-bar restore icon. In-flow page tools use `.fynns-docked-tools-inset`;
+a top-bar restore icon. Place the canvas inside `.fynns-workspace-panes`
+alongside EndAside, one full-height row directly
+below TopAppBar. Only one floating editing toolbar per canvas. Document mode,
+direction, arrange and export belong in one top-bar ghost icon DropdownMenu
+(MoreHorizontalIcon + Tooltip/aria-label), never a second toolbar. No header
+row may push the inspector below the canvas; opening menus preserves both bounds.
+In-flow page tools use `.fynns-docked-tools-inset`;
 never glue rounded docked bars to canvas/panes. Persistent actionable errors use
 core `WorkspaceNoticeStack`: top/end 16dp, content width, 16dp stacking, stable
 ids, independent ghost X/recovery and token-based entry/exit/reflow with reduced

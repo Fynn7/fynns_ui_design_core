@@ -6,6 +6,17 @@ const imports = 'import { Button, IconButton, Toolbar, TopAppBar, PanelRightIcon
 const rules = (source: string) => checkWorkspaceSource(imports + source).map((v: { rule: string }) => v.rule);
 
 describe("workspace consumer contract", () => {
+  it("rejects a second canvas toolbar, including aliases and same-file helpers", () => {
+    expect(rules('function Extra(){return <Toolbar/>;} const sample = <div className="fynns-workspace-canvas"><Toolbar variant="floating"/><Extra/></div>;')).toContain("canvas-single-toolbar");
+    expect(checkWorkspaceSource('import { Toolbar as Tools } from "@fynns/ui"; const sample = <div className="fynns-workspace-canvas"><Tools/><Tools/></div>;').map((v: {rule: string}) => v.rule)).toContain("canvas-single-toolbar");
+    expect(rules('const sample = <div className="fynns-workspace-canvas">{compact ? <Toolbar/> : <Toolbar/>}</div>;')).toEqual([]);
+    expect(rules('const sample = <div className="fynns-workspace-canvas"><Toolbar><Button onClick={() => {const unused = <Toolbar/>;}}>Create</Button></Toolbar></div>;')).toEqual([]);
+  });
+  it("rejects document toolbars above the pane row while preserving inspector actions and separate page specimens", () => {
+    expect(rules('const sample = <div className="fynns-workspace-panes"><Toolbar aria-label="Document commands"/><div className="fynns-workspace-canvas"><Toolbar variant="floating"/></div><EndAside open/></div>;')).toContain("workspace-command-menu");
+    expect(rules('const sample = <ClippedNavShell><Toolbar/><div className="fynns-workspace-panes"><div className="fynns-workspace-canvas"><Toolbar variant="floating"/></div><EndAside open/></div></ClippedNavShell>;')).toContain("workspace-command-menu");
+    expect(rules('const sample = <><div className="fynns-workspace-panes"><div className="fynns-workspace-canvas"><Toolbar variant="floating"/></div><EndAside open><Toolbar/></EndAside></div><div className="fynns-docked-tools-inset"><Toolbar variant="docked"/></div></>;')).toEqual([]);
+  });
   it("rejects docked canvas tools by semantic label or shared overlay host", () => {
     expect(rules('const sample = <Toolbar variant="docked" aria-label="画布工具栏"><Button variant="ghost">Arrange</Button></Toolbar>;')).toContain("canvas-tools-floating");
     expect(rules('const sample = <div className="fynns-workspace-tools"><Toolbar variant="docked" aria-label={labels.tools}><Button variant="ghost">Arrange</Button></Toolbar></div>;')).toContain("canvas-tools-floating");

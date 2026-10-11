@@ -5,9 +5,11 @@ reaches consumer apps.
 
 **Install contract:** [`llm/CONSUME.md`](../llm/CONSUME.md).
 
-**Canvas migration ≥ 0.5.309:** consume `WorkspaceNoticeStack` plus core canvas
+**Canvas migration ≥ 0.5.310:** consume `WorkspaceNoticeStack` plus core canvas
 overlay classes instead of copying sandbox positioning/motion CSS. The updated
-workspace gate rejects docked canvas toolbars in semantic/shared hosts. Re-sync
+workspace gate rejects docked canvas toolbars in semantic/shared hosts, multiple
+canvas editing toolbars and standalone document toolbar rows. Use one top-bar
+document menu and `.fynns-workspace-panes` for continuous canvas/inspector edges. Re-sync
 the pasteable consumer rule and merge `UI_REWARD_SIGNALS.md` review requirements
 into consumer agent guidance. See [workspace contract](design-system/workspace-chrome.md).
 
