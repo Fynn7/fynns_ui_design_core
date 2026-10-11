@@ -72,7 +72,13 @@ export function checkWorkspaceSource(text, filename = "sample.tsx", ts = compile
     line: source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1, rule, message,
   });
   const isRow = node => tag(node) === "Toolbar" || /\bfynns-control-cluster\b/.test(value(node, "className") ?? "");
-  const upper = text => /^[A-Z][A-Z\s/_-]{2,}$/.test(text.trim()) && /[A-Z]{3}/.test(text);
+  const upper = text => {
+    const label = text.trim();
+    // A standalone short initialism is ambiguous without domain knowledge.
+    // Leave it for copy review rather than blocking a consumer's dev server.
+    if (/^[A-Z]{1,3}$/.test(label)) return false;
+    return /^[A-Z][A-Z\s/_-]{2,}$/.test(label) && /[A-Z]{3}/.test(label);
+  };
   const inherited = (node, name) => {
     for (let parent = node.parent; parent; parent = parent.parent) if (tag(parent) === name) return true;
     return false;

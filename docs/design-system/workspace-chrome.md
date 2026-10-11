@@ -25,7 +25,13 @@ Its overlay placement, notice stacking and motion are shipped core behavior.
 | Resource rename | Right-click the resource's `NavigationDrawerItem` → `ContextMenu` + `DropdownMenuItem` → rename `Dialog`. Capture the clicked resource id; never change the current selection on right-click. Support ContextMenu key and Shift+F10. | A rename pill/title Button in the canvas toolbar; left-click opening rename; a menu always acting on the selected resource instead of the target. |
 | Routine object actions | One horizontal `Toolbar` / `.fynns-control-cluster`: ordering, duplicate and delete use ghost IconButtons + Tooltip + aria-label. If labels are needed, use ghost/tonal Buttons. Danger belongs in the destructive confirmation. | Full-width stacked primary/danger pills for ordinary inspector commands; all actions competing as primary; local accent/destructive fills. |
 | Commit form changes | At most one primary per action group, rightmost. Dialog `feet` → `.fynns-control-cluster--end-align`: `CloseIcon` + labeled ghost Cancel, then `CheckIcon` + labeled primary Save. | Filled Cancel; Cancel and Save both primary; icon-only confirmation; footer actions in the scrolling body. |
-| Visible chrome copy | Natural sentence case and localized human labels. | All-cap titles/overlines/section names or `text-transform: uppercase` / `toUpperCase()` to decorate UI. Code content and literal protocol/data values remain exact. |
+| Visible chrome copy | Natural sentence case and localized human labels; preserve the conventional casing of technical abbreviations. | All-cap titles/overlines/section names or `text-transform: uppercase` / `toUpperCase()` to decorate UI. Code content and literal protocol/data values remain exact. |
+
+The static `natural-case` gate leaves standalone one-to-three-letter uppercase
+labels for copy review because they may be technical initialisms. This is a
+limit of static detection, not permission to capitalize ordinary UI words.
+Longer or compound uppercase labels remain checked; use natural sentence case
+for the surrounding human label (for example, “API settings”).
 
 Use `DestinationAppShell` for explicitly requested fixed destination lists: its existing inspector
 toggle already owns the one ghost PanelRight control; do not add another toggle
