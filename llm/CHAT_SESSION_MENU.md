@@ -3,8 +3,9 @@
 Use `ChatSessionMenu` directly inside `Chat`, before `ChatThread`. It reserves
 the top-right seat outside the scrolling log. In a FillColumn workspace with
 its own TopAppBar, the trigger is portaled to the well edge: end inset matches
-`--fynns-appbar-pad-inline`, and the gap below the bar matches
-`--fynns-appbar-actions-gap`. Content padding stays intact. Standalone Chat
+`--fynns-appbar-pad-inline`. The hover circles have equal clearance above and
+below the bar divider: `(bar row height - icon target) / 2` (8dp for the
+default 56dp row and 40dp target). Content padding stays intact. Standalone Chat
 uses a 32dp trigger; shell chrome uses the same 40dp circular target as
 TopAppBar, so both the hover radius and centerline match. TopAppBar normalizes
 wrapped IconButton/menu actions to this target, including explicit sm/lg props.
@@ -61,9 +62,12 @@ See [catalog](../docs/design-system/catalog.md).
 
 Alignment reference: `#layouts-demo-chat-session-menu` includes the owning
 TopAppBar. `e2e/treaty/chat-session-menu-chrome.spec.ts` verifies the shared
-vertical centerline, matching bar/action spacing, unchanged well bounds,
+vertical centerline, unchanged well bounds,
 keyboard focus return, dark/light themes, narrow shell and reduced motion.
 The standalone and FillColumn inset regressions remain unchanged.
+`e2e/treaty/chat-session-menu-divider.spec.ts` verifies symmetric divider
+clearance. The older chrome test's action-gap assertion describes the previous
+2dp vertical contract and is superseded by this divider-clearance contract.
 
 UI review for this menu scope: **10/10** — ghost emphasis (2), one session menu
 without extra toolbar (2), shared chrome spacing/alignment (2), stable geometry

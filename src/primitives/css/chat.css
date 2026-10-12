@@ -1752,7 +1752,7 @@ a.fynns-chat-activity-artifact:hover {
 
 .fynns-fill-column-main > .fynns-chat-session-menu--chrome {
   position: absolute;
-  inset-block-start: var(--fynns-appbar-actions-gap);
+  inset-block-start: calc((var(--fynns-appbar-row-height) - var(--fynns-size-icon-target)) / 2);
   inset-inline-end: var(--fynns-appbar-pad-inline);
   z-index: 1;
 }

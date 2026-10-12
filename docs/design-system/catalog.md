@@ -211,7 +211,7 @@ classes.
   - **Active conversation menu:** place **`ChatSessionMenu`** directly inside
     `Chat`, before `ChatThread`. Core reserves a seat at the well's top-right
     (standalone: 16dp top / end; FillColumn + own TopAppBar: well edge aligned
-    to the bar's end inset and action gap), outside the scrolling log, with one ghost
+    to the bar's end inset, with symmetric hover-circle clearance around its divider), outside the scrolling log, with one ghost
     `MoreHorizontalIcon`, localized `label` for Tooltip + aria-label, and an
     end-aligned portaled `DropdownMenu`. Pass `activeSessionId` (null disables
     the trigger) and `renderMenu(sessionId)` returning `DropdownMenuItem`,
