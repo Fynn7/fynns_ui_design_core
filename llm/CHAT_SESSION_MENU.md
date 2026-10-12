@@ -5,7 +5,11 @@ the top-right seat outside the scrolling log. In a FillColumn workspace with
 its own TopAppBar, the trigger is portaled to the well edge: end inset matches
 `--fynns-appbar-pad-inline`, and the gap below the bar matches
 `--fynns-appbar-actions-gap`. Content padding stays intact. Standalone Chat
-and aside hosts retain their 16dp internal seat.
+uses a 32dp trigger; shell chrome uses the same 40dp circular target as
+TopAppBar, so both the hover radius and centerline match. TopAppBar normalizes
+wrapped IconButton/menu actions to this target, including explicit sm/lg props.
+Do not add private width, height, padding or transforms to chrome buttons.
+Standalone Chat and aside hosts retain their 16dp internal seat.
 Core owns the ghost ellipsis trigger, Tooltip, menu surface, nested positioning,
 keyboard navigation, focus return and dismissal. No consumer positioning CSS
 or extra toolbar is needed. The same shell works in the main canvas and EndAside.

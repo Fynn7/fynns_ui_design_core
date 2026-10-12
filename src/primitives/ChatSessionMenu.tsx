@@ -48,7 +48,7 @@ export function ChatSessionMenu({
   const menu = <div className={`fynns-chat-session-menu${chromeHost ? " fynns-chat-session-menu--chrome" : ""}`}>
     <Tooltip key={`${activeSessionId}:${unavailable}`} content={label} side="bottom">
       <DropdownMenu trigger={<MoreHorizontalIcon />} ariaLabel={label}
-        iconOnly size="sm" variant="ghost" align="end" disabled={unavailable}>
+        iconOnly size={chromeHost ? "md" : "sm"} variant="ghost" align="end" disabled={unavailable}>
         {items}
       </DropdownMenu>
     </Tooltip>

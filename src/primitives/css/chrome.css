@@ -1149,6 +1149,15 @@
   color: var(--fynns-color-text-muted);
 }
 
+/* App chrome has one circular target, including wrapped menu/import actions.
+ * Local sm/lg choices must not shift the shared centerline or hover circle. */
+.fynns-top-app-bar-row .fynns-btn--icon {
+  width: var(--fynns-size-icon-target);
+  min-width: var(--fynns-size-icon-target);
+  height: var(--fynns-size-icon-target);
+  min-height: var(--fynns-size-icon-target);
+}
+
 /* Tooltip wrappers must not collapse IconButton hit targets in the action row. */
 .fynns-top-app-bar-leading .fynns-tooltip-trigger,
 .fynns-top-app-bar-trailing .fynns-tooltip-trigger {

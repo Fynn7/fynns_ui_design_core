@@ -18,6 +18,7 @@ Its overlay placement, notice stacking and motion are shipped core behavior.
 
 | Job | Required composition | Forbidden |
 | --- | --- | --- |
+| Chrome icon geometry | TopAppBar normalizes every icon action, including wrapped menu/import buttons, to the shared 40dp circular target. A ChatSessionMenu below that bar uses the same target, end inset and action gap. | Private width/height/padding/transform overrides; mixed hover-circle diameters or shifted circle centers. |
 | Inspector open/close | One stable TopAppBar trailing `IconButton variant="ghost"` with `PanelRightIcon`, Tooltip, localized aria-label and `aria-pressed`. Both states toggle the same boolean. | Labeled/filled “Sidebar” Button; a second close X inside the inspector; separate open and collapse controls. |
 | Global project/catalog home | TopAppBar leading ghost `IconButton` + `HomeIcon`, Tooltip and aria-label. Clicking shows the root/catalog in the same app shell. | Ordinary drawer/list item secretly routing to a different global page; a text Home pill; replacing the shell. |
 | Back from a detail | One ghost `IconButton` + `ArrowLeftIcon` in TopAppBar leading; Tooltip + aria-label. | “← Projects” labeled Button, doubled arrows or a filled navigation CTA. |
