@@ -30,6 +30,10 @@ type MenuContextValue = {
   menuId: string;
   /** Outermost DropdownMenu panel id (outside-click seatbelt). */
   rootMenuId: string;
+  /** Id of the currently open direct-child submenu (sibling mutual exclusion). */
+  openSub: string | null;
+  /** Claim (`id`) or release (`null`) the sibling-exclusive submenu slot. */
+  requestSubOpen: (id: string | null) => void;
 };
 
 const MenuContext = createContext<MenuContextValue | null>(null);
@@ -103,6 +107,8 @@ export function MenuSurface({
   const [menuEl, setMenuEl] = useState<HTMLDivElement | null>(null);
   const [mounted, setMounted] = useState(open);
   const [presenting, setPresenting] = useState(open);
+  /** Sibling-exclusive slot: at most one direct-child submenu open per surface. */
+  const [openSub, setOpenSub] = useState<string | null>(null);
 
   const setPanelRef = useCallback(
     (el: HTMLDivElement | null) => {
@@ -123,6 +129,10 @@ export function MenuSurface({
     const timer = setTimeout(() => setMounted(false), flyoutExitMs());
     return () => clearTimeout(timer);
   }, [open, mounted]);
+
+  useEffect(() => {
+    if (!open) setOpenSub(null);
+  }, [open]);
 
   useEffect(() => {
     if (!open || !presenting || !menuEl) return;
@@ -174,7 +184,7 @@ export function MenuSurface({
 
   return createPortal(
     <MenuContext.Provider
-      value={{ close: onClose, closeRoot, menuId, rootMenuId }}
+      value={{ close: onClose, closeRoot, menuId, rootMenuId, openSub, requestSubOpen: setOpenSub }}
     >
       <div
         ref={setPanelRef}
@@ -763,9 +773,13 @@ export type DropdownMenuSubProps = {
 
 /**
  * Nested submenu row inside a `DropdownMenu` / `MenuSurface`.
- * Opens on hover / focus / ArrowRight; panel docks to the **end** (right in
- * LTR) of the row via `useFloatingBoxPosition` (≥ **0.5.288**). Live
- * `#sandbox-menu-submenu`.
+ * Opens on hover / ArrowRight (Enter / Space confirms); panel docks to the
+ * **end** (right in LTR) of the row via `useFloatingBoxPosition`
+ * (≥ **0.5.288**). Focus alone never auto-opens (root auto-focus must not
+ * cascade into the first submenu). Sibling submenus are mutually exclusive:
+ * opening one instantly preempts the others through the parent surface's
+ * `openSub` slot (the claim happens at actual open time, so grazing a row
+ * on the way to another panel never steals it). Live `#sandbox-menu-submenu`.
  */
 export function DropdownMenuSub({
   trigger,
@@ -793,8 +807,14 @@ export function DropdownMenuSub({
   const openSoon = useCallback(() => {
     if (disabled) return;
     clearTimers();
-    openTimer.current = setTimeout(() => setOpen(true), 80);
-  }, [clearTimers, disabled]);
+    // Claim the sibling-exclusive slot at actual open time (not on
+    // mouseenter), so grazing this row en route elsewhere never preempts.
+    openTimer.current = setTimeout(() => {
+      openTimer.current = null;
+      setOpen(true);
+      parent.requestSubOpen(subId);
+    }, 80);
+  }, [clearTimers, disabled, parent, subId]);
 
   const closeSoon = useCallback(() => {
     clearTimers();
@@ -804,9 +824,24 @@ export function DropdownMenuSub({
   const stayOpen = useCallback(() => {
     clearTimers();
     setOpen(true);
-  }, [clearTimers]);
+    parent.requestSubOpen(subId);
+  }, [clearTimers, parent, subId]);
 
   useEffect(() => () => clearTimers(), [clearTimers]);
+
+  // Sibling mutual exclusion: a claimed slot closes this panel instantly
+  // (layout effect — before paint, so two panels never overlap a frame).
+  useLayoutEffect(() => {
+    if (parent.openSub !== null && parent.openSub !== subId && open) {
+      clearTimers();
+      setOpen(false);
+    }
+  }, [parent.openSub, subId, open, clearTimers]);
+
+  const release = useCallback(() => {
+    setOpen(false);
+    parent.requestSubOpen(null);
+  }, [parent]);
 
   useEffect(() => {
     if (!panelEl) return;
@@ -859,15 +894,16 @@ export function DropdownMenuSub({
           event.preventDefault();
           if (disabled) return;
           setOpen(true);
+          parent.requestSubOpen(subId);
         }}
         onKeyDown={(event) => {
           if (disabled) return;
           if (event.key === "ArrowRight" || event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             setOpen(true);
+            parent.requestSubOpen(subId);
           }
         }}
-        onFocus={openSoon}
       >
         {icon ? <span className="fynns-menu-item-icon">{icon}</span> : null}
         <span className="fynns-menu-item-label">{label}</span>
@@ -877,7 +913,7 @@ export function DropdownMenuSub({
       </button>
       <MenuSurface
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={release}
         id={subId}
         ariaLabel={ariaLabel ?? (typeof tip === "string" ? tip : "Submenu")}
         className="fynns-menu--sub"

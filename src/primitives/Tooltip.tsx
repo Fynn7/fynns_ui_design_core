@@ -216,14 +216,43 @@ export function Tooltip({
         : { left: caretPos, right: "auto", transform: "translateX(-50%) rotate(45deg)" };
 
   const onTriggerBlur = (e: FocusEvent<HTMLSpanElement>) => {
+    const next = e.relatedTarget as Node | null;
+    // Focus returning into the anchor (e.g. menu closed, focus restored to
+    // the trigger) is not a leave — the matching focus event re-shows.
+    if (next && anchorRef.current?.contains(next)) return;
     if (!interactive) {
       hideNow();
       return;
     }
-    const next = e.relatedTarget as Node | null;
     if (next && floatingRef.current?.contains(next)) return;
     scheduleHide();
   };
+
+  /**
+   * Focus inside the anchor shows the tip — but menu / dialog panels portal
+   * to `document.body` while staying React-descendants of this span, so
+   * focus bubbling up from an open menu must be ignored (otherwise the
+   * trigger tip re-opens and sticks while the menu has focus).
+   */
+  const onTriggerFocus = (e: FocusEvent<HTMLSpanElement>) => {
+    if (!anchorRef.current?.contains(e.target as Node)) return;
+    showNow();
+  };
+
+  /**
+   * Native `mouseleave` seatbelt: React derives `onMouseLeave` from
+   * `mouseout` along the *React* tree, so moving the pointer onto a
+   * portaled React-descendant (open menu) never dispatches it — while the
+   * DOM pointer has truly left the anchor. The native event is DOM-based
+   * and fires correctly in that case.
+   */
+  useEffect(() => {
+    const el = anchorRef.current;
+    if (!el) return;
+    const onLeave = () => scheduleHide();
+    el.addEventListener("mouseleave", onLeave);
+    return () => el.removeEventListener("mouseleave", onLeave);
+  });
 
   return (
     <span
@@ -231,7 +260,7 @@ export function Tooltip({
       className={["fynns-tooltip-trigger", className ?? ""].filter(Boolean).join(" ")}
       onMouseEnter={scheduleShow}
       onMouseLeave={scheduleHide}
-      onFocus={showNow}
+      onFocus={onTriggerFocus}
       onBlur={onTriggerBlur}
       aria-describedby={open ? tooltipId : undefined}
     >
