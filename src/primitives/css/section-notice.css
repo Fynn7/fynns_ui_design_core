@@ -1,0 +1,44 @@
+.fynns-section-notice {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--fynns-space-sm) var(--fynns-layout-unit-stack-gap);
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: var(--fynns-layout-unit-stack-gap);
+  border-radius: var(--fynns-radius-xl);
+  color: var(--fynns-color-text);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+}
+.fynns-section-notice--warning { background: color-mix(in srgb, var(--fynns-color-warning) 12%, transparent); }
+.fynns-section-notice--error { background: color-mix(in srgb, var(--fynns-color-danger) 12%, transparent); }
+.fynns-section-notice--info { background: color-mix(in srgb, var(--fynns-color-info) 12%, transparent); }
+.fynns-section-notice--success { background: color-mix(in srgb, var(--fynns-color-success) 12%, transparent); }
+.fynns-section-notice__summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--fynns-space-sm);
+  min-width: 0;
+}
+.fynns-section-notice__icon { display: flex; align-items: center; min-height: calc(1em * var(--fynns-line-height-body)); }
+.fynns-section-notice--warning .fynns-section-notice__icon { color: var(--fynns-color-warning); }
+.fynns-section-notice--error .fynns-section-notice__icon { color: var(--fynns-color-danger); }
+.fynns-section-notice--info .fynns-section-notice__icon { color: var(--fynns-color-info); }
+.fynns-section-notice--success .fynns-section-notice__icon { color: var(--fynns-color-success); }
+.fynns-section-notice__copy { min-width: 0; overflow-wrap: anywhere; }
+.fynns-section-notice__heading { display: block; font-weight: var(--fynns-font-weight-semibold); }
+.fynns-section-notice__message { margin: 0; }
+.fynns-section-notice__dismiss { grid-column: 2; grid-row: 1; }
+.fynns-section-notice:not(:has(.fynns-section-notice__dismiss)) .fynns-section-notice__summary { grid-column: 1 / -1; }
+.fynns-section-notice__actions { grid-column: 1 / -1; }
+.fynns-section-notice__details {
+  grid-column: 1 / -1;
+  /* Detail length must not widen the summary when disclosure opens. */
+  contain: inline-size;
+  border-top: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  padding-top: var(--fynns-layout-unit-stack-gap);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}

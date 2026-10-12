@@ -307,6 +307,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["告警", "alert", "banner", "warning", "error", "提示条"],
   },
   {
+    id: "section-notice",
+    categoryId: "communication",
+    label: "SectionNotice",
+    keywords: ["区域提示", "详情", "缓存", "notice", "actionable", "details"],
+  },
+  {
     id: "sandbox-inline-alert-recovery",
     categoryId: "communication",
     label: "Error recovery",

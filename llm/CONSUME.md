@@ -26,6 +26,9 @@ gaps or reset core padding. Live references: `#sandbox-action-spacing` and
 before choosing chrome. Live `#layouts-demo-workspace-chrome` includes top-bar
 ghost Home/Back/one inspector toggle, a first New resource menu, targeted
 right-click/keyboard rename, horizontal ghost object actions and Dialog Cancel.
+In-flow persistent feedback with details/actions uses `SectionNotice` string
+slots and action descriptors, never components nested inside `InlineAlert`.
+See [SectionNotice](../docs/design-system/section-notice.md), live `#section-notice`.
 Errors default to snackbar. Persistent InlineAlert uses `onDismiss` and a
 content-width centered ghost-X template (`#sandbox-inline-alert-dismiss`).
 The installed export gate checks static workspace composition as well as exports;

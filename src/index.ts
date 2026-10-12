@@ -6,6 +6,7 @@
  */
 import "./theme/theme.css";
 import "./primitives/primitives.css";
+export * from "./primitives/SectionNotice";
 export * from "./primitives/ChatSessionsDrawer";
 export * from "./primitives/ChatSessionMenu";
 export * from "./primitives/SelectionArea";

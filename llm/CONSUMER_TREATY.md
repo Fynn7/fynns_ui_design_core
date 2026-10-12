@@ -320,7 +320,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | catalog morph remounts ClippedNavShell (drawer bounce) | DESIGN_SYSTEM hard-rules | `—` |
 | InlineAlert + orphan List for one catalog | DESIGN_SYSTEM content-density / List | `—` |
 | InlineAlert beside List in ControlStack | DESIGN_SYSTEM content-density / List | `#env-check` |
-| List / FieldHeader nested inside InlineAlert | DESIGN_SYSTEM content-density / List | `—` |
+| Components / Collapsible / List / controls nested inside InlineAlert | [SectionNotice contract](../docs/design-system/section-notice.md): plain text in InlineAlert; in-flow details/actions via SectionNotice string slots and action descriptors | `#section-notice` |
 | CodeBlock copy covering the last glyphs | DESIGN_SYSTEM catalog | `#code-block` |
 | plain CodeBlock despite a filetype label | DESIGN_SYSTEM catalog | `—` |
 | Textarea for a suffixed file body | DESIGN_SYSTEM catalog | `#code-block` |

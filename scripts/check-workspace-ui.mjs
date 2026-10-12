@@ -209,11 +209,13 @@ export function checkWorkspaceSource(text, filename = "sample.tsx", ts = compile
     if (kind === "InlineAlert") {
       const embedded = new Set();
       for (const child of children(node)) rendered(child, item => {
-        if (["Button", "IconButton"].includes(tag(item))) embedded.add(tag(item));
+        if (opening(item) && !["span", "strong", "em", "b", "i", "small", "code", "s", "u", "mark", "sub", "sup"].includes(tag(item))) embedded.add(tag(item));
       });
-      const message = attribute(node, "message");
-      if (message) rendered(message.initializer, item => { if (["Button", "IconButton"].includes(tag(item))) embedded.add(tag(item)); });
-      if (embedded.size) report(node, "inline-dismiss", "InlineAlert message contains controls. Dismiss with onDismiss + dismissAriaLabel; keep retry/recovery in a sibling fynns-control-cluster (canvas: WorkspaceNoticeStack). Transient errors default to snackbar.");
+      for (const key of ["message", "children"]) {
+        const content = attribute(node, key);
+        if (content) rendered(content.initializer, item => { if (opening(item) && !["span", "strong", "em", "b", "i", "small", "code", "s", "u", "mark", "sub", "sup"].includes(tag(item))) embedded.add(tag(item)); });
+      }
+      if (embedded.size) report(node, "inline-dismiss", "InlineAlert accepts phrasing text only; never embed components, disclosure, lists or controls. Use SectionNotice for in-flow details/actions; onDismiss + dismissAriaLabel for plain dismissal; sibling fynns-control-cluster for existing recovery (canvas: WorkspaceNoticeStack). Transient errors default to snackbar.");
       const style = attribute(node, "style")?.getText(source) ?? "";
       if (/width\s*:\s*["']100%["']|alignItems\s*:\s*["']flex-start["']/.test(style)) report(node, "inline-geometry", "Preserve InlineAlert content width and cross-axis center; do not override core geometry.");
     }
@@ -291,7 +293,20 @@ export function fixWorkspaceSource(text, filename = "sample.tsx", ts = compiler(
         const shift = (fragment, from, to) => fragment.split(/\r?\n/).map((line, index) =>
           index === 0 ? line : to + (line.startsWith(from) ? line.slice(from.length) : line)).join(eol);
         let alert = text.slice(start, node.end);
-        for (const button of [...buttons].sort((a, b) => b.pos - a.pos)) {
+        const removals = [];
+        const unwrap = item => {
+          if (buttons.includes(item)) return;
+          if (ts.isJsxElement(item) && item.openingElement.tagName.getText(source) === "div") {
+            const attrs = item.openingElement.attributes.properties;
+            const cls = attribute(item, "className")?.initializer;
+            if (!attrs.length || (attrs.length === 1 && cls && ts.isStringLiteral(cls) && cls.text === "fynns-unit-stack")) {
+              removals.push([item.openingElement.getStart(source), item.openingElement.end], [item.closingElement.getStart(source), item.closingElement.end]);
+            }
+          }
+          ts.forEachChild(item, unwrap);
+        };
+        children(node).forEach(unwrap);
+        for (const button of buttons) {
           let removeStart = button.getStart(source);
           let removeEnd = button.end;
           const lineStart = text.lastIndexOf("\n", removeStart - 1) + 1;
@@ -300,6 +315,9 @@ export function fixWorkspaceSource(text, filename = "sample.tsx", ts = compiler(
             removeStart = lineStart;
             removeEnd = lineEnd + 1;
           }
+          removals.push([removeStart, removeEnd]);
+        }
+        for (const [removeStart, removeEnd] of removals.sort((a, b) => b[0] - a[0])) {
           alert = alert.slice(0, removeStart - start) + alert.slice(removeEnd - start);
         }
         // Retain exact handlers, disabled state, labels, icons and content.

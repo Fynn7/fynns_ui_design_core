@@ -73,6 +73,9 @@ banner. InlineAlert owns these defaults:
   The familiar X needs an aria-label; it may omit a Tooltip like other closes.
 
 Dismissal and recovery have different jobs. For unavailable in-flow content,
+use [SectionNotice](section-notice.md) when details/actions belong to one notice.
+Its string slots and action descriptors keep consumer controls out of the body.
+Existing simple recovery compositions may continue to
 keep the persistent error visible and put Retry in a sibling action row; keep
 its existing disabled state and callback. Use the stack in a canvas instead.
 

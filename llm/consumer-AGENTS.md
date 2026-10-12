@@ -30,6 +30,9 @@ template and onDismiss/dismissAriaLabel ghost X; never embed labeled controls or
 force full width. The installed export gate also checks workspace composition;
 dynamic copy/props and cross-file behavior still require browser review.
 
+Persistent in-flow details/actions use `SectionNotice` with string message,
+optional string details and action descriptors; core owns disclosure and ghost
+buttons. Never nest components or controls inside InlineAlert. Live `#section-notice`.
 An InlineAlert recovery Button belongs in a sibling `.fynns-control-cluster`,
 not the message. Preserve retry callbacks and disabled state; `onDismiss` is
 only the X. Dialog Cancel explicitly uses ghost, Save stays primary. On gate

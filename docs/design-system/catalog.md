@@ -43,7 +43,9 @@ classes.
   `--fynns-layout-selection-composer-width` for width. Live:
   `#text-selection-composer`. Import from `@fynns/ui`; do not rebuild selection
   geometry, send chrome or model calls inside the primitive.
-- **Feedback:** WorkspaceNoticeStack (persistent actionable workspace overlays;
+- **Feedback:** SectionNotice (in-flow text, core disclosure and ghost actions;
+  no arbitrary nested components; live `#section-notice`,
+  [contract](section-notice.md)), WorkspaceNoticeStack (persistent actionable workspace overlays;
   core top/end stacking, ghost recovery/X, stable ids and enter/exit/reflow),
   Banner, InlineAlert (phrasing copy only — never nest List /
   FieldStack / CodeBlock inside), LoadingSkeleton / LinearProgress,
