@@ -3,6 +3,7 @@ import { PlaygroundTargetProvider } from "./state/PlaygroundTargetProvider";
 import { LocaleProvider } from "./i18n";
 import { ChatThinkingReferenceDemo } from "./components/ChatThinkingReferenceDemo";
 import { ChatThinkingDetailsDemo } from "./components/ChatThinkingDetailsDemo";
+import { ChatThinkingClockDemo } from "./components/ChatThinkingClockDemo";
 import { SandboxShell } from "./shell/SandboxShell";
 import "./sandbox.css";
 
@@ -15,6 +16,8 @@ export function App() {
             ? <ChatThinkingReferenceDemo />
             : new URLSearchParams(window.location.search).get("demo") === "thinking-details"
             ? <ChatThinkingDetailsDemo inConversation />
+            : new URLSearchParams(window.location.search).get("demo") === "thinking-clock"
+            ? <ChatThinkingClockDemo inConversation />
             : <SandboxShell />}
         </PlaygroundTargetProvider>
       </TokenDraftProvider>

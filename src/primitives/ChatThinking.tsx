@@ -40,7 +40,7 @@ export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children">
   variant?: "status" | "disclosure";
   /** Prefer details for structured work: only muted text and nested ChatThinking. */
   details?: readonly ChatThinkingDetail[];
-  /** Muted continuation after the main heading. */
+  /** Muted continuation after the main heading; preferred for elapsed clocks/counts. Updates preserve label motion. */
   summary?: string;
   /** Decorative nested mark; depth 2+ defaults to dot, depth 1 reserves an icon slot. */
   marker?: "icon" | "dot" | "none";
@@ -52,8 +52,8 @@ export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children">
    * While true: streaming label + force-open (unless user pinned closed) +
    * label motion. Trigger stays enabled so the disclosure can
    * collapse mid-run. Label is consumer-owned progressive copy
-   * (`"Thinking"`, `"Calling the function…"`, `"Searching…"`, …) —
-   * swap `streamingLabel` to morph the row (AGENTS.md **Label tense**).
+   * (`"Thinking"`, `"Calling the function…"`, `"Searching…"`, …).
+   * Copy and elapsed-time updates stay in place without replaying entry motion.
    */
   streaming?: boolean;
   /** Label while `streaming` (progressive). @default "Thinking" */
@@ -197,9 +197,10 @@ export function ChatThinking({
       </span>
     ) : null;
 
+  // Keep OverflowTip and its animated span mounted. A clock/count is content,
+  // never identity: keying by resolvedLabel replays the fade and shimmer each tick.
   const labelNode = (
     <OverflowTip
-      key={resolvedLabel}
       content={[resolvedLabel, summary, artifact?.label].filter(Boolean).join(" ")}
       className={join(
         "fynns-chat-thinking-label",

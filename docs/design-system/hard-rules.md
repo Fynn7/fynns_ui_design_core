@@ -678,6 +678,12 @@ Use the core CSS recipe; never compress these with local margins or line heights
   anatomy. Decorative dots are not status/accuracy signals. Inline code and
   non-interactive artifact labels are core-owned text adornments. Prefer `details`;
   results, questions and all actions stay outside. Live `#thinking-details`.
+- **DON'T** replay Thinking entry motion for elapsed seconds, counts or phase
+  text updates. Keep rows and detail IDs stable; never key by label/time.
+  Core preserves the title, OverflowTip, disclosure and streaming sweep.
+  Prefer `summary` for elapsed copy, sample timestamp-derived wall time once
+  per second, stop on settlement and keep clocks outside live regions.
+  Live `#thinking-clock`; [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
 - **DON'T** stretch ChatActivity tool-count headers or push their chevron to
   the body/panel end. `ChatActivity` and `ChatThinking` share the label→chevron
   token (`thinking-trigger-gap`, default 6dp; `activity-trigger-gap` aliases

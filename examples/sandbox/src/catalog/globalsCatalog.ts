@@ -417,6 +417,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["thinking", "copilot", "curve", "弧线", "reference"],
   },
   {
+    id: "thinking-clock",
+    categoryId: "communication",
+    label: "ChatThinking · clock updates",
+    keywords: ["秒数刷新", "计时", "闪烁", "elapsed", "timer", "clock", "shimmer", "稳定标题"],
+  },
+  {
     id: "thinking-details",
     categoryId: "communication",
     label: "ChatThinking · nested details",

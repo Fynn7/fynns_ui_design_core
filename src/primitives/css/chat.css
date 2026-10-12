@@ -549,9 +549,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
-/* Remount on label change (activity swap) — short enter, then streaming shimmer. */
+/* Entry/lifecycle motion only. Text, counters and clock ticks update in place;
+ * they must not remount this span or restart either animation. */
 .fynns-chat-thinking-label--swap {
   animation: fynns-chat-thinking-label-swap var(--fynns-duration-base)
     var(--fynns-ease-emphasized) both;

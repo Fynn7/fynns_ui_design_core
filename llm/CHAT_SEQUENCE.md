@@ -85,6 +85,29 @@ names. Normal task text wraps naturally. It is a visual reproduction,
 not a claim of access to Copilot source CSS. Isolated task review: `/?demo=thinking-details`. It uses the same
 component and includes processing/completion/stop simulations outside thinking.
 
+## Clocks, counts and motion
+
+Keep the same `ChatThinking` and stable `details[].id` mounted while seconds,
+counts or phase copy change. Never derive React keys from labels, durations,
+timestamps or summaries. Core updates text in place and preserves OverflowTip,
+focus, disclosure choices and the current streaming sweep. It does not fade,
+crossfade or slide text on every refresh. Entry motion belongs to mounting and
+streaming lifecycle changes; expansion motion belongs to disclosure state.
+
+Prefer `summary={elapsedText}` for a muted clock after a semantic `label` /
+`streamingLabel`; existing inline clock labels and `durationLabel` updates are
+also stable. Core uses tabular digits in the heading: equal-length numbers keep
+their advance width, while minute/hour rollovers may naturally change width.
+Sample elapsed wall time at most once per second; calculate from recorded start
+and end timestamps rather than counting interval callbacks. Stop sampling when
+the operation settles, clean up the interval on unmount and keep timer text out
+of live regions. Consumers own the clock and truthful status; core owns motion.
+
+Live `#thinking-clock` / isolated `/?demo=thinking-clock`: inline and summary
+clocks, nested body text, pause/resume, minute/hour boundaries, phase changes and
+manual folding. Reduced motion removes entry, sweep and chevron travel while
+retaining legible updates. Do not patch `.fynns-chat-thinking-*` in consumers.
+
 ## Thinking variants and rhythm
 
 - `variant="status"`: muted label only; no chevron, body or toggle.

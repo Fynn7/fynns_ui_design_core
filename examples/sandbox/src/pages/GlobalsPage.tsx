@@ -173,6 +173,7 @@ import { ChatTodoComposerDemo } from "../components/ChatTodoComposerDemo";
 import { ChatQuestionSequenceDemo } from "../components/ChatQuestionSequenceDemo";
 import { ChatThinkingReferenceDemo } from "../components/ChatThinkingReferenceDemo";
 import { ChatThinkingDetailsDemo } from "../components/ChatThinkingDetailsDemo";
+import { ChatThinkingClockDemo } from "../components/ChatThinkingClockDemo";
 import { TextSelectionComposerDemo } from "../components/TextSelectionComposerDemo";
 import { ChatChevronDemo } from "../components/ChatChevronDemo";
 import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
@@ -4362,6 +4363,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="thinking-details">
           <ChatThinkingDetailsDemo key={locale} />
+        </GlobalsDemo>
+        <GlobalsDemo id="thinking-clock">
+          <ChatThinkingClockDemo key={locale} />
         </GlobalsDemo>
         <GlobalsDemo id="thinking">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
