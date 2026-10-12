@@ -1730,6 +1730,21 @@ a.fynns-chat-activity-artifact:hover {
   background: transparent;
 }
 
+.fynns-chat:has(> .fynns-chat-session-menu) {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas: "session-menu" "thread" "composer";
+}
+
+/* A reserved seat keeps long first turns clear of the fixed More control. */
+.fynns-chat > .fynns-chat-session-menu {
+  grid-area: session-menu;
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+  padding-block-start: var(--fynns-space-4);
+  padding-inline: var(--fynns-space-4);
+}
+
 /* Narrow EndAside / fill hosts: allow shrink so inset pad is not clipped. */
 .fynns-end-aside .fynns-chat,
 .fynns-chat-host--fill > .fynns-chat {

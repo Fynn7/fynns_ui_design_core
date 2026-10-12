@@ -206,6 +206,21 @@ classes.
     (`--fynns-duration-base` / `--fynns-ease-emphasized`); reduced-motion =
     instant. `interactive` = Button-grammar state-layer hover/press. Do **not**
     use `Chip`/`ChipSet` or a dedicated starter primitive. Live `#chat` Empty.
+  - **Active conversation menu:** place **`ChatSessionMenu`** directly inside
+    `Chat`, before `ChatThread`. Core reserves a seat at the well's top-right
+    (16dp top / end), outside the scrolling log, with one ghost
+    `MoreHorizontalIcon`, localized `label` for Tooltip + aria-label, and an
+    end-aligned portaled `DropdownMenu`. Pass `activeSessionId` (null disables
+    the trigger) and `renderMenu(sessionId)` returning `DropdownMenuItem`,
+    separators and `DropdownMenuSub` for nested choices such as Export chat
+    as… → Markdown (.md) / JSON (.json). The consumer owns callbacks, formats,
+    persistence and extra items; core owns appearance, floating positioning,
+    keyboard navigation and dismissal. Changing session ID or disabling the
+    menu closes the old menu tree. This targets the active conversation,
+    separately from sidebar multi-selection. Do not add private positioning,
+    trigger CSS or a second toolbar; keep Rename in the navigation item's
+    context menu. Recipe: [CHAT_SESSION_MENU.md](../../llm/CHAT_SESSION_MENU.md).
+    Live: `#layouts-demo-chat-product` / `#layouts-demo-chat-aside`.
   - **Session-history menus:** use **`ChatSessionsDrawer`** (a composed
     `NavigationDrawer` with scoped Ctrl / Cmd+A, Ctrl click, Shift range and
     Ctrl+Shift additive range selection). Full selection uses the same batch

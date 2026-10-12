@@ -32,6 +32,7 @@ const DEMO_FILES = [
   "examples/sandbox/src/components/ChatComposerModeTogglesEndActions.tsx",
   "examples/sandbox/src/components/ChatQuestionSequenceDemo.tsx",
   "examples/sandbox/src/components/ChatSessionsDrawerDemo.tsx",
+  "examples/sandbox/src/components/ChatConversationDemo.tsx",
   "examples/sandbox/src/components/ListSelectionDemo.tsx",
   "examples/sandbox/src/components/TextSelectionComposerDemo.tsx",
 ];

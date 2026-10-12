@@ -1,0 +1,52 @@
+# Active chat session menu
+
+Use `ChatSessionMenu` directly inside `Chat`, before `ChatThread`. It reserves
+the well's top-right seat with 16dp top/end padding, outside the scrolling log.
+Core owns the ghost ellipsis trigger, Tooltip, menu surface, nested positioning,
+keyboard navigation, focus return and dismissal. No consumer positioning CSS
+or extra toolbar is needed. The same shell works in the main canvas and EndAside.
+
+```tsx
+import {
+  Chat, ChatSessionMenu, ChatThread, ChatComposer,
+  DropdownMenuSub, DropdownMenuItem,
+} from "@fynns/ui";
+
+<Chat>
+  <ChatSessionMenu
+    activeSessionId={activeSessionId ?? null}
+    label="Chat session options"
+    disabled={sessionBusy}
+    renderMenu={(sessionId) => (
+      <DropdownMenuSub trigger="Export chat as…">
+        <DropdownMenuItem onClick={() => exportChat(sessionId, "md")}>
+          Markdown (.md)
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => exportChat(sessionId, "json")}>
+          JSON (.json)
+        </DropdownMenuItem>
+      </DropdownMenuSub>
+    )}
+  />
+  <ChatThread>{messages}</ChatThread>
+  <ChatComposer {...composerProps} />
+</Chat>
+```
+
+- Localize `label` (both tooltip and accessible name) and menu copy.
+- `activeSessionId` targets the active conversation, not sidebar multi-selection.
+  Null disables the trigger and does not call `renderMenu`.
+- Changing the ID or disabling the component unmounts the previous menu tree.
+  Bind actions to the `sessionId` supplied to `renderMenu` and take the correct
+  session's message snapshot. Consumers own export serializers, downloads,
+  errors, persistence and extra items/separators/submenus.
+- Keep Rename in the target navigation item's keyboard-accessible context menu.
+- A null/false menu body disables the trigger. Omit the component entirely if
+  this surface has no session actions. Mount only one per Chat.
+- Keep existing ChatThread/composer sizing, scrolling and empty/loading/error
+  states; the menu is a direct sibling, not part of ChatThread or TopAppBar.
+
+Live examples: sandbox `#layouts-demo-chat-product` and
+`#layouts-demo-chat-aside`. The product example downloads sample Markdown/JSON;
+its Archive row only demonstrates a callback request, without persistence.
+See [catalog](../docs/design-system/catalog.md).

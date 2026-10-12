@@ -3,9 +3,16 @@ import {
   ChatComposer,
   ChatMessage,
   ChatReveal,
+  ChatSessionMenu,
   ChatThread,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
   EmptyState,
+  ArchiveIcon,
+  FileIcon,
   Surface,
+  snackbar,
 } from "@fynns/ui";
 import { useEffect, useRef, useState } from "react";
 import { useLocale } from "../i18n";
@@ -23,6 +30,7 @@ export function ChatConversationDemo({
   starterItems,
   landing,
   onFirstSend,
+  activeSessionId,
 }: {
   label: string;
   ariaLabel: string;
@@ -31,8 +39,12 @@ export function ChatConversationDemo({
   starterItems: ReadonlyArray<ChatStarterItem>;
   landing: boolean;
   onFirstSend?: () => void;
+  activeSessionId?: string | null;
 }) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const menuCopy = locale === "zh"
+    ? { more: "会话选项", export: "导出会话为…", archive: "归档会话", requested: "示例归档请求" }
+    : { more: "Chat session options", export: "Export chat as…", archive: "Archive chat", requested: "Sample archive request" };
   const [draft, setDraft] = useState("");
   const [turns, setTurns] = useState<DemoTurn[]>([]);
   const nextId = useRef(0);
@@ -74,9 +86,35 @@ export function ChatConversationDemo({
     />
   );
   const showLanding = landing && turns.length === 0;
+  const sessionId = activeSessionId === undefined
+    ? (turns.length > 0 ? "sample-session" : null)
+    : activeSessionId;
+  const exportChat = (id: string, format: "md" | "json") => {
+    const body = format === "json"
+      ? JSON.stringify({ sessionId: id, turns }, null, 2)
+      : turns.map((turn) => `## ${turn.kind}\n\n${turn.text}`).join("\n\n");
+    const url = URL.createObjectURL(new Blob([body], {
+      type: format === "json" ? "application/json" : "text/markdown;charset=utf-8",
+    }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `chat-${id}.${format}`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <Chat label={label} className={showLanding ? "sandbox-chat--landing" : undefined}>
+      <ChatSessionMenu activeSessionId={sessionId} label={menuCopy.more} renderMenu={(id) => <>
+        <DropdownMenuSub trigger={menuCopy.export} icon={<FileIcon />}>
+          <DropdownMenuItem onClick={() => exportChat(id, "md")}>Markdown (.md)</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => exportChat(id, "json")}>JSON (.json)</DropdownMenuItem>
+        </DropdownMenuSub>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem icon={<ArchiveIcon />} onClick={() => snackbar(`${menuCopy.requested} · ${id}`)}>
+          {menuCopy.archive}
+        </DropdownMenuItem>
+      </>} />
       <ChatThread
         empty={
           showLanding ? (

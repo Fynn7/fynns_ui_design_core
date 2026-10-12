@@ -7,6 +7,7 @@
 import "./theme/theme.css";
 import "./primitives/primitives.css";
 export * from "./primitives/ChatSessionsDrawer";
+export * from "./primitives/ChatSessionMenu";
 export * from "./primitives/SelectionArea";
 export * from "./primitives/useListSelection";
 import { ensureOverlayScrollbars } from "./theme/overlayScrollbar";

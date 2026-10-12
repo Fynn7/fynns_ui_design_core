@@ -291,6 +291,7 @@ export function ChatProductLayoutsDemo() {
                 sendLabel={t("layouts.fillColumnSend")}
                 starterItems={starterItems}
                 landing={isNewChatLanding}
+                activeSessionId={activeSession}
                 onFirstSend={() => {
                   setSessionsEmpty(false);
                   setActiveSession("alpha");

@@ -152,18 +152,22 @@ export function MenuSurface({
 
     if (event.key === "ArrowDown") {
       event.preventDefault();
+      event.stopPropagation();
       const next = index < 0 ? 0 : (index + 1) % items.length;
       items[next]?.focus();
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
+      event.stopPropagation();
       const next =
         index < 0 ? items.length - 1 : (index - 1 + items.length) % items.length;
       items[next]?.focus();
     } else if (event.key === "Home") {
       event.preventDefault();
+      event.stopPropagation();
       items[0]?.focus();
     } else if (event.key === "End") {
       event.preventDefault();
+      event.stopPropagation();
       items[items.length - 1]?.focus();
     } else if (event.key === "Escape") {
       event.preventDefault();
