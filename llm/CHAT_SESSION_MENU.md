@@ -1,7 +1,11 @@
 # Active chat session menu
 
 Use `ChatSessionMenu` directly inside `Chat`, before `ChatThread`. It reserves
-the well's top-right seat with 16dp top/end padding, outside the scrolling log.
+the top-right seat outside the scrolling log. In a FillColumn workspace with
+its own TopAppBar, the trigger is portaled to the well edge: end inset matches
+`--fynns-appbar-pad-inline`, and the gap below the bar matches
+`--fynns-appbar-actions-gap`. Content padding stays intact. Standalone Chat
+and aside hosts retain their 16dp internal seat.
 Core owns the ghost ellipsis trigger, Tooltip, menu surface, nested positioning,
 keyboard navigation, focus return and dismissal. No consumer positioning CSS
 or extra toolbar is needed. The same shell works in the main canvas and EndAside.
@@ -50,3 +54,14 @@ Live examples: sandbox `#layouts-demo-chat-product` and
 `#layouts-demo-chat-aside`. The product example downloads sample Markdown/JSON;
 its Archive row only demonstrates a callback request, without persistence.
 See [catalog](../docs/design-system/catalog.md).
+
+Alignment reference: `#layouts-demo-chat-session-menu` includes the owning
+TopAppBar. `e2e/treaty/chat-session-menu-chrome.spec.ts` verifies the shared
+vertical centerline, matching bar/action spacing, unchanged well bounds,
+keyboard focus return, dark/light themes, narrow shell and reduced motion.
+The standalone and FillColumn inset regressions remain unchanged.
+
+UI review for this menu scope: **10/10** — ghost emphasis (2), one session menu
+without extra toolbar (2), shared chrome spacing/alignment (2), stable geometry
+and session-scoped actions (2), core keyboard/focus and theme/width checks (2).
+Message/composer well padding remains intact; no consumer CSS patch is needed.

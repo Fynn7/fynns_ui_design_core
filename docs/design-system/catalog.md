@@ -210,7 +210,8 @@ classes.
     use `Chip`/`ChipSet` or a dedicated starter primitive. Live `#chat` Empty.
   - **Active conversation menu:** place **`ChatSessionMenu`** directly inside
     `Chat`, before `ChatThread`. Core reserves a seat at the well's top-right
-    (16dp top / end), outside the scrolling log, with one ghost
+    (standalone: 16dp top / end; FillColumn + own TopAppBar: well edge aligned
+    to the bar's end inset and action gap), outside the scrolling log, with one ghost
     `MoreHorizontalIcon`, localized `label` for Tooltip + aria-label, and an
     end-aligned portaled `DropdownMenu`. Pass `activeSessionId` (null disables
     the trigger) and `renderMenu(sessionId)` returning `DropdownMenuItem`,

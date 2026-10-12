@@ -1745,6 +1745,18 @@ a.fynns-chat-activity-artifact:hover {
   padding-inline: var(--fynns-space-4);
 }
 
+/* Shell chrome belongs to the well edge, outside FillColumn's content inset. */
+.fynns-fill-column-main:has(> .fynns-chat-session-menu--chrome) {
+  position: relative;
+}
+
+.fynns-fill-column-main > .fynns-chat-session-menu--chrome {
+  position: absolute;
+  inset-block-start: var(--fynns-appbar-actions-gap);
+  inset-inline-end: var(--fynns-appbar-pad-inline);
+  z-index: 1;
+}
+
 /* Narrow EndAside / fill hosts: allow shrink so inset pad is not clipped. */
 .fynns-end-aside .fynns-chat,
 .fynns-chat-host--fill > .fynns-chat {

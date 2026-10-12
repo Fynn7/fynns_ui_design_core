@@ -18,6 +18,11 @@ export const LAYOUTS_LEAD_KEY: MessageKey = "layouts.lead";
 
 export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
   {
+    id: "chat-session-menu",
+    label: "Chat session menu alignment",
+    keywords: ["chat", "session", "menu", "alignment", "会话", "菜单", "对齐"],
+  },
+  {
     id: "canvas-workspace",
     label: "Canvas workspace",
     keywords: ["canvas", "floating", "docked", "toolbar", "menu", "inspector", "save", "retry", "画布", "浮层", "工具条", "菜单", "侧栏", "保存", "重试"],

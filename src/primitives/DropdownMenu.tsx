@@ -843,9 +843,11 @@ export function DropdownMenuSub({
   }, [parent.openSub, subId, open, clearTimers]);
 
   const release = useCallback(() => {
+    clearTimers();
     setOpen(false);
     parent.requestSubOpen(null);
-  }, [parent]);
+    itemRef.current?.focus();
+  }, [clearTimers, parent]);
 
   useEffect(() => {
     if (!panelEl) return;
@@ -897,6 +899,7 @@ export function DropdownMenuSub({
         onClick={(event) => {
           event.preventDefault();
           if (disabled) return;
+          clearTimers();
           setOpen(true);
           parent.requestSubOpen(subId);
         }}
@@ -904,6 +907,7 @@ export function DropdownMenuSub({
           if (disabled) return;
           if (event.key === "ArrowRight" || event.key === "Enter" || event.key === " ") {
             event.preventDefault();
+            clearTimers();
             setOpen(true);
             parent.requestSubOpen(subId);
           }

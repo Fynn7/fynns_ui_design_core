@@ -6,6 +6,10 @@ import {
   EmptyState,
   FillColumn,
   MoreHorizontalIcon,
+  IconButton,
+  PanelRightIcon,
+  TopAppBar,
+  Tooltip,
   NavigationDrawer,
   NavigationDrawerItem,
   NavigationDrawerNewChat,
@@ -32,7 +36,7 @@ import { ChatConversationDemo } from "./ChatConversationDemo";
  *
  * Live: `#layouts-demo-chat-product`.
  */
-export function ChatProductLayoutsDemo() {
+export function ChatProductLayoutsDemo({ withTopBar = false }: { withTopBar?: boolean }) {
   const { t } = useLocale();
   const [navOpen, setNavOpen] = useState(true);
   const [modalNavOpen, setModalNavOpen] = useState(false);
@@ -165,7 +169,9 @@ export function ChatProductLayoutsDemo() {
           className="fynns-destination-app-shell"
           navMode={navOpen ? "drawer" : "hidden"}
           onNavCrowded={() => setNavOpen(false)}
-          topBar={null}
+          topBar={withTopBar ? <TopAppBar title={t("layouts.chatProductChatLabel")} trailing={
+            <Tooltip content="Inspector"><IconButton aria-label="Inspector" variant="ghost" size="sm"><PanelRightIcon /></IconButton></Tooltip>
+          } /> : null}
           nav={
             <NavigationDrawer
               variant="standard"

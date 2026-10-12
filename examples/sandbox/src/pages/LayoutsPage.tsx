@@ -428,6 +428,10 @@ export function LayoutsPage() {
             <ChatProductLayoutsDemo />
           </LayoutsDemo>
 
+          <LayoutsDemo id="chat-session-menu">
+            <ChatProductLayoutsDemo withTopBar />
+          </LayoutsDemo>
+
           <LayoutsDemo id="chat-sessions-drawer">
             <ChatSessionsDrawerDemo />
           </LayoutsDemo>
