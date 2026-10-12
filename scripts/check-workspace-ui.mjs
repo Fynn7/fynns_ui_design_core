@@ -109,6 +109,11 @@ export function checkWorkspaceSource(text, filename = "sample.tsx", ts = compile
   const isRow = node => tag(node) === "Toolbar" || /\bfynns-control-cluster\b/.test(value(node, "className") ?? "");
   const upper = text => {
     const label = text.trim();
+    // Conventional metric/hardware names are data labels, not decorative copy.
+    // Keep this vocabulary explicit: accepting arbitrary uppercase words would
+    // also accept SETTINGS, and a length threshold misses TTFT and VRAM.
+    const technical = new Set(["TTFT", "GPU", "VRAM", "CPU", "RAM"]);
+    if (label.split(/\s*\/\s*/).every(part => technical.has(part))) return false;
     // A standalone short initialism is ambiguous without domain knowledge.
     // Leave it for copy review rather than blocking a consumer's dev server.
     if (/^[A-Z]{1,3}$/.test(label)) return false;
@@ -240,7 +245,7 @@ export function checkWorkspaceFiles(files, target) {
 }
 
 /** Conservative source migration. Never runs during a read-only gate. Only
- * literal Cancel variants and simple, unconditional retry rows are safe here;
+ * literal Cancel variants, text wrappers and unconditional retry rows are safe here;
  * arbitrary render functions/slots/dismiss handlers require a human edit. */
 export function fixWorkspaceSource(text, filename = "sample.tsx", ts = compiler()) {
   const source = ts.createSourceFile(filename, text, ts.ScriptTarget.Latest, true,
@@ -265,7 +270,13 @@ export function fixWorkspaceSource(text, filename = "sample.tsx", ts = compiler(
   const edits = [];
   const violations = checkWorkspaceSource(text, filename, ts);
   const violates = (node, rule) => violations.some(error => error.rule === rule && error.line === source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1);
-  const add = (start, end, replacement, rule) => edits.push({ start, end, replacement, rule });
+  const add = (start, end, replacement, rule) => {
+    const candidate = text.slice(0, start) + replacement + text.slice(end);
+    if (rule === "inline-dismiss" && checkWorkspaceSource(candidate, filename, ts).filter(error => error.rule === rule).length >=
+      violations.filter(error => error.rule === rule).length) return false;
+    edits.push({ start, end, replacement, rule });
+    return true;
+  };
   const retry = node => tag(node) === "Button" && !spread(node) && children(node).some(child =>
     /\b(retry|refresh|recover|reload)\b|重试|重新加载|恢复|刷新/i.test(child.getText(source)));
   const containsControl = node => {
@@ -273,6 +284,35 @@ export function fixWorkspaceSource(text, filename = "sample.tsx", ts = compiler(
     let found = false;
     ts.forEachChild(node, child => { if (containsControl(child)) found = true; });
     return found;
+  };
+  const textOnly = node => {
+    if (ts.isJsxText(node)) return true;
+    if (ts.isJsxExpression(node)) {
+      let jsx = false;
+      const scan = item => {
+        if (opening(item) || ts.isJsxFragment(item)) jsx = true;
+        ts.forEachChild(item, scan);
+      };
+      ts.forEachChild(node, scan);
+      return !jsx;
+    }
+    if (!ts.isJsxElement(node)) return false;
+    const name = node.openingElement.tagName.getText(source);
+    const attrs = node.openingElement.attributes.properties;
+    const cls = attribute(node, "className")?.initializer;
+    const bareWrapper = name === "div" && (!attrs.length ||
+      (attrs.length === 1 && cls && ts.isStringLiteral(cls) && cls.text === "fynns-unit-stack"));
+    // Several block children encode paragraph boundaries; flattening them can
+    // concatenate copy and silently lose layout semantics.
+    if (bareWrapper && meaningful(node).length !== 1) return false;
+    return (bareWrapper || ["span", "strong", "em", "b", "i", "small", "code", "s", "u", "mark", "sub", "sup"].includes(name)) &&
+      children(node).every(textOnly);
+  };
+  const unwrapText = node => {
+    if (!ts.isJsxElement(node)) return node.getText(source);
+    const content = children(node).map(unwrapText).join("");
+    if (node.openingElement.tagName.getText(source) === "div") return content;
+    return node.openingElement.getText(source) + content + node.closingElement.getText(source);
   };
   function visit(node) {
     if (tag(node) === "InlineAlert" && ts.isJsxElement(node) && !spread(node) && !attribute(node, "message") && !attribute(node, "children") && violates(node, "inline-dismiss")) {
@@ -286,7 +326,11 @@ export function fixWorkspaceSource(text, filename = "sample.tsx", ts = compiler(
       const content = meaningful(container);
       const buttons = content.filter(retry);
       const rest = content.filter(child => !buttons.includes(child));
-      if (buttons.length && rest.length && !rest.some(containsControl)) {
+      if (!buttons.length && meaningful(node).length === 1 && children(node).every(textOnly)) {
+        const replacement = node.openingElement.getText(source) + children(node).map(unwrapText).join("") + node.closingElement.getText(source);
+        if (add(node.getStart(source), node.end, replacement, "inline-dismiss")) return;
+      }
+      if (buttons.length && rest.length === 1 && rest.every(textOnly) && !rest.some(containsControl)) {
         const start = node.getStart(source);
         const indent = text.slice(text.lastIndexOf("\n", start - 1) + 1, start).match(/^\s*/)[0];
         const eol = text.includes("\r\n") ? "\r\n" : "\n";

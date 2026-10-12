@@ -19,7 +19,12 @@ npx vitest run <file>        # 单测（全量 npm run test:unit）
 npm run typecheck            # 类型
 npm run check                # 门禁：typecheck + wysiwyg + perf + no-consumer + doc-links + unit + e2e
 npm run gen:theme            # 改过 tokens.ts / motionTokens.ts 之后
+npm run check:consumers -- --target <消费包> [--target <消费包> ...] # 逐一检查受影响消费仓
 ```
+
+改动消费契约 / 门禁或要求多个消费仓迁移时，完成前必须对每个受影响消费包运行
+`check:consumers`，再运行消费包自己的类型 / 构建检查。core 的 `npm run check`
+不证明消费仓已兼容；不得仅凭同步成功、修了部分报错或 core 单测通过宣称完成。
 
 ## 查 API：用工具，不读整文件
 

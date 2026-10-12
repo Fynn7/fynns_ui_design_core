@@ -30,7 +30,10 @@ Its overlay placement, notice stacking and motion are shipped core behavior.
 The static `natural-case` gate leaves standalone one-to-three-letter uppercase
 labels for copy review because they may be technical initialisms. This is a
 limit of static detection, not permission to capitalize ordinary UI words.
-Longer or compound uppercase labels remain checked; use natural sentence case
+Conventional metric/hardware labels `TTFT`, `GPU`, `VRAM`, `CPU`, `RAM` and
+slash-separated combinations of those names retain their exact casing. This
+explicit vocabulary does not exempt arbitrary uppercase words or headings.
+Other longer or compound uppercase labels remain checked; use natural sentence case
 for the surrounding human label (for example, “API settings”).
 
 Use `DestinationAppShell` for explicitly requested fixed destination lists: its existing inspector
@@ -171,12 +174,29 @@ exit 1 as stale core. Workspace violations require consumer source edits;
 pulling core or skipping sibling sync does not repair them.
 
 Existing consumers can explicitly run `check-ui-exports.mjs --target <app> --fix`
-and review the diff. This migrates literal Cancel variants and simple,
+and review the diff. This migrates literal Cancel variants, bare text-only `div`
+wrappers (including `fynns-unit-stack`) and simple,
 unconditional InlineAlert retry rows, preserving callbacks, disabled state,
 icons and localized copy. Dynamic variants, spreads, conditional recovery and
 message slots remain manual migrations. It then runs the complete strict gate;
 unresolved problems still exit 1. Checks without `--fix` never write source.
 Keep the original tests and the gate enabled after migration.
+
+After changing core contracts or migrating consumers, run a read-only preflight
+against **every affected consumer package**, before declaring the update complete:
+
+```sh
+npm run check:consumers -- --target ../app-one/apps/web --target ../app-two/gui
+```
+
+The command runs the current core export/workspace/cache gate for each explicitly
+named package, continues after failures, and exits nonzero if any package fails.
+It never syncs core, installs dependencies or edits consumers. Core's own
+`npm run check` cannot prove consumer compatibility; CI without sibling packages
+still runs it independently. Follow preflight with each consumer's typecheck/build
+and browser verification. A migrated alert is accepted only when its original
+`inline-dismiss` violation disappears; details, styled wrappers and indirect
+controls cannot be reported as a successful partial migration.
 
 Static success is necessary, not sufficient: cross-file wrappers, dynamic props,
 translated copy, navigation behavior, duplicate controls, CSS transforms and

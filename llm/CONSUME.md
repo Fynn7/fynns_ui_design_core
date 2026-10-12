@@ -37,7 +37,7 @@ dynamic/localized behavior still requires browser verification.
 **Gate failure recovery:** read the actual file/rule diagnostics first. A
 `workspace-contract` failure is consumer JSX, not a stale sibling. Run
 `node ../fynns_ui_design_core/scripts/check-ui-exports.mjs --target <app> --fix`
-to migrate simple legacy Cancel/retry rows, review the diff and rerun the gate.
+to migrate simple legacy Cancel/retry rows and bare text wrappers, review the diff and rerun the gate.
 Complex/dynamic cases still require source edits. Checks without `--fix` are
 read-only. Keep Retry callbacks/disabled state reachable in a sibling
 `.fynns-control-cluster`; `onDismiss` only dismisses presentation. See the
@@ -46,6 +46,13 @@ Wrappers must preserve JSON `issues[].code` / `message` (or the CLI diagnostic),
 never label every nonzero exit as stale core or suggest skipping sibling sync.
 Only missing core/exports calls for linking/sync; `dev-cache` calls for
 `install-as-npm.mjs --dev-cache-only`, tooling failures for installing TypeScript.
+
+For updates affecting multiple consumers, run in core:
+`npm run check:consumers -- --target <package-one> --target <package-two>`.
+List every affected package; this read-only batch checks them all and fails if
+any fails. Then run each consumer's typecheck/build and browser checks before
+reporting compatibility. Core tests or a successful sibling sync alone cannot
+prove that the consumer migration is complete.
 
 **Canvas workspaces (≥ 0.5.310):** use `.fynns-workspace-canvas` and
 `.fynns-workspace-tools` → floating Toolbar, with core 16dp clearance and a
