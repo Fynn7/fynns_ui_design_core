@@ -30,6 +30,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawnSync } from "node:child_process";
+import { prepareConsumer } from "./consumer-recovery.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = path.resolve(__dirname, "..");
@@ -56,7 +57,8 @@ clone — no NODE_AUTH_TOKEN). Optionally file:-link ${PKG_NAME} into the packag
 Options:
   --target <dir>         Consumer package dir or path inside the consumer repo
   --ref <branch>         Clone/update ref (default: ${DEFAULT_REF} or FYNNS_UI_CORE_REF)
-  --update               Fetch + fast-forward an existing clean sibling to origin/<ref>
+  --update               Sync sibling, automatically restore app dependencies/cache,
+                         migrate supported legacy JSX, then verify consumer readiness
   --min-version <semver> Fail if sibling package.json version is still below this
   --install              npm install ${PKG_NAME}@file:<sibling> into --target package
   --npmrc                Write zero-token .npmrc beside the package (safe @fynn7 scope)
@@ -606,7 +608,7 @@ function ensureConsumerLink(pkgRoot, sibling, log = []) {
   log.push({ step: "consumer-link", status: "repaired", path: link, target: sibling });
 }
 
-function main() {
+async function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.help) {
     process.stdout.write(`${usage()}\n`);
@@ -625,9 +627,19 @@ function main() {
     assertMinVersion(sibling, minVersion, log);
     if (opts.npmrc || opts.install) writeSafeNpmrc(pkgRoot, false, log);
     if (opts.install) installFromSibling(pkgRoot, sibling, log);
-    // A ready checkout does not imply that the consumer's node_modules link exists.
-    // Never invoke npm here: postinstall also runs this helper.
-    if (opts.update) ensureConsumerLink(pkgRoot, sibling, log);
+    let consumer = null;
+    if (opts.update) {
+      try { ensureConsumerLink(pkgRoot, sibling, log); }
+      catch (error) {
+        // Preserve ensureConsumerLink's strict/read-only ownership contract.
+        // Startup recovery can quarantine an incomplete physical installation
+        // and reinstall from the already validated dependency declaration.
+        if (!String(error.message).startsWith("Incomplete installed")) throw error;
+      }
+      consumer = await prepareConsumer(pkgRoot, { json: opts.json });
+      log.push({ step: "consumer-recovery", ...consumer });
+      if (!consumer.ok) throw new Error(consumer.error);
+    }
     const updateSkipped = Boolean(updateResult?.skipped);
     const summary = {
       ok: true,
@@ -640,6 +652,7 @@ function main() {
       tokenRequired: false,
       coreRoot: CORE_ROOT,
       updateSkipped,
+      consumer,
       log,
     };
     if (opts.json) process.stdout.write(`${JSON.stringify(summary, null, 2)}\n`);
@@ -672,7 +685,7 @@ const isDirectRun = (() => {
   }
 })();
 
-if (isDirectRun) main();
+if (isDirectRun) await main();
 
 export {
   ensureConsumerLink,

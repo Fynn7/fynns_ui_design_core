@@ -327,12 +327,24 @@ Existing app-owned gate wrappers
 are preserved. Flags: `--sibling` (default: safe `.npmrc` + `file:`),
 `--packages` (GitHub Packages, publishers only — needs a token), `--check`,
 `--wire-only` / `--skip-install`, `--dev-cache-only` (patch Vite header only),
+`--recovery-only` (add startup hooks alone, retaining pinned dependencies/configs),
 `--sync-consumer-rule`, `--dry-run`,
-`--vite <file>`, `--tsconfig <file>`, `--json`. Wires `fynns-ui:gate`
+`--vite <file>`, `--tsconfig <file>`, `--json`. Wires `fynns-ui:prepare` before `fynns-ui:gate`
 (`ensure-sibling --update` + `check-ui-exports`) and the soft registry notice
 `fynns-ui:check-update` (`FYNNS_UI_SKIP_UPDATE_CHECK=1` silences; cache
 `.fynns-ui-update-check.json`). Optional floor: consumer `package.json`
 `"fynnsUi": { "minVersion": "0.5.x" }`.
+
+**Automatic recovery:** the copied bootstrap loads core tooling even when the
+app's node_modules is absent. Normal dev/build/preview checks metadata, main/bin
+artifacts, command shims and npm's dependency tree; if damaged, it serializes one
+app-level install with lifecycle scripts enabled and verifies again. Broken
+installed packages are retained in ignored `.fynns-ui-recovery` backups. Standard
+dev-cache and supported workspace migrations run before the strict gate. Nested
+install hooks never recursively install. Healthy restarts do not reinstall;
+unsupported source changes and failed install hooks remain errors. A pinned old
+UI snapshot can use the canonical local sibling's recovery tools without changing
+its dependency. See [recovery details](../docs/package-propagation.md).
 
 **`scripts/check-ui-exports.mjs --target <app>`** — hard gate: every named
 import from `@fynns/ui` must exist on the linked barrel, and Vite dev responses

@@ -9,6 +9,19 @@ import { spawnSync } from "node:child_process";
 const CORE = "@fynn7/ui-design-core";
 const readJson = (file) => JSON.parse(fs.readFileSync(file, "utf8").replace(/^\uFEFF/, ""));
 
+export function resolveNpmCli() {
+  const candidates = [process.env.npm_execpath,
+    path.join(path.dirname(process.execPath), "node_modules/npm/bin/npm-cli.js"),
+    path.resolve(path.dirname(process.execPath), "../lib/node_modules/npm/bin/npm-cli.js")];
+  for (const dir of (process.env.PATH ?? "").split(path.delimiter)) {
+    candidates.push(path.join(dir, "node_modules/npm/bin/npm-cli.js"));
+    if (process.platform !== "win32") {
+      try { const cli = fs.realpathSync(path.join(dir, "npm")); if (cli.endsWith(".js")) candidates.push(cli); } catch {}
+    }
+  }
+  return candidates.find(file => file && fs.existsSync(file)) ?? null;
+}
+
 // Use the consumer's resolution chain, never the tooling/core node_modules.
 // Walking package directories also supports packages that hide package.json in exports.
 function installedPackage(pkgRoot, name) {
@@ -20,7 +33,8 @@ function installedPackage(pkgRoot, name) {
       throw error;
     }
     // A broken nearer install shadows any healthy ancestor install.
-    return { dir, manifest: readJson(path.join(dir, "package.json")) };
+    try { return { dir, manifest: readJson(path.join(dir, "package.json")) }; }
+    catch (error) { error.dependencyPath = dir; throw error; }
   }
   return null;
 }
@@ -60,7 +74,7 @@ export function checkConsumerDependencies(pkgRoot) {
         catch { failures.push({ name, reason: `main entry missing: ${manifest.main}`, path: dir }); }
       }
     } catch (error) {
-      failures.push({ name, reason: `unreadable installed package: ${error.message}` });
+      failures.push({ name, reason: `unreadable installed package: ${error.message}`, ...(error.dependencyPath ? { path: error.dependencyPath } : {}) });
     }
   }
   const repair = `node "${fileURLToPath(import.meta.url)}" --target "${pkgRoot}" --repair`;
@@ -74,16 +88,16 @@ export function checkConsumerDependencies(pkgRoot) {
   return { ok: failures.length === 0, checked, failures, issues: message ? [{ code: "consumer-dependencies", message }] : [], error: message };
 }
 
-export function repairConsumerDependencies(pkgRoot, { json = false } = {}) {
+export function repairConsumerDependencies(pkgRoot, { json = false, force = false } = {}) {
   const before = checkConsumerDependencies(pkgRoot);
-  if (before.ok) return { ...before, repaired: false };
+  if (before.ok && !force) return { ...before, repaired: false };
   if (process.env.FYNNS_UI_REPAIRING_DEPS === "1" || process.env.npm_lifecycle_event === "postinstall" ||
       ["install", "ci"].includes(process.env.npm_command)) {
     throw new Error("Dependency repair cannot run inside install hooks. Run the repair command directly after npm exits.");
   }
   // Fixed arguments, cwd selects the package. Do not disable lifecycle scripts:
   // packages such as Electron/esbuild need them to be runnable.
-  const npmCli = process.env.npm_execpath;
+  const npmCli = resolveNpmCli();
   const viaNode = npmCli && fs.existsSync(npmCli);
   const result = spawnSync(viaNode ? process.execPath : "npm", [
     ...(viaNode ? [npmCli] : []), "install", "--include=dev", "--no-audit", "--no-fund",

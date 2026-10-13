@@ -29,6 +29,7 @@
     "scripts/check-ui-update.mjs",
     "scripts/check-ui-exports.mjs",
     "scripts/check-consumer-deps.mjs",
+    "scripts/consumer-recovery.mjs",
     "scripts/install-as-npm.mjs",
     "scripts/vite-dev-cache.mjs",
     "scripts/ensure-sibling-ui-core.mjs",
@@ -68,6 +69,7 @@
     "consume:check-exports": "node scripts/check-ui-exports.mjs",
     "consume:check-deps": "node scripts/check-consumer-deps.mjs",
     "consume:repair-deps": "node scripts/check-consumer-deps.mjs --repair",
+    "consume:prepare": "node scripts/consumer-recovery.mjs",
     "prepublishOnly": "npm run check",
     "check:thinking-content": "node scripts/check-thinking-content.mjs"
   },

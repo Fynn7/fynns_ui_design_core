@@ -31,6 +31,7 @@ const UPDATE_SCRIPT = "fynns-ui:check-update";
 const UPDATE_SCRIPT_CMD =
   "node node_modules/@fynn7/ui-design-core/scripts/check-ui-update.mjs || exit 0";
 const SYNC_SCRIPT = "fynns-ui:sync";
+const PREPARE_SCRIPT = "fynns-ui:prepare";
 const SYNC_SCRIPT_CMD =
   "node node_modules/@fynn7/ui-design-core/scripts/ensure-sibling-ui-core.mjs --target . --update";
 const EXPORTS_SCRIPT = "fynns-ui:check-exports";
@@ -65,6 +66,7 @@ Options:
   --skip-install     Only wire configs / .npmrc (dependency already present)
   --wire-only        Same as --skip-install
   --dev-cache-only   Only add no-store to the Vite dev config
+  --recovery-only    Only wire startup recovery and lifecycle hooks; preserve pinned dependencies/configs
   --check            Validate dep + alias + consumer-rule hash; exit 1 if incomplete
   --sync-consumer-rule  Force overwrite .cursor/rules/fynns-ui-consumer.mdc from core
   --dry-run          Print actions without writing
@@ -87,6 +89,7 @@ function parseArgs(argv) {
     skipInstall: false,
     wireOnly: false,
     devCacheOnly: false,
+    recoveryOnly: false,
     check: false,
     syncConsumerRule: false,
     dryRun: false,
@@ -113,6 +116,7 @@ function parseArgs(argv) {
       out.wireOnly = true;
     } else if (a === "--check") out.check = true;
     else if (a === "--dev-cache-only") out.devCacheOnly = true;
+    else if (a === "--recovery-only") out.recoveryOnly = true;
     else if (a === "--sync-consumer-rule") out.syncConsumerRule = true;
     else if (a === "--dry-run") out.dryRun = true;
     else if (a === "--json") out.json = true;
@@ -592,7 +596,8 @@ function wireUpdateHooks(pkgRoot, dryRun, log) {
   const bootstrapCmd = `node ${bootstrapRel}`;
   const bootstrapPath = path.join(pkgRoot, bootstrapRel);
   const bootstrapSource = fs.readFileSync(path.join(__dirname, "consumer-ui-bootstrap.mjs"), "utf8");
-  const needsBootstrap = !scripts[SYNC_SCRIPT] || scripts[SYNC_SCRIPT] === SYNC_SCRIPT_CMD || scripts[SYNC_SCRIPT] === bootstrapCmd;
+  const needsBootstrap = !scripts[PREPARE_SCRIPT] || scripts[PREPARE_SCRIPT] === `${bootstrapCmd} --prepare` ||
+    !scripts[SYNC_SCRIPT] || scripts[SYNC_SCRIPT] === SYNC_SCRIPT_CMD || scripts[SYNC_SCRIPT] === bootstrapCmd;
   if (needsBootstrap && fs.existsSync(bootstrapPath) &&
       !fs.readFileSync(bootstrapPath, "utf8").includes("// Copied into consumer scripts so bootstrap never depends on a node_modules link.")) {
     throw new Error(`Consumer-owned bootstrap already exists: ${bootstrapPath}; refusing to overwrite it.`);
@@ -603,10 +608,12 @@ function wireUpdateHooks(pkgRoot, dryRun, log) {
   }
   const gateCmd = `npm run ${GATE_SCRIPT}`;
   const softCmd = `npm run ${UPDATE_SCRIPT}`;
+  const prepareCmd = `npm run ${PREPARE_SCRIPT}`;
   let changed = false;
 
   const desired = {
     [SYNC_SCRIPT]: bootstrapCmd,
+    [PREPARE_SCRIPT]: `${bootstrapCmd} --prepare`,
     [EXPORTS_SCRIPT]: EXPORTS_SCRIPT_CMD,
     [GATE_SCRIPT]: GATE_SCRIPT_CMD,
     [UPDATE_SCRIPT]: UPDATE_SCRIPT_CMD,
@@ -628,6 +635,7 @@ function wireUpdateHooks(pkgRoot, dryRun, log) {
     // Soft notice after hard gate (never masks export failures).
     next = prependLifecycleHook(next, softCmd, softMarkers);
     next = prependLifecycleHook(next, gateCmd, hardMarkers);
+    next = prependLifecycleHook(next, prepareCmd, [PREPARE_SCRIPT]);
     if (next !== scripts[hook]) {
       scripts[hook] = next;
       changed = true;
@@ -638,6 +646,7 @@ function wireUpdateHooks(pkgRoot, dryRun, log) {
     const hook = "postinstall";
     let next = scripts[hook];
     next = prependLifecycleHook(next, gateCmd, hardMarkers);
+    next = prependLifecycleHook(next, prepareCmd, [PREPARE_SCRIPT]);
     if (next !== scripts[hook]) {
       scripts[hook] = next;
       changed = true;
@@ -656,7 +665,7 @@ function wireUpdateHooks(pkgRoot, dryRun, log) {
   log.push({
     step: "update_hooks",
     status: dryRun ? "dry-run" : "patched",
-    detail: `${GATE_SCRIPT} (sync+exports) + soft ${UPDATE_SCRIPT} on predev/prebuild/prepreview`,
+    detail: `${PREPARE_SCRIPT} + ${GATE_SCRIPT} (sync+exports) + soft ${UPDATE_SCRIPT} on predev/prebuild/prepreview`,
   });
 }
 
@@ -787,6 +796,7 @@ function removeMiswiredParentHooks(parentRoot, dryRun, log) {
   const scripts = { ...(pkg.data.scripts || {}) };
   const installedCommands = {
     [SYNC_SCRIPT]: "node scripts/fynns-ui-bootstrap.mjs",
+    [PREPARE_SCRIPT]: "node scripts/fynns-ui-bootstrap.mjs --prepare",
     [EXPORTS_SCRIPT]: EXPORTS_SCRIPT_CMD,
     [GATE_SCRIPT]: GATE_SCRIPT_CMD,
     [UPDATE_SCRIPT]: UPDATE_SCRIPT_CMD,
@@ -799,7 +809,7 @@ function removeMiswiredParentHooks(parentRoot, dryRun, log) {
   for (const name of ["predev", "prebuild", "prepreview"]) {
     const before = scripts[name];
     if (typeof before !== "string") continue;
-    const next = before.replace(/^npm run fynns-ui:gate && /, "")
+    const next = before.replace(/^npm run fynns-ui:prepare && /, "").replace(/^npm run fynns-ui:gate && /, "")
       .replace(/^npm run fynns-ui:check-update(?: && )?/, "");
     if (next !== before) {
       if (next) scripts[name] = next;
@@ -809,7 +819,7 @@ function removeMiswiredParentHooks(parentRoot, dryRun, log) {
   }
   if (typeof scripts.postinstall === "string") {
     const before = scripts.postinstall;
-    const next = before.replace(/^npm run fynns-ui:gate(?: && )?/, "");
+    const next = before.replace(/^npm run fynns-ui:prepare && /, "").replace(/^npm run fynns-ui:gate(?: && )?/, "");
     if (next !== before) {
       if (next) scripts.postinstall = next;
       else delete scripts.postinstall;
@@ -833,6 +843,7 @@ function hasMiswiredParentHooks(parentRoot) {
   const scripts = pkg.data.scripts || {};
   return scripts[SYNC_SCRIPT] === SYNC_SCRIPT_CMD ||
     scripts[SYNC_SCRIPT] === "node scripts/fynns-ui-bootstrap.mjs" ||
+    scripts[PREPARE_SCRIPT] === "node scripts/fynns-ui-bootstrap.mjs --prepare" ||
     scripts[EXPORTS_SCRIPT] === EXPORTS_SCRIPT_CMD ||
     scripts[GATE_SCRIPT] === GATE_SCRIPT_CMD ||
     scripts[UPDATE_SCRIPT] === UPDATE_SCRIPT_CMD;
@@ -1025,6 +1036,15 @@ function main() {
       for (const i of result.issues) console.log(`  - ${i}`);
     }
     process.exit(result.ok ? 0 : 1);
+  }
+
+  if (opts.recoveryOnly) {
+    for (const parentRoot of parentRoots) removeMiswiredParentHooks(parentRoot, opts.dryRun, log);
+    wireUpdateHooks(pkgRoot, opts.dryRun, log);
+    const out = { ok: true, action: "recovery-only", consumerRoot: pkgRoot, dryRun: opts.dryRun, log };
+    if (opts.json) console.log(JSON.stringify(out, null, 2));
+    else for (const step of log) console.log(`${step.step}: ${step.status}${step.detail ? ` (${step.detail})` : ""}`);
+    return;
   }
 
   if (opts.devCacheOnly) {

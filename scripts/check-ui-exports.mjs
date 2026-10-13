@@ -32,6 +32,7 @@ const SKIP_DIRS = new Set([
   "build",
   "coverage",
   ".vite",
+  ".fynns-ui-recovery",
   "playwright-report",
   "test-results",
 ]);

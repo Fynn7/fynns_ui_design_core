@@ -61,12 +61,12 @@ scripts (including native tool setup), verifies the resulting artifacts and
 preserves npm/hook failures. It never runs recursively inside install hooks.
 The gate itself is read-only; it never retries an install or rewrites app JSX.
 Healthy hoisted installs are supported; broken nearer packages shadow parents.
-Optional packages may be absent. This preflight does not prove transitive
-dependencies, native binary execution, prop compatibility or browser behavior:
+Optional packages may be absent. This read-only preflight does not prove native
+binary execution, prop compatibility or browser behavior:
 the consumer's own typecheck/build and startup verification are still required.
 
 A root `npm install` installs nested packages only when that root declares them
-as npm workspaces. Otherwise setup must install each app package explicitly.
+as npm workspaces. Startup recovery installs the actual app package when needed.
 Linking core, syncing its version or counting matching exports does not install
 React, Vite or the consumer's process runner. Do not report “ready to start” on
 an export-only or wire-only success. Do not tell users to clean/pull core for an
@@ -80,24 +80,48 @@ Textarea preserve their casing. These exceptions do not allow all-cap headings
 or labels unconnected to a field. New gate rules require positive and negative
 fixtures plus checks against affected consumers before compatibility is claimed.
 
-Startup recovery: `--update` also recreates a missing/dangling app-local
-`node_modules/@fynn7/ui-design-core` link when the app declares the canonical
-sibling as a `file:` dependency. It does not run npm or lifecycle hooks, edit
-manifests/locks, or delete physical installed directories. The export/workspace
-gate remains read-only and must still pass after recovery.
+Startup recovery is implemented by
+[`scripts/consumer-recovery.mjs`](../scripts/consumer-recovery.mjs), called by
+`ensure-sibling-ui-core.mjs --update` and the installer-owned `fynns-ui:prepare`
+hook. Ordinary `npm run dev` / build / preview checks direct package metadata,
+main/bin artifacts, command shims and the npm dependency tree. Missing/broken
+installs trigger one `npm install --include=dev` in the app package, with native
+setup and consumer lifecycle hooks enabled. Damaged installed directories are
+renamed into ignored `.fynns-ui-recovery` backups before reinstalling; source
+checkouts are retained. Hoisted CLI packages receive app-local links for
+launchers that address `node_modules/<tool>` directly.
+Physical UI copies left by npm `install-links` are compared with the declared
+`file:` source (version and source digest); a stale copy is retained as a backup
+and replaced by a source link, including source-only updates at the same version.
+
+Recovery serializes installs per consumer repository, rechecks after waiting,
+reclaims dead-process locks and prevents recursive installation, including
+external npm installs whose nested `npm run` hooks replace lifecycle env vars.
+It applies the standard Vite no-store header and only supported mechanical
+workspace migrations (such as Cancel emphasis and simple InlineAlert retry
+composition, retaining handlers and disabled state). The strict export/workspace
+gate runs afterward. Unknown source errors and failed npm/native hooks remain
+failures; the process never loops or declares readiness just because npm exited.
+Healthy restarts do not install again. Regression fixtures run real npm
+lifecycles with fault injection and offline local packages.
 
 The installer now writes `scripts/fynns-ui-bootstrap.mjs` into the consumer;
 commit this helper with the consumer. It resolves the declared file dependency
 before loading core tooling, so a deleted node_modules link cannot prevent its
 own repair. Re-run `consume:install -- --target <app> --wire-only` to migrate
-installer-owned sync commands; custom consumer wrappers are preserved and should
-call core ensure with `--update` from the sibling. Missing sibling checkouts can
+installer-owned sync commands; custom consumer wrappers are preserved. To add
+recovery hooks alone, use `consume:install -- --target <app> --recovery-only`;
+this preserves dependency pins, Vite/TS configs and consumer rules. A pinned UI
+snapshot without the helper uses recovery tooling from the canonical local
+sibling, while its original snapshot and gate stay selected. Missing sibling checkouts can
 be cloned by the bootstrap; unavailable Git/network, invalid source and actual
 consumer incompatibilities remain actionable failures, not successful startups.
 
 `npm run consume:install` wires:
 
-1. **`fynns-ui:gate`** (hard) — `ensure-sibling-ui-core.mjs --update` then
+1. **`fynns-ui:prepare`** (hard) — deterministic recovery before existing
+   lifecycle gates, loaded from the copied bootstrap independently of node_modules.
+2. **`fynns-ui:gate`** (hard) — `ensure-sibling-ui-core.mjs --update` then
    `check-ui-exports.mjs` on `predev` / `prebuild` / `prepreview` /
    `postinstall`. Auto fast-forwards a **clean** sibling to `origin/dev`
    (or `FYNNS_UI_CORE_REF`) with `git merge --ff-only` after fetch. If FF is
@@ -121,7 +145,7 @@ consumer incompatibilities remain actionable failures, not successful startups.
    webview from reusing a stale native ESM barrel after the sibling updates.
    Optional: `FYNNS_UI_SKIP_SIBLING_SYNC=1` while editing core. Optional
    floor: `"fynnsUi": { "minVersion": "…" }` in the consumer package.json.
-2. **`fynns-ui:check-update`** (soft) — registry notice on
+3. **`fynns-ui:check-update`** (soft) — registry notice on
    `predev` / `prebuild` / `prepreview`. On sibling/`file:` the registry
    lookup skips quietly without a token. Optional Packages lookup needs
    `NODE_AUTH_TOKEN` / `GITHUB_TOKEN`. Silence: `FYNNS_UI_SKIP_UPDATE_CHECK=1`.

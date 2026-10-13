@@ -373,7 +373,8 @@ export function fixWorkspaceSource(text, filename = "sample.tsx", ts = compiler(
       if (only.length === 1 && ts.isJsxElement(only[0]) && only[0].openingElement.tagName.getText(source) === "div") {
         const wrapper = only[0];
         const cls = attribute(wrapper, "className")?.initializer;
-        if (wrapper.openingElement.attributes.properties.length === 1 && cls && ts.isStringLiteral(cls) && cls.text === "fynns-unit-stack") container = wrapper;
+        if (!wrapper.openingElement.attributes.properties.length ||
+            (wrapper.openingElement.attributes.properties.length === 1 && cls && ts.isStringLiteral(cls) && cls.text === "fynns-unit-stack")) container = wrapper;
       }
       const content = meaningful(container);
       const buttons = content.filter(retry);
