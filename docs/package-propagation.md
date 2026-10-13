@@ -39,6 +39,21 @@ Do **not** commit `_authToken=${NODE_AUTH_TOKEN}` (empty env → E401).
 
 ## Update notices + hard gate (consumer dev/build)
 
+Startup recovery: `--update` also recreates a missing/dangling app-local
+`node_modules/@fynn7/ui-design-core` link when the app declares the canonical
+sibling as a `file:` dependency. It does not run npm or lifecycle hooks, edit
+manifests/locks, or delete physical installed directories. The export/workspace
+gate remains read-only and must still pass after recovery.
+
+The installer now writes `scripts/fynns-ui-bootstrap.mjs` into the consumer;
+commit this helper with the consumer. It resolves the declared file dependency
+before loading core tooling, so a deleted node_modules link cannot prevent its
+own repair. Re-run `consume:install -- --target <app> --wire-only` to migrate
+installer-owned sync commands; custom consumer wrappers are preserved and should
+call core ensure with `--update` from the sibling. Missing sibling checkouts can
+be cloned by the bootstrap; unavailable Git/network, invalid source and actual
+consumer incompatibilities remain actionable failures, not successful startups.
+
 `npm run consume:install` wires:
 
 1. **`fynns-ui:gate`** (hard) — `ensure-sibling-ui-core.mjs --update` then

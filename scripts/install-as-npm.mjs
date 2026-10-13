@@ -17,6 +17,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawnSync } from "node:child_process";
 import { semverLt, walkInstallChain } from "./check-ui-update.mjs";
 import { ensureNoStoreDevHeader, hasNoStoreDevHeader } from "./vite-dev-cache.mjs";
+import { npmrcHasActiveEmptyAuth } from "./ensure-sibling-ui-core.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = path.resolve(__dirname, "..");
@@ -587,12 +588,25 @@ function wireUpdateHooks(pkgRoot, dryRun, log) {
   }
 
   const scripts = { ...(pkg.data.scripts || {}) };
+  const bootstrapRel = "scripts/fynns-ui-bootstrap.mjs";
+  const bootstrapCmd = `node ${bootstrapRel}`;
+  const bootstrapPath = path.join(pkgRoot, bootstrapRel);
+  const bootstrapSource = fs.readFileSync(path.join(__dirname, "consumer-ui-bootstrap.mjs"), "utf8");
+  const needsBootstrap = !scripts[SYNC_SCRIPT] || scripts[SYNC_SCRIPT] === SYNC_SCRIPT_CMD || scripts[SYNC_SCRIPT] === bootstrapCmd;
+  if (needsBootstrap && fs.existsSync(bootstrapPath) &&
+      !fs.readFileSync(bootstrapPath, "utf8").includes("// Copied into consumer scripts so bootstrap never depends on a node_modules link.")) {
+    throw new Error(`Consumer-owned bootstrap already exists: ${bootstrapPath}; refusing to overwrite it.`);
+  }
+  if (needsBootstrap && !dryRun) {
+    fs.mkdirSync(path.dirname(bootstrapPath), { recursive: true });
+    fs.writeFileSync(bootstrapPath, bootstrapSource);
+  }
   const gateCmd = `npm run ${GATE_SCRIPT}`;
   const softCmd = `npm run ${UPDATE_SCRIPT}`;
   let changed = false;
 
   const desired = {
-    [SYNC_SCRIPT]: SYNC_SCRIPT_CMD,
+    [SYNC_SCRIPT]: bootstrapCmd,
     [EXPORTS_SCRIPT]: EXPORTS_SCRIPT_CMD,
     [GATE_SCRIPT]: GATE_SCRIPT_CMD,
     [UPDATE_SCRIPT]: UPDATE_SCRIPT_CMD,
@@ -600,7 +614,7 @@ function wireUpdateHooks(pkgRoot, dryRun, log) {
   for (const [name, cmd] of Object.entries(desired)) {
     // A consumer may provide a wrapper for old sibling versions or extra setup.
     // The installer owns missing entries only; never replace an app's wrapper.
-    if (!scripts[name]) {
+    if (!scripts[name] || (name === SYNC_SCRIPT && scripts[name] === SYNC_SCRIPT_CMD)) {
       scripts[name] = cmd;
       changed = true;
     }
@@ -772,15 +786,15 @@ function removeMiswiredParentHooks(parentRoot, dryRun, log) {
   if (deps[PKG_NAME]) return;
   const scripts = { ...(pkg.data.scripts || {}) };
   const installedCommands = {
-    [SYNC_SCRIPT]: SYNC_SCRIPT_CMD,
+    [SYNC_SCRIPT]: "node scripts/fynns-ui-bootstrap.mjs",
     [EXPORTS_SCRIPT]: EXPORTS_SCRIPT_CMD,
     [GATE_SCRIPT]: GATE_SCRIPT_CMD,
     [UPDATE_SCRIPT]: UPDATE_SCRIPT_CMD,
   };
-  if (!Object.entries(installedCommands).some(([name, cmd]) => scripts[name] === cmd)) return;
+  if (!Object.entries(installedCommands).some(([name, cmd]) => scripts[name] === cmd) && scripts[SYNC_SCRIPT] !== SYNC_SCRIPT_CMD) return;
   let changed = false;
   for (const [name, cmd] of Object.entries(installedCommands)) {
-    if (scripts[name] === cmd) { delete scripts[name]; changed = true; }
+    if (scripts[name] === cmd || (name === SYNC_SCRIPT && scripts[name] === SYNC_SCRIPT_CMD)) { delete scripts[name]; changed = true; }
   }
   for (const name of ["predev", "prebuild", "prepreview"]) {
     const before = scripts[name];
@@ -818,6 +832,7 @@ function hasMiswiredParentHooks(parentRoot) {
   if (deps[PKG_NAME]) return false;
   const scripts = pkg.data.scripts || {};
   return scripts[SYNC_SCRIPT] === SYNC_SCRIPT_CMD ||
+    scripts[SYNC_SCRIPT] === "node scripts/fynns-ui-bootstrap.mjs" ||
     scripts[EXPORTS_SCRIPT] === EXPORTS_SCRIPT_CMD ||
     scripts[GATE_SCRIPT] === GATE_SCRIPT_CMD ||
     scripts[UPDATE_SCRIPT] === UPDATE_SCRIPT_CMD;
@@ -870,7 +885,7 @@ function checkMode(pkgRoot, viteFile, tsconfigFile, gitRoot) {
   const npmrc = path.join(pkgRoot, ".npmrc");
   if (fs.existsSync(npmrc)) {
     const npmrcText = readText(npmrc);
-    if (/_authToken=\$\{NODE_AUTH_TOKEN\}/.test(npmrcText) && !process.env.NODE_AUTH_TOKEN?.trim()) {
+    if (npmrcHasActiveEmptyAuth(npmrcText) && !process.env.NODE_AUTH_TOKEN?.trim()) {
       issues.push(
         `.npmrc has _authToken=\${NODE_AUTH_TOKEN} — empty env causes E401; switch to zero-token sibling .npmrc (see llm/CONSUME.md)`,
       );

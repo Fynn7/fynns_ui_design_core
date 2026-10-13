@@ -571,6 +571,41 @@ function installFromSibling(pkgRoot, sibling, log) {
   log.push({ step: "install", status: "ok", detail: `${PKG_NAME}@file:${sibling}` });
 }
 
+/** Repair only missing/broken links explicitly declared as this sibling file dependency. */
+function ensureConsumerLink(pkgRoot, sibling, log = []) {
+  const pkg = JSON.parse(fs.readFileSync(path.join(pkgRoot, "package.json"), "utf8").replace(/^\uFEFF/, ""));
+  const spec = pkg.dependencies?.[PKG_NAME] ?? pkg.devDependencies?.[PKG_NAME];
+  if (typeof spec !== "string" || !spec.startsWith("file:")) return;
+  const declared = spec.startsWith("file://")
+    ? fileURLToPath(spec) : path.resolve(pkgRoot, spec.slice(5));
+  if (fs.realpathSync(declared) !== fs.realpathSync(sibling)) {
+    throw new Error(`${PKG_NAME} file dependency points to ${declared}, not ${sibling}; refusing to rewrite it.`);
+  }
+  const link = path.join(pkgRoot, "node_modules", "@fynn7", "ui-design-core");
+  const entry = path.join(link, "src", "index.ts");
+  if (!fs.existsSync(path.join(sibling, "src", "index.ts"))) {
+    throw new Error(`Sibling barrel missing: ${sibling}/src/index.ts`);
+  }
+  let stat;
+  try { stat = fs.lstatSync(link); } catch (err) { if (err.code !== "ENOENT") throw err; }
+  if (stat) {
+    if (!stat.isSymbolicLink()) {
+      if (fs.existsSync(entry)) return; // npm --install-links copies are consumer-owned.
+      throw new Error(`Incomplete installed ${PKG_NAME} directory at ${link}; run npm install --ignore-scripts to repair it.`);
+    }
+    if (fs.existsSync(entry) && fs.realpathSync(link) === fs.realpathSync(sibling)) return;
+    // unlink removes the junction itself, never recursively deletes its target.
+    fs.unlinkSync(link);
+  }
+  fs.mkdirSync(path.dirname(link), { recursive: true });
+  try {
+    fs.symlinkSync(path.resolve(sibling), link, process.platform === "win32" ? "junction" : "dir");
+  } catch (err) {
+    if (err.code !== "EEXIST" || !fs.existsSync(entry) || fs.realpathSync(link) !== fs.realpathSync(sibling)) throw err;
+  }
+  log.push({ step: "consumer-link", status: "repaired", path: link, target: sibling });
+}
+
 function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.help) {
@@ -590,6 +625,9 @@ function main() {
     assertMinVersion(sibling, minVersion, log);
     if (opts.npmrc || opts.install) writeSafeNpmrc(pkgRoot, false, log);
     if (opts.install) installFromSibling(pkgRoot, sibling, log);
+    // A ready checkout does not imply that the consumer's node_modules link exists.
+    // Never invoke npm here: postinstall also runs this helper.
+    if (opts.update) ensureConsumerLink(pkgRoot, sibling, log);
     const updateSkipped = Boolean(updateResult?.skipped);
     const summary = {
       ok: true,
@@ -637,6 +675,7 @@ const isDirectRun = (() => {
 if (isDirectRun) main();
 
 export {
+  ensureConsumerLink,
   PKG_NAME,
   SIBLING_DIRNAME,
   assertMinVersion,

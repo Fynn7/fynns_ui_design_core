@@ -31,6 +31,7 @@
     "scripts/install-as-npm.mjs",
     "scripts/vite-dev-cache.mjs",
     "scripts/ensure-sibling-ui-core.mjs",
+    "scripts/consumer-ui-bootstrap.mjs",
     "scripts/api.mjs",
     "scripts/check-thinking-content.mjs",
     "scripts/check-workspace-ui.mjs"
