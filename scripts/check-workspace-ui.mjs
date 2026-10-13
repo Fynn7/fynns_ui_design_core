@@ -178,26 +178,68 @@ export function checkWorkspaceSource(text, filename = "sample.tsx", ts = compile
       }
     }
     if (isRow(node)) {
-      let primary = 0;
+      const primary = [];
+      const stable = item => ts.isIdentifier(item) ||
+        (ts.isPropertyAccessExpression(item) && stable(item.expression));
+      const unwrap = item => {
+        while (ts.isParenthesizedExpression(item)) item = item.expression;
+        return item;
+      };
+      const guardKey = item => {
+        // Identically named parameters in separate helpers are not one state.
+        let scope = item.parent;
+        while (scope && !ts.isFunctionLike(scope)) scope = scope.parent;
+        return `${scope?.getStart(source) ?? "module"}:${item.getText(source)}`;
+      };
+      const guard = (condition, truth, guards) => {
+        condition = unwrap(condition);
+        const next = new Map(guards);
+        if (stable(condition)) next.set(guardKey(condition), JSON.stringify(truth));
+        else if (truth && ts.isBinaryExpression(condition) &&
+          condition.operatorToken.kind === ts.SyntaxKind.EqualsEqualsEqualsToken) {
+          let key = unwrap(condition.left), literal = unwrap(condition.right);
+          if (!stable(key)) [key, literal] = [literal, key];
+          if (stable(key) && (ts.isStringLiteral(literal) || ts.isNumericLiteral(literal) ||
+              [ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.FalseKeyword].includes(literal.kind))) {
+            const literalValue = ts.isStringLiteral(literal) ? JSON.stringify(literal.text)
+              : ts.isNumericLiteral(literal) ? String(Number(literal.text)) : literal.getText(source);
+            next.set(guardKey(key), literalValue);
+          }
+        }
+        return next;
+      };
       // Descend through wrappers and same-file helpers, but not event handlers,
       // nested action rows or unrelated slots such as a menu's item content.
-      function count(item, seen = new Set()) {
+      function count(item, seen = new Set(), guards = new Map()) {
         if (!item || seen.has(item)) return;
-        seen.add(item);
+        seen = new Set(seen).add(item);
         if (item !== node && isRow(item)) return;
-        if (ts.isIdentifier(item) && definitions.has(item.text)) return count(definitions.get(item.text), seen);
+        if (ts.isIdentifier(item) && definitions.has(item.text)) return count(definitions.get(item.text), seen, guards);
+        if (ts.isConditionalExpression(item)) {
+          // Even a dynamic condition picks only one side of this ternary.
+          const branchKey = `branch:${item.getStart(source)}`;
+          count(item.whenTrue, seen, new Map(guard(item.condition, true, guards)).set(branchKey, true));
+          count(item.whenFalse, seen, new Map(guard(item.condition, false, guards)).set(branchKey, false));
+          return;
+        }
+        if (ts.isBinaryExpression(item) && item.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken) {
+          count(item.right, seen, guard(item.left, true, guards));
+          return;
+        }
         const name = tag(item);
         if (name === "Button" || name === "IconButton" || name === "DropdownMenu") {
           const variant = value(item, "variant") ?? (attribute(item, "variant") ? undefined : name === "Button" ? "primary" : "ghost");
-          if (variant === "primary") primary++;
+          if (variant === "primary") primary.push(guards);
           return;
         }
-        if (opening(item) && definitions.has(name)) return count(definitions.get(name), seen);
-        if (opening(item)) { for (const child of children(item)) count(child, seen); }
-        else ts.forEachChild(item, child => count(child, seen));
+        if (opening(item) && definitions.has(name)) return count(definitions.get(name), seen, guards);
+        if (opening(item)) { for (const child of children(item)) count(child, seen, guards); }
+        else ts.forEachChild(item, child => count(child, seen, guards));
       }
       count(node);
-      if (primary > 1) report(node, "action-emphasis", "One action row may have at most one primary; routine inspector actions use horizontal ghost icons or tonal/ghost labeled actions.");
+      const competing = primary.some((left, index) => primary.slice(index + 1).some(right =>
+        ![...left].some(([key, constraint]) => right.has(key) && right.get(key) !== constraint)));
+      if (competing) report(node, "action-emphasis", "One action row may have at most one primary; routine inspector actions use horizontal ghost icons or tonal/ghost labeled actions.");
     }
     if (["Button", "IconButton"].includes(kind)) {
       const glyphs = icons(node);
@@ -230,6 +272,16 @@ export function checkWorkspaceSource(text, filename = "sample.tsx", ts = compile
       }
       for (const key of ["title", "label", "headline", "trigger", "message"]) {
         const text = value(node, key);
+        // Preserve the exact casing of a machine field identifier. This exception
+        // is limited to labels wired to their actual input, never headings.
+        const fieldId = value(node, "htmlFor");
+        let linkedInput = false;
+        if (key === "label" && kind === "FieldBlock" && fieldId && /^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+$/.test(text ?? "")) {
+          for (const child of children(node)) expanded(child, item => {
+            if (["Input", "Textarea"].includes(tag(item)) && value(item, "id") === fieldId) linkedInput = true;
+          });
+        }
+        if (linkedInput) continue;
         if (text && upper(text)) report(node, "natural-case", "Visible chrome must use natural sentence case, never all-cap headings or labels.");
       }
     }

@@ -57,8 +57,17 @@
       "argv": ["node", "scripts/install-as-npm.mjs", "--target", "<CONSUMER_ROOT>", "--dev-cache-only", "--json"]
     },
     "checkExports": {
-      "description": "Read-only hard gate: named @fynns/ui imports, Vite dev cache policy and consumer workspace composition; JSON issues[].code/message distinguishes each failure.",
+      "description": "Read-only hard gate: declared app dependencies/CLI artifacts, named @fynns/ui imports, Vite dev cache policy and consumer workspace composition; JSON issues[].code/message distinguishes each failure. Not a substitute for app typecheck/build/startup.",
       "argv": ["node", "scripts/check-ui-exports.mjs", "--target", "<CONSUMER_ROOT>", "--json"]
+    },
+    "checkDependencies": {
+      "description": "Read-only app dependency/devDependency and CLI/main artifact readiness; accepts hoisted installs and optional omissions.",
+      "argv": ["node", "scripts/check-consumer-deps.mjs", "--target", "<CONSUMER_ROOT>", "--json"]
+    },
+    "repairDependencies": {
+      "description": "Run npm install --include=dev in the actual app package with normal hooks, preserve failures and verify install artifacts. Never run inside install hooks.",
+      "argv": ["node", "scripts/check-consumer-deps.mjs", "--target", "<CONSUMER_ROOT>", "--repair", "--json"],
+      "npm": "npm run consume:repair-deps -- --target <CONSUMER_ROOT>"
     },
     "repairWorkspace": {
       "description": "Explicitly migrate literal Cancel variants and simple InlineAlert retry rows, review the source diff, then run the full strict gate. Dynamic cases remain manual; recovery behavior is preserved.",
@@ -84,6 +93,7 @@
     "package.json depends on @fynn7/ui-design-core (prefer file: sibling)",
     ".npmrc scopes @fynn7 to registry.npmjs.org (no empty _authToken)",
     "node_modules/@fynn7/ui-design-core/src/index.ts exists after npm install",
+    "the app package's declared dependencies/devDependencies and CLI/main artifacts are installed; a non-workspace root install alone is insufficient",
     "vite.config.* has resolve.alias[\"@fynns/ui\"] pointing at that entry, resolve.dedupe [react, react-dom], and server.headers Cache-Control: no-store",
     "tsconfig paths map @fynns/ui to the same entry; target/lib ES2022+",
     "no git submodule left as the alias target",

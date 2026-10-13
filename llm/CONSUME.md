@@ -47,6 +47,21 @@ never label every nonzero exit as stale core or suggest skipping sibling sync.
 Only missing core/exports calls for linking/sync; `dev-cache` calls for
 `install-as-npm.mjs --dev-cache-only`, tooling failures for installing TypeScript.
 
+`consumer-dependencies` means the app package's dependencies/devDependencies or
+CLI artifacts are missing, even if the core link and all exports exist. Repair
+from core with `npm run consume:repair-deps -- --target <app-package>` (or run
+`npm install --include=dev` in that package), then rerun the gate and the app's
+typecheck/build. The repair keeps normal install hooks and does not run inside
+postinstall. Gates never install recursively. A root install does not install a
+nested app unless npm workspaces include it; install/setup must target the app.
+The dependency preflight supports healthy hoisted packages, but cannot prove
+native execution or transitive/prop/runtime compatibility on its own.
+
+Gate changes must have fixtures for valid code as well as violations. Count
+simultaneously reachable primary actions, not mutually exclusive branches.
+Keep uppercase machine field keys intact when FieldBlock.htmlFor matches its
+Input/Textarea.id; this is not permission for uppercase decorative headings.
+
 For updates affecting multiple consumers, run in core:
 `npm run check:consumers -- --target <package-one> --target <package-two>`.
 List every affected package; this read-only batch checks them all and fails if

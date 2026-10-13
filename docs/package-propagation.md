@@ -39,6 +39,47 @@ Do **not** commit `_authToken=${NODE_AUTH_TOKEN}` (empty env → E401).
 
 ## Update notices + hard gate (consumer dev/build)
 
+### Install readiness and failure ownership
+
+The consumer gate now checks declared app dependencies/devDependencies and
+installed CLI/main artifacts as well as the UI barrel. A repaired core link
+alone cannot produce a successful app preflight. JSON issue code
+`consumer-dependencies` identifies an incomplete app install; sync, cache and
+workspace failures retain their own codes. This is a development/build gate,
+so production-only installs that omit required dev tooling are not ready.
+
+From this core checkout, diagnose and repair the actual app package:
+
+```bash
+npm run consume:check-deps -- --target ../my-app/gui
+npm run consume:repair-deps -- --target ../my-app/gui
+npm run check:consumers -- --target ../my-app/gui
+```
+
+Repair runs `npm install --include=dev` in that package, keeps normal lifecycle
+scripts (including native tool setup), verifies the resulting artifacts and
+preserves npm/hook failures. It never runs recursively inside install hooks.
+The gate itself is read-only; it never retries an install or rewrites app JSX.
+Healthy hoisted installs are supported; broken nearer packages shadow parents.
+Optional packages may be absent. This preflight does not prove transitive
+dependencies, native binary execution, prop compatibility or browser behavior:
+the consumer's own typecheck/build and startup verification are still required.
+
+A root `npm install` installs nested packages only when that root declares them
+as npm workspaces. Otherwise setup must install each app package explicitly.
+Linking core, syncing its version or counting matching exports does not install
+React, Vite or the consumer's process runner. Do not report “ready to start” on
+an export-only or wire-only success. Do not tell users to clean/pull core for an
+app dependency or source-contract error.
+
+Workspace checks must distinguish simultaneously reachable controls from
+conditional alternatives. Mutually exclusive actions on the same discriminator
+may each be primary; independent conditions can still show competing primaries.
+Uppercase machine keys on FieldBlock labels linked to their actual Input or
+Textarea preserve their casing. These exceptions do not allow all-cap headings
+or labels unconnected to a field. New gate rules require positive and negative
+fixtures plus checks against affected consumers before compatibility is claimed.
+
 Startup recovery: `--update` also recreates a missing/dangling app-local
 `node_modules/@fynn7/ui-design-core` link when the app declares the canonical
 sibling as a `file:` dependency. It does not run npm or lifecycle hooks, edit

@@ -3,6 +3,7 @@
  * Hard gate: consumer named imports from `@fynns/ui` must exist on the linked
  * `@fynn7/ui-design-core` barrel (src/index.ts + export * re-exports), and a
  * Vite consumer must disable dev browser caching of native ESM responses.
+ * Declared app dependencies and their CLI artifacts must also be installed.
  *
  * Catches stale sibling checkouts before Vite serves a blank page with
  * "does not provide an export named ...".
@@ -11,13 +12,14 @@
  *   node scripts/check-ui-exports.mjs --target <consumer-pkg>
  *   node scripts/check-ui-exports.mjs --target ../my-app/apps/web --json
  *
- * Exit 1 when any imported symbol is missing or Vite dev caching is unsafe.
+ * Exit 1 for dependency, export, static workspace or dev-cache failures.
  */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { hasNoStoreDevHeader } from "./vite-dev-cache.mjs";
 import { checkWorkspaceFiles, fixWorkspaceFiles } from "./check-workspace-ui.mjs";
+import { checkConsumerDependencies } from "./check-consumer-deps.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PKG_NAME = "@fynn7/ui-design-core";
@@ -329,6 +331,16 @@ export function checkUiExports(pkgRoot) {
   const errors = [];
   const issues = [];
   const addIssue = (code, message) => { issues.push({ code, message }); errors.push(message); };
+  let dependencies;
+  try {
+    dependencies = fs.existsSync(path.join(pkgRoot, "package.json"))
+      ? checkConsumerDependencies(pkgRoot)
+      : { ok: true, checked: 0, issues: [], skipped: "Source-only target without a package manifest" };
+  }
+  catch (error) {
+    dependencies = { ok: false, issues: [{ code: "consumer-dependency-tooling", message: error.message }] };
+  }
+  for (const issue of dependencies.issues) addIssue(issue.code, issue.message);
   let workspaceViolations = [];
   try {
     workspaceViolations = checkWorkspaceFiles([...files.keys()], pkgRoot);
@@ -360,6 +372,7 @@ export function checkUiExports(pkgRoot) {
     barrelPath,
     viteConfig: viteConfig ?? null,
     workspaceViolations,
+    dependencies,
     issues,
     files: Object.fromEntries(
       [...files.entries()].map(([f, names]) => [path.relative(pkgRoot, f) || f, names]),
@@ -396,7 +409,7 @@ function main() {
     process.stdout.write(`${JSON.stringify({ pkgRoot, ...result, ...(opts.fix ? { fixes } : {}) }, null, 2)}\n`);
   } else if (result.ok) {
     console.log(
-      `[fynns-ui] export gate ok: ${result.imports.length} @fynns/ui import(s) match barrel (${result.exportsCount} symbols)`,
+      `[fynns-ui] consumer gate ok: ${result.dependencies.skipped ? "dependency check skipped (source-only target)" : "dependencies ready"}; ${result.imports.length} @fynns/ui import(s) match barrel (${result.exportsCount} symbols); static UI/cache checks passed`,
     );
   } else {
     console.error(`[fynns-ui] ${result.error}`);
