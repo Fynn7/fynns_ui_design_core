@@ -93,6 +93,8 @@ export type {
 } from "./primitives/SplitButton";
 export { IconButton } from "./primitives/IconButton";
 export { Input } from "./primitives/Input";
+export { TagInput } from "./primitives/TagInput";
+export type { TagInputProps } from "./primitives/TagInput";
 export type { InputProps, InputSize, InputVariant } from "./primitives/Input";
 export { SearchBar, SearchBarResult } from "./primitives/SearchBar";
 export type {

@@ -253,6 +253,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["单选", "radio"],
   },
   {
+    id: "tag-input",
+    categoryId: "textInputs",
+    label: "TagInput",
+    keywords: ["标签输入", "tags", "comma", "chips", "sandbox-tag-input"],
+  },
+  {
     id: "chip",
     categoryId: "selection",
     label: "Chip",

@@ -1,0 +1,37 @@
+import { expect, test } from "@playwright/test";
+import { globalsDemo, openGlobalsDemo, resetSandboxSession } from "../helpers/sandbox";
+
+test("tag input adds batches, removes with keyboard and retains controls in narrow hosts", async ({ page }) => {
+  await resetSandboxSession(page);
+  await openGlobalsDemo(page, "tag-input");
+  const demo = globalsDemo(page, "tag-input");
+  const tags = demo.locator(".fynns-tag-input").first();
+  const input = tags.getByRole("textbox");
+  await input.fill("React, TypeScript，CSS, CSS");
+  await input.press("Enter");
+  await expect(tags.locator(".fynns-chip")).toHaveCount(3);
+  await expect(input).toHaveValue("");
+  await input.fill("Testing");
+  await input.press("Tab");
+  await expect(tags.locator(".fynns-chip")).toHaveCount(4);
+  const remove = tags.getByRole("button", { name: "Remove CSS", exact: true });
+  await remove.focus();
+  await page.keyboard.press("Enter");
+  await expect(tags.locator(".fynns-chip")).toHaveCount(3);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await tags.evaluate(el => { el.style.width = "240px"; });
+  await input.fill("A".repeat(100));
+  await input.press("Enter");
+  await expect(tags.locator(".fynns-chip")).toHaveCount(4);
+  expect(await tags.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
+  const longRemove = tags.getByRole("button", { name: `Remove ${"A".repeat(100)}`, exact: true });
+  const hostBox = (await tags.boundingBox())!;
+  const removeBox = (await longRemove.boundingBox())!;
+  expect(removeBox.x + removeBox.width).toBeLessThanOrEqual(hostBox.x + hostBox.width + 1);
+  expect(removeBox.width).toBeGreaterThan(0);
+  await longRemove.click();
+  await expect(tags.locator(".fynns-chip")).toHaveCount(3);
+  await expect(demo.locator("#sandbox-tag-input-disabled")).toBeDisabled();
+  await expect(demo.locator("#sandbox-tag-input-readonly")).toHaveAttribute("readonly", "");
+  await expect(demo.locator("#sandbox-tag-input-error")).toHaveAttribute("aria-invalid", "true");
+});

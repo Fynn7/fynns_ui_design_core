@@ -15,7 +15,7 @@ classes.
 - **Actions:** Button, IconButton, SplitButton (M3 Expressive; no `danger` on
   SplitButton; sizes `sm`/`md`/`lg`; `ghost` on Button/IconButton), Fab,
   FabMenu / FabMenuItem
-- **Fields:** Input, Textarea (default width 100%, autoGrow, soft
+- **Fields:** Input, [TagInput](tag-input.md) (controlled chips + Enter/blur comma input), Textarea (default width 100%, autoGrow, soft
   `--fynns-layout-textarea-max-height` ≥ **0.5.103**; `spellCheck={false}`
   default), FieldHeader / FieldBlock, Select (**soft-deprecated ≥ 0.5.236** —
   anatomy + Pagination carve-out; prefer `DropdownMenu`), Autocomplete

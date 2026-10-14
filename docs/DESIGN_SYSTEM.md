@@ -40,6 +40,7 @@ day-to-day consume. Publish / optional Packages bumps:
 | Body / caption / gallery spacing | [`design-system/content-rhythm.md`](design-system/content-rhythm.md) |
 | Chrome type & row proportion | [`design-system/chrome-proportion.md`](design-system/chrome-proportion.md) |
 | Form rhythm (toolbar / FieldStack / inset) | [`design-system/form-rhythm.md`](design-system/form-rhythm.md) |
+| Editable tag list | [`design-system/tag-input.md`](design-system/tag-input.md) |
 | Icons | [`design-system/icons.md`](design-system/icons.md) |
 | Adding to the system | [`design-system/contributing.md`](design-system/contributing.md) |
 

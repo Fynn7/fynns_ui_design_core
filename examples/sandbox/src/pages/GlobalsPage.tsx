@@ -1,4 +1,5 @@
 import { ContentRhythmDemo } from "./ContentRhythmDemo";
+import { TagInputDemo } from "../components/TagInputDemo";
 import {
   Autocomplete,
   ArchiveIcon,
@@ -2855,6 +2856,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="text-selection-composer">
           <TextSelectionComposerDemo key={locale} />
+        </GlobalsDemo>
+        <GlobalsDemo id="tag-input">
+          <TagInputDemo key={locale} />
         </GlobalsDemo>
         </div>
       </>
