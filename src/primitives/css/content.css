@@ -304,6 +304,24 @@
   padding-inline-end: var(--fynns-space-xs);
 }
 
+/* Header buttons are always sm, including default-md / explicit-lg controls
+ * behind Tooltip, clusters or consumer helper wrappers. Body and portaled menu
+ * controls retain their own density. Keep the shared title band unchanged. */
+:is(.fynns-card-actions, .fynns-collapsible-actions) .fynns-btn {
+  min-height: var(--fynns-layout-field-header-action-row-min-height);
+  height: var(--fynns-layout-field-header-action-row-min-height);
+  font-size: var(--fynns-font-size-xs);
+  padding: 0 var(--fynns-space-md);
+}
+
+:is(.fynns-card-actions, .fynns-collapsible-actions) .fynns-btn.fynns-btn--icon {
+  width: var(--fynns-layout-field-header-action-row-min-height);
+  min-width: var(--fynns-layout-field-header-action-row-min-height);
+  height: var(--fynns-layout-field-header-action-row-min-height);
+  min-height: var(--fynns-layout-field-header-action-row-min-height);
+  padding: 0;
+}
+
 /*
  * Header actions = one horizontal strip (M3). Every cluster under the actions
  * slot must hug + nowrap — including nested helper groups. A sole

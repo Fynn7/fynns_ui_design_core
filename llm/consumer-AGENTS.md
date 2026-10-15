@@ -109,6 +109,11 @@ locally or compress prose with tight/snug/compact. See
    Put both directly inside `Button`, set the icon `aria-hidden`, and never add
    local icon margin / gap / literal spaces; core owns the spacing. Use
    `IconButton` + Tooltip + `aria-label` only for compact self-evident chrome.
+   Card/Collapsible header buttons (including InfoHint/menu triggers) use
+   `size="sm"` (32dp); core clamps wrapped header buttons to this size.
+   Status details use `InfoHint icon={<CheckIcon aria-hidden />}` for a
+   completed/available result; eyes mean view/reveal only. Keep the shared
+   16dp glyph, circular hover target and keyboard Tooltip; no tiny span/SVG clones.
    Action groups use Toolbar or `.fynns-control-cluster`: any labeled Button
    or Menu makes the entire row 8dp (including wrapped triggers); icon-only
    rows are 4dp. No private tight gaps or per-button margins. Outer Toolbar

@@ -2066,6 +2066,17 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
         </GlobalsDemo>
         <GlobalsDemo id="info-hint">
+        <div id="sandbox-status-hint" className="fynns-unit-stack">
+          <Card title={t("globals.infoHintCompleteAria")} actions={
+            <InfoHint icon={<CheckIcon aria-hidden />} size="sm"
+              ariaLabel={t("globals.infoHintCompleteAria")}
+              content={t("globals.infoHintCompleteBody")} />
+          }>
+            <InfoHint icon={<CheckIcon aria-hidden />}
+              ariaLabel={t("globals.infoHintCompleteAria")}
+              content={t("globals.infoHintCompleteBody")} />
+          </Card>
+        </div>
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <InfoHint
             content={t("globals.infoHintIconBody")}

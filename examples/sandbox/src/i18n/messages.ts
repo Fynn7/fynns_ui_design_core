@@ -1268,6 +1268,8 @@ const en = {
   "globals.infoHintIconBody":
     "Standalone help: hover or focus the “i” for a short explanation. Prefer InfoHint over inventing an IconButton + Tooltip for pure information.",
   "globals.infoHintIconAria": "More about InfoHint",
+  "globals.infoHintCompleteAria": "Completed",
+  "globals.infoHintCompleteBody": "The result is available. A check denotes completion; hover or focus for details. The eye is reserved for viewing or revealing content.",
   "globals.infoHintDangerBody":
     "Fail / error detail: use `tone=\"danger\"` on icon-only InfoHint beside a short `Fail` status so OK vs Fail rows scan at a glance.",
   "globals.infoHintDangerAria": "Fail detail help",
@@ -3794,6 +3796,8 @@ const zh: Record<MessageKey, string> = {
   "globals.infoHintIconBody":
     "独立帮助：悬停或聚焦 “i” 查看简短说明。纯信息请用 InfoHint，不要手写 IconButton + Tooltip。",
   "globals.infoHintIconAria": "关于 InfoHint 的更多说明",
+  "globals.infoHintCompleteAria": "已完成",
+  "globals.infoHintCompleteBody": "结果已就绪。勾号表示完成；悬停或键盘聚焦查看详情。眼睛图标仅用于查看或显示内容。",
   "globals.infoHintDangerBody":
     "Fail / 错误详情：短 `Fail` 状态旁的 icon-only InfoHint 使用 `tone=\"danger\"`，便于一眼区分 OK 与 Fail。",
   "globals.infoHintDangerAria": "失败详情帮助",

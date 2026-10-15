@@ -56,7 +56,10 @@ classes.
   children are mounted; empty cold-start ≥ **0.5.191** = chrome only — no
   content-sized mask island; content skeletons occupy the upcoming UI, without visible loading copy; explicit message / circular is permanently archived; real `value` uses one linear bar; `fill` for height-resolved cold-start), EmptyState,
   **Chat** family (see below), Snackbar (`snackbar()` + `<SnackbarHost />`),
-  Tooltip, InfoHint
+  Tooltip, InfoHint (`icon` defaults to InfoIcon; completed/available result
+  details use `icon={<CheckIcon aria-hidden />}` + meaningful `ariaLabel` /
+  `content`; keep the stock hover/focus target, header `size="sm"`, no private
+  tiny SVG/span triggers; live `#info-hint` / `#sandbox-status-hint`)
 
   Error feedback defaults to `snackbar`. Persistent actionable canvas errors use
   `WorkspaceNoticeStack`; plain persistent in-panel copy uses `InlineAlert`.

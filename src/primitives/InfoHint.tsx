@@ -15,6 +15,10 @@ export type InfoHintProps = {
    */
   label?: ReactNode;
   ariaLabel?: string;
+  /** Icon-only semantic glyph. Completion/existing result: <CheckIcon aria-hidden />.
+   * Omit for InfoIcon (help); EyeIcon is reserved for view/reveal actions.
+   * Keep the shared glyph size; never replace the trigger with a bare SVG/span. */
+  icon?: ReactNode;
   /** Icon-only: matches IconButton target (`md` = 40dp chrome default). */
   size?: ButtonSize;
   /** Rare override — default follows `--fynns-size-icon` (16dp). */
@@ -29,6 +33,7 @@ export function InfoHint({
   content,
   label,
   ariaLabel = "More information",
+  icon,
   size = "md",
   iconSize,
   tone = "default",
@@ -73,7 +78,7 @@ export function InfoHint({
             .filter(Boolean)
             .join(" ")}
       >
-        <InfoIcon {...(iconSize != null ? { size: iconSize } : {})} />
+        {icon ?? <InfoIcon {...(iconSize != null ? { size: iconSize } : {})} />}
       </IconButton>
     </Tooltip>
   );

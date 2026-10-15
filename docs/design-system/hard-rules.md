@@ -373,6 +373,17 @@ Use the core CSS recipe; never compress these with local margins or line heights
   ghost Copy/Save instead of IconButton+Tooltip; **FieldBlock labeled Save key
   instead of IconButton+Tooltip**; **FieldBlock Save IconButton wraps under
   Input**.
+- **Card / Collapsible header density:** all Button / IconButton / InfoHint /
+  menu button triggers use `size="sm"` (32dp target, shared 16dp glyph). Core
+  CSS clamps header buttons even through Tooltip/cluster/helper wrappers;
+  never enlarge a filled primary disk in the header. Body controls follow
+  their own density rules. Keep the existing title band and inset rhythm.
+- **Status detail glyphs:** use `InfoHint icon={<CheckIcon aria-hidden />}`
+  with a meaningful `ariaLabel` and `content` for completed/available results.
+  EyeIcon means view/reveal, never completion. Keep the stock circular hover
+  and keyboard-focus target; no tiny private span/SVG Tooltip triggers.
+  Decorative static icons without detail belong with visible status text.
+  Live `#info-hint` / `#sandbox-status-hint`.
 - **DON'T** put `variant="primary"` (filled) **leading** a multi-control
   `.fynns-control-cluster` in Card / Collapsible `actions` (or densified head
   strips) — LTR order is secondary ghost/tonal IconButtons **then primary last**

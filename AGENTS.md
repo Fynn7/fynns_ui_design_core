@@ -45,6 +45,8 @@ Grep 必须限定目录（`src/primitives` / `docs/design-system` / `llm`）并�
 2. **勿改对外 API 签名**，除非任务明确要求。扩 barrel 须同任务加 sandbox 活示例（`npm run check:wysiwyg`）。
 3. **勿改测试内容当判官**，以现有测试为准。
 4. 图标动作用 Tooltip + aria-label，**禁止 `title=`**（自明的关闭/清除可无 Tooltip）。
+   纯信息/状态提示用 InfoHint；完成/结果已存在用 `icon={<CheckIcon aria-hidden />}`，眼睛只表示查看/显隐。禁止自建微型 SVG/span 提示变体；保留标准 16dp glyph 与圆形 hover/focus target。
+   Card / Collapsible header 的 Button / IconButton / InfoHint / 菜单按钮统一 `size="sm"`（32dp）；core CSS 对包装后的按钮同样限为小号，禁止大号实心圆按钮撑 header。正文动作按所在场景密度执行。
 5. 滚动容器必须 `fynns-scroll`（`PageScroll` 已封装），禁原生条。
 6. 加载 / 空 / 错误必显：应用开屏用 `AppLoadingScreen`（不透明主题背景 + 居中扫光 logo，自动优先已配置图标 → 字母缩写头像 → core 标记，无骨架 / 可见文案 / 加载圈；JS 配置图标传 `logoSrc`）；应用内用 `BusyRegion` / `BusyScrim` / `EmptyState` / `InlineAlert`；骨架仅在即将渲染的内容原位占位，加载画面无可见文案；`LoadingSkeleton` 默认加粗的宽幅文字骨架（非 fill 六行，fill 省略 lines 时按高度自适应铺满），内容冷启动画布内边距由 core 保留，禁止清零或在整窗格固定六行；Block 仅用于图片 / iframe 等整块内容，禁 compact / 小型居中文字徽记；真实 `value` 用线性进度；加载圈永久 archive/deprecated，强烈不推荐消费仓使用；瞬时用 `snackbar` + `<SnackbarHost />`。
 7. Popover / Tooltip 定位走 `floatingBox`，勿手写 ad-hoc 几何。

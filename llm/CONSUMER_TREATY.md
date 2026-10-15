@@ -304,6 +304,8 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | revived `#field-header` Manage mega-Card / OK·Fail wall | DESIGN_SYSTEM Hard rules | `#field-header` / `#provider-settings` |
 | `#rhythm` morph + cover-letter twin section strips | DESIGN_SYSTEM Hard rules | `#sandbox-rhythm-catalog` |
 | Card head primary IconButton leftmost in control-cluster | DESIGN_SYSTEM Card / Hard rules | `#sandbox-card-head-primary-end` |
+| Card header oversized wrapped buttons | DESIGN_SYSTEM Hard rules / content-density | `#card` / `#sandbox-status-hint` |
+| Completion eye glyph tiny private tooltip trigger | DESIGN_SYSTEM Hard rules / InfoHint | `#info-hint` / `#sandbox-status-hint` |
 | repeatable Textarea remove wraps below row | DESIGN_SYSTEM catalog | `#form-recipe` |
 | Dialog body Card stack crush | DESIGN_SYSTEM Dialog / overlays | `#form-recipe` |
 | phantom PageScroll rail behind modal Dialog | DESIGN_SYSTEM hard-rules | `#form-recipe` |

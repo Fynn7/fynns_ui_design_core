@@ -5,6 +5,12 @@ alwaysApply: true
 
 # @fynns/ui 消费仓硬性条约（复制即用）
 
+Card / Collapsible header 的 Button / IconButton / InfoHint / 菜单按钮统一
+`size="sm"`（32dp target、标准 16dp glyph）；core CSS 同样限制包装后的按钮。
+完成/结果已存在的状态详情用 `InfoHint icon={<CheckIcon aria-hidden />}`，传入
+明确的 `ariaLabel` 与 `content`。眼睛仅表示查看/显隐，禁止自建微型 SVG/span
+提示变体；保留 core 圆形 hover、键盘 focus 和 Tooltip。正文密度不受 header 规则影响。
+
 本文件是**消费仓**侧对 `@fynns/ui` 的补充合同。权威细节：
 `docs/DESIGN_SYSTEM.md`、`llm/CONSUME.md`、`llm/PERF.md`。失败模式 slug 索引：
 `llm/CONSUMER_TREATY.md`（细节 → Hard rules + sandbox，勿把 AGENTS 当 SoT）。
