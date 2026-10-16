@@ -40,6 +40,7 @@ day-to-day consume. Publish / optional Packages bumps:
 | Body / caption / gallery spacing | [`design-system/content-rhythm.md`](design-system/content-rhythm.md) |
 | Chrome type & row proportion | [`design-system/chrome-proportion.md`](design-system/chrome-proportion.md) |
 | Form rhythm (toolbar / FieldStack / inset) | [`design-system/form-rhythm.md`](design-system/form-rhythm.md) |
+| Categorized settings / immediate save / path drafts | [`design-system/settings.md`](design-system/settings.md) |
 | Editable tag list | [`design-system/tag-input.md`](design-system/tag-input.md) |
 | Icons | [`design-system/icons.md`](design-system/icons.md) |
 | Adding to the system | [`design-system/contributing.md`](design-system/contributing.md) |
@@ -49,6 +50,7 @@ day-to-day consume. Publish / optional Packages bumps:
 | Topic | Anchor |
 | --- | --- |
 | Form / FieldStack / Dialog | `#form-recipe`, `#field-header`, `#sandbox-field-stack-grid-select` |
+| Categorized settings dialog | `#layouts-demo-settings-dialog` |
 | List catalogs / density | `#list`, `#page-scroll`, `#sandbox-list-status-action`, `#sandbox-list-repo-path-actions`, `#sandbox-list-recipe-catalog` |
 | Timeline | `#timeline` |
 | Toolbar / ControlRow / end-align | `#rhythm` |

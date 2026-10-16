@@ -18,6 +18,11 @@ export const LAYOUTS_LEAD_KEY: MessageKey = "layouts.lead";
 
 export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
   {
+    id: "settings-dialog",
+    label: "Settings dialog",
+    keywords: ["settings", "preferences", "general", "advanced", "设置", "常规", "高级"],
+  },
+  {
     id: "chat-session-menu",
     label: "Chat session menu alignment",
     keywords: ["chat", "session", "menu", "alignment", "会话", "菜单", "对齐"],

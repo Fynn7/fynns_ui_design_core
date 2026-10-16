@@ -78,6 +78,10 @@ headings, negative margins or reset drawer body/headline padding. Live:
 
 ## FieldStack semantic clusters
 
+Categorized settings use the shared two-pane dialog recipe in
+[Settings](settings.md), live `#layouts-demo-settings-dialog`. Keep preference
+rows compact and path drafts independent of category navigation.
+
 When building inspector / settings / Dialog / multi-section forms, **partition
 by meaning** with `FieldStack` — do not leave every FieldBlock / ControlBlock as
 a flat Card-body sibling.

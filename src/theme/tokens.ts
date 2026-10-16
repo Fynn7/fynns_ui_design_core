@@ -1515,6 +1515,10 @@ export const LAYOUT_TOKENS = {
   "dialog-max-width-sm": "24rem",
   "dialog-max-width-md": "32rem",
   "dialog-max-width-lg": "35rem",
+  /** Categorized preferences: inset two-pane dialog, compact top nav on narrow hosts. */
+  "settings-dialog-width": "52rem",
+  "settings-nav-width": "11rem",
+  "settings-content-min-height": "22rem",
   /** Large inset workspace dialog; distinct from M3 basic and fullscreen. */
   "dialog-viewport-width": "88vw",
   "dialog-viewport-height": "82dvh",

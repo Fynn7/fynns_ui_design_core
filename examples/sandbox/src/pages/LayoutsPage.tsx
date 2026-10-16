@@ -92,6 +92,7 @@ import { layoutsDemoElementId } from "../catalog/layoutsCatalog";
 import { DrillInLayoutsDemo } from "./DrillInLayoutsDemo";
 import { WorkspaceChromeDemo } from "../components/WorkspaceChromeDemo";
 import { CanvasWorkspaceDemo } from "../components/CanvasWorkspaceDemo";
+import { SettingsDialogDemo } from "../components/SettingsDialogDemo";
 
 type RailId = "home" | "search" | "charts" | "all";
 
@@ -183,6 +184,7 @@ export function LayoutsPage() {
         <p className="sandbox-globals-lead">{t("layouts.lead")}</p>
 
         <div className="sandbox-globals-section-body">
+          <LayoutsDemo id="settings-dialog"><SettingsDialogDemo /></LayoutsDemo>
           <LayoutsDemo id="canvas-workspace"><CanvasWorkspaceDemo /></LayoutsDemo>
           <LayoutsDemo id="workspace-chrome"><WorkspaceChromeDemo /></LayoutsDemo>
           <LayoutsDemo id="shell">
