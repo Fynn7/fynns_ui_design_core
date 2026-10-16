@@ -99,6 +99,9 @@ export type NavigationDrawerProps = {
    * `.fynns-control-cluster--toolbar-end` / `.fynns-control-row` /
    * `.fynns-nav-drawer-new-chat` as **direct** children are covered
    * (≥ **0.5.222** / **0.5.256**) — not only `:has()` wrappers.
+   * For a distinct data section after those tools, mark its first direct
+   * child `.fynns-content-boundary` in every loading/result state; this
+   * replaces the ordinary sibling step with 24dp without moving later rows.
    * Do **not** wrap destinations in `.fynns-unit-stack`.
    * Session / history create → `NavigationDrawerNewChat` (not icon-only
    * `--toolbar-end`). Mode catalog tools still use `--toolbar-end`.

@@ -1301,3 +1301,17 @@
      plus a flex `min-height: 0` otherwise clips ToggleGroup into a 36px pill. */
   flex-shrink: 0;
 }
+
+/* A tools/control band precedes a distinct data-content region. Mark only
+ * its first unit, in loading, ready, empty and error states. The host's
+ * existing stack gap contributes to the total 24dp clearance. Never add this
+ * to individual List rows, Table cells or skeleton bars. */
+.fynns-content-boundary:not(:first-child) {
+  margin-block-start: var(--fynns-layout-content-boundary-gap);
+}
+.fynns-unit-stack > * + .fynns-content-boundary,
+.fynns-content-flow > * + .fynns-content-boundary {
+  margin-block-start: calc(
+    var(--fynns-layout-content-boundary-gap) - var(--fynns-layout-unit-stack-gap)
+  );
+}

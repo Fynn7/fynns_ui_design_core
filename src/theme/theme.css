@@ -686,6 +686,7 @@
   --fynns-layout-field-hint-gap: 0.5rem;
   --fynns-layout-field-header-action-row-min-height: 2rem;
   --fynns-layout-unit-stack-gap: 1rem;
+  --fynns-layout-content-boundary-gap: 1.5rem;
   --fynns-layout-media-caption-gap: var(--fynns-space-sm);
   --fynns-layout-media-grid-gap: var(--fynns-layout-unit-stack-gap);
   --fynns-layout-media-min-width: 12rem;

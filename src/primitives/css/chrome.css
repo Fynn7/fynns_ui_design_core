@@ -2253,6 +2253,13 @@
   margin-block-start: var(--fynns-navdrawer-search-gap);
 }
 
+/* Content after drawer search/tools is a different section from destination
+ * row-to-row rhythm. The same first-item marker stays on skeleton, ready,
+ * empty and error surfaces, avoiding a vertical jump when a request settles. */
+.fynns-nav-drawer-body > * + .fynns-content-boundary {
+  margin-block-start: var(--fynns-layout-content-boundary-gap);
+}
+
 /* Destination SearchBar / chrome peers are 40dp / content-sized — never
  * flex-shrink under a height-capped drawer body. */
 .fynns-nav-drawer-body > .fynns-search-bar,

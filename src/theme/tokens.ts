@@ -1822,6 +1822,12 @@ export const LAYOUT_TOKENS = {
    * smaller than section gaps (24dp+).
    */
   "unit-stack-gap": "1rem",
+  /**
+   * Control / tools band → first data-content unit (24dp). Apply the
+   * `.fynns-content-boundary` marker to that first unit in every request state,
+   * including its skeleton, so loading does not move the content start.
+   */
+  "content-boundary-gap": "1.5rem",
   /** Content rhythm: image→caption 8dp; tiles and prose blocks 16dp. */
   "media-caption-gap": "var(--fynns-space-sm)",
   "media-grid-gap": "var(--fynns-layout-unit-stack-gap)",

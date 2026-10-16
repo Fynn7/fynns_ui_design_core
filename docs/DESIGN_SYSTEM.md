@@ -56,7 +56,7 @@ day-to-day consume. Publish / optional Packages bumps:
 | Banner strip + dismiss center | `#banner` |
 | Workspace chrome / persistent InlineAlert | `#layouts-demo-workspace-chrome` / `#sandbox-inline-alert-dismiss` |
 | One canvas toolbar / document menu / continuous inspector / persistent notices | `#layouts-demo-canvas-workspace` |
-| Busy / loading ([skeleton convention](design-system/loading.md)) | `#sandbox-loading-skeleton`, `#busy-region`, `#sandbox-pane-load-error` |
+| Busy / loading ([skeleton convention](design-system/loading.md)) | `#sandbox-loading-skeleton`, `#sandbox-loading-content-boundary`, `#busy-region`, `#sandbox-pane-load-error` |
 | Busy hang guards (timeout/abort) | `#busy-paint`, `#sandbox-busy-task-timeout`, `#sandbox-busy-task-abort`, `#sandbox-busy-task-generation`, `#sandbox-button-loading-task`, `#sandbox-confirm-loading-trap`, `#sandbox-chat-busy-no-stop` |
 | CodeBlock file body | `#code-block` |
 | Chat question / Other input / thinking variants / event order | `#chat-question` / `#thinking` ([contract](../llm/CHAT_SEQUENCE.md)) |

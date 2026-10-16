@@ -82,6 +82,10 @@ locally or compress prose with tight/snug/compact. See
    padding: core owns the bare cold-start dialog-inset and retains canonical
    FillColumn / PageScroll / ChatThread insets. ChatThread.empty uses BusyRegion
    busy fill; avoid content-sized wrappers. Explicit block = image / iframe / canvas.
+   Search/filter/tools → first data unit uses `.fynns-content-boundary` in
+   loading, ready, empty and error states for the same 24dp start position;
+   never margin each skeleton bar, List row or Table cell. Live
+   `#sandbox-loading-content-boundary`.
    Labels are accessible-only; no visible Loading copy, compact busy marks or
    small centered text emblems. Keep the large text skeleton.
    Skeletons paint only bars: root / wrappers / BusyRegion overlay / BusyScrim

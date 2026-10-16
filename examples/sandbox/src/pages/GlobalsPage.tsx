@@ -1,5 +1,6 @@
 import { ContentRhythmDemo } from "./ContentRhythmDemo";
 import { TagInputDemo } from "../components/TagInputDemo";
+import { ContentBoundaryDemo } from "../components/ContentBoundaryDemo";
 import {
   Autocomplete,
   ArchiveIcon,
@@ -7056,6 +7057,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="busy-region">
+        <ContentBoundaryDemo />
         <div id="sandbox-loading-skeleton" className="fynns-unit-stack">
           <SandboxHelp text={t("globals.loadingSkeletonHelp")} />
           <LoadingSkeleton id="sandbox-loading-skeleton-text" label={t("globals.busyRegionLabel")} />

@@ -101,6 +101,20 @@ using their existing layout and `--fynns-*` tokens.
 `variant="compact"` has been removed. Never put a skeleton inside an existing
 button as a busy mark; the button already exists and is not about to render.
 
+### Content boundary after tools
+
+When a search, filter or other control band precedes a distinct data-content
+section, its first content unit starts `--fynns-layout-content-boundary-gap`
+(24dp) below that band. Give that first unit `.fynns-content-boundary` in
+**every** request state: a cold-start `BusyRegion`, the first ready item/group,
+an `EmptyState` or an error `InlineAlert`. The core class composes with
+`.fynns-unit-stack` / `.fynns-content-flow` gaps and overrides the drawer's
+ordinary 4dp destination / 8dp tool spacing for this marked boundary. Do not
+put the marker on each skeleton bar, List row or Table cell, and do not add
+consumer margins or override `.fynns-*` styles. The placeholder and eventual
+content must begin at the same position. Live drawer recipe:
+`#sandbox-loading-content-boundary` under `#busy-region`.
+
 ```tsx
 import { BusyRegion, LoadingSkeleton } from "@fynns/ui";
 
