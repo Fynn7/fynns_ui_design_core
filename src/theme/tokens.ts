@@ -2159,6 +2159,22 @@ export const CODE_TOKENS = {
   invalid: "#f44747",
 } as const;
 
+/** Read-only unified diff: theme-relative surfaces and bounded reading geometry. */
+const DIFF_TOKENS = {
+  "add-ink": "color-mix(in srgb, var(--fynns-color-success) 65%, var(--fynns-color-text))",
+  "del-ink": "color-mix(in srgb, var(--fynns-color-danger) 65%, var(--fynns-color-text))",
+  "muted-ink": "color-mix(in srgb, var(--fynns-color-text-muted) 65%, var(--fynns-color-text))",
+  "add-bg": "color-mix(in srgb, var(--fynns-color-success) 7%, var(--fynns-color-surface-1))",
+  "del-bg": "color-mix(in srgb, var(--fynns-color-danger) 7%, var(--fynns-color-surface-1))",
+  "add-emphasis": "color-mix(in srgb, var(--fynns-color-success) 16%, transparent)",
+  "del-emphasis": "color-mix(in srgb, var(--fynns-color-danger) 16%, transparent)",
+  "syntax-strength": "35%",
+  "gutter-width": "3.5ch",
+  "marker-width": "2ch",
+  "ratio-size": "0.5rem",
+  "ratio-gap": "0.125rem",
+} as const;
+
 /** Ungrouped tokens. Emitted as `--fynns-<key>` (no sub-prefix). */
 export const MISC_TOKENS = {
   "border-hairline": "1px",
@@ -2341,6 +2357,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],
   ["code", CODE_TOKENS],
+  ["diff", DIFF_TOKENS],
   ["", MISC_TOKENS],
 ];
 

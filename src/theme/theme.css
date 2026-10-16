@@ -729,6 +729,18 @@
   --fynns-code-constant-named: #d5971a;
   --fynns-code-escape: #FFD68F;
   --fynns-code-invalid: #f44747;
+  --fynns-diff-add-ink: color-mix(in srgb, var(--fynns-color-success) 65%, var(--fynns-color-text));
+  --fynns-diff-del-ink: color-mix(in srgb, var(--fynns-color-danger) 65%, var(--fynns-color-text));
+  --fynns-diff-muted-ink: color-mix(in srgb, var(--fynns-color-text-muted) 65%, var(--fynns-color-text));
+  --fynns-diff-add-bg: color-mix(in srgb, var(--fynns-color-success) 7%, var(--fynns-color-surface-1));
+  --fynns-diff-del-bg: color-mix(in srgb, var(--fynns-color-danger) 7%, var(--fynns-color-surface-1));
+  --fynns-diff-add-emphasis: color-mix(in srgb, var(--fynns-color-success) 16%, transparent);
+  --fynns-diff-del-emphasis: color-mix(in srgb, var(--fynns-color-danger) 16%, transparent);
+  --fynns-diff-syntax-strength: 35%;
+  --fynns-diff-gutter-width: 3.5ch;
+  --fynns-diff-marker-width: 2ch;
+  --fynns-diff-ratio-size: 0.5rem;
+  --fynns-diff-ratio-gap: 0.125rem;
   --fynns-border-hairline: 1px;
   --fynns-opacity-muted: 0.8;
 }

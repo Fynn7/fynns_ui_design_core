@@ -511,7 +511,12 @@ export type {
   DiffLineKind,
   DiffViewLine,
   DiffViewProps,
+  DiffSource,
+  DiffFile,
+  DiffLabels,
 } from "./primitives/DiffView";
+export { DiffDialog } from "./primitives/DiffDialog";
+export type { DiffDialogProps } from "./primitives/DiffDialog";
 export {
   highlightCode,
   highlightWithProfile,

@@ -785,6 +785,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["diff", "unified", "对比", "变更"],
   },
   {
+    id: "diff-dialog",
+    categoryId: "patterns",
+    label: "DiffDialog",
+    keywords: ["diff", "patch", "review", "对比", "审阅", "变更"],
+  },
+  {
     id: "breadcrumb",
     categoryId: "navigation",
     label: "Breadcrumb",

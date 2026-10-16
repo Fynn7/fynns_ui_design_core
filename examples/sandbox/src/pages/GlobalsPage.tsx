@@ -1,4 +1,5 @@
 import { ContentRhythmDemo } from "./ContentRhythmDemo";
+import { DiffViewDemo, DiffDialogDemo } from "../components/DiffDemo";
 import { TagInputDemo } from "../components/TagInputDemo";
 import { ContentBoundaryDemo } from "../components/ContentBoundaryDemo";
 import {
@@ -8352,6 +8353,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="diff-view">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <DiffViewDemo />
           <DiffView
             maxHeight={12 * 16}
             lines={[
@@ -8363,6 +8365,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <SandboxHelp text={t("globals.diffViewHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="diff-dialog">
+          <DiffDialogDemo />
         </GlobalsDemo>
       </>
         )}

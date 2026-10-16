@@ -853,7 +853,7 @@ const en = {
   "globals.codeBlockHiddenTabHelp":
     "**Hidden-tab host (hard ≥ 0.5.112):** pipeline / mode panels that keep siblings mounted with HTML `hidden` must still grow `CodeBlock` `autoGrow` when the panel opens — first measure while `display:none` sticks at one row (~47dp). Toggle Show to verify remeasure.",
   "globals.diffViewHelp":
-    "DiffView — scrollable unified-diff panel (`add` / `del` / `same` / `meta`). Callers own `+` / `-` markers in `text`.",
+    "DiffView — read-only text or patch comparison with line numbers, expandable context and inline highlighting. Legacy `lines` keeps caller-owned `+` / `-` markers.",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
   "globals.codeBlockNowrapHelp":
     "`wrap={false}` — long lines scroll horizontally instead of soft-wrapping.",
@@ -3385,7 +3385,7 @@ const zh: Record<MessageKey, string> = {
   "globals.codeBlockHiddenTabHelp":
     "**Hidden 分区宿主（硬 ≥ 0.5.112）：** 用 HTML `hidden` 保持兄弟挂载的 pipeline / 模式面板，在打开时仍须让 `CodeBlock` `autoGrow` 撑满正文 — 首次在 `display:none` 下测量会卡在一行（~47dp）。点 Show 验证重测。",
   "globals.diffViewHelp":
-    "DiffView — 可滚动 unified-diff 面板（`add` / `del` / `same` / `meta`）。`+` / `-` 标记由调用方写在 `text` 里。",
+    "DiffView — 只读文本或 patch 对比，内置行号、上下文展开与行内高亮。旧版 `lines` 的 `+` / `-` 标记仍由调用方提供。",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
   "globals.codeBlockNowrapHelp":
     "`wrap={false}` — 长行横向滚动，不软换行。",

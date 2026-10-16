@@ -423,7 +423,9 @@ classes.
   `.fynns-table-meta` never Chip), **`RevealMore` + `useRevealMore`** (long
   Card / PageScroll catalogs — Table default **10**/step **10** ≥ **0.5.144**;
   List pass **5**/step **5** via `REVEAL_MORE_LIST_DEFAULT_*` ≥ **0.5.145**;
-  foot outside wrap / after List), DiffView, CodeBlock (titled `default`
+  foot outside wrap / after List), [DiffView / DiffDialog](diff.md) (single-file
+  unified comparison + multi-file review Dialog; text or patch input; legacy
+  `lines` preserved), CodeBlock (titled `default`
   **requires** non-empty `label`; else `variant="plain"`; `label` ≠ `language`
   — always pass matching `language` / `codeLanguageFromPath`; editable
   autoGrow default on PageScroll; soft-wrap live highlight ≥ **0.5.52**;
