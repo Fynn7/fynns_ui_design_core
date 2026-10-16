@@ -152,6 +152,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | twin Button loading rings in one control-cluster | DESIGN_SYSTEM form-rhythm | `#rhythm` |
 | Card batch CTA + ListItem row twin loading rings | DESIGN_SYSTEM Hard rules / Loading placement | `#sandbox-list-repo-path-actions` |
 | Skeleton as compact busy mark / small centered text emblem / visible loading copy; block used as default text placeholder | [Content-position skeleton convention](../docs/design-system/loading.md) | `#sandbox-loading-skeleton` |
+| Skeleton adds a black / tinted panel, dimming mask or backdrop blur over mounted content; consumer background override | [Transparent content skeleton backgrounds](../docs/design-system/loading.md) | `#sandbox-loading-skeleton` / `#sandbox-loading-chat-pane` / `#busy-scrim` |
 | Chat / pane loading skeleton flush to well edges or fixed six thin rows in a tall pane | [Adaptive pane skeleton geometry](../docs/design-system/loading.md#chat--pane-cold-start-geometry) | `#sandbox-loading-chat-pane` / `#sandbox-loading-chat-thread` |
 | New consumer uses archived ring / consumer shimmer CSS | [Loading skeleton convention](../docs/design-system/loading.md) | `#sandbox-loading-skeleton` / `#busy-region` |
 | Application startup uses whole-window skeleton rows, translucent BusyScrim, or ignores configured project icon | [Logo startup screen](../docs/design-system/loading.md#application-startup-logo-screen) | `#busy-scrim` / `#sandbox-app-loading-open` |

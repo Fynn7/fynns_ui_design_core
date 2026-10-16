@@ -105,6 +105,7 @@ export type BusyScrimProps = {
 
 /**
  * In-app blocking content wait: skeletons and an accessible-only label.
+ * Skeleton mode has a transparent backdrop; focus and input stay blocked.
  * Application startup uses AppLoadingScreen, never whole-window text rows.
  * Explicit message / circular retains the permanently archived ring presentation.
  * Non-dismissible: no Esc / scrim click. Prefer `BusyRegion` for sectional waits.
@@ -188,6 +189,7 @@ export type BusyRegionProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> &
  * Content-position loading: children remain mounted, hidden and inert while a
  * matching skeleton occupies their bounds. No visible loading text. Empty
  * cold-start stays in normal flow unless fill resolves to the pane height.
+ * Skeleton mode preserves the host background, without a dimming mask or blur.
  *
  * Explicit message / circular is permanently archived: the centered ring and
  * copy retain the soft frosted mask over existing content. Empty cold-start

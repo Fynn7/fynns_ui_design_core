@@ -84,6 +84,10 @@ locally or compress prose with tight/snug/compact. See
    busy fill; avoid content-sized wrappers. Explicit block = image / iframe / canvas.
    Labels are accessible-only; no visible Loading copy, compact busy marks or
    small centered text emblems. Keep the large text skeleton.
+   Skeletons paint only bars: root / wrappers / BusyRegion overlay / BusyScrim
+   skeleton backdrop stay transparent in both themes, on cold-start and refresh.
+   No dark panel, dimming wash, backdrop blur, shadow panel or local `.fynns-*`
+   override. Preserve the host surface; AppLoadingScreen stays opaque.
    Actions prefer disabled + aria-busy with the content skeleton owning the wait.
    Rings / Button loading / explicit busy message+circular are permanently
    archived, deprecated and strongly discouraged. Real value = linear progress.

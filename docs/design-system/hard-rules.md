@@ -181,6 +181,10 @@ Use the core CSS recipe; never compress these with local margins or line heights
   instead: opaque theme background, centered icon and clipped sweep. Identity
   priority = configured project icon → initials Avatar → core mark. Never use
   whole-window text rows or translucent startup chrome.
+  Content skeletons paint only their bars: roots, wrappers and BusyRegion /
+  BusyScrim skeleton backdrops stay transparent, without dimming wash, backdrop
+  blur or shadow panels, including refreshes over mounted content in both themes.
+  Preserve the host surface; never add a dark loading panel or consumer CSS override.
   Content waits have no visible loading copy; labels are
   accessible-only. BusyRegion / BusyScrim default to the large, full-width
   thick text skeleton: six rows without fill, adaptive rows with fill and

@@ -296,6 +296,11 @@ Pick primitives by job (details: `node scripts/api.mjs <Name>`; catalog:
 3. **Every state visible:** startup (`AppLoadingScreen`), content loading (`BusyRegion` / `BusyScrim`), empty
    (`EmptyState`), error (default `snackbar`; persistent recovery only:
    `InlineAlert` + Retry).
+   Content skeletons paint only bars. Keep roots, wrappers and BusyRegion /
+   BusyScrim skeleton backdrops transparent in both themes, including refresh
+   over mounted content. No dark loading panel, dimming wash, backdrop blur,
+   shadow panel or local `.fynns-*` override. Preserve the host surface;
+   startup AppLoadingScreen keeps its opaque theme background.
 4. **Chrome:** destinations only in the shell nav; inspector = `EndAside`
    (toggle `open`, keep mounted); page scroll only via `PageScroll`.
 5. **Copy:** no `·` / `—` glue in titles or list rows; org → `supportingText`,

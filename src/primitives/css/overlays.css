@@ -1290,12 +1290,6 @@
 .fynns-busy-region--skeleton > .fynns-busy-region-content {
   visibility: hidden;
 }
-.fynns-busy-region-overlay--skeleton {
-  place-items: stretch;
-  background: transparent;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
 /* Bare pane cold-start has no Chat / PageScroll content inset yet. Core owns
  * this breathing room; explicit slots and refreshes keep their exact bounds. */
 .fynns-busy-region--fill.fynns-busy-region--default-skeleton
@@ -1503,6 +1497,20 @@
 .fynns-busy-scrim > .fynns-busy-stack {
   max-width: 100%;
   min-width: 0;
+}
+
+/* Skeletons paint only their bars. Keep these mode overrides after the generic
+ * busy masks so refreshes over mounted children never gain a dark rectangle.
+ * Blocking skeletons still capture focus/input; startup owns its opaque theme
+ * background through AppLoadingScreen, independently of these content modes. */
+.fynns-busy-region-overlay.fynns-busy-region-overlay--skeleton,
+.fynns-busy-scrim.fynns-busy-scrim--skeleton {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.fynns-busy-region-overlay.fynns-busy-region-overlay--skeleton {
+  place-items: stretch;
 }
 
 @media (prefers-reduced-motion: reduce) {

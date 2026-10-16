@@ -28,6 +28,7 @@ Read by role; do not duplicate specs across files — follow the links.
 | Workspace / error feedback | [`docs/design-system/workspace-chrome.md`](../docs/design-system/workspace-chrome.md) | Mandatory greenfield navigation/actions, context rename, snackbar-first failures and InlineAlert geometry |
 | UI quality rewards | [`llm/UI_REWARD_SIGNALS.md`](UI_REWARD_SIGNALS.md) | 10-point evidence rubric for clean, complete, accessible layouts; canvas notice stack recipe |
 | Workspace migration task | [`llm/WORKSPACE_MIGRATION_PROMPT.md`](WORKSPACE_MIGRATION_PROMPT.md) | Pasteable consumer upgrade prompt for canvas chrome, feedback stacking and quality verification |
+| Skeleton background migration | [`llm/SKELETON_BACKGROUND_MIGRATION_PROMPT.md`](SKELETON_BACKGROUND_MIGRATION_PROMPT.md) | Pasteable dependency update, transparent loading audit and browser verification task |
 | Agent always-on slim | [`AGENTS.md`](../AGENTS.md) | OpenCode resident summary + token discipline — not full SoT |
 | Consume install + greenfield | [`llm/CONSUME.md`](CONSUME.md) | Zero-token sibling `file:` + Vite alias, app skeleton, primitive-by-job table |
 | Consume install (JSON) | [`llm/consume.json`](consume.json) | Machine install / check / api contract |

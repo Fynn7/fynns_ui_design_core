@@ -15,6 +15,13 @@ into consumer agent guidance. See [workspace contract](design-system/workspace-c
 
 ## Model
 
+**Skeleton background fix ≥ 0.5.311:** update the consumed source, including
+pinned source snapshots, rather than adding consumer CSS. Content skeleton
+overlays and blocking skeleton backdrops are transparent across themes and
+refreshes over mounted children. Re-sync the consumer rules and verify the
+actual linked package plus the app's typecheck/build and browser loading states.
+See [loading contract](design-system/loading.md).
+
 1. This **git repo is public**. Day-to-day consumers use a **sibling checkout**
    `../fynns_ui_design_core` + `package.json` dependency
    `@fynn7/ui-design-core` via **`file:`**, with Vite/tsconfig alias

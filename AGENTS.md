@@ -49,6 +49,7 @@ Grep 必须限定目录（`src/primitives` / `docs/design-system` / `llm`）并�
    Card / Collapsible header 的 Button / IconButton / InfoHint / 菜单按钮统一 `size="sm"`（32dp）；core CSS 对包装后的按钮同样限为小号，禁止大号实心圆按钮撑 header。正文动作按所在场景密度执行。
 5. 滚动容器必须 `fynns-scroll`（`PageScroll` 已封装），禁原生条。
 6. 加载 / 空 / 错误必显：应用开屏用 `AppLoadingScreen`（不透明主题背景 + 居中扫光 logo，自动优先已配置图标 → 字母缩写头像 → core 标记，无骨架 / 可见文案 / 加载圈；JS 配置图标传 `logoSrc`）；应用内用 `BusyRegion` / `BusyScrim` / `EmptyState` / `InlineAlert`；骨架仅在即将渲染的内容原位占位，加载画面无可见文案；`LoadingSkeleton` 默认加粗的宽幅文字骨架（非 fill 六行，fill 省略 lines 时按高度自适应铺满），内容冷启动画布内边距由 core 保留，禁止清零或在整窗格固定六行；Block 仅用于图片 / iframe 等整块内容，禁 compact / 小型居中文字徽记；真实 `value` 用线性进度；加载圈永久 archive/deprecated，强烈不推荐消费仓使用；瞬时用 `snackbar` + `<SnackbarHost />`。
+   内容骨架只绘制条带：根节点、包装层、BusyRegion overlay / BusyScrim 骨架背景透明，冷启动 / 已有内容刷新及明暗主题均禁黑底、洗色、backdrop blur 和阴影面板；保留宿主主题表面，禁消费侧 `.fynns-*` 覆盖。AppLoadingScreen 仍不透明，阻塞骨架保留焦点 / 输入锁定。
 7. Popover / Tooltip 定位走 `floatingBox`，勿手写 ad-hoc 几何。
 8. a11y 默认在线；动效用 motion token，勿随意写 ms。
 9. 消费侧 bug：**优先在本仓约束**（文档 / 条约 / CSS），再修消费者；勿只在消费仓打补丁。

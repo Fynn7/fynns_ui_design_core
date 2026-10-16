@@ -56,6 +56,20 @@ Core owns the theme-aware fill and soft ChatThinking sweep
 (`--fynns-duration-thinking-shimmer`). Reduced motion stops the sweep and keeps
 the placeholder visible. Do not write consumer shimmer CSS or keyframes.
 
+**Transparent content background (hard):** `LoadingSkeleton` paints only its
+bars. Its root, layout wrappers, `BusyRegion` skeleton overlay and `BusyScrim`
+skeleton backdrop stay transparent, with no background image, dimming wash,
+backdrop blur or shadow panel. Preserve the existing page / Card / canvas
+surface in both themes, on cold-start and refresh over mounted children.
+Do not wrap skeletons in a dark surface, reuse dialog scrim tokens, override
+`.fynns-*` locally or clear the host's normal theme background. Blocking
+`BusyScrim` still traps focus and blocks input. `AppLoadingScreen` keeps its
+opaque theme background; determinate progress and archived ring masks retain
+their existing presentation. Reduced motion changes the sweep only.
+
+Live verification: `#sandbox-loading-skeleton` (refresh),
+`#sandbox-loading-chat-pane` (cold-start) and `#busy-scrim` (blocking content).
+
 | Upcoming content | Placement |
 | --- | --- |
 | Text / document / content body | `LoadingSkeleton` defaults to the large, full-width text skeleton; six rows without `fill`, adaptive rows with `fill` |
