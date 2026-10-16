@@ -82,6 +82,14 @@ Categorized settings use the shared two-pane dialog recipe in
 [Settings](settings.md), live `#layouts-demo-settings-dialog`. Keep preference
 rows compact and path drafts independent of category navigation.
 
+**Input decorative leading glyph:** pass the standard glyph through `leading`.
+Core reserves 16dp from the shell's inner edge to the glyph and 16dp from glyph
+to text, including when a trailing Save action is present. An IconButton owns a
+32dp hit target and retains the 4dp capsule edge; a bare decorative SVG gets its
+own inner field padding. Do not use a consumer margin or pad the icon manually.
+Live: `#input` and Settings → Advanced; geometry regression also checks the
+standalone Input sample so the rule is not limited to the settings prototype.
+
 When building inspector / settings / Dialog / multi-section forms, **partition
 by meaning** with `FieldStack` — do not leave every FieldBlock / ControlBlock as
 a flat Card-body sibling.

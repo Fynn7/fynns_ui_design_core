@@ -3,7 +3,7 @@ import {
   Button, BusyRegion, CheckIcon, ControlBlock, ControlRow, Dialog,
   DropdownMenu, DropdownMenuItem, FieldBlock, FieldStack, FolderOpenIcon,
   IconButton, InfoHint, InlineAlert, Input, LoadingSkeleton,
-  NavigationDrawerItem, SaveIcon, SettingsIcon, Switch,
+  NavigationDrawerItem, OverflowTip, SaveIcon, SettingsIcon, Switch,
   ToggleGroup, Tooltip, snackbar,
 } from "@fynns/ui";
 import { useLocale } from "../i18n";
@@ -167,8 +167,9 @@ export function SettingsDialogDemo() {
                         </BusyRegion>
                       </ControlRow>
                     </ControlBlock>
-                    <ControlBlock description={scenario === "unavailable" ? c.unsupported : c.startupHint}>
-                      <ControlRow label={<>{c.startup}
+                    <ControlBlock className={scenario !== "unavailable" ? "fynns-settings-row--status" : undefined}
+                      description={scenario === "unavailable" ? c.unsupported : c.startupHint}>
+                      <ControlRow label={<><OverflowTip content={c.startup}>{c.startup}</OverflowTip>
                         {scenario !== "unavailable" && <InfoHint size="sm" icon={startup && !loading && pending !== "startup" ? <CheckIcon aria-hidden /> : undefined}
                           ariaLabel={loading ? c.startup : pending === "startup" ? c.saving : startup ? c.ready : c.off}
                           content={loading ? c.startupHint : pending === "startup" ? c.saving : startup ? c.readyHint : c.offHint} />}

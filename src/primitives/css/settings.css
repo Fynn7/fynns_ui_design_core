@@ -11,6 +11,12 @@
   padding: 0;
 }
 
+.fynns-dialog-panel--centered.fynns-settings-dialog > .fynns-dialog-head {
+  padding-block: var(--fynns-layout-unit-stack-gap);
+  background: var(--fynns-color-surface-1);
+  border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
 .fynns-settings-layout {
   display: grid;
   grid-template-columns: var(--fynns-layout-settings-nav-width) minmax(0, 1fr);
@@ -33,6 +39,7 @@
   padding: var(--fynns-layout-dialog-inset);
   line-height: var(--fynns-line-height-body);
   container-type: inline-size;
+  background: var(--fynns-color-surface-2);
 }
 
 .fynns-settings-heading {
@@ -45,6 +52,13 @@
 .fynns-settings-rows {
   display: flex;
   flex-direction: column;
+}
+
+/* A single control's BusyRegion must not add an inline baseline/descender
+ * strut below its track; that extra height offsets the Switch from its status. */
+.fynns-settings-rows .fynns-busy-region-content {
+  display: flex;
+  align-items: center;
 }
 
 .fynns-settings-rows > .fynns-control-block {
@@ -98,4 +112,47 @@
     flex: 1 1 0;
     min-width: 0;
   }
+}
+
+/* A preference's status and Switch share the center of its full text unit.
+ * Keep InfoHint in the semantic label slot, but let its box participate in
+ * the parent grid so it spans both title and description, including at narrow
+ * widths. The text wrapper and supporting hint share the first column. */
+.fynns-settings-dialog.fynns-dialog-panel--centered .fynns-settings-rows
+  > .fynns-control-block.fynns-settings-row--status:has(> .fynns-control-row):has(> .fynns-field-hint) {
+  grid-template-columns: minmax(0, 1fr) max-content max-content;
+}
+
+.fynns-settings-dialog .fynns-settings-row--status
+  .fynns-control-row__label {
+  display: contents;
+}
+
+.fynns-settings-dialog .fynns-settings-row--status
+  .fynns-control-row__label > .fynns-overflow-tip {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+}
+
+.fynns-settings-dialog .fynns-settings-row--status
+  .fynns-control-row__label .fynns-overflow-tip-label {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.fynns-settings-dialog .fynns-settings-row--status
+  .fynns-control-row__label > .fynns-tooltip-trigger:has(.fynns-info-hint-trigger) {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+.fynns-settings-dialog .fynns-settings-rows
+  .fynns-control-block.fynns-settings-row--status:has(> .fynns-field-hint)
+  .fynns-control-row__controls {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: center;
+  justify-self: end;
 }

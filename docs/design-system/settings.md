@@ -25,6 +25,12 @@ Live prototype: Layout templates → Settings dialog,
   categories. At 640px and below, navigation becomes a wrapping top row.
   The built-in `fynns-scroll` dialog body keeps all content reachable on short
   screens. Do not add consumer `.fynns-*` overrides or fixed screen dimensions.
+- Header uses symmetric 16dp block padding, so the visible title and close
+  button share its vertical center. A tokenized hairline separates it from the
+  body. Header/navigation use `surface-1`; content explicitly uses `surface-2`,
+  the existing core modal surface. This is the local mapping of the M3 dialog's
+  [surface-container-high role](https://material-web.dev/components/dialog/#tokens),
+  with lower chrome surfaces for the categorized layout.
 - General preferences use `FieldStack.fynns-settings-rows` with a `ControlBlock`
   per setting. Put the visible label in `ControlRow`, a short explanation in
   `ControlBlock.description`, and the compact control in its trailing cell.
@@ -34,11 +40,20 @@ Live prototype: Layout templates → Settings dialog,
   `InfoHint size="sm" icon={<CheckIcon aria-hidden />}` on the label. Explain
   an unavailable platform beside a disabled Switch. Never claim readiness
   before the server confirms the startup entry exists; pending is informational.
+  When a description is present, add `fynns-settings-row--status` to the
+  `ControlBlock` and wrap its visible label in `OverflowTip`. Core gives the
+  label/description one text column and centers the status target and Switch on
+  the complete text unit, including narrow layouts. Do not align status to only
+  the first text line while the Switch centers on two lines.
 - Advanced paths use `FieldStack` / `FieldBlock` and a full-width Input.
   Put a ghost `size="sm"` Save icon with Tooltip and `aria-label` in Input's
   `trailing` slot. Render the effective path separately using
   `.fynns-settings-meta`; wrap long paths without horizontal page scrolling.
   Keep a blank configured path distinct from its effective default.
+  A decorative leading glyph has 16dp of optical clearance from the shell's
+  inner edge and 16dp to the text; Input owns both distances. Its outer affix
+  shell keeps the existing capsule edge contract, while raw SVG glyphs receive
+  internal field padding. Interactive trailing actions keep their 32dp target.
 
 ## State and behavior
 
@@ -83,6 +98,13 @@ Browser coverage lives in
 1440/390/320px widths, short viewport scrolling, category/draft persistence,
 effective-path save and retry, optimistic rollback, successful immediate saves,
 transparent loading slots, platform support, focus trap/return and reduced motion.
+The additional
+[settings-geometry.spec.ts](../../e2e/treaty/settings-geometry.spec.ts) measures
+header/title/close centers, actual surface roles/divider, status/Switch/text-unit
+centers and glyph-to-shell/text clearance in both languages and themes at all
+three widths. It also checks the generic Input demo outside settings. Merely
+checking wrapper bounds and lack of overflow did not catch these defects in the
+first review; the explicit geometry assertions replace that incomplete evidence.
 
 Settings-surface review against [UI reward signals](../../llm/UI_REWARD_SIGNALS.md)
 (canvas-only toolbar/notice criteria do not apply to this modal):
@@ -91,7 +113,7 @@ Settings-surface review against [UI reward signals](../../llm/UI_REWARD_SIGNALS.
 | --- | --- | --- |
 | Clear hierarchy | 2/2 | One title, one close action, one active category; compact controls and ghost path Save. |
 | Useful surfaces | 2/2 | Navigation and settings content only; no option Cards or detached startup-status row. |
-| Spacing and alignment | 2/2 | Desktop side-by-side panes; top navigation on narrow screens; no label/control intersections at 1440/390/320px. |
+| Spacing and alignment | 2/2 | Header/title/close and status/Switch/text-unit center errors at most 1dp; leading glyph inner inset and text gap 16dp; both languages/themes at 1440/390/320px. |
 | Complete behavior | 2/2 | Stable panel width/height, draft preservation, real effective-path transition, failed-save rollback/retry and unsupported state. |
 | Shared and accessible | 2/2 | Shipped CSS/tokens and existing primitives; both themes, keyboard trap/return, Escape after save and reduced motion verified in the browser. |
 
