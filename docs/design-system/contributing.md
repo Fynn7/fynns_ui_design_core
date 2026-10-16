@@ -18,16 +18,16 @@
    (`test:e2e` / Playwright on `:5174`). New CONSUMER_TREATY / Hard-rule
    regressions belong under [`e2e/treaty/`](../../e2e/treaty/) (DOM / geometry /
    interaction — not pixel screenshots).
-4. **Bump + publish (hard):** every landed change consumers should see is a
-   new GitHub Packages version in the **same task**. Authority:
-   [`docs/package-propagation.md`](../package-propagation.md). Do **not**
-   ship via a consumer Vite alias to this checkout.
-5. **Consumer pattern bugs (hard):** same-task loop —    (a) constrain in this
-   core (`docs/DESIGN_SYSTEM.md` + treaty + pasteable rule + public CSS if needed),
-   (b) **update sandbox Globals / Preview / Layout demo** that teaches the fix
-   and **browser-verify in sandbox**, (c) **dispatch a subagent** into the
-   reporting consumer to bump, patch props-only if needed, and **browser-verify
-   there**, (d) **fleet-scan every local `@fynn7/ui-design-core` consumer** with
-   parallel Task subagents for the **same failure class**, fix all hits, and
-   re-verify. Never a consumer-only patch. Cursor: `/constrain-then-consumer` →
-   [`.cursor/skills/constrain-then-consumer/SKILL.md`](../../.cursor/skills/constrain-then-consumer/SKILL.md).
+4. **Propagation:** use the specified consumer's actual dependency mode.
+   Daily sibling `file:` does not require a package release. Follow
+   [`docs/package-propagation.md`](../package-propagation.md); publish, commit
+   and push only with user authorization. Verify the actual resolved core
+   path/version rather than assuming the app loaded a source change.
+5. **Consumer UI issues:** load the installed, self-contained
+   `constrain-then-consumer` skill (`@constrain-then-consumer` in OpenCode,
+   `$constrain-then-consumer` in Codex).
+   One agent completes core and the explicitly specified consumers, including
+   sandbox and real-page browser verification. Fix reusable defects in core;
+   correct misuse of existing public APIs in the consumer. No mandatory
+   subagent, publication or migration of unrelated consumers. Honor explicit
+   core-only scope and mark consumer implementation/verification pending.

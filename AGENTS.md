@@ -52,7 +52,7 @@ Grep 必须限定目录（`src/primitives` / `docs/design-system` / `llm`）并�
    内容骨架只绘制条带：根节点、包装层、BusyRegion overlay / BusyScrim 骨架背景透明，冷启动 / 已有内容刷新及明暗主题均禁黑底、洗色、backdrop blur 和阴影面板；保留宿主主题表面，禁消费侧 `.fynns-*` 覆盖。AppLoadingScreen 仍不透明，阻塞骨架保留焦点 / 输入锁定。
 7. Popover / Tooltip 定位走 `floatingBox`，勿手写 ad-hoc 几何。
 8. a11y 默认在线；动效用 motion token，勿随意写 ms。
-9. 消费侧 bug：**优先在本仓约束**（文档 / 条约 / CSS），再修消费者；勿只在消费仓打补丁。
+9. 消费侧 UI 问题遵循 本机 `constrain-then-consumer` 完整技能（OpenCode：`@constrain-then-consumer`；Codex：`$constrain-then-consumer`）：同一 agent 完成 core 与指定消费仓的实施及真实页面验收。先查既有能力与实际依赖；可复用缺陷修 core，已有 API 的误用修消费调用，禁消费侧私有 CSS 补丁。尊重只改 core 的范围；不默认子代理、发布或全消费仓迁移。
 10. Sandbox / 文档不得含消费产品文案（`npm run check:no-consumer`）。
 11. **永久跳过**：TimePicker dial / LoadingIndicator / ButtonGroup / RangeSlider（已有数字 TimePicker 足够）。
 12. 勿 git commit / push，除非用户明确要求。

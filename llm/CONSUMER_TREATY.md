@@ -1,52 +1,51 @@
-# Consumer treaty — pasteable `@fynns/ui` contract
+# Consumer treaty — `@fynns/ui` contract
 
-**Purpose:** give any consumer repo a short, always-on agent rule so it obeys
-`@fynns/ui` even when nobody opens `AGENTS.md` / `CONSUME.md`.
+**Purpose:** give OpenCode and Codex a shared consumer contract, a core-first
+workflow and a stable failure-mode index.
 
-**Single paste source:** [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc)
-(copy that entire file).
+Authoritative design rules live in [`AGENTS.md`](../AGENTS.md),
+[`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md) and the living sandbox demos.
+Use the [consumer AGENTS template](consumer-AGENTS.md) for application guidance.
 
-**Moved:** long failure-mode essays are gone. Authoritative rules live in
-[`AGENTS.md`](../AGENTS.md) (Hard rules + Content density) and live sandbox
-demos. This file keeps paste instructions, the core-first loop, and a **stable
-slug index** for bookmarks / consumer-rule cross-links.
-
-Install contract: [`CONSUME.md`](CONSUME.md). Publish:
+Install contract: [`CONSUME.md`](CONSUME.md). Package propagation:
 [`docs/package-propagation.md`](../docs/package-propagation.md).
 
-## How to paste (any consumer)
+## Consumer instruction entry
 
-1. Create `.cursor/rules/fynns-ui-consumer.mdc` in the **consumer** root
-   (or merge into an existing always-apply rule).
-2. Paste the full contents of
-   [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
-3. Optional: one line in the consumer `AGENTS.md` / README:
+Keep consumer-specific instructions in the application's `AGENTS.md`, preserving
+its existing requirements. Point to this treaty and `llm/CONSUME.md` in the
+resolved core checkout or installed package. Read the current referenced docs
+before UI work; do not treat a copied rule as a substitute for the live contract.
 
-   > UI: follow `.cursor/rules/fynns-ui-consumer.mdc` and
-   > `node_modules/@fynn7/ui-design-core/llm/CONSUME.md` (or the core checkout).
-
-The consume installer may also drop this rule when wiring a consumer
-(`scripts/install-as-npm.mjs`); if the file already exists it is left alone
-unless you re-copy by hand. **Re-paste after treaty / pasteable-rule updates.**
+For cross-repo implementation, load the complete local
+`constrain-then-consumer` skill in the current host. Its steps are installed in
+OpenCode's native skill directory and exported as a full Codex copy.
 Local install gate: `consume --check` — see [`CONSUME.md`](CONSUME.md).
 
 ## Core-first loop (when a consumer screen is wrong)
 
 Media/caption/prose crowding: [Content rhythm](../docs/design-system/content-rhythm.md),
 sandbox `#rhythm` → `#sandbox-content-rhythm`. Use the shipped CSS recipe
-and re-copy the always-apply rule into existing consumers after this update.
+and keep the affected consumer AGENTS references aligned with this contract.
 
-Same task — **all three**, not pick-one:
+Use one agent to complete the explicitly specified core and consumer scope:
 
-1. **Core constraint** — token / primitive / CSS in `fynns_ui_design_core`.
-2. **Sandbox demo** — update Globals / Preview / Layout sample that teaches the
-   fix; browser-verify in sandbox.
-3. **Consumer** — dispatch a subagent into the consumer checkout: bump core,
-   props-only fix, browser-verify on the reported screen.
+1. **Locate the cause** — inspect existing core capability and the consumer's
+   actual resolved dependency. Fix reusable defects in core; correct consumer
+   misuse of an existing API without inventing new core APIs or duplicate rules.
+2. **Sandbox demo** — maintain or reuse the relevant living example and verify
+   it in a browser. Core UI changes must be represented there.
+3. **Specified consumers** — propagate through their actual dependency mode
+   (daily sibling `file:` by default), apply public-API changes, run the relevant
+   gates and verify each reported real page in a browser.
 
-Authority: `/constrain-then-consumer` →
-[`.cursor/skills/constrain-then-consumer/SKILL.md`](../.cursor/skills/constrain-then-consumer/SKILL.md).
-Never consumer-only; never core-only without a living sandbox sample.
+Workflow: load the installed, self-contained `constrain-then-consumer` skill
+with `@constrain-then-consumer` in OpenCode or `$constrain-then-consumer` in Codex.
+OpenCode uses `~/.config/opencode/skills/constrain-then-consumer/SKILL.md`;
+Codex uses its complete exported copy in `~/.agents/skills/constrain-then-consumer/SKILL.md`.
+No mandatory subagent, publication or all-consumer migration. Explicit core-only
+requests stop at core and sandbox, with consumer work marked pending. Do not
+replace authorized consumer implementation with a handoff or a local CSS patch.
 
 ## Failure mode index
 
@@ -394,7 +393,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | --- | --- |
 | [`CONSUME.md`](CONSUME.md) / [`consume.json`](consume.json) | Install + greenfield skeleton |
 | [`consumer-AGENTS.md`](consumer-AGENTS.md) | Consumer `AGENTS.md` template (OpenCode / local models) |
-| [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) | Pasteable always-on consumer rule |
+| [`consumer-AGENTS.md`](consumer-AGENTS.md) | Consumer AGENTS guidance for OpenCode and Codex |
 | [`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md) | Hard rules / density SoT index |
 | [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | **Full documentation catalog** (+ CodeBlock highlight + `api.mjs`) |
 | [`PERF.md`](PERF.md) | Shells / inspectors / catalogs |
