@@ -72,8 +72,10 @@
 .fynns-card-head {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--fynns-space-2);
+  column-gap: var(--fynns-space-2);
+  row-gap: 0;
   min-width: 0;
   /*
    * One header height for every anatomy (title-only / icon / trailing IconButton).
@@ -128,16 +130,13 @@
   align-items: center;
   /* Disclose (icon/chevron) → title: a step above space-sm, under space-md. */
   gap: var(--fynns-space-3);
-  /*
-   * Prefer a readable title band (~40% flex-basis) when the host is wide.
-   * Do **not** hard-floor `min-width: 40%`: that + `actions` `flex: 0 0 auto`
-   * + Card `overflow: hidden` clips the end IconButton (danger trash) when
-   * the strip is denser than ~60% (ToggleGroup + icons — agents-hub lesson).
-   * Yield below 40% so chrome stays fully visible; title ellipsizes via
-   * `.fynns-card-title { min-width: 0 }`. Live: sandbox `#card` actions-strip.
-   */
-  flex: 1 1 40%;
+  /* A zero basis lets a fitting action strip keep one row. Once the strip
+   * exceeds the host, flex wrapping moves it below the title instead of
+   * clipping controls at the shell's overflow boundary. No viewport cutoff:
+   * this also adapts in a narrow pane of a wide window. */
+  flex: 1 1 0;
   min-width: 0;
+  min-height: calc(var(--fynns-size-icon-target) + 2 * var(--fynns-space-xs));
   /* Vertical rhythm comes from the shared head min-height + flex centering —
    * no padding-block (it fought IconButton+xs and caused variant drift). */
   padding-block: 0;
@@ -294,9 +293,14 @@
 .fynns-card-actions {
   position: relative;
   z-index: 1;
-  /* Hug chrome; never shrink under the lead — title yields instead (see lead). */
-  flex: 0 0 auto;
+  /* Hug when possible, then wrap within the actual header width. */
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  margin-inline-start: auto;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   align-items: center;
   gap: var(--fynns-space-2);
   /* Keep IconButton hover disks off the card edge (not full content-inset). */
@@ -322,21 +326,27 @@
   padding: 0;
 }
 
-/*
- * Header actions = one horizontal strip (M3). Every cluster under the actions
- * slot must hug + nowrap — including nested helper groups. A sole
- * `>` rule is not enough when helpers wrap themselves in `.fynns-control-cluster`
- * (`width: 100%` + wrap) and the head squeezes the strip: each nested group
- * claims a full row (~72dp tall stack). Prefer a flat outer cluster of
- * IconButtons; nested helpers must still stay one row.
- */
+/* Nested helper groups hug on roomy headers, but must not force an unbounded
+ * nowrap strip in narrow cards. Bound every cluster, not just the outer one. */
 .fynns-card-actions .fynns-control-cluster,
 .fynns-collapsible-actions .fynns-control-cluster {
   width: auto;
-  max-width: none;
-  flex-wrap: nowrap;
-  flex: 0 0 auto;
+  max-width: 100%;
+  flex-wrap: wrap;
+  flex: 0 1 auto;
   min-width: 0;
+}
+
+/* A single long menu trigger must also fit on its own line. Its existing
+ * OverflowTip keeps the full label accessible without resizing the flyout. */
+:is(.fynns-card-actions, .fynns-collapsible-actions) .fynns-menu-root {
+  min-width: 0;
+  max-width: 100%;
+}
+
+:is(.fynns-card-actions, .fynns-collapsible-actions) .fynns-menu-root > .fynns-btn {
+  min-width: 0;
+  max-width: 100%;
 }
 
 /*

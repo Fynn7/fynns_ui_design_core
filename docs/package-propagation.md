@@ -15,6 +15,13 @@ into consumer agent guidance. See [workspace contract](design-system/workspace-c
 
 ## Model
 
+**Narrow header fix ≥ 0.5.312:** Card / Collapsible action strips and nested
+control clusters now wrap within the actual header width instead of clipping
+trailing controls. No API migration or consumer CSS is required. Linked source
+consumers receive this through their existing file dependency; pinned/vendor
+snapshots need their existing snapshot update before the fix reaches the app.
+Verify the dense header in both themes at narrow window and pane widths.
+
 **Skeleton background fix ≥ 0.5.311:** update the consumed source, including
 pinned source snapshots, rather than adding consumer CSS. Content skeleton
 overlays and blocking skeleton backdrops are transparent across themes and

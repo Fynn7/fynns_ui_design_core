@@ -197,6 +197,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | ListItem overline restates trailing status | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-repo-path-actions` |
 | ControlRow IconButton crushed to ellipse | DESIGN_SYSTEM form-rhythm | `#rhythm` |
 | end-align IconButton strip crushed | DESIGN_SYSTEM form-rhythm | `#rhythm` |
+| narrow Card / Collapsible header clips trailing actions | DESIGN_SYSTEM form-rhythm; core ≥ 0.5.312 wraps actions by container width, including nested clusters | `#sandbox-header-actions-responsive` / `#card` |
 | Pagination crushed or stacked off-spec | DESIGN_SYSTEM form-rhythm | `#pagination` |
 | Pagination bar wraps to two rows | DESIGN_SYSTEM form-rhythm | `—` |
 | Pagination Select invents absolute overlay | DESIGN_SYSTEM Hard rules / Content density | `#pagination` / `#select` |

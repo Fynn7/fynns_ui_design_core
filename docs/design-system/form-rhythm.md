@@ -64,6 +64,15 @@ flush; neighboring independent controls still need 8dp. On narrow hosts,
 wrap or adapt the composition instead of compressing the gap. Live:
 `#sandbox-action-spacing`.
 
+**Narrow section headers (≥ 0.5.312):** Card and Collapsible keep a fitting
+action strip on one row. When the strip no longer fits the actual container,
+core moves it below the title and wraps controls at their normal size and
+spacing. Nested `.fynns-control-cluster` helpers hug their content but remain
+bounded by the header; they must not force an unbounded nowrap strip. This is
+container-driven, including narrow panes in wide windows. Keep using `actions`
+and the shared cluster; do not hide actions, compress targets, or override core
+CSS in consumers. Live: `#sandbox-header-actions-responsive` under `#card`.
+
 **Drawer title boundary (hard):** a title line box clears the sheet's top
 edge / app-bar divider by `--fynns-navdrawer-title-edge-inset`
 (aliases `dialog-inset`, **24dp**). An internal Divider→section title uses

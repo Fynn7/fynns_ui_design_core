@@ -1,4 +1,5 @@
 import { ContentRhythmDemo } from "./ContentRhythmDemo";
+import { ResponsiveHeaderDemo } from "../components/ResponsiveHeaderDemo";
 import { DiffViewDemo, DiffDialogDemo } from "../components/DiffDemo";
 import { TagInputDemo } from "../components/TagInputDemo";
 import { ContentBoundaryDemo } from "../components/ContentBoundaryDemo";
@@ -6034,6 +6035,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="card">
+          <ResponsiveHeaderDemo />
         <div className="sandbox-globals-cards">
           <Card
             className="sandbox-globals-card"
