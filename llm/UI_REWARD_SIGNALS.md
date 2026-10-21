@@ -43,6 +43,9 @@ Cleaner means fewer competing surfaces with complete behavior, not a blank UI.
   motion ship with core, not the sandbox stylesheet.
 - Navigation/context rename: `#layouts-demo-workspace-chrome` →
   [WorkspaceChromeDemo.tsx](../examples/sandbox/src/components/WorkspaceChromeDemo.tsx).
+  Core rename dialog (double-click / `F2` on the destination):
+  `#layouts-demo-nav-drawer-rename` →
+  [NavDrawerRenameDemo.tsx](../examples/sandbox/src/components/NavDrawerRenameDemo.tsx).
 - Plain persistent in-panel copy: `#sandbox-inline-alert-dismiss` → `InlineAlert`.
 - Validate consumer export/workspace gates, types/build, desktop + narrow,
   dark + light, multiple notices, middle dismissal, keyboard and reduced motion.

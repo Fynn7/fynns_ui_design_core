@@ -15,6 +15,15 @@ into consumer agent guidance. See [workspace contract](design-system/workspace-c
 
 ## Model
 
+**Core rename flow ≥ 0.5.313:** `NavigationDrawerItem` ships the rename
+gesture and dialog (`renamable` + `onRename` + `renameLabels`, optional
+controlled `renameOpen` / `onRenameOpenChange`). Double-click a destination
+(or press `F2`) opens the core rename Dialog; `Enter` saves, `Escape` cancels.
+Consumers drop their own rename dialog and point the item context menu at
+the same dialog. Persistent drawers keep the row mounted, so the gesture
+completes there; modal drawers still close on the first click. See
+[workspace contract](design-system/workspace-chrome.md).
+
 **Narrow header fix ≥ 0.5.312:** Card / Collapsible action strips and nested
 control clusters now wrap within the actual header width instead of clipping
 trailing controls. No API migration or consumer CSS is required. Linked source

@@ -25,7 +25,8 @@ gaps or reset core padding. Live references: `#sandbox-action-spacing` and
 [Workspace chrome and error feedback](../docs/design-system/workspace-chrome.md)
 before choosing chrome. Live `#layouts-demo-workspace-chrome` includes top-bar
 ghost Home/Back/one inspector toggle, a first New resource menu, targeted
-right-click/keyboard rename, horizontal ghost object actions and Dialog Cancel.
+right-click/keyboard rename (the same core rename Dialog opens on a
+double-click of the destination), horizontal ghost object actions and Dialog Cancel.
 In-flow persistent feedback with details/actions uses `SectionNotice` string
 slots and action descriptors, never components nested inside `InlineAlert`.
 See [SectionNotice](../docs/design-system/section-notice.md), live `#section-notice`.

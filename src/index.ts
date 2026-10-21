@@ -366,6 +366,7 @@ export type {
   NavigationDrawerItemProps,
   NavigationDrawerNewChatProps,
   NavigationDrawerProps,
+  NavigationDrawerRenameLabels,
 } from "./primitives/NavigationDrawer";
 export { Divider } from "./primitives/Divider";
 export type { DividerProps } from "./primitives/Divider";

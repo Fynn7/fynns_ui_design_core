@@ -20,8 +20,11 @@ Workspace/greenfield defaults are mandatory: read
 One TopAppBar ghost icon toggles the inspector in both states; no second close.
 Global Home = top-bar HomeIcon, Back = ArrowLeftIcon, both ghost icon-only with
 Tooltip/aria-label. First nav element = New resource menu, not a domain slogan.
-Rename belongs to the targeted resource's context menu (right-click/Shift+F10),
-never a canvas-toolbar rename Button. Routine inspector actions are one horizontal
+Rename belongs to the targeted resource: the item context menu (right-click /
+Shift+F10) and a double-click on the destination open the **same** core rename
+Dialog (`NavigationDrawerItem renamable` + `onRename`; F2 is the keyboard
+equivalent). Never a canvas-toolbar rename Button, never a second rename
+surface. Routine inspector actions are one horizontal
 ghost icon row (4dp); labeled/mixed rows use 8dp. At most one primary per group.
 Dialog.feet: labeled ghost Cancel then primary Save. No all-cap UI chrome or
 uppercase transforms. Unspecified error feedback defaults to error snackbar;

@@ -22,8 +22,10 @@ Paste the task below in the consumer repository.
 落实全部约束：
 1. 顶栏 Home/Back/侧栏 toggle 均为 ghost 纯图标，Tooltip + aria-label。
    侧栏开关由同一个按钮处理，删除检查器内的冗余关闭按钮。
-   导航首项是“新建资源”菜单；重命名只从被右键的导航项 ContextMenu
-   进入 Dialog，并支持 Shift+F10/ContextMenu 键。右键不改变当前选中项。
+   导航首项是“新建资源”菜单；重命名从被右键的导航项 ContextMenu
+   进入 Dialog，并支持 Shift+F10/ContextMenu 键；同一导航项双击（core 内置
+   `NavigationDrawerItem renamable` + `onRename`，F2 等价）进入同一个 Dialog，
+   不要另写一套重命名界面。右键不改变当前选中项。
 2. 用 .fynns-workspace-canvas 承载画布，.fynns-workspace-tools 内使用
    floating Toolbar，保持 16dp 边距，可用 ghost X 关闭、从顶栏恢复。
    删除贴边整宽圆角 docked 工具条。普通页面的 docked 工具必须放入

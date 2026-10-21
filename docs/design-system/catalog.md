@@ -370,7 +370,9 @@ classes.
   settings gear `sm` — **not** a destination Item; never wrap destinations in
   `.fynns-unit-stack`; SearchBar/tools ↔ destinations =
   `--fynns-navdrawer-search-gap` **8dp**; Item↔Item =
-  `--fynns-navdrawer-section-gap` **4dp**), SkipLink, Breadcrumb, Pagination
+  `--fynns-navdrawer-section-gap` **4dp**; Item `renamable` + `onRename` ships
+  the **core rename dialog** — double-click / `F2` opens it, `renameOpen` wires
+  the item context menu to the same dialog), SkipLink, Breadcrumb, Pagination
   (`.fynns-pagination-bar` = single M3/MUI footer row — never wrap to two rows;
   rows-per-page Select is the **stock** Keep-set Select — 40dp shell +
   portaled `.fynns-select-menu` like `#select` (≥ **0.5.208**); siblings share

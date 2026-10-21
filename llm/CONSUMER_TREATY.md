@@ -421,6 +421,7 @@ All greenfield consumers follow this recipe; static export gate + browser review
 | Global home hidden as ordinary destination / labeled back pill | workspace-chrome | `#layouts-demo-workspace-chrome` |
 | Nav starts with slogan instead of New resource menu | workspace-chrome | `#layouts-demo-workspace-chrome` |
 | Toolbar title opens rename / right-click targets active item | workspace-chrome | `#layouts-demo-workspace-chrome` |
+| Second rename surface beside the core rename dialog / double-click ignored on a persistent destination | workspace-chrome / Resource rename | `#layouts-demo-nav-drawer-rename` |
 | Cancel primary / multiple primary actions | workspace-chrome / Dialog feet | `#layouts-demo-workspace-chrome` |
 | All-cap UI headings / uppercase decoration | workspace-chrome | `#layouts-demo-workspace-chrome` |
 | Transient failure defaults to persistent InlineAlert | workspace-chrome / Error feedback | `#sandbox-inline-alert-dismiss` |

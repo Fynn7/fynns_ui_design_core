@@ -81,6 +81,7 @@ import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { NavDrawerFooterAccount } from "../components/NavDrawerFooterAccount";
+import { NavDrawerRenameDemo } from "../components/NavDrawerRenameDemo";
 import { ChatEmptySurfaceStarters } from "../components/ChatEmptySurfaceStarters";
 import { ChatProductLayoutsDemo } from "../components/ChatProductLayoutsDemo";
 import { ChatSessionsDrawerDemo } from "../components/ChatSessionsDrawerDemo";
@@ -187,6 +188,7 @@ export function LayoutsPage() {
           <LayoutsDemo id="settings-dialog"><SettingsDialogDemo /></LayoutsDemo>
           <LayoutsDemo id="canvas-workspace"><CanvasWorkspaceDemo /></LayoutsDemo>
           <LayoutsDemo id="workspace-chrome"><WorkspaceChromeDemo /></LayoutsDemo>
+          <LayoutsDemo id="nav-drawer-rename"><NavDrawerRenameDemo /></LayoutsDemo>
           <LayoutsDemo id="shell">
             <div className="sandbox-globals-row sandbox-globals-row--stack">
               <Switch

@@ -1,7 +1,7 @@
 import { useState, type KeyboardEvent, type MouseEvent } from "react";
 import {
-  ArrowLeftIcon, ArrowUpIcon, Button, Card, CheckIcon, ClipboardIcon,
-  ClippedNavShell, CloseIcon, ContextMenu, Dialog, DropdownMenu,
+  ArrowLeftIcon, ArrowUpIcon, Button, Card, ClipboardIcon,
+  ClippedNavShell, ContextMenu, DropdownMenu,
   DropdownMenuItem, EmptyState, EndAside, FieldBlock, FieldStack, FileIcon,
   HomeIcon, IconButton, InlineAlert, Input, NavigationDrawer,
   NavigationDrawerItem, PageScroll, PanelLeftIcon, PanelRightIcon,
@@ -22,7 +22,7 @@ const copy = {
     longFailure: "Import failed. The selected file contains unsupported fields. Check the file format, correct the fields and try again.",
     dismiss: "Dismiss notice", restore: "Show persistent notice", transient: "Simulate import failure",
     feedback: "Error feedback",
-    help: "Home and Back are top-bar icons. One inspector icon toggles both states. The first navigation control creates a document; right-click a document or press Shift+F10 to rename it. Routine object actions stay in one ghost icon row. Errors default to snackbar; persistent notices use the content-width InlineAlert with its built-in ghost X.",
+    help: "Home and Back are top-bar icons. One inspector icon toggles both states. The first navigation control creates a document; double-click a document (or right-click / press Shift+F10) to rename it in the core rename dialog. Routine object actions stay in one ghost icon row. Errors default to snackbar; persistent notices use the content-width InlineAlert with its built-in ghost X.",
   },
   zh: {
     title: "示例工作区", home: "主页", back: "返回", nav: "导航",
@@ -35,7 +35,7 @@ const copy = {
     longFailure: "导入失败。所选文件包含不支持的字段。请检查文件格式，修正字段后重试。",
     dismiss: "关闭提示", restore: "显示持久提示", transient: "模拟导入失败",
     feedback: "错误反馈",
-    help: "主页与返回均为顶栏纯图标。同一个检查器图标切换开关。导航首项用于新建文档；右键文档或按 Shift+F10 重命名。常规对象操作使用一行 ghost 图标。错误默认用 snackbar；持久提示使用按内容宽度布局且内置 ghost X 的 InlineAlert。",
+    help: "主页与返回均为顶栏纯图标。同一个检查器图标切换开关。导航首项用于新建文档；双击文档（或右键 / 按 Shift+F10）在 core 重命名对话框中重命名。常规对象操作使用一行 ghost 图标。错误默认用 snackbar；持久提示使用按内容宽度布局且内置 ghost X 的 InlineAlert。",
   },
 };
 
@@ -47,7 +47,6 @@ export function WorkspaceChromeDemo() {
   const [asideOpen, setAsideOpen] = useState(false);
   const [selected, setSelected] = useState(true);
   const [name, setName] = useState<string | null>(null);
-  const [draft, setDraft] = useState("");
   const [renameOpen, setRenameOpen] = useState(false);
   const [menu, setMenu] = useState({ open: false, x: 0, y: 0 });
   const label = name ?? c.name;
@@ -82,7 +81,10 @@ export function WorkspaceChromeDemo() {
             <DropdownMenuItem icon={<FileIcon />} onClick={() => setSelected(true)}>{c.blank}</DropdownMenuItem>
           </DropdownMenu>
           <NavigationDrawerItem label={label} icon={<FileIcon />} active={selected}
-            onClick={() => setSelected(true)} onContextMenu={openMenu} onKeyDown={keyboardMenu} />
+            onClick={() => setSelected(true)} onContextMenu={openMenu} onKeyDown={keyboardMenu}
+            renamable renameOpen={renameOpen} onRenameOpenChange={setRenameOpen}
+            renameLabels={{ title: c.rename, field: c.field, cancel: c.cancel, save: c.save }}
+            onRename={(next) => { setName(next); setRenameOpen(false); snackbar(c.saved); }} />
         </NavigationDrawer> : null}>
         <div style={{ display: "flex", height: "100%", minHeight: 0, minWidth: 0 }}>
           <div style={{ flex: "1 1 0", minWidth: 0 }}><PageScroll>
@@ -107,21 +109,10 @@ export function WorkspaceChromeDemo() {
     </div>
     <ContextMenu open={menu.open} x={menu.x} y={menu.y} ariaLabel={c.menu}
       onOpenChange={open => setMenu(prev => ({ ...prev, open }))}>
-      <DropdownMenuItem icon={<PencilIcon />} onClick={() => { setDraft(label); setRenameOpen(true); }}>
+      <DropdownMenuItem icon={<PencilIcon />} onClick={() => setRenameOpen(true)}>
         {c.rename}
       </DropdownMenuItem>
     </ContextMenu>
-    <Dialog open={renameOpen} onOpenChange={setRenameOpen} title={c.rename}
-      feet={<div className="fynns-control-cluster fynns-control-cluster--end-align">
-        <Button variant="ghost" onClick={() => setRenameOpen(false)}><CloseIcon />{c.cancel}</Button>
-        <Button variant="primary" disabled={!draft.trim()} onClick={() => {
-          setName(draft.trim()); setRenameOpen(false); snackbar(c.saved);
-        }}><CheckIcon />{c.save}</Button>
-      </div>}>
-      <FieldStack><FieldBlock label={c.field} htmlFor="workspace-demo-name">
-        <Input id="workspace-demo-name" value={draft} onChange={event => setDraft(event.target.value)} />
-      </FieldBlock></FieldStack>
-    </Dialog>
     <InlineAlertDemo />
     <p className="sandbox-globals-navrail-pane-body">{c.help}</p>
   </div>;

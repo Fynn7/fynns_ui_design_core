@@ -23,7 +23,7 @@ Its overlay placement, notice stacking and motion are shipped core behavior.
 | Global project/catalog home | TopAppBar leading ghost `IconButton` + `HomeIcon`, Tooltip and aria-label. Clicking shows the root/catalog in the same app shell. | Ordinary drawer/list item secretly routing to a different global page; a text Home pill; replacing the shell. |
 | Back from a detail | One ghost `IconButton` + `ArrowLeftIcon` in TopAppBar leading; Tooltip + aria-label. | “← Projects” labeled Button, doubled arrows or a filled navigation CTA. |
 | First navigation element | A localized “New <resource>” menu with `PlusIcon` and creation choices using `DropdownMenu`; use ghost/tonal emphasis. Chat's stock `NavigationDrawerNewChat` remains the chat recipe. | A product/domain slogan or redundant section heading above creation; creation only in the main toolbar. |
-| Resource rename | Right-click the resource's `NavigationDrawerItem` → `ContextMenu` + `DropdownMenuItem` → rename `Dialog`. Capture the clicked resource id; never change the current selection on right-click. Support ContextMenu key and Shift+F10. | A rename pill/title Button in the canvas toolbar; left-click opening rename; a menu always acting on the selected resource instead of the target. |
+| Resource rename | Right-click the resource's `NavigationDrawerItem` → `ContextMenu` + `DropdownMenuItem` → rename `Dialog`. **Double-click the destination** (or press `F2` on the focused row) opens that **same core rename dialog**: `NavigationDrawerItem` ships `renamable` + `onRename` + `renameLabels`, so the gesture, the dialog chrome (title, `Name` field, ghost Cancel, one primary Save) and the commit rules are core behavior. Capture the clicked resource id; never change the current selection on right-click. Support ContextMenu key and Shift+F10. | A rename pill/title Button in the canvas toolbar; left-click opening rename; a menu always acting on the selected resource instead of the target; a second rename surface (own dialog, inline editor) next to the core one. |
 | Routine object actions | One horizontal `Toolbar` / `.fynns-control-cluster`: ordering, duplicate and delete use ghost IconButtons + Tooltip + aria-label. If labels are needed, use ghost/tonal Buttons. Danger belongs in the destructive confirmation. | Full-width stacked primary/danger pills for ordinary inspector commands; all actions competing as primary; local accent/destructive fills. |
 | Commit form changes | At most one primary per action group, rightmost. Dialog `feet` → `.fynns-control-cluster--end-align`: `CloseIcon` + labeled ghost Cancel, then `CheckIcon` + labeled primary Save. | Filled Cancel; Cancel and Save both primary; icon-only confirmation; footer actions in the scrolling body. |
 | Visible chrome copy | Natural sentence case and localized human labels; preserve the conventional casing of technical abbreviations. | All-cap titles/overlines/section names or `text-transform: uppercase` / `toUpperCase()` to decorate UI. Code content and literal protocol/data values remain exact. |
@@ -52,6 +52,43 @@ Actions share [Form rhythm](form-rhythm.md): **4dp** for an all-icon row,
 **8dp** for any labeled/mixed row, including wrapped menu triggers. No custom
 button margins/gaps or stacked full-width action columns. Narrow panes must
 retain the row or put overflow actions in a core menu, without clipping.
+
+## Resource rename
+
+Core owns the rename flow for drawer destinations (≥ **0.5.313**).
+`NavigationDrawerItem`
+takes `renamable`, `onRename`, `renameLabels` and the optional controlled
+`renameOpen` / `onRenameOpenChange`:
+
+```tsx
+<NavigationDrawerItem
+  label={doc.name}
+  icon={<FileIcon />}
+  renamable
+  renameOpen={renameOpen}
+  onRenameOpenChange={setRenameOpen}
+  renameLabels={{ title: t("rename.title"), field: t("rename.field"), cancel: t("rename.cancel"), save: t("rename.save") }}
+  onRename={(next) => rename(doc.id, next)}
+/>
+```
+
+- **Gesture:** double-click the destination, or press `F2` on the focused row.
+  Left-click still activates the destination.
+- **One surface:** the core dialog is the only rename UI. Wire the item
+  context menu to the same dialog through `renameOpen` instead of shipping a
+  second dialog or an inline editor.
+- **Dialog chrome:** title, one `Name` field, `feet` = ghost Cancel (X) then
+  the single primary Save; Save stays disabled while the name is empty.
+- **Commit rules:** `Enter` saves, `Escape` cancels, `Cancel` cancels.
+  `onRename` receives the trimmed name and fires only when it actually
+  changed; the consumer owns the data and re-renders `label`.
+- **Drawer variant:** the gesture completes in persistent drawers
+  (`variant="standard"`), which keep the row mounted. A modal drawer closes
+  on the first click, so keep its context-menu rename.
+
+Live: `#layouts-demo-nav-drawer-rename` (persistent destinations) and
+`#layouts-demo-workspace-chrome` (context menu + double-click share one
+dialog).
 
 ## Error feedback defaults
 

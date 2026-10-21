@@ -25,7 +25,7 @@ ASCII `-`。
 ## 工作区与 greenfield（强制）
 
 权威：`docs/design-system/workspace-chrome.md`，活例 `#layouts-demo-workspace-chrome` / `#sandbox-inline-alert-dismiss`。
-所有项目默认：顶栏同一个 ghost IconButton + PanelRightIcon toggle 检查器，禁文字/primary 侧栏按钮或检查器内第二个关闭；Home 为顶栏 ghost HomeIcon，返回为 ghost ArrowLeftIcon，均只有图标 + Tooltip + aria-label。导航首项为“新建资源”DropdownMenu，禁口号标题占首位；重命名只由目标导航项的 ContextMenu 进入 Dialog，右键不改变当前选择，支持 Shift+F10/ContextMenu 键，禁画布顶栏重命名按钮。
+所有项目默认：顶栏同一个 ghost IconButton + PanelRightIcon toggle 检查器，禁文字/primary 侧栏按钮或检查器内第二个关闭；Home 为顶栏 ghost HomeIcon，返回为 ghost ArrowLeftIcon，均只有图标 + Tooltip + aria-label。导航首项为“新建资源”DropdownMenu，禁口号标题占首位；重命名从目标导航项的 ContextMenu（右键不改变当前选择，支持 Shift+F10/ContextMenu 键）或双击该导航项（core 内置 `NavigationDrawerItem renamable` + `onRename`，F2 等价）进入同一个 Dialog，禁画布顶栏重命名按钮与第二套重命名界面。
 检查器排序/复制/删除是一行 ghost 图标动作，禁整宽纵向 primary/danger；每组最多一个 primary。含文字的组 8dp、纯图标组 4dp，禁止本地间距/颜色覆盖。Dialog feet：CloseIcon + ghost 取消 → CheckIcon + 唯一 primary 保存。禁止全大写 UI 标题/标签、text-transform uppercase、toUpperCase 装饰。
 用户未指定错误方式时优先 error snackbar + SnackbarHost，禁止操作失败默认常驻 InlineAlert 或双重反馈；其次仅持久恢复用 InlineAlert。其 icon/正文/关闭垂直居中、内容自适应宽度（父级封顶）、文字→关闭 16dp；关闭用 onDismiss + dismissAriaLabel 内置无字 ghost X，禁 message/children 内嵌按钮或 width:100%。消费 export gate 已接入工作区静态检查；跨文件封装/动态文案/行为必须按模板在浏览器验证。
 

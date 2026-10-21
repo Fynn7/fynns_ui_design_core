@@ -8,12 +8,15 @@ Use the core CSS recipe; never compress these with local margins or line heights
 
 - **DO** follow [Workspace chrome and error feedback](workspace-chrome.md) in
   every greenfield app: one top-bar ghost inspector toggle, icon-only Home and
-  Back, first navigation element = New resource menu, item context menu rename,
-  horizontal low-emphasis inspector actions, ghost Cancel and one primary Save.
+  Back, first navigation element = New resource menu, item context menu rename
+  (the same core rename dialog also opens on a double-click of the
+  destination), horizontal low-emphasis inspector actions, ghost Cancel and one
+  primary Save.
   **DON'T** use all-cap chrome or duplicate inspector close controls. Errors
   default to snackbar; persistent InlineAlert uses core content width, centered
   icon/text/ghost X and 16dp text→dismiss gap. Live
-  `#layouts-demo-workspace-chrome` / `#sandbox-inline-alert-dismiss`.
+  `#layouts-demo-workspace-chrome` / `#sandbox-inline-alert-dismiss` /
+  `#layouts-demo-nav-drawer-rename`.
 
 - **DO** use `StatusBar` + `StatusBarItem` for desktop workspace bottom
   status. Place one full-width bar after the main/inspector row. Core owns

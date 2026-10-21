@@ -38,6 +38,11 @@ export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
     keywords: ["home", "new", "rename", "inspector", "InlineAlert", "snackbar", "工作区", "重命名", "错误提示"],
   },
   {
+    id: "nav-drawer-rename",
+    label: "Double-click rename",
+    keywords: ["rename", "double click", "F2", "重命名", "双击", "导航抽屉"],
+  },
+  {
     id: "shell",
     label: "DestinationAppShell",
     keywords: [
