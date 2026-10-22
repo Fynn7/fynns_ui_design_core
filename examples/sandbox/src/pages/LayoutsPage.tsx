@@ -1714,38 +1714,38 @@ export function LayoutsPage() {
             <ActionSpacingDemo />
             <div className="sandbox-globals-toolbar">
               <div className="fynns-docked-tools-inset">
-              <Toolbar
-                variant="docked"
-                aria-label={t("globals.toolbarDockedAria")}
-                floatingActionButton={
-                  <Tooltip content={t("globals.fabTip")}>
-                    <Fab size="sm" aria-label={t("globals.fabTip")}>
-                      <PlusIcon />
-                    </Fab>
+                <Toolbar
+                  variant="docked"
+                  aria-label={t("globals.toolbarDockedAria")}
+                  floatingActionButton={
+                    <Tooltip content={t("globals.fabTip")}>
+                      <Fab size="sm" aria-label={t("globals.fabTip")}>
+                        <PlusIcon />
+                      </Fab>
+                    </Tooltip>
+                  }
+                >
+                  <Tooltip content={t("globals.toolbarUndo")}>
+                    <IconButton aria-label={t("globals.toolbarUndo")}>
+                      <UndoIcon />
+                    </IconButton>
                   </Tooltip>
-                }
-              >
-                <Tooltip content={t("globals.toolbarUndo")}>
-                  <IconButton aria-label={t("globals.toolbarUndo")}>
-                    <UndoIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip content={t("globals.toolbarEdit")}>
-                  <IconButton aria-label={t("globals.toolbarEdit")}>
-                    <PencilIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip content={t("globals.toolbarSave")}>
-                  <IconButton aria-label={t("globals.toolbarSave")}>
-                    <SaveIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip content={t("globals.bottomAppBarDelete")}>
-                  <IconButton aria-label={t("globals.bottomAppBarDelete")}>
-                    <TrashIcon />
-                  </IconButton>
-                </Tooltip>
-              </Toolbar>
+                  <Tooltip content={t("globals.toolbarEdit")}>
+                    <IconButton aria-label={t("globals.toolbarEdit")}>
+                      <PencilIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.toolbarSave")}>
+                    <IconButton aria-label={t("globals.toolbarSave")}>
+                      <SaveIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.bottomAppBarDelete")}>
+                    <IconButton aria-label={t("globals.bottomAppBarDelete")}>
+                      <TrashIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Toolbar>
               </div>
               <div
                 style={{

@@ -20,7 +20,7 @@ import { Spinner } from "./Loading";
 import {
   NavigationDrawerRenameDialog,
   resolveRenameLabels,
-  useNavDrawerRename,
+  useNavigationDrawerRename,
   type NavigationDrawerRenameLabels,
 } from "./navigationDrawerRename";
 import { OverflowTip, overflowTipText } from "./OverflowTip";
@@ -520,8 +520,9 @@ export type NavigationDrawerItemProps = Omit<
   /**
    * Controlled open state of the rename dialog. Use it to open the **same**
    * core dialog from the item context menu (the workspace recipe) instead of
-   * shipping a second rename surface. Pair it with `onRenameOpenChange` —
-   * without that callback the gesture cannot open the dialog.
+   * shipping a second rename surface. Requires `renamable` (otherwise no
+   * dialog is rendered) and `onRenameOpenChange` — without that callback the
+   * double-click / F2 gesture cannot open the dialog.
    */
   renameOpen?: boolean;
   /** Notified when the rename dialog opens or closes. */
@@ -598,7 +599,7 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
     .join(" ");
 
   // —— core rename flow ——
-  const rename = useNavDrawerRename({
+  const rename = useNavigationDrawerRename({
     renamable,
     label,
     disabled,

@@ -12,6 +12,7 @@ import {
   type ReactNode,
 } from "react";
 import { refreshOverlayScrollbars } from "../theme/overlayScrollbar";
+import { isDevEnv } from "./devEnv";
 import { readRemPx, readVarPx } from "./layoutMeasure";
 import { isClippedNavDrawerOverlay, isNavigationDrawerActivation } from "./navigationDrawerActivation";
 
@@ -414,10 +415,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
   const squashedDrawerWarnedRef = useRef(false);
   const narrowDrawerWarnedRef = useRef(false);
   useEffect(() => {
-    // Avoid bare `process` (consumer tsc may lack @types/node).
-    const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } })
-      .process?.env?.NODE_ENV;
-    if (nodeEnv === "production") return;
+    if (!isDevEnv()) return;
     if (navMode !== "rail" || phase === "closed") {
       squashedDrawerWarnedRef.current = false;
       return;
@@ -441,9 +439,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
   }, [navMode, phase]);
 
   useEffect(() => {
-    const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } })
-      .process?.env?.NODE_ENV;
-    if (nodeEnv === "production") return;
+    if (!isDevEnv()) return;
     if (typeof window === "undefined") return;
     const mq = window.matchMedia("(max-width: 56.25rem)");
     const warn = () => {

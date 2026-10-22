@@ -206,4 +206,38 @@ describe("NavigationDrawerItem core rename flow", () => {
     doubleClick(row(host));
     expect(dialog()).toBeNull();
   });
+
+  it("warns in development when the rename wiring is incomplete", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      // `renamable` without `onRename` — Save would discard the typed name.
+      const first = mount({ onRename: undefined });
+      expect(
+        warn.mock.calls.some((call) =>
+          String(call[0]).includes("needs `onRename`"),
+        ),
+      ).toBe(true);
+      first.render();
+
+      // `renameOpen` without `onRenameOpenChange` — the gesture cannot open it.
+      warn.mockClear();
+      mount({ renameOpen: false, onRenameOpenChange: undefined });
+      expect(
+        warn.mock.calls.some((call) =>
+          String(call[0]).includes("Pair it with `onRenameOpenChange`"),
+        ),
+      ).toBe(true);
+
+      // `renameOpen` without `renamable` — no dialog is rendered at all.
+      warn.mockClear();
+      mount({ renamable: false, renameOpen: false });
+      expect(
+        warn.mock.calls.some((call) =>
+          String(call[0]).includes("needs `renamable`"),
+        ),
+      ).toBe(true);
+    } finally {
+      warn.mockRestore();
+    }
+  });
 });

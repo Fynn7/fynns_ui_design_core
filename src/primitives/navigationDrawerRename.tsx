@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { Button } from "./Button";
+import { isDevEnv } from "./devEnv";
 import { Dialog } from "./Dialog";
 import { FieldBlock } from "./FieldHeader";
 import { FieldStack } from "./FieldStack";
@@ -35,7 +36,7 @@ export function resolveRenameLabels(
   return { ...DEFAULT_RENAME_LABELS, ...labels };
 }
 
-export type NavDrawerRenameOptions = {
+export type NavigationDrawerRenameOptions = {
   /** The gesture is enabled (`renamable`). */
   renamable: boolean;
   /** Current destination label — seeds the field. */
@@ -50,7 +51,7 @@ export type NavDrawerRenameOptions = {
   onRenameOpenChange?: (open: boolean) => void;
 };
 
-export type NavDrawerRenameState = {
+export type NavigationDrawerRenameState = {
   /** Whether the rename dialog is open. */
   visible: boolean;
   /** Field value — the current label until the user types. */
@@ -65,44 +66,51 @@ export type NavDrawerRenameState = {
   commit: () => void;
 };
 
-function devEnv() {
-  return (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env
-    ?.NODE_ENV;
-}
-
 /**
  * Rename state for a nav drawer destination: gesture, controlled/uncontrolled
  * open state, the draft value and the commit rules.
  */
-export function useNavDrawerRename({
+export function useNavigationDrawerRename({
   renamable,
   label,
   disabled,
   onRename,
   renameOpen,
   onRenameOpenChange,
-}: NavDrawerRenameOptions): NavDrawerRenameState {
+}: NavigationDrawerRenameOptions): NavigationDrawerRenameState {
   const controlled = renameOpen !== undefined;
   const [internalOpen, setInternalOpen] = useState(false);
   /** `null` = untouched, so the field always starts from the current label. */
   const [draft, setDraft] = useState<string | null>(null);
   const visible = controlled ? renameOpen === true : internalOpen;
   const value = draft ?? label;
-  const warnedRef = useRef(false);
+  const warnedRef = useRef<Record<string, boolean>>({});
 
   useEffect(() => {
-    if (!renamable || devEnv() === "production" || warnedRef.current) return;
-    if (onRename == null) {
-      warnedRef.current = true;
-      console.warn(
+    if (!isDevEnv()) return;
+    const warn = (key: string, message: string) => {
+      if (warnedRef.current[key]) return;
+      warnedRef.current[key] = true;
+      console.warn(message);
+    };
+    if (renamable && onRename == null) {
+      warn(
+        "onRename",
         "[fynns] NavigationDrawerItem: `renamable` needs `onRename` to commit the new name. " +
           "Without it the core rename dialog opens but Save discards the typed name.",
       );
-    } else if (controlled && onRenameOpenChange == null) {
-      warnedRef.current = true;
-      console.warn(
+    }
+    if (renamable && controlled && onRenameOpenChange == null) {
+      warn(
+        "onRenameOpenChange",
         "[fynns] NavigationDrawerItem: `renameOpen` makes the rename dialog controlled. " +
           "Pair it with `onRenameOpenChange`, otherwise the double-click / F2 gesture cannot open it.",
+      );
+    }
+    if (!renamable && controlled) {
+      warn(
+        "renamable",
+        "[fynns] NavigationDrawerItem: `renameOpen` needs `renamable` — without it the core rename dialog is not rendered.",
       );
     }
   }, [renamable, onRename, controlled, onRenameOpenChange]);
