@@ -20,6 +20,7 @@ import {
   syncScrollEdgeFade,
   syncScrollEdgeFadeOnto,
 } from "./scrollEdgeFade";
+import { measureCollapsedHeight } from "./autoGrowMeasure";
 import {
   highlightCode,
   highlightWithProfile,
@@ -523,8 +524,13 @@ export function CodeBlock(props: CodeBlockProps) {
       return;
     }
 
-    el.style.height = "0px";
-    const contentBox = el.scrollHeight + borderY;
+    /* Measure with the collapsed probe, but keep the page where it is: the
+       0px probe shrinks every ancestor scroll range, so the browser clamps
+       their offsets and the page jumped back to the top on every keystroke. */
+    const contentBox = measureCollapsedHeight(
+      el,
+      (node) => node.scrollHeight + borderY,
+    );
     const next = Math.min(Math.max(contentBox, floor), cap);
     el.style.height = `${next}px`;
   }, [autoGrow, rows, showEditorOverlay]);

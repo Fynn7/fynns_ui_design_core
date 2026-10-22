@@ -15,6 +15,7 @@ import {
   clearScrollEdgeFade,
   syncScrollEdgeFade,
 } from "./scrollEdgeFade";
+import { measureCollapsedHeight } from "./autoGrowMeasure";
 
 export type TextareaSize = "sm" | "md";
 export type TextareaVariant = "filled" | "outlined";
@@ -144,8 +145,14 @@ export const Textarea = forwardRef(function Textarea(
       return;
     }
 
-    el.style.height = "0px";
-    let next = Math.min(Math.max(el.scrollHeight + borderY, floor), cap);
+    /* Measure with the collapsed probe, but keep the page where it is: the
+       0px probe shrinks every ancestor scroll range, so the browser clamps
+       their offsets and the page jumped back to the top on every keystroke. */
+    const contentHeight = measureCollapsedHeight(
+      el,
+      (node) => node.scrollHeight + borderY,
+    );
+    let next = Math.min(Math.max(contentHeight, floor), cap);
     el.style.height = `${next}px`;
     // Absorb subpixel / last-line clip while still under the soft cap —
     // otherwise the final glyph row can be half-cropped with no thumb.

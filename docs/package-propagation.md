@@ -15,6 +15,14 @@ into consumer agent guidance. See [workspace contract](design-system/workspace-c
 
 ## Model
 
+**autoGrow scroll stability ≥ 0.5.314:** editable `CodeBlock` and `Textarea`
+measure their content height with a collapsed probe. The probe no longer
+moves the page: the previous height and every captured scroll offset are
+restored before the measured height is applied, so typing in a long entry
+keeps the page scroll where it was instead of snapping back to the top. No
+API change; linked source consumers receive it through their existing file
+dependency.
+
 **Core rename flow ≥ 0.5.313:** `NavigationDrawerItem` ships the rename
 gesture and dialog (`renamable` + `onRename` + `renameLabels`, optional
 controlled `renameOpen` / `onRenameOpenChange`). Double-click a destination
