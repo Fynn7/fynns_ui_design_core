@@ -1,0 +1,58 @@
+/* Core owns canvas chrome; sandbox paints only its illustrative scene. */
+.sandbox-globals.sandbox-layouts {
+  max-width: var(--fynns-layout-content-max-width);
+}
+
+.sandbox-canvas-workspace-host {
+  height: calc(var(--fynns-navdrawer-item-height) * 15);
+}
+
+.sandbox-canvas-stage {
+  background-color: var(--fynns-color-app-bg);
+  background-image: radial-gradient(circle, var(--fynns-color-border) var(--fynns-radius-2xs), transparent var(--fynns-radius-2xs));
+  background-size: var(--fynns-space-xl) var(--fynns-space-xl);
+}
+
+.sandbox-canvas-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--fynns-layout-unit-stack-gap);
+}
+
+.sandbox-canvas-scene[data-arranged="true"] {
+  flex-direction: column;
+}
+
+.sandbox-canvas-node {
+  padding: var(--fynns-space-xl) var(--fynns-space-lg);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-accent);
+  border-radius: var(--fynns-radius-xl);
+  background: var(--fynns-color-surface-2);
+  color: var(--fynns-color-text);
+  text-align: center;
+  line-height: var(--fynns-line-height-body);
+}
+
+.sandbox-canvas-node--next {
+  border-color: var(--fynns-color-border-strong);
+}
+
+.sandbox-canvas-connector {
+  flex: 0 0 var(--fynns-space-xl);
+  width: var(--fynns-space-xl);
+  height: var(--fynns-border-hairline);
+  background: var(--fynns-color-text-muted);
+}
+
+.sandbox-canvas-scene[data-arranged="true"] .sandbox-canvas-connector {
+  width: var(--fynns-border-hairline);
+  height: var(--fynns-space-xl);
+}
+
+.sandbox-canvas-docked-specimen {
+  background: var(--fynns-color-app-bg);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}

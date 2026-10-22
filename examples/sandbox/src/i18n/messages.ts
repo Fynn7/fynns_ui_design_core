@@ -27,9 +27,9 @@ const en = {
   "nav.globalsHint":
     "M3 component catalog (collapsed sections) plus keyword search to jump to a demo; shape / radius inspector on the right.",
   "nav.layoutsHint":
-    "Default app chrome for greenfield: DestinationAppShell first, then TopAppBar / Drawer / Rail / Bar and related strips. Not the Settings Templates page.",
+    "Default greenfield chrome: workspace recipe with Home, New menu, one inspector toggle and context actions. Fixed destination, chat and layout primitives follow.",
   "layouts.lead":
-    "Greenfield default: copy DestinationAppShell (first demo) as the desktop main UI. Catalog drill-in (second demo): swap the drawer body to the item list and keep main full-width — do not hub-split the canvas. Destinations are binary (labeled drawer or hidden) — NavigationRail alone is an intentional phone part, not DestinationAppShell densify. Small nav helpers (Breadcrumb / Pagination / SkipLink) stay on Components.",
+    "Greenfield default: copy the first workspace recipe. Home and Back are ghost icons, navigation starts with a New menu, one inspector icon toggles both states, and resource rename belongs to its context menu. Routine actions stay horizontal; errors default to snackbar. Fixed destination and chat templates follow. Destinations are a labeled drawer or hidden; never densify to a rail.",
   "layouts.shellMainTitle": "Main canvas",
   "layouts.shellMainBody":
     "Children of DestinationAppShell — any page content. Aside is optional and not required to be Chat.",
@@ -110,6 +110,21 @@ const en = {
   "layouts.chatProductTitle": "Sample chat",
   "layouts.chatProductNavMode": "Show session drawer",
   "layouts.chatProductSessionsEmpty": "No sessions in drawer",
+  "layouts.sessionsDrawerBusy": "Loading sessions",
+  "layouts.sessionsDrawerError": "Session load failure",
+  "layouts.sessionsDrawerModal": "Open session overlay",
+  "layouts.selectionList": "Selectable sample list",
+  "layouts.selectionGroups": "Grouped selection sidebar",
+  "layouts.selectionGroupA": "Sample project",
+  "layouts.selectionGroupB": "Sample child sessions",
+  "layouts.selectionAll": "Select all entries",
+  "layouts.selectionDelete": "Delete selected entries",
+  "layouts.selectionCopy": "Copy selected names",
+  "layouts.selectionCopyOne": "Copy entry name",
+  "layouts.selectionInput": "Selection shortcut input",
+  "layouts.selectionCount": "Selected entries",
+  "layouts.selectionHelp": "Ctrl / Cmd click toggles a row; Shift click selects a range; Ctrl / Cmd + Shift click adds a range. Ctrl / Cmd+A selects every enabled item in this focused dataset, including unrevealed or collapsed rows. Inputs keep native text selection. Right-click a selected row retains bulk targets; right-click another row targets only that row. Escape clears selection after the menu is closed. Active conversation and selection are separate.",
+  "layouts.sessionsDrawerHelp": "ChatSessionsDrawer: right-click a row for Rename / Delete, or the blank list area for New chat / Delete all. More buttons and Shift+F10 provide the same actions. Rename reports the requested identity; deletion updates sample data. Consumers own dialogs and persistence.",
   "layouts.chatProductSessionsEmptyTitle": "No conversations",
   "layouts.chatProductSessionsEmptyBody":
     "Conversations appear here after you start. Tap New chat above.",
@@ -627,21 +642,27 @@ const en = {
     "Save something first, then return here. Pane sole EmptyState uses fill so copy centers in the canvas.",
   "globals.emptyFillHelp":
     "Pane sole zero-result (DestinationAppShell canvas / FillColumn children / shell main): EmptyState fill — centers like BusyRegion fill. Inside Card / List / ChatThread.empty keep the default (no fill).",
+  "globals.archivedLoadingTitle": "Archived loading ring (deprecated)",
+  "globals.archivedLoadingHelp": "Permanently archived compatibility example. Explicit visible message or circular indicator restores a ring with text. Strongly discouraged in consumers; new loading screens use content-position skeletons without visible loading copy.",
+  "globals.loadingSkeletonHelp":
+    "Default: the large, full-width six-row text skeleton below, with the ChatThinking sweep, placed where text will appear. Keep this large text pattern; compact and small centered busy skeletons are removed. Explicit block is for images / iframes / canvas: Show busy / Clear busy replaces the preview at the same bounds. No visible loading copy; label stays accessible-only.",
+  "globals.loadingSkeletonPaneHelp":
+    "Pane / Chat cold-start: BusyRegion busy fill owns the inset even before Chat is mounted. Thick text rows adapt to the pane height and cover the content area. Do not fix lines to six in a filled pane or reset padding. Canonical FillColumn / PageScroll / ChatThread hosts keep their existing inset. The narrow sample uses ChatThread.empty. Show / Clear fill busy switches the large sample to a ready conversation.",
   "globals.busyRegionLabel": "Loading section",
   "globals.busyRegionTitle": "Section",
   "globals.busyRegionMessage": "Refreshing this block…",
   "globals.busyRegionBody":
-    "Section content stays mounted under a soft blur + gray mask overlay while BusyRegion is busy.",
+    "Sample preview content.",
   "globals.busyRegionStart": "Show busy",
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
-    "BusyRegion wraps a section: relative soft blur + tokenized gray mask (`backdrop-filter` + `--fynns-color-busy-region-mask` — not a consumer `surface-*` wash or `--fynns-color-overlay` BusyScrim; default blur radius light so busy does not read as a glitchy frame) + one progress chrome + visible copy. Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress, and never invent a private centered progress shell (hub-progress-block) for section loads. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim. Dialog / Card / section body load → BusyRegion (fill when height-resolved) — never a bare default-md CircularProgress as the body. FieldBlock / Card header chrome while BusyRegion is busy → disabled without loading (see FieldBlock actions sample below).",
+    "Preferred: BusyRegion defaults to thick, full-width text rows at the upcoming content position. Without fill there are six rows; fill adapts the row count to the pane height. Core keeps cold-start insets. Explicit block is for images / iframes / canvas; skeleton matches known geometry. Label is accessible-only. Children stay mounted but hidden and inert. Real value uses one linear bar. Message / circular are permanently archived; no compact busy emblems.",
   "globals.busyRegionNarrowHelp":
     "Narrow host (NavigationDrawer / EndAside width): linear BusyStack must shrink to the host — never a fixed 20rem / 100vw bar that spills past the drawer seam. Live sample below.",
   "globals.busyRegionNarrowLabel": "Scanning samples",
   "globals.busyRegionNarrowMessage": "Scanning sample-files… 24/16099",
   "globals.busyRegionDrawerHelp":
-    "NavigationDrawer cold-start: SearchBar / tools stay **siblings above** BusyRegion (never wrap Search inside BusyRegion). Empty BusyRegion without fill paints chrome in normal flow — the ring must not overlap the SearchBar. Empty cold-start (≥ **0.5.191**) drops frosted mask so BusyStack is not a floating surface island on bare app-bg (no 贴图色块). Live `#sandbox-busy-region-empty-no-mask`.",
+    "NavigationDrawer cold-start: SearchBar / tools stay **siblings above** BusyRegion (never wrap Search inside BusyRegion). Empty BusyRegion without fill paints chrome in normal flow — the skeleton must not overlap the SearchBar. Empty cold-start (≥ **0.5.191**) drops frosted mask so BusyStack is not a floating surface island on bare app-bg (no 贴图色块). Live `#sandbox-busy-region-empty-no-mask`.",
   "globals.busyRegionDrawerSearchPh": "Search name / description…",
   "globals.busyRegionDrawerSearchAria": "Search catalog",
   "globals.busyRegionDrawerBusyLabel": "Loading…",
@@ -650,10 +671,10 @@ const en = {
   "globals.busyRegionFillStart": "Show fill busy",
   "globals.busyRegionFillStop": "Clear fill busy",
   "globals.busyRegionFillHelp":
-    "Pane cold-start: BusyRegion fill as FillColumn children (this stage) **or** PageScroll → `.fynns-content-column` (live `#sandbox-busy-region-page-scroll-fill`, ≥ **0.5.136**) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the ring parks at the top / overflows the overlay). Empty fill (≥ **0.5.191**) centers BusyStack **without** frosted mask island on bare app-bg; refresh-over-content keeps soft blur + gray mask. Do not use EmptyState + CircularProgress as a loading shell, and do not add a private `surface-*` colored loading wash.",
+    "Pane cold-start: BusyRegion fill as FillColumn children or PageScroll → `.fynns-content-column`. Keep the resolved height chain; content-sized unit-stack / Card / List wrappers cannot fill a pane. Default thick text rows adapt to the height and span the content area with core-owned insets, without frosted mask or visible copy. Do not force six lines, clear padding, use EmptyState + CircularProgress as loading, or add private loading CSS.",
   "globals.busyRegionPageScrollFillLabel": "Loading section",
   "globals.busyRegionPageScrollFillHelp":
-    "PageScroll pane cold-start (≥ **0.5.136**): `.fynns-page-scroll` → `.fynns-content-column` (min-height fills the scrollport) → optional thin section wrapper → `BusyRegion` `fill`. BusyStack must **center** in the visible column — not park under TopAppBar or overflow a collapsed absolute overlay. Live host `#sandbox-busy-region-page-scroll-fill`. Failure mode: CONSUMER_TREATY **BusyRegion fill BusyStack top overflow in PageScroll**.",
+    "PageScroll pane cold-start: `.fynns-page-scroll` → `.fynns-content-column` (min-height fills the scrollport) → optional thin section wrapper → BusyRegion fill. Thick text rows adapt to cover the visible content area, retaining the column inset; no centered busy glyph, six-row ceiling strip, or collapsed overlay. Live `#sandbox-busy-region-page-scroll-fill`.",
   "globals.paneLoadErrorHelp":
     "Pane cold-start that times out or fails (≥ **0.5.178**): leave BusyRegion `fill` only while the fetch is in flight; on hang/fail **clear busy** and show InlineAlert + short FieldHint + end-align Retry — never permanent fill, never EmptyState as the load-fail shell, never silent empty. Pair with `runBusyTask` / fetch `timeoutMs` / `AbortSignal`. Live `#sandbox-pane-load-error`. Failure: CONSUMER_TREATY **pane cold-start hang without error surface**.",
   "globals.paneLoadErrorBusyLabel": "Loading pane",
@@ -673,15 +694,15 @@ const en = {
   "globals.busyRegionPaneLeadShowCold": "Simulate cold-start",
   "globals.busyRegionPaneLeadShowReady": "Simulate loaded",
   "globals.busyRegionPaneLeadHelp":
-    "Pane cold-start in one well: hide section FieldHint / SectionLead sub until data is ready — render only BusyRegion fill (no .fynns-unit-stack sibling hint). Never stack hint + fill busy in the same column (spinner overlaps scope copy). Failure mode: CONSUMER_TREATY section FieldHint + pane cold-start BusyRegion.",
+    "Pane cold-start in one well: hide section FieldHint / SectionLead sub until data is ready — render only BusyRegion fill with content-position skeletons (no .fynns-unit-stack sibling hint). Never stack hint + fill busy in the same column (loading placeholder overlaps scope copy). Failure mode: CONSUMER_TREATY section FieldHint + pane cold-start BusyRegion.",
   "globals.busyRegionDialogOpen": "Open Dialog body load",
   "globals.busyRegionDialogTitle": "Pick an item",
   "globals.busyRegionDialogLabel": "Loading catalog",
   "globals.busyRegionDialogMessage": "Fetching the list…",
   "globals.busyRegionDialogHelp":
-    "Dialog / section body load: put BusyRegion in the body (add fill when the host height is resolved — see fill sample above). Never park a bare default-md CircularProgress in the Dialog or unit-stack. CircularProgress sm stays for IconButton / Button slots only.",
+    "Dialog / section body load: put BusyRegion in the body (add fill when the host height is resolved). Default is the large text skeleton; use explicit block for images / iframes. Keep actions disabled + aria-busy while content loads. CircularProgress and Button / IconButton loading are permanently archived; compact skeletons are removed.",
   "globals.busyRegionColdHelp":
-    "Card / section body cold-start: render BusyRegion only — do not also paint Sessions Select / Pagination as siblings under the empty overlay (mask covers the footer; spinner sits on the Select). After data loads, keep pager chrome outside BusyRegion and wrap only the List / table on refresh.",
+    "Card / section body cold-start: render BusyRegion only — do not also paint Sessions Select / Pagination as siblings under the empty overlay (mask covers the footer; loading placeholder sits on the Select). After data loads, keep pager chrome outside BusyRegion and wrap only the List / table on refresh.",
   "globals.busyRegionColdTitle": "Sessions catalog",
   "globals.busyRegionColdLabel": "Loading sessions",
   "globals.busyRegionColdMessage": "Fetching the catalog…",
@@ -691,7 +712,7 @@ const en = {
   "globals.busyRegionColdShow": "Show cold busy",
   "globals.busyRegionColdClear": "Show loaded catalog",
   "globals.busyRegionFieldHelp":
-    "FieldBlock body wait + label-row refresh: wrap the body in BusyRegion — while busy the header IconButton stays the glyph and is `disabled` **without** `loading` (soft blur + gray mask keep the body mounted and de-emphasize copy so busy message does not stack on mono preview). Never stack BusyRegion ring with a chrome `loading` spinner on the same host (information redundancy). Per-control wait with no BusyRegion may still use IconButton `loading` alone. Live sample below uses `CodeBlock` under refresh.",
+    "FieldBlock body wait + label-row refresh: wrap the body in BusyRegion — while busy the header IconButton stays the glyph and is `disabled` **without** `loading` (soft blur + gray mask keep the body mounted and de-emphasize copy so busy message does not stack on mono preview). Never stack BusyRegion skeleton with a chrome archived `loading` ring on the same host (information redundancy). Per-control wait with no BusyRegion may still use IconButton `loading` alone. Live sample below uses `CodeBlock` under refresh.",
   "globals.busyRegionFieldLabel": "Sample notice",
   "globals.busyRegionFieldRefreshTip": "Refresh sample",
   "globals.busyRegionFieldBusyLabel": "Refreshing sample",
@@ -735,17 +756,22 @@ const en = {
   "globals.treeFileTree": "Tree.tsx",
   "globals.treeFileReadme": "README.md",
   "globals.treeFilePackage": "package.json",
-  "globals.busyScrimOpen": "Show fullscreen busy (2s)",
+  "globals.appLoadingScreenOpen": "Show app startup (2s)",
+  "globals.appLoadingScreenCustomOpen": "Show startup with sample logo (2s)",
+  "globals.appLoadingScreenCoreOpen": "Show startup without identity (2s)",
+  "globals.appLoadingScreenLabel": "Starting application",
+  "globals.appLoadingScreenHelp": "AppLoadingScreen is the default for startup: opaque theme background, one centered mark, silhouette / initials sweep, and accessible-only label. Priority: configured logoSrc / page icons / manifest → initials Avatar → core mark. Name defaults to application-name / page title; empty name represents unavailable identity. Broken configured icons fall through. No skeleton rows, loading copy, ring or visible app chrome. Close on ready / failure; demos close after 2s. BusyRegion is for local content, BusyScrim only for an explicit in-app blocking wait.",
+  "globals.busyScrimOpen": "Show fullscreen content wait (2s)",
   "globals.busyScrimLabel": "Loading",
   "globals.busyScrimMessage": "Working — please wait…",
   "globals.busyScrimHelp":
-    "BusyScrim is a non-dismissible full-viewport scrim (same overlay token as Dialog) + one progress chrome + message. Determinate sample uses indicator=linear. Auto-closes here after 2s.",
+    "BusyScrim is an explicit blocking content wait inside an initialized app, not application startup. Startup uses AppLoadingScreen above. Prefer BusyRegion for local content. If a whole-window content wait is required, supply its matching layout; real value uses linear progress and message / circular remains archived. Label is accessible-only; this sample closes after 2s.",
   "globals.busyPaintBad": "Anti-pattern: busy then stall",
   "globals.busyPaintGood": "runBusyTask then stall",
   "globals.busyPaintLabel": "Heavy work",
   "globals.busyPaintMessage": "Simulated 800ms main-thread stall…",
   "globals.busyPaintHelp":
-    "`runBusyTask` / `useBusyTask`: flushSync busy on → afterNextPaint → then work so the ring can start. Same sync stall can still hitch afterward; use a Worker for true smoothness.",
+    "`runBusyTask` / `useBusyTask`: flushSync busy on → afterNextPaint → then work so the skeleton can paint. Same sync stall can still hitch afterward; use a Worker for true smoothness.",
   "globals.stepperAria": "Setup progress",
   "globals.stepperHelp":
     "Stepper marks the active step; completed labels reuse Button ghost sm when onStepChange is set.",
@@ -827,7 +853,7 @@ const en = {
   "globals.codeBlockHiddenTabHelp":
     "**Hidden-tab host (hard ≥ 0.5.112):** pipeline / mode panels that keep siblings mounted with HTML `hidden` must still grow `CodeBlock` `autoGrow` when the panel opens — first measure while `display:none` sticks at one row (~47dp). Toggle Show to verify remeasure.",
   "globals.diffViewHelp":
-    "DiffView — scrollable unified-diff panel (`add` / `del` / `same` / `meta`). Callers own `+` / `-` markers in `text`.",
+    "DiffView — read-only text or patch comparison with line numbers, expandable context and inline highlighting. Legacy `lines` keeps caller-owned `+` / `-` markers.",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
   "globals.codeBlockNowrapHelp":
     "`wrap={false}` — long lines scroll horizontally instead of soft-wrapping.",
@@ -883,8 +909,14 @@ const en = {
   "globals.dialogNestedScrollFold": "Mounted sample body",
   "globals.dialogNestedScrollHelp":
     "Centered Dialog + List + Collapsible + plain CodeBlock: `maxHeight` sets `--fynns-code-block-max-height` on the root; copy-float overlay Y rails run rounded-clip clamp then chrome clamp so thumbs stay inside `radius-3xl` (never past the panel floor). Live `#dialog-nested-scroll`.",
+  "globals.dialogViewportOpen": "Open viewport workspace dialog",
+  "globals.dialogViewportTitle": "Sample configuration workspace",
+  "globals.dialogViewportDescription":
+    "Edit a larger configuration without leaving the current page.",
+  "globals.dialogViewportHelp":
+    "Large non-fullscreen workspace: `Dialog size=\"viewport\"` keeps centered radius and viewport margins while resolving a wider, taller work area. A direct editable CodeBlock uses `autoGrow={false}` and fills the remaining body height without consumer CSS. Live `#dialog-viewport`.",
   "globals.overlayHelp":
-    "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). First-child bordered well (CodeBlock) flush-starts under the title — `#fullscreen-flush`. Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
+    "Dialogs: M3 basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X), large inset workspace (`Dialog size=\"viewport\"`), and full-screen (`FullscreenDialog`). First-child bordered well (CodeBlock) flush-starts under the fullscreen title — `#fullscreen-flush`. Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
   "globals.dialogLabeledOpen": "Open Dialog with close",
   "globals.dialogLabeledTitle": "Dialog with close",
@@ -1059,7 +1091,7 @@ const en = {
   "globals.rhythmCatalogRefresh": "Refresh list",
   "globals.rhythmCatalogAdd": "Add server",
   "globals.rhythmEndAlignHelp":
-    "Action footer with no visible name: one `.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`). Use `__grow` only when a leading Select / meta must fill leftover. Never `ControlRow` with empty `label=\"\"` (fake label column / mid-left island). **Busy (hard):** click either button — **at most one** `loading` ring; the sibling stays `disabled` without a second spinner. Never bind the same `busy` to every `loading`.",
+    "Action footer with no visible name: one `.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`). Use `__grow` only when a leading Select / meta must fill leftover. Never `ControlRow` with empty `label=\"\"` (fake label column / mid-left island). **Busy (hard):** click either button — **at most one** archived `loading` ring; the sibling stays `disabled` without a second ring. Never bind the same `busy` to every `loading`.",
   "globals.rhythmEndAlignIconHelp":
     "Icon-only end-align strip: Tooltip → IconButton siblings stay 40dp circles (not crushed ellipses on the full-width row).",
   "globals.rhythmEndAlignIconOpenTip": "Open destination folder",
@@ -1204,10 +1236,17 @@ const en = {
   "globals.formRecipeReset": "Reset",
   "globals.formRecipeSave": "Save",
   "globals.formRecipeHelp":
-    "Recipe hosts: `Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` intro → `FieldStack`(`FieldBlock` text…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → feedback / foot. Dialog foot: **one** `loading` (Extract); siblings `disabled` without rings. See AGENTS.md Toolbar / unit rhythm.",
+    "Recipe hosts: `Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` intro → `FieldStack`(`FieldBlock` text…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → feedback / foot. Dialog foot: **one** `loading` (Extract); siblings `disabled` without loading. See AGENTS.md Toolbar / unit rhythm.",
   "globals.btnSmall": "Small",
+  "globals.btnApply": "Apply",
+  "globals.btnRefresh": "Refresh",
   "globals.btnViewDetails": "View details",
   "globals.btnCopyText": "Copy text",
+  "globals.btnSave": "Save",
+  "globals.btnCancel": "Cancel",
+  "globals.btnDelete": "Delete",
+  "globals.btnIconLabelHelp":
+    "Default consumer action: semantic leading icon + visible label. Button owns the exact icon-to-label gap; do not add icon margin, custom gap, or spaces. Use IconButton + Tooltip only for compact, self-evident chrome.",
   "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
   "globals.btnTonal": "Tonal",
@@ -1229,6 +1268,8 @@ const en = {
   "globals.infoHintIconBody":
     "Standalone help: hover or focus the “i” for a short explanation. Prefer InfoHint over inventing an IconButton + Tooltip for pure information.",
   "globals.infoHintIconAria": "More about InfoHint",
+  "globals.infoHintCompleteAria": "Completed",
+  "globals.infoHintCompleteBody": "The result is available. A check denotes completion; hover or focus for details. The eye is reserved for viewing or revealing content.",
   "globals.infoHintDangerBody":
     "Fail / error detail: use `tone=\"danger\"` on icon-only InfoHint beside a short `Fail` status so OK vs Fail rows scan at a glance.",
   "globals.infoHintDangerAria": "Fail detail help",
@@ -1242,6 +1283,7 @@ const en = {
     "Typical ControlRow preference pattern: InfoHint on the label; Switch alone in controls. Do not wrap tip+Switch in a wrapping cluster (narrow drawers stack tip above Switch — see `#sandbox-control-row-tip-switch-narrow`).",
   "globals.infoHintRowAria": "Preview mode help",
   "globals.infoHintNarrowLabel": "Sample preference",
+  "globals.infoHintWrapLabel": "Long preference label that wraps beside its help icon",
   "globals.infoHintNarrowSwitch": "Hide sample catalog entries",
   "globals.infoHintNarrowBody": "Sample tip for a narrow ControlRow — keep the tip on the label, Switch alone in controls.",
   "globals.infoHintNarrowAria": "About sample preference",
@@ -1372,7 +1414,7 @@ const en = {
   "globals.progressLinearIndeterminate": "Linear progress (indeterminate)",
   "globals.progressLinearIndeterminateAria": "Loading",
   "globals.progressHelp":
-    "Determinate LinearProgress is active fill + remaining track (optional gap). The M3 end-stop / end “dot” is removed — do not revive stopIndicator or private end marks. Known-% section loads → BusyRegion indicator=linear; long tasks beside live content may use a strip LinearProgress.",
+    "Determinate LinearProgress is active fill + remaining track (optional gap). The M3 end-stop / end “dot” is removed — do not revive stopIndicator or private end marks. Known-% section loads → BusyRegion value; inline real progress → LinearProgress value. Unknown waits use BusyRegion / LoadingSkeleton. Circular and indeterminate bars below are compatibility demos only.",
   "globals.progressCircularAria": "Circular progress",
   "globals.progressCircularIndeterminateAria": "Working",
   "globals.avatarAda": "Ada Lovelace",
@@ -1415,6 +1457,14 @@ const en = {
   "globals.menuSubItemC": "Volume sample C",
   "globals.menuSubHelp":
     "Hover or ArrowRight on Sample volume for a nested menu (DropdownMenuSub). Live #sandbox-menu-submenu.",
+  "globals.menuRowActionTrigger": "Session volume",
+  "globals.menuRowActionAria": "Session volume menu with row actions",
+  "globals.menuRowActionDeleteAria": "Delete sample volume",
+  "globals.menuRowActionDeleteTip": "Delete this volume",
+  "globals.menuRowActionHelp":
+    "DropdownMenuRemovableItem includes a trash icon, Tooltip and accessible label. onRemove updates the collection; removal keeps root and submenu open and focuses a nearby row or the empty menu. ArrowRight enters trash; ArrowLeft returns. Row selection still closes the menu. Reset restores samples. Live #sandbox-menu-row-action.",
+  "globals.menuRowActionEmpty": "No sample volumes",
+  "globals.menuRowActionReset": "Reset samples",
   "globals.menuHelp":
     "M3 Menu (DropdownMenu): portaled surface with groups, separators, and checkbox items. Sort / filter rows with a leading kind glyph → `DropdownMenuCheckboxItem` **`icon`** prop (16dp `.fynns-menu-item-icon` — same band as plain `DropdownMenuItem`; label = text only). Check column + icon + label share one vertically centered row. Arrow keys move focus; Esc dismisses. Icon-only overflow → `iconOnly` ghost sm. **Labeled triggers** auto-append a trailing chevron that rotates open (≥ **0.5.253**; trailing flex slot + block icon ≥ **0.5.254**). **Leading glyph + label** → `leadingIcon` (16dp `.fynns-menu-trigger-leading`, vertically centered — ≥ **0.5.258**; live `#sandbox-menu-leading-icon`) — do **not** stuff `<>icon text</>` into `trigger` and hope baseline alignment works. **Form FieldBlock** hosts auto **matchTriggerWidth** (≥ **0.5.239** — menu width = live trigger; left flush with trigger ≥ **0.5.254**; long labels ellipsize; Select 0.5.238 parity). **Long catalogs** use capped `fynns-scroll` panel (`max-height: min(70dvh, 20rem)`) with a **visible** flyout overlay rail (≥ **0.5.251**) — `#sandbox-scroll-menu-stack`. Huge lists: filter / window in the consumer. Toolbar / `iconOnly` stay content-fit. Live `#sandbox-menu-field-match`.",
   "globals.menuFieldMatchLabel": "Sample discrete pick",
@@ -1584,6 +1634,7 @@ const en = {
   "globals.bottomAppBarDelete": "Delete",
   "globals.bottomAppBarHelp":
     "[mobile-first] BottomAppBar — bottom action chrome (56dp) with optional FAB. Destinations → NavigationBar. Not a duplicate of NavigationBar.",
+  "globals.statusBarInspector": "Inspector",
   "globals.statusBarAria": "Sample status bar",
   "globals.statusBarBranch": "main*",
   "globals.statusBarWorkspace": "sample-project",
@@ -1592,7 +1643,7 @@ const en = {
   "globals.statusBarEncoding": "UTF-8",
   "globals.statusBarCursor": "Ln 42, Col 7",
   "globals.statusBarHelp":
-    "IDE status strip (Cursor / VS Code) — dock at the **bottom of the app shell** under main / EndAside. ~22dp, edge-flush, muted caption. Clickable chips via StatusBarItem `onClick`. **Not** BottomAppBar (actions + FAB) and **not** Banner (severity). Live: Components `#status-bar` (Navigation) and Layout templates `#layouts-demo-status-bar`.",
+    "IDE status strip (Cursor / VS Code) — dock at the **bottom of the app shell** under main / EndAside. 22dp, 12dp type, vertically centered with breathing room above and below. Workspace status / problems on the left; contextual values on the right. Full-height rectangular actions via StatusBarItem `onClick`; narrow labels truncate. Do not override height, padding, line-height or add text margins. **Not** BottomAppBar (actions + FAB) and **not** Banner (severity). Live: Components `#status-bar` (Navigation) and Layout templates `#layouts-demo-status-bar`.",
   "globals.toolbarDockedAria": "Sample docked toolbar",
   "globals.toolbarFloatingAria": "Sample floating toolbar",
   "globals.toolbarVibrantAria": "Sample vibrant floating toolbar",
@@ -1619,7 +1670,26 @@ const en = {
   "globals.bannerHelp":
     "M3 Banner: full-width strip under TopAppBar (message + actions + dismiss). Multi-line supportingText: leading icon and dismiss X stay vertically **centered** on the row (core `align-items: center`) — use `onDismiss` inside the strip, never a sibling close outside the rounded host. For in-panel severity use InlineAlert (soft tonal fill; fynns utility, not M3).",
   "globals.snackbarShortBtn": "Short snackbar",
+  "globals.snackbarVariant_default": "Default snackbar",
+  "globals.snackbarVariant_info": "Info snackbar",
+  "globals.snackbarVariant_success": "Success snackbar",
+  "globals.snackbarVariant_warning": "Warning snackbar",
+  "globals.snackbarVariant_error": "Error snackbar",
+  "globals.snackbarText_info": "Info without icon",
+  "globals.snackbarText_success": "Success without icon",
+  "globals.snackbarText_warning": "Warning without icon",
+  "globals.snackbarText_error": "Error without icon",
+  "globals.snackbarDefaultIcon": "Default with icon",
+  "globals.snackbarStatusMessage": "Sample status message",
+  "globals.snackbarRequestError": "Request failed. Please try again.",
+  "layouts.fillColumnNoticeToggle": "Persistent conversation notice",
+  "layouts.fillColumnNotice": "This conversation is close to its size limit.",
+  "layouts.fillColumnRequestError": "Simulate request error",
   "globals.snackbarUndoBtn": "Snackbar with Undo",
+  "globals.snackbarActionDismissBtn": "Tonal action + dismiss",
+  "globals.snackbarActionOnlyBtn": "Tonal action only",
+  "globals.snackbarView": "View draft",
+  "globals.snackbarViewed": "Draft opened",
   "globals.snackbarIndefiniteBtn": "Indefinite snackbar",
   "globals.snackbarShort": "Draft saved",
   "globals.snackbarUndoMsg": "Item removed",
@@ -1628,7 +1698,7 @@ const en = {
   "globals.snackbarIndefiniteMsg": "Waiting for confirmation…",
   "globals.snackbarDismiss": "Dismiss",
   "globals.snackbarHelp":
-    "Imperative `snackbar(message, opts?)` + root `<SnackbarHost />`. One at a time (bottom-center). Optional single action; `short` / `long` / `indefinite`. Do not use deleted toast APIs.",
+    "Imperative snackbar(message, opts?) + root SnackbarHost. Default = theme surface, no icon; icon=true enables an info icon. severity=info/success/warning/error uses uniform flat tones matching InlineAlert rendered on app-bg (12% semantic color, 88% canvas), on-surface text and matching icons. The four original InlineAlert strips below are color references and remain unchanged. No frosted glass, backdrop blur, see-through text or white pastel. icon=false/null removes the icon while retaining the fill. Error uses alert, others status. One fixed overlay at a time, rising from bottom-center; never resize or lift Chat. Reduced motion fades only. Actions keep ghost/tonal capsule variants; dismissible controls X; action defaults to indefinite + X; duration=long without X auto-dismisses after 10s. Action callbacks dismiss only their own snackbar.",
   "globals.snackbarHostNote":
     "`SnackbarHost` is mounted once in SandboxShell (companion API) — not duplicated in this row.",
   "globals.chatSystem": "This is a demo thread — no model is connected.",
@@ -1788,7 +1858,7 @@ const en = {
   "globals.thinkingActionCheck": "Executing layout checks…",
   "globals.thinkingActionDraft": "Drafting a reply…",
   "globals.thinkingActionsHelp":
-    "Dummy agent / LLM activity labels (streaming). Use progressive *-ing* copy (`Calling…`, `Searching…`); done → past (`Thought for Ns`). Label shimmer; swap `streamingLabel` to morph. Multi-step trees → **ChatActivity** (AGENTS.md Label tense).",
+    "Dummy agent / LLM activity labels (streaming). Use progressive *-ing* copy (`Calling…`, `Searching…`); done → past (`Thought for Ns`). Label shimmer; swap `streamingLabel` to morph. Multi-stage processing → one outer **ChatThinking** with muted text and indented **details**; actions stay outside.",
   "globals.thinkingBody":
     "Checked naming against CHATMESSAGE_TOKENS and kept the disclosure off the Collapsible card shell.",
   "globals.thinkingAnswer":
@@ -1796,7 +1866,7 @@ const en = {
   "globals.thinkingSimulate": "Simulate agent run",
   "globals.thinkingReset": "Reset done",
   "globals.thinkingHelp":
-    "**ChatThinking** — Wave 1 single-block reasoning / agent-activity disclosure (ChatGPT / Claude “Thinking / Thought for Ns”; Cursor-style tool status via `streamingLabel`). **Label tense (consumer):** streaming / activity = progressive (*Thinking*, *Calling the function…*, *Reading sample docs…*); done = past (*Thought for Ns*). Core does not rewrite copy — swap strings when streaming ends. Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open unless the user pinned closed (trigger stays enabled so it can collapse mid-run; a new run clears the pin) + label shimmer; remount on label change for swap enter. Done: auto-collapse once; user expand sticks. No children → static duration strip (no chevron). No default streaming orb — pass `icon` only for a custom leading glyph. No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*`. Multi-step tool / status tree → **ChatActivity** (Wave 2).",
+    "**ChatThinking** — Wave 1 single-block reasoning / agent-activity disclosure (ChatGPT / Claude “Thinking / Thought for Ns”; Cursor-style tool status via `streamingLabel`). **Label tense (consumer):** streaming / activity = progressive (*Thinking*, *Calling the function…*, *Reading sample docs…*); done = past (*Thought for Ns*). Core does not rewrite copy — swap strings when streaming ends. Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open unless the user pinned closed (trigger stays enabled so it can collapse mid-run; a new run clears the pin) + label shimmer; remount on label change for swap enter. Done: auto-collapse the body once, retain the disclosure and completed children through later answer/status/error states; user expand sticks. The two completed messages above have different body/answer lengths but the same label; their chevrons must align with the label, not the message width. No children → static duration strip (no chevron). No default streaming orb — pass `icon` only for a custom leading glyph. No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*`. Multi-stage processing → one outer **ChatThinking** with structured **details**: muted small text and indented nested thinking only. Keep actions, cards and results outside. Live **ChatThinking · nested details**.",
   "globals.activityHeaderStart": "Gathering context…",
   "globals.activityHeaderMemory": "Created memory file",
   "globals.activityHeaderPlan": "Updated plan with details",
@@ -2344,7 +2414,7 @@ const en = {
   "globals.iconBtnLoading": "Loading icon button",
   "globals.iconBtnPrimaryLoading": "Primary loading icon button",
   "globals.iconBtnPrimaryLoadingHelp":
-    "IconButton busy (hard ≥ **0.5.217**): use stock **`loading`** — Spinner on primary/danger uses `currentColor` (visible on filled chrome). Do **not** swap children for nested `CircularProgress` (accent ring on accent fill = blank disk). Live `#sandbox-iconbutton-primary-loading`. Failure: CONSUMER_TREATY IconButton busy swaps CircularProgress instead of loading.",
+    "IconButton busy (hard ≥ **0.5.217**): use stock **`loading`** — Archived ring on primary/danger uses `currentColor` (visible on filled chrome). Do **not** swap children for nested `CircularProgress` (accent ring on accent fill = blank disk). Live `#sandbox-iconbutton-primary-loading`. Failure: CONSUMER_TREATY IconButton busy swaps CircularProgress instead of loading.",
   "globals.inputError": "This field is required.",
   "globals.inputFilledAria": "Filled small input with leading",
   "globals.inputFilledPlaceholder": "Filled sm + leading",
@@ -2505,9 +2575,9 @@ const zh: Record<MessageKey, string> = {
   "nav.globalsHint":
     "按 M3 分类的组件样例（分区默认收起），可用关键词搜索跳转到具体 demo；右侧是圆角 / 形状检查器。",
   "nav.layoutsHint":
-    "Greenfield 默认应用壳：首屏 DestinationAppShell，另有 TopAppBar / 抽屉 / Rail / 底栏等。不是底部「模板」设置页。",
+    "Greenfield 默认工作区：主页、新建菜单、单一侧栏 toggle 与右键操作。后续为固定目的地、会话与布局组件模板。",
   "layouts.lead":
-    "Greenfield 默认：抄首屏 DestinationAppShell 做桌面主界面。目录钻入（第二项）：侧栏换成条目列表、主区全宽详情 — 禁止主画布 hub-split。目的地二态（全宽抽屉或收起）— 单独的 NavigationRail 仅作有意的手机样例，不是 DestinationAppShell densify。小导航（Breadcrumb / Pagination / SkipLink）仍在「组件」。",
+    "Greenfield 默认：抄首个工作区模板。主页与返回为 ghost 纯图标，导航首项为新建菜单，同一个检查器图标切换开关，资源重命名只从其右键菜单进入。常规操作保持水平，错误默认用 snackbar。后续为固定目的地与会话模板。导航仅有完整抽屉或隐藏两态，禁止压缩成 rail。",
   "layouts.shellMainTitle": "主画布",
   "layouts.shellMainBody":
     "DestinationAppShell 的 children — 任意页面内容。右侧 aside 可选，且不必是 Chat。",
@@ -2586,6 +2656,21 @@ const zh: Record<MessageKey, string> = {
   "layouts.chatProductTitle": "示例对话",
   "layouts.chatProductNavMode": "显示会话抽屉",
   "layouts.chatProductSessionsEmpty": "侧栏无会话",
+  "layouts.sessionsDrawerBusy": "会话加载中",
+  "layouts.sessionsDrawerError": "会话加载失败",
+  "layouts.sessionsDrawerModal": "打开会话浮层",
+  "layouts.selectionList": "可多选的示例列表",
+  "layouts.selectionGroups": "分组多选侧栏",
+  "layouts.selectionGroupA": "示例项目",
+  "layouts.selectionGroupB": "示例子会话",
+  "layouts.selectionAll": "全选条目",
+  "layouts.selectionDelete": "删除选中条目",
+  "layouts.selectionCopy": "复制选中名称",
+  "layouts.selectionCopyOne": "复制条目名称",
+  "layouts.selectionInput": "选择快捷键输入框",
+  "layouts.selectionCount": "选中条目",
+  "layouts.selectionHelp": "Ctrl / Cmd 点击切换单项；Shift 点击选择范围；Ctrl / Cmd+Shift 点击追加范围。Ctrl / Cmd+A 全选当前焦点数据集的可选条目，包含未显示或折叠的条目；输入框保留原生文本全选。右键已选项保留批量目标，右键其他项仅作用于该项。菜单关闭后 Escape 清空选择。当前打开的会话与多选状态互相独立。",
+  "layouts.sessionsDrawerHelp": "ChatSessionsDrawer：右键会话行可重命名或删除，右键列表空白处可新建会话或删除全部。More 按钮和 Shift+F10 提供相同动作。重命名演示回传目标标识，删除更新示例数据；弹窗与持久化由消费侧负责。",
   "layouts.chatProductSessionsEmptyTitle": "暂无会话",
   "layouts.chatProductSessionsEmptyBody":
     "开始后对话会出现在这里。点上方「新会话」即可。",
@@ -3089,21 +3174,27 @@ const zh: Record<MessageKey, string> = {
     "先保存内容再回到这里。画布唯一子级 EmptyState 用 fill，文案在可见区内居中。",
   "globals.emptyFillHelp":
     "栏目唯一零结果（DestinationAppShell canvas / FillColumn children / shell main）：EmptyState fill — 与 BusyRegion fill 同宿主契约居中。Card / List / ChatThread.empty 内保持默认（不要 fill）。",
+  "globals.archivedLoadingTitle": "归档加载圈（deprecated）",
+  "globals.archivedLoadingHelp": "永久归档的兼容样例。显式 message 或 circular indicator 恢复加载圈与文字。强烈不推荐消费仓使用；新的加载画面用内容原位骨架，不显示 Loading 文案。",
+  "globals.loadingSkeletonHelp":
+    "默认使用下方最大的宽幅六行文字骨架，带 ChatThinking 扫光，放在文字即将出现的位置。保留这一大的文字样式，仅移除 compact 与小型居中 busy 骨架。显式 block 用于图片 / iframe / 画布：点击显示 / 清除 busy 可在同一位置、同一尺寸替换预览。无可见加载文案，label 仅供无障碍。",
+  "globals.loadingSkeletonPaneHelp":
+    "栏目 / Chat 冷启动：BusyRegion busy fill 在 Chat 尚未挂载时也自行保留内边距。加粗的文字条按窗格高度自动增加行数，覆盖正文区域。不要在 fill 窗格里固定六行或清零 padding。FillColumn / PageScroll / ChatThread 已有边距不重复添加。窄样例使用 ChatThread.empty；显示 / 清除 fill busy 会把大样例切换为已加载对话。",
   "globals.busyRegionLabel": "区块加载中",
   "globals.busyRegionTitle": "区块",
   "globals.busyRegionMessage": "正在刷新此区域…",
   "globals.busyRegionBody":
-    "BusyRegion 为 busy 时，区块内容仍挂载在轻模糊 + 浅灰 mask 遮罩下方。",
+    "样例预览内容。",
   "globals.busyRegionStart": "显示 busy",
   "globals.busyRegionStop": "清除 busy",
   "globals.busyRegionHelp":
-    "BusyRegion 包裹区块：相对定位轻模糊 + token 浅灰 mask（`backdrop-filter` + `--fynns-color-busy-region-mask` — 禁止消费仓 `surface-*` 洗底或复用 `--fynns-color-overlay` BusyScrim；默认模糊半径保持轻量）+ 一个进度件 + 可见文案。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress，也禁止私有居中进度壳（hub-progress-block）冒充区块加载。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。全屏染色 → BusyScrim。Dialog / Card / section 正文加载 → BusyRegion（已定高用 fill）— 禁止裸默认 md CircularProgress 当正文壳。BusyRegion busy 时 FieldBlock / Card 头栏 chrome 仅 disabled、不画 loading（见下方 FieldBlock actions 样例）。",
+    "推荐方式：BusyRegion 默认在内容即将出现的位置显示加粗宽幅文字条，非 fill 六行，fill 按窗格高度自适应增加行数。core 保留冷启动内边距。图片 / iframe / 画布显式用 block，已知结构用 skeleton 对齐。label 仅供无障碍；children 保持挂载但隐藏并 inert。真实 value 用线性进度。message / circular 永久归档，禁 compact busy 徽记。",
   "globals.busyRegionNarrowHelp":
     "窄宿主（NavigationDrawer / EndAside 宽）：linear BusyStack 必须随宿主收缩 — 禁止固定 20rem / 100vw 进度条溢出抽屉缝。下方为活样例。",
   "globals.busyRegionNarrowLabel": "扫描样例",
   "globals.busyRegionNarrowMessage": "正在扫描 sample-files… 24/16099",
   "globals.busyRegionDrawerHelp":
-    "NavigationDrawer 冷启动：SearchBar / 工具条是 BusyRegion 的**上方兄弟**（禁止把 Search 包进 BusyRegion）。无 children 且无 fill 时 chrome 走正常文档流 — 圈不得叠在 SearchBar 上。空冷启动（≥ **0.5.191**）关掉 frosted mask，BusyStack 不再是裸 app-bg 上的浮空色块（贴图色块）。对照 `#sandbox-busy-region-empty-no-mask`。",
+    "NavigationDrawer 冷启动：SearchBar / 工具条是 BusyRegion 的**上方兄弟**（禁止把 Search 包进 BusyRegion）。无 children 且无 fill 时 chrome 走正常文档流 — 骨架不得叠在 SearchBar 上。空冷启动（≥ **0.5.191**）关掉 frosted mask，BusyStack 不再是裸 app-bg 上的浮空色块（贴图色块）。对照 `#sandbox-busy-region-empty-no-mask`。",
   "globals.busyRegionDrawerSearchPh": "搜索名称 / 描述…",
   "globals.busyRegionDrawerSearchAria": "搜索目录",
   "globals.busyRegionDrawerBusyLabel": "加载中…",
@@ -3112,10 +3203,10 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionFillStart": "显示 fill busy",
   "globals.busyRegionFillStop": "清除 fill busy",
   "globals.busyRegionFillHelp":
-    "栏目冷启动：BusyRegion fill 作为 FillColumn children（本舞台）**或** PageScroll → `.fynns-content-column`（对照 `#sandbox-busy-region-page-scroll-fill`，≥ **0.5.136**）— 禁止再塞进 .fynns-unit-stack / Card / List / Dialog unit-stack（内容定高，fill 拉不开，圈会贴顶 / 溢出遮罩）。空 fill（≥ **0.5.191**）在裸 app-bg 上居中 BusyStack **且无** frosted mask 色块；刷新已有内容时仍用轻模糊 + 浅灰 mask。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有 `surface-*` 彩色 loading 底。",
+    "栏目冷启动：BusyRegion fill 放在 FillColumn children 或 PageScroll → `.fynns-content-column`。保留定高链；内容定高的 unit-stack / Card / List 包装无法铺满窗格。默认加粗文字条按高度自适应铺满内容区，内边距由 core 保留，无 frosted mask 或可见文案。禁止固定六行、清零 padding、EmptyState + CircularProgress loading 壳或私有加载 CSS。",
   "globals.busyRegionPageScrollFillLabel": "加载栏目",
   "globals.busyRegionPageScrollFillHelp":
-    "PageScroll 栏目冷启动（≥ **0.5.136**）：`.fynns-page-scroll` → `.fynns-content-column`（min-height 铺满滚口）→ 可选薄栏目包装 → `BusyRegion` `fill`。BusyStack 必须在可见列内**居中** — 禁止贴 TopAppBar 或溢出塌缩的 absolute 遮罩。对照 `#sandbox-busy-region-page-scroll-fill`。失败模式：CONSUMER_TREATY **BusyRegion fill BusyStack top overflow in PageScroll**。",
+    "PageScroll 栏目冷启动：`.fynns-page-scroll` → `.fynns-content-column`（min-height 铺满滚口）→ 可选薄栏目包装 → BusyRegion fill。加粗文字条自适应铺满可见内容区，沿用列内边距；无居中 busy 图标、仅顶端六行或塌缩遮罩。对照 `#sandbox-busy-region-page-scroll-fill`。",
   "globals.paneLoadErrorHelp":
     "栏目冷启动超时/失败（≥ **0.5.178**）：仅在请求进行中保留 BusyRegion `fill`；挂起或失败时**先清 busy**，再画 InlineAlert + 短 FieldHint + 末端对齐 Retry — 禁止永久 fill、禁止用 EmptyState 当加载失败壳、禁止静默空态。与 `runBusyTask` / 请求 `timeoutMs` / `AbortSignal` 配对。对照 `#sandbox-pane-load-error`。失败模式：CONSUMER_TREATY **pane cold-start hang without error surface**。",
   "globals.paneLoadErrorBusyLabel": "加载栏目",
@@ -3141,7 +3232,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionDialogLabel": "加载目录",
   "globals.busyRegionDialogMessage": "正在拉取列表…",
   "globals.busyRegionDialogHelp":
-    "Dialog / section 正文加载：正文里放 BusyRegion（宿主已定高再加 fill — 见上方 fill 样例）。禁止把裸默认 md CircularProgress 塞进 Dialog 或 unit-stack。CircularProgress sm 仅用于 IconButton / Button 槽。",
+    "Dialog / section 正文加载：正文里放 BusyRegion（宿主已定高再加 fill）。默认用最大的文字骨架，图片 / iframe 显式用 block。等待正文时动作保持 disabled + aria-busy。CircularProgress 与 Button / IconButton loading 永久归档；compact 骨架已删除。",
   "globals.busyRegionColdHelp":
     "Card / section 正文冷启动：只渲 BusyRegion — 禁止再并行渲 Sessions Select / Pagination 等脚栏兄弟（mask 遮罩会盖住脚栏，圈叠在 Select 上）。有数据后：脚栏留在 BusyRegion 外，翻页 / 刷新只包 List / 表。",
   "globals.busyRegionColdTitle": "会话目录",
@@ -3197,17 +3288,22 @@ const zh: Record<MessageKey, string> = {
   "globals.treeFileTree": "Tree.tsx",
   "globals.treeFileReadme": "README.md",
   "globals.treeFilePackage": "package.json",
-  "globals.busyScrimOpen": "显示全屏 busy（2 秒）",
+  "globals.appLoadingScreenOpen": "显示应用开屏（2 秒）",
+  "globals.appLoadingScreenCustomOpen": "显示自定义 logo 开屏（2 秒）",
+  "globals.appLoadingScreenCoreOpen": "显示无身份信息开屏（2 秒）",
+  "globals.appLoadingScreenLabel": "应用正在启动",
+  "globals.appLoadingScreenHelp": "AppLoadingScreen 是默认开屏：不透明主题背景、居中单个标记、轮廓 / 缩写文字内的扫光，label 仅供无障碍。优先级：已配置 logoSrc / 页面图标 / manifest → 字母缩写 Avatar → core 标记。name 默认 application-name / 页面标题，空 name 表示无身份信息；图标加载失败自动回退。没有骨架条、加载文案、加载圈或透出的应用 UI。就绪 / 失败即关闭，样例 2 秒后关闭。局部内容用 BusyRegion；BusyScrim 仅用于应用内显式阻塞等待。",
+  "globals.busyScrimOpen": "显示全屏内容等待（2 秒）",
   "globals.busyScrimLabel": "加载中",
   "globals.busyScrimMessage": "处理中，请稍候…",
   "globals.busyScrimHelp":
-    "BusyScrim 为不可关闭的全屏 scrim（与 Dialog 同 overlay token）+ 一个进度件 + 文案。确定进度样例用 indicator=linear。此处 2 秒后自动关闭。",
+    "BusyScrim 是应用已启动后的显式阻塞内容等待，不用于开屏；开屏用上方 AppLoadingScreen，局部正文优先 BusyRegion。确需整窗内容等待时传匹配的内容结构；真实 value 用线性进度，message / circular 仍归档。label 仅供无障碍，本样例 2 秒后关闭。",
   "globals.busyPaintBad": "反例：busy 后立刻卡主线程",
   "globals.busyPaintGood": "runBusyTask 后再卡主线程",
   "globals.busyPaintLabel": "繁重工作",
   "globals.busyPaintMessage": "模拟主线程占用 800ms…",
   "globals.busyPaintHelp":
-    "`runBusyTask` / `useBusyTask`：flushSync 打开 busy → afterNextPaint → 再跑任务，圆环才有机会转起来。之后同样的同步卡顿仍可能顿一下；真正丝滑需 Worker。",
+    "`runBusyTask` / `useBusyTask`：flushSync 打开 busy → afterNextPaint → 再跑任务，骨架才有机会绘制。之后同样的同步卡顿仍可能顿一下；真正丝滑需 Worker。",
   "globals.stepperAria": "设置进度",
   "globals.stepperHelp":
     "Stepper 标出当前步；提供 onStepChange 时，已完成步骤的标签复用 Button ghost sm。",
@@ -3289,7 +3385,7 @@ const zh: Record<MessageKey, string> = {
   "globals.codeBlockHiddenTabHelp":
     "**Hidden 分区宿主（硬 ≥ 0.5.112）：** 用 HTML `hidden` 保持兄弟挂载的 pipeline / 模式面板，在打开时仍须让 `CodeBlock` `autoGrow` 撑满正文 — 首次在 `display:none` 下测量会卡在一行（~47dp）。点 Show 验证重测。",
   "globals.diffViewHelp":
-    "DiffView — 可滚动 unified-diff 面板（`add` / `del` / `same` / `meta`）。`+` / `-` 标记由调用方写在 `text` 里。",
+    "DiffView — 只读文本或 patch 对比，内置行号、上下文展开与行内高亮。旧版 `lines` 的 `+` / `-` 标记仍由调用方提供。",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
   "globals.codeBlockNowrapHelp":
     "`wrap={false}` — 长行横向滚动，不软换行。",
@@ -3345,8 +3441,13 @@ const zh: Record<MessageKey, string> = {
   "globals.dialogNestedScrollFold": "已挂载示例正文",
   "globals.dialogNestedScrollHelp":
     "居中 Dialog + List + Collapsible + plain CodeBlock：`maxHeight` 写到根上的 `--fynns-code-block-max-height`；copy-float 的 overlay Y 轨先做圆角裁剪再做 chrome 裁剪，拇指不超出 `radius-3xl`、不越过面板底边。活样例 `#dialog-nested-scroll`。",
+  "globals.dialogViewportOpen": "打开视口工作区对话框",
+  "globals.dialogViewportTitle": "示例配置工作区",
+  "globals.dialogViewportDescription": "在不离开当前页面的情况下编辑较大配置。",
+  "globals.dialogViewportHelp":
+    "大型非全屏工作区：`Dialog size=\"viewport\"` 保留居中圆角和视口留白，同时提供更宽、更高的工作面。直属 editable CodeBlock 使用 `autoGrow={false}` 后会填满正文剩余高度，无需消费侧 CSS。活样例 `#dialog-viewport`。",
   "globals.overlayHelp":
-    "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。正文首个带边框井（CodeBlock）顶天贴标题 — `#fullscreen-flush`。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
+    "对话框：M3 basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）、大型内嵌工作区（`Dialog size=\"viewport\"`）与 full-screen（`FullscreenDialog`）。正文首个带边框井（CodeBlock）在全屏标题下顶天贴合 — `#fullscreen-flush`。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",
   "globals.dialogLabeledOpen": "打开 Dialog（关闭）",
   "globals.dialogLabeledTitle": "带关闭的 Dialog",
@@ -3665,8 +3766,15 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeHelp":
     "配方宿主：`Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` 引言 → `FieldStack`(`FieldBlock` 文本…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → 反馈 / 底栏。Dialog 底栏：**一颗** `loading`（Extract）；兄弟只 `disabled`、不画圈。见 AGENTS.md Toolbar / unit rhythm。",
   "globals.btnSmall": "小号",
+  "globals.btnApply": "应用",
+  "globals.btnRefresh": "刷新",
   "globals.btnViewDetails": "查看详情",
   "globals.btnCopyText": "复制文本",
+  "globals.btnSave": "保存",
+  "globals.btnCancel": "取消",
+  "globals.btnDelete": "删除",
+  "globals.btnIconLabelHelp":
+    "消费仓动作默认使用语义前置图标 + 可见文字。Button 统一提供图标与文字的精确间距；禁止另加图标 margin、自定义 gap 或空格。仅紧凑且语义自明的铬使用 IconButton + Tooltip。",
   "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",
   "globals.btnTonal": "色调",
@@ -3688,6 +3796,8 @@ const zh: Record<MessageKey, string> = {
   "globals.infoHintIconBody":
     "独立帮助：悬停或聚焦 “i” 查看简短说明。纯信息请用 InfoHint，不要手写 IconButton + Tooltip。",
   "globals.infoHintIconAria": "关于 InfoHint 的更多说明",
+  "globals.infoHintCompleteAria": "已完成",
+  "globals.infoHintCompleteBody": "结果已就绪。勾号表示完成；悬停或键盘聚焦查看详情。眼睛图标仅用于查看或显示内容。",
   "globals.infoHintDangerBody":
     "Fail / 错误详情：短 `Fail` 状态旁的 icon-only InfoHint 使用 `tone=\"danger\"`，便于一眼区分 OK 与 Fail。",
   "globals.infoHintDangerAria": "失败详情帮助",
@@ -3701,6 +3811,7 @@ const zh: Record<MessageKey, string> = {
     "常见 ControlRow 偏好写法：InfoHint 挂在标签尾；Switch 单独在右侧。禁止 tip+Switch 进会 wrap 的 cluster（窄抽屉会竖叠 — 见 `#sandbox-control-row-tip-switch-narrow`）。",
   "globals.infoHintRowAria": "预览模式帮助",
   "globals.infoHintNarrowLabel": "示例偏好",
+  "globals.infoHintWrapLabel": "较长的偏好设置名称在帮助图标旁自然换行",
   "globals.infoHintNarrowSwitch": "隐藏示例目录条目",
   "globals.infoHintNarrowBody": "窄 ControlRow 样例说明 — tip 挂在标签尾，Switch 单独在右侧。",
   "globals.infoHintNarrowAria": "关于示例偏好",
@@ -3831,7 +3942,7 @@ const zh: Record<MessageKey, string> = {
   "globals.progressLinearIndeterminate": "线性进度（不确定）",
   "globals.progressLinearIndeterminateAria": "加载中",
   "globals.progressHelp":
-    "确定进度 LinearProgress = active 填充 + 剩余轨（可选 gap）。M3 末端 stop /「带点」已删除 — 禁止复活 stopIndicator 或私有末端圆点。已知 % 的区块加载 → BusyRegion indicator=linear；旁路长任务可用条带 LinearProgress。",
+    "确定进度 LinearProgress = active 填充 + 剩余轨（可选 gap）。M3 末端 stop /「带点」已删除 — 禁止复活 stopIndicator 或私有末端圆点。已知 % 的区块加载 → BusyRegion value；行内真实进度 → LinearProgress value。未知等待使用 BusyRegion / LoadingSkeleton。下方圆环与不确定条仅为兼容示例。",
   "globals.progressCircularAria": "环形进度",
   "globals.progressCircularIndeterminateAria": "处理中",
   "globals.avatarAda": "Ada Lovelace",
@@ -3874,6 +3985,14 @@ const zh: Record<MessageKey, string> = {
   "globals.menuSubItemC": "卷示例 C",
   "globals.menuSubHelp":
     "悬停或右方向键打开「示例卷」嵌套菜单（DropdownMenuSub）。Live #sandbox-menu-submenu。",
+  "globals.menuRowActionTrigger": "会话卷",
+  "globals.menuRowActionAria": "带行尾动作的会话卷菜单",
+  "globals.menuRowActionDeleteAria": "删除示例卷",
+  "globals.menuRowActionDeleteTip": "删除这个卷",
+  "globals.menuRowActionHelp":
+    "DropdownMenuRemovableItem 内置垃圾桶、Tooltip 与无障碍标签。onRemove 更新集合；删除后父菜单和子菜单保持打开，焦点移到相邻行或空菜单。右方向键进入垃圾桶，左方向键回到行；选择行仍正常关闭菜单。重置可恢复示例。Live #sandbox-menu-row-action。",
+  "globals.menuRowActionEmpty": "暂无示例卷",
+  "globals.menuRowActionReset": "重置示例",
   "globals.menuHelp":
     "M3 Menu（DropdownMenu）：分组、分隔线、复选行。带种类图标的排序/筛选 → `DropdownMenuCheckboxItem` **`icon`**（16dp `.fynns-menu-item-icon`；label 仅文案）。勾选列 + 图标 + 文案同一行垂直居中。方向键移动焦点；Esc 关闭。溢出菜单 → `iconOnly` ghost sm。**带标签触发器**自动附 trailing chevron，打开时旋转（≥ **0.5.253**；trailing flex 槽 + block 块盒 ≥ **0.5.254**）。**前置图标 + 文案** → `leadingIcon`（16dp `.fynns-menu-trigger-leading`，垂直居中 — ≥ **0.5.258**；活样 `#sandbox-menu-leading-icon`）— **禁止**把 `<>图标 文案</>` 塞进 `trigger` 赌 baseline 对齐。**表单 FieldBlock** 宿主自动 **matchTriggerWidth**（≥ **0.5.239** — 菜单宽 = live 触发器；左缘齐平 ≥ **0.5.254**；长标签省略；对齐 Select 0.5.238）。**长目录**用定高 `fynns-scroll` 面板（`max-height: min(70dvh, 20rem)`）+ **可见** flyout overlay 轨（≥ **0.5.251**）— `#sandbox-scroll-menu-stack`。超长列表：消费仓自行筛选 / 窗口化。工具栏 / `iconOnly` 仍内容适配。对照 `#sandbox-menu-field-match`。",
   "globals.menuFieldMatchLabel": "示例离散选择",
@@ -4043,6 +4162,7 @@ const zh: Record<MessageKey, string> = {
   "globals.bottomAppBarDelete": "删除",
   "globals.bottomAppBarHelp":
     "[偏移动端] BottomAppBar — 底部操作栏（56dp），可选 FAB。目的地请用 NavigationBar。与 NavigationBar 不是同一组件。",
+  "globals.statusBarInspector": "属性面板",
   "globals.statusBarAria": "示例状态栏",
   "globals.statusBarBranch": "main*",
   "globals.statusBarWorkspace": "sample-project",
@@ -4051,7 +4171,7 @@ const zh: Record<MessageKey, string> = {
   "globals.statusBarEncoding": "UTF-8",
   "globals.statusBarCursor": "第 42 行，第 7 列",
   "globals.statusBarHelp":
-    "IDE 状态栏（Cursor / VS Code）— 贴在**应用壳底**（main / EndAside 下方）。约 22dp、顶天、弱字号。可点条目用 StatusBarItem `onClick`。**不是** BottomAppBar（操作 + FAB），**也不是** Banner（严重度条）。样例：Components `#status-bar`（Navigation）与布局模板 `#layouts-demo-status-bar`。",
+    "IDE 状态栏（Cursor / VS Code）— 贴在**应用壳底**（main / EndAside 下方）。22dp 高、12dp 字号，文字垂直居中并保留上下留白。全局状态和诊断在左，上下文信息在右。可点条目用 StatusBarItem `onClick`，整高矩形命中区；窄屏文字省略。禁止覆盖高度、内边距、行高或另加文字 margin。**不是** BottomAppBar（操作 + FAB），**也不是** Banner（严重度条）。样例：Components `#status-bar`（Navigation）与布局模板 `#layouts-demo-status-bar`。",
   "globals.toolbarDockedAria": "示例停靠工具栏",
   "globals.toolbarFloatingAria": "示例浮动工具栏",
   "globals.toolbarVibrantAria": "示例鲜艳浮动工具栏",
@@ -4078,7 +4198,26 @@ const zh: Record<MessageKey, string> = {
   "globals.bannerHelp":
     "M3 Banner：顶栏下全宽条（文案 + 操作 + 关闭）。多行 supportingText 时 leading 图标与 dismiss X 相对整行垂直居中（core `align-items: center`）— 用条内 `onDismiss`，勿在圆角条外再放关闭。面板内严重度请用 InlineAlert（轻底色；fynns 工具，非 M3）。",
   "globals.snackbarShortBtn": "短时 Snackbar",
+  "globals.snackbarVariant_default": "默认 Snackbar",
+  "globals.snackbarVariant_info": "信息 Snackbar",
+  "globals.snackbarVariant_success": "成功 Snackbar",
+  "globals.snackbarVariant_warning": "警告 Snackbar",
+  "globals.snackbarVariant_error": "错误 Snackbar",
+  "globals.snackbarText_info": "信息 · 无图标",
+  "globals.snackbarText_success": "成功 · 无图标",
+  "globals.snackbarText_warning": "警告 · 无图标",
+  "globals.snackbarText_error": "错误 · 无图标",
+  "globals.snackbarDefaultIcon": "默认 · 带图标",
+  "globals.snackbarStatusMessage": "示例状态消息",
+  "globals.snackbarRequestError": "请求失败，请重试。",
+  "layouts.fillColumnNoticeToggle": "持续会话提示",
+  "layouts.fillColumnNotice": "此会话即将达到容量上限。",
+  "layouts.fillColumnRequestError": "模拟请求错误",
   "globals.snackbarUndoBtn": "带 Undo 的 Snackbar",
+  "globals.snackbarActionDismissBtn": "胶囊操作 + 关闭",
+  "globals.snackbarActionOnlyBtn": "仅胶囊操作",
+  "globals.snackbarView": "查看草稿",
+  "globals.snackbarViewed": "已打开草稿",
   "globals.snackbarIndefiniteBtn": "不自动关闭",
   "globals.snackbarShort": "草稿已保存",
   "globals.snackbarUndoMsg": "已删除该项",
@@ -4087,7 +4226,7 @@ const zh: Record<MessageKey, string> = {
   "globals.snackbarIndefiniteMsg": "等待确认…",
   "globals.snackbarDismiss": "关闭",
   "globals.snackbarHelp":
-    "命令式 `snackbar(message, opts?)` + 根级 `<SnackbarHost />`。同时只显示一条（底部居中）。可选单个 action；时长 `short` / `long` / `indefinite`。勿使用已删除的 toast API。",
+    "命令式 snackbar(message, opts?) + 根级 SnackbarHost。默认主题背景、无图标；icon=true 可开启 info 图标。severity=info/success/warning/error 默认使用均匀淡色背景，与 InlineAlert 显示在 app-bg 上的颜色一致（语义色 12%、画布底色 88%），文字保持 on-surface，默认带对应图标。下方四条原 InlineAlert 为颜色参照，组件本身保持不变。不使用毛玻璃、背景模糊、透字或白色粉彩。icon=false/null 去掉图标但保留背景。错误以 alert 播报，其余 status。同时只显示一条固定浮层，从底部向上出现，不改变或抬高 Chat；减少动效时仅淡入。操作仍支持 ghost/tonal 胶囊；dismissible 控制 X；带操作默认 indefinite + X；无 X 用 duration=long 为 10 秒后自动关闭。操作回调只关闭当前条。",
   "globals.snackbarHostNote":
     "`SnackbarHost` 挂在 SandboxShell 一次（companion API）— 本行不重复挂载。",
   "globals.chatSystem": "演示会话 — 未连接任何模型。",
@@ -4238,7 +4377,7 @@ const zh: Record<MessageKey, string> = {
   "globals.thinkingActionCheck": "正在执行布局检查…",
   "globals.thinkingActionDraft": "正在起草回复…",
   "globals.thinkingActionsHelp":
-    "假数据 Agent / LLM 活动标签（流式）。进行中用「正在…」；完成用「已… / 已思考 Ns」。标签 shimmer；切换 `streamingLabel` 可变形。多步骤树 → **ChatActivity**（AGENTS.md Label tense）。",
+    "假数据 Agent / LLM 活动标签（流式）。进行中用「正在…」；完成用「已… / 已思考 Ns」。标签 shimmer；切换 `streamingLabel` 可变形。多阶段处理 → 一个外层 **ChatThinking**，内含灰色小字与缩进 **details**；操作放在外面。",
   "globals.thinkingBody":
     "对照 CHATMESSAGE_TOKENS 核对命名，并避免套用 Collapsible 的卡片壳。",
   "globals.thinkingAnswer":
@@ -4246,7 +4385,7 @@ const zh: Record<MessageKey, string> = {
   "globals.thinkingSimulate": "模拟 Agent 运行",
   "globals.thinkingReset": "重置为完成",
   "globals.thinkingHelp":
-    "**ChatThinking** — Wave 1 单块推理 / Agent 活动披露（ChatGPT / Claude「Thinking / Thought for Ns」；Cursor 式工具状态经 `streamingLabel`）。**标签时态（消费仓）：** 流式 / 活动 = 进行时（*思考中*、*正在调用函数…*、*正在阅读样例文档…*）；完成 = 过去时（*已思考 Ns*）。core 不改写文案 — 流式结束时换字符串。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：默认展开，用户可收起（trigger 保持可点；新一轮 streaming 清 pin）+ 标签 shimmer；标签变更 remount 进入动画。完成：自动收拢一次；用户展开后粘住。无 children → 不可展开时长条（无 chevron）。默认无流式光点 — 仅在需要时传 `icon`。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`。多步骤工具 / 状态树 → **ChatActivity**（Wave 2）。",
+    "**ChatThinking** — Wave 1 单块推理 / Agent 活动披露（ChatGPT / Claude「Thinking / Thought for Ns」；Cursor 式工具状态经 `streamingLabel`）。**标签时态（消费仓）：** 流式 / 活动 = 进行时（*思考中*、*正在调用函数…*、*正在阅读样例文档…*）；完成 = 过去时（*已思考 Ns*）。core 不改写文案 — 流式结束时换字符串。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：默认展开，用户可收起（trigger 保持可点；新一轮 streaming 清 pin）+ 标签 shimmer；标签变更 remount 进入动画。完成：只自动收拢内容，保留组件和已完成内容，后续答案 / 状态 / 错误都不得清除；用户展开后粘住。上方两条完成消息的内容和答案长度不同、标签相同；chevron 必须跟着标签，不能跟着消息宽度走。无 children → 不可展开时长条（无 chevron）。默认无流式光点 — 仅在需要时传 `icon`。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`。多阶段处理 → 一个外层 **ChatThinking**，使用结构化 **details**：内部只放灰色小字与带缩进的 thinking。操作、卡片和结果放在外面。参见 **ChatThinking · nested details**。",
   "globals.activityHeaderStart": "正在收集上下文…",
   "globals.activityHeaderMemory": "已创建记忆文件",
   "globals.activityHeaderPlan": "已用细节更新计划",
@@ -4427,7 +4566,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listShortcutCardUrlPath": "https://example.com/docs",
   "globals.listCatalogAria": "路径目录示例",
   "globals.listCatalogStaticHelp":
-    "**路径 / 仓目录（硬 ≥ 0.5.168；滚动轨 ≥ 0.5.171；防溢出 ≥ **0.5.224**；状态一次 ≥ **0.5.264**；批量 CTA ≥ **0.5.265**）：** `interactive={false}` 仍把 end 操作放在 trailing 兄弟槽 — 一个 `.fynns-control-cluster` 全是 ghost **md** IconButton（同 40dp 基线）。状态 / 空态 = **`overline` 一次** — **禁止**再在 `trailingSupportingText` 写同义状态（如「尚未运行」+「未构建」）。kind/wiki = 互补的 `trailingSupportingText` / `.fynns-table-meta` — **禁止** headline 里 Chip / 自造 badge。批量启用 = leading **`Checkbox`** — **禁止** Switch 夹在 IconButton 中间。删除 = ghost + ConfirmDialog — **禁止** `IconButton` `danger` 实心盘。批量运行（≥ **0.5.265**）：仅 Card primary Button `loading` — 行内 Refresh IconButton **只 disabled、不带 `loading`**（禁止双环）。单行 Refresh 可自带环。封顶井：`List` + `fynns-scroll` + `list-well-max-height*` — **overflow-y: auto**（行不得画出井外盖住下一段说明）+ meta 须离开 overlay Y 轨（core 预留 `--fynns-scrollbar-size`；勿自造消费仓 end pad）。失败：CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup / List scroll-well trailing meta kisses overlay rail / List scroll-well overflow-y spill overlaps siblings / ListItem overline restates trailing status / Card batch CTA + ListItem row twin loading rings。对照 `#sandbox-list-repo-path-actions`。",
+    "**路径 / 仓目录（硬 ≥ 0.5.168；滚动轨 ≥ 0.5.171；防溢出 ≥ **0.5.224**；状态一次 ≥ **0.5.264**；批量 CTA ≥ **0.5.265**）：** `interactive={false}` 仍把 end 操作放在 trailing 兄弟槽 — 一个 `.fynns-control-cluster` 全是 ghost **md** IconButton（同 40dp 基线）。状态 / 空态 = **`overline` 一次** — **禁止**再在 `trailingSupportingText` 写同义状态（如「尚未运行」+「未构建」）。kind/wiki = 互补的 `trailingSupportingText` / `.fynns-table-meta` — **禁止** headline 里 Chip / 自造 badge。批量启用 = leading **`Checkbox`** — **禁止** Switch 夹在 IconButton 中间。删除 = ghost + ConfirmDialog — **禁止** `IconButton` `danger` 实心盘。批量运行（≥ **0.5.265**）：仅 Card primary Button `loading` — 行内 Refresh IconButton **只 disabled、不带 `loading`**（禁止重复加载动效）。单行 Refresh 的旧 loading 圈仅作归档兼容，新 UI 用原位内容骨架。封顶井：`List` + `fynns-scroll` + `list-well-max-height*` — **overflow-y: auto**（行不得画出井外盖住下一段说明）+ meta 须离开 overlay Y 轨（core 预留 `--fynns-scrollbar-size`；勿自造消费仓 end pad）。失败：CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup / List scroll-well trailing meta kisses overlay rail / List scroll-well overflow-y spill overlaps siblings / ListItem overline restates trailing status / Card batch CTA + ListItem row twin loading rings。对照 `#sandbox-list-repo-path-actions`。",
   "globals.listCatalogStaticAria": "带 end 操作的静态路径目录示例",
   "globals.listRepoPathCardTitle": "仓库",
   "globals.listRepoPathBatchRebuild": "立刻重建勾选",
@@ -4788,7 +4927,7 @@ const zh: Record<MessageKey, string> = {
   "globals.iconBtnLoading": "加载中图标按钮",
   "globals.iconBtnPrimaryLoading": "主色加载中图标按钮",
   "globals.iconBtnPrimaryLoadingHelp":
-    "IconButton 忙碌（硬 ≥ **0.5.217**）：用 stock **`loading`** — 主色 / danger 上 Spinner 走 `currentColor`（填色铬上可见）。**禁止**把 children 换成嵌套 `CircularProgress`（accent 环贴 accent 底 = 空白盘）。对照 `#sandbox-iconbutton-primary-loading`。失败模式：CONSUMER_TREATY IconButton busy swaps CircularProgress instead of loading。",
+    "IconButton 忙碌（硬 ≥ **0.5.217**）：用 stock **`loading`** — 主色 / danger 上归档加载圈走 `currentColor`（填色铬上可见）。**禁止**把 children 换成嵌套 `CircularProgress`（accent 环贴 accent 底 = 空白盘）。对照 `#sandbox-iconbutton-primary-loading`。失败模式：CONSUMER_TREATY IconButton busy swaps CircularProgress instead of loading。",
   "globals.inputError": "此字段为必填。",
   "globals.inputFilledAria": "带前缀的 filled 小输入框",
   "globals.inputFilledPlaceholder": "Filled sm + 前缀",

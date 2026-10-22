@@ -24,6 +24,7 @@ import { Tooltip } from "./Tooltip";
 import { clearScrollEdgeFade, syncScrollEdgeFadeOnto } from "./scrollEdgeFade";
 import { ChatEntranceContext } from "./chatEntrance";
 import { ChatComposerTodoList, type ChatComposerTodoListProps } from "./ChatComposerTodoList";
+import { refreshOverlayScrollbars } from "../theme/overlayScrollbar";
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -117,6 +118,10 @@ export type ChatThreadProps = HTMLAttributes<HTMLDivElement> & {
 
 /**
  * Scrollable message log (`role="log"`). Only this region scrolls inside `Chat`.
+ * Pass one chronological event list with stable keys. New prompts, calls,
+ * thinking and result/question cards append after earlier events; streaming
+ * and completion update their event in place. Never bucket by role/type or
+ * dock a perpetual result. Split thinking stacks at intervening events.
  */
 export function ChatThread({
   empty,
@@ -204,14 +209,28 @@ export function ChatScrollToBottom({
   className,
 }: ChatScrollToBottomProps) {
   const { atBottom, scrollToBottom } = useChatContext("ChatScrollToBottom");
+  const fabRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (atBottom || typeof ResizeObserver === "undefined") return;
+    const fab = fabRef.current;
+    const composer = fab?.parentElement?.querySelector(".fynns-chat-composer");
+    if (!fab || !composer) return;
+    const observer = new ResizeObserver(refreshOverlayScrollbars);
+    observer.observe(fab);
+    observer.observe(composer);
+    return () => observer.disconnect();
+  }, [atBottom]);
+
   if (atBottom) return null;
 
   return (
-    <div className={join("fynns-chat-scroll-fab", className)}>
+    <div ref={fabRef} className={join("fynns-chat-scroll-fab", className)}>
       <Tooltip content={label}>
         <IconButton
           size="sm"
           variant="elevated"
+          data-fynns-scroll-occluder=""
           aria-label={label}
           onClick={() => scrollToBottom()}
         >
@@ -343,7 +362,8 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
         return;
       }
       // Match the 26rem composer-host container query's content box. The form
-      // width stays fixed when the toolbar wraps, so this cannot oscillate.
+      // width stays fixed when the draft moves above the single action row,
+      // so this cannot oscillate. Hosts own the controls' minimum width.
       const sync = () => {
         const formStyle = getComputedStyle(form);
         const contentWidth =

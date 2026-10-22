@@ -52,16 +52,18 @@
   line-height: var(--fynns-line-height-body);
 }
 
-/* Labeled buttons may place an icon before text (including through a React
- * Fragment). Center each box on the same cross axis instead of letting the
- * inline SVG enlarge the line box and push the text below the icon. */
-.fynns-btn-label:has(> svg) {
+/* Labeled buttons may place a semantic icon before text (including through a
+ * React Fragment). `gap` is the ONLY inline spacing source: consumer margin,
+ * whitespace hacks, or a second icon margin make the pair visibly too loose. */
+.fynns-btn-label:has(> svg),
+.fynns-btn-label:has(> .fynns-icon) {
   display: inline-flex;
   align-items: center;
   gap: var(--fynns-space-2);
 }
 
-.fynns-btn-label:has(> svg) > svg {
+.fynns-btn-label > svg,
+.fynns-btn-label > .fynns-icon {
   display: block;
   flex-shrink: 0;
   margin-inline-end: 0;
@@ -87,13 +89,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.fynns-btn-label > svg,
-.fynns-btn-label > .fynns-icon {
-  display: inline-block;
-  vertical-align: -0.125em;
-  margin-inline-end: var(--fynns-space-2);
 }
 
 /* M3 state layer (no scale-on-press). Fade via opacity — do not interpolate

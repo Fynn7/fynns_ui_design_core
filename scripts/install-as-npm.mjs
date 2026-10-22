@@ -16,6 +16,8 @@ import { createHash } from "node:crypto";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawnSync } from "node:child_process";
 import { semverLt, walkInstallChain } from "./check-ui-update.mjs";
+import { ensureNoStoreDevHeader, hasNoStoreDevHeader } from "./vite-dev-cache.mjs";
+import { npmrcHasActiveEmptyAuth } from "./ensure-sibling-ui-core.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = path.resolve(__dirname, "..");
@@ -29,6 +31,7 @@ const UPDATE_SCRIPT = "fynns-ui:check-update";
 const UPDATE_SCRIPT_CMD =
   "node node_modules/@fynn7/ui-design-core/scripts/check-ui-update.mjs || exit 0";
 const SYNC_SCRIPT = "fynns-ui:sync";
+const PREPARE_SCRIPT = "fynns-ui:prepare";
 const SYNC_SCRIPT_CMD =
   "node node_modules/@fynn7/ui-design-core/scripts/ensure-sibling-ui-core.mjs --target . --update";
 const EXPORTS_SCRIPT = "fynns-ui:check-exports";
@@ -53,7 +56,7 @@ function usage() {
 Wire ${ALIAS} → ${ENTRY_FROM_PKG}. Default mode: --sibling (zero-token).
 
 Options:
-  --target <dir>     Consumer repo (or path inside it). Default: cwd
+  --target <dir>     Consumer app package (or repo with one UI app). Default: cwd
   --sibling          Zero-token: safe .npmrc; prefer file: sibling (default)
   --packages         Install from GitHub Packages (needs NODE_AUTH_TOKEN)
   --version <ver>    Semver range for --packages (default: core package.json)
@@ -62,6 +65,8 @@ Options:
   --vite-from <dir>  Directory that contains vite.config.*
   --skip-install     Only wire configs / .npmrc (dependency already present)
   --wire-only        Same as --skip-install
+  --dev-cache-only   Only add no-store to the Vite dev config
+  --recovery-only    Only wire startup recovery and lifecycle hooks; preserve pinned dependencies/configs
   --check            Validate dep + alias + consumer-rule hash; exit 1 if incomplete
   --sync-consumer-rule  Force overwrite .cursor/rules/fynns-ui-consumer.mdc from core
   --dry-run          Print actions without writing
@@ -83,6 +88,8 @@ function parseArgs(argv) {
     viteFrom: null,
     skipInstall: false,
     wireOnly: false,
+    devCacheOnly: false,
+    recoveryOnly: false,
     check: false,
     syncConsumerRule: false,
     dryRun: false,
@@ -108,6 +115,8 @@ function parseArgs(argv) {
       out.skipInstall = true;
       out.wireOnly = true;
     } else if (a === "--check") out.check = true;
+    else if (a === "--dev-cache-only") out.devCacheOnly = true;
+    else if (a === "--recovery-only") out.recoveryOnly = true;
     else if (a === "--sync-consumer-rule") out.syncConsumerRule = true;
     else if (a === "--dry-run") out.dryRun = true;
     else if (a === "--json") out.json = true;
@@ -287,6 +296,24 @@ function wireVite(viteFile, entryRel, dryRun, log) {
   });
 }
 
+function wireViteDevCache(viteFile, dryRun, log) {
+  const before = readText(viteFile);
+  const next = ensureNoStoreDevHeader(before);
+  if (next === null) {
+    log.push({
+      step: "vite_dev_cache",
+      status: "manual",
+      file: viteFile,
+      detail: 'Add server.headers: { "Cache-Control": "no-store" } to the Vite dev config',
+    });
+  } else if (next === before) {
+    log.push({ step: "vite_dev_cache", status: "ok", file: viteFile });
+  } else {
+    writeText(viteFile, next, dryRun);
+    log.push({ step: "vite_dev_cache", status: dryRun ? "dry-run" : "patched", file: viteFile });
+  }
+}
+
 function wireTsconfig(tsconfigFile, entryRel, dryRun, log) {
   const before = readText(tsconfigFile);
   let data;
@@ -445,7 +472,11 @@ function ensureSiblingDependency(pkgRoot, gitRoot, dryRun, log) {
 function readConsumerPkg(gitRoot) {
   const p = path.join(gitRoot, "package.json");
   if (!fs.existsSync(p)) return null;
-  return { path: p, data: JSON.parse(readText(p)) };
+  try {
+    return { path: p, data: JSON.parse(readText(p).replace(/^\uFEFF/, "")) };
+  } catch {
+    return null;
+  }
 }
 
 function isLocalDependencySpec(spec) {
@@ -561,18 +592,36 @@ function wireUpdateHooks(pkgRoot, dryRun, log) {
   }
 
   const scripts = { ...(pkg.data.scripts || {}) };
+  const bootstrapRel = "scripts/fynns-ui-bootstrap.mjs";
+  const bootstrapCmd = `node ${bootstrapRel}`;
+  const bootstrapPath = path.join(pkgRoot, bootstrapRel);
+  const bootstrapSource = fs.readFileSync(path.join(__dirname, "consumer-ui-bootstrap.mjs"), "utf8");
+  const needsBootstrap = !scripts[PREPARE_SCRIPT] || scripts[PREPARE_SCRIPT] === `${bootstrapCmd} --prepare` ||
+    !scripts[SYNC_SCRIPT] || scripts[SYNC_SCRIPT] === SYNC_SCRIPT_CMD || scripts[SYNC_SCRIPT] === bootstrapCmd;
+  if (needsBootstrap && fs.existsSync(bootstrapPath) &&
+      !fs.readFileSync(bootstrapPath, "utf8").includes("// Copied into consumer scripts so bootstrap never depends on a node_modules link.")) {
+    throw new Error(`Consumer-owned bootstrap already exists: ${bootstrapPath}; refusing to overwrite it.`);
+  }
+  if (needsBootstrap && !dryRun) {
+    fs.mkdirSync(path.dirname(bootstrapPath), { recursive: true });
+    fs.writeFileSync(bootstrapPath, bootstrapSource);
+  }
   const gateCmd = `npm run ${GATE_SCRIPT}`;
   const softCmd = `npm run ${UPDATE_SCRIPT}`;
+  const prepareCmd = `npm run ${PREPARE_SCRIPT}`;
   let changed = false;
 
   const desired = {
-    [SYNC_SCRIPT]: SYNC_SCRIPT_CMD,
+    [SYNC_SCRIPT]: bootstrapCmd,
+    [PREPARE_SCRIPT]: `${bootstrapCmd} --prepare`,
     [EXPORTS_SCRIPT]: EXPORTS_SCRIPT_CMD,
     [GATE_SCRIPT]: GATE_SCRIPT_CMD,
     [UPDATE_SCRIPT]: UPDATE_SCRIPT_CMD,
   };
   for (const [name, cmd] of Object.entries(desired)) {
-    if (scripts[name] !== cmd) {
+    // A consumer may provide a wrapper for old sibling versions or extra setup.
+    // The installer owns missing entries only; never replace an app's wrapper.
+    if (!scripts[name] || (name === SYNC_SCRIPT && scripts[name] === SYNC_SCRIPT_CMD)) {
       scripts[name] = cmd;
       changed = true;
     }
@@ -586,6 +635,7 @@ function wireUpdateHooks(pkgRoot, dryRun, log) {
     // Soft notice after hard gate (never masks export failures).
     next = prependLifecycleHook(next, softCmd, softMarkers);
     next = prependLifecycleHook(next, gateCmd, hardMarkers);
+    next = prependLifecycleHook(next, prepareCmd, [PREPARE_SCRIPT]);
     if (next !== scripts[hook]) {
       scripts[hook] = next;
       changed = true;
@@ -596,6 +646,7 @@ function wireUpdateHooks(pkgRoot, dryRun, log) {
     const hook = "postinstall";
     let next = scripts[hook];
     next = prependLifecycleHook(next, gateCmd, hardMarkers);
+    next = prependLifecycleHook(next, prepareCmd, [PREPARE_SCRIPT]);
     if (next !== scripts[hook]) {
       scripts[hook] = next;
       changed = true;
@@ -614,7 +665,7 @@ function wireUpdateHooks(pkgRoot, dryRun, log) {
   log.push({
     step: "update_hooks",
     status: dryRun ? "dry-run" : "patched",
-    detail: `${GATE_SCRIPT} (sync+exports) + soft ${UPDATE_SCRIPT} on predev/prebuild/prepreview`,
+    detail: `${PREPARE_SCRIPT} + ${GATE_SCRIPT} (sync+exports) + soft ${UPDATE_SCRIPT} on predev/prebuild/prepreview`,
   });
 }
 
@@ -690,10 +741,112 @@ function pickVite(opts, gitRoot) {
     if (hits[0]) return hits[0];
   }
   const hits = autoViteConfigs(gitRoot).filter(
-    (p) => !/[\\/]packages[\\/]fynns_ui_design_core[\\/]/.test(p),
+    (p) => !/[\\/]packages[\\/]fynns_ui_design_core[\\/]/.test(p) &&
+      !/^(?:.*[\\/])?(?:docs|examples?|fixtures?|tests?|__tests__)[\\/]/.test(path.relative(gitRoot, p)),
   );
   hits.sort((a, b) => a.split(path.sep).length - b.split(path.sep).length);
   return hits.find((p) => !/[\\/]examples?[\\/]/.test(p)) || hits[0] || null;
+}
+
+function resolveVitePackageRoot(pkgRoot, opts) {
+  const candidates = !opts.vite && !opts.viteFrom
+    ? autoViteConfigs(pkgRoot)
+      .filter((file) => !/[\\/]packages[\\/]fynns_ui_design_core[\\/]/.test(file))
+      .filter((file) => !/^(?:.*[\\/])?(?:docs|examples?|fixtures?|tests?|__tests__)[\\/]/.test(path.relative(pkgRoot, file)))
+      .map((file) => ({ file, owner: findPackageRoot(path.dirname(file)) }))
+    : [];
+  const linkedOwners = new Set(candidates
+    .filter(({ owner }) => {
+      const pkg = owner && readConsumerPkg(owner);
+      const deps = { ...(pkg?.data.dependencies || {}), ...(pkg?.data.devDependencies || {}) };
+      return Boolean(deps[PKG_NAME]);
+    })
+    .map(({ owner }) => owner));
+  if (linkedOwners.size > 1) {
+    throw new Error(`Multiple UI app packages found under ${pkgRoot}: ${[...linkedOwners].join(", ")}. Pass --target <app-package>`);
+  }
+  const selected = linkedOwners.size === 1
+    ? candidates.find(({ owner }) => linkedOwners.has(owner))?.file
+    : pickVite(opts, pkgRoot);
+  if (!selected) return { pkgRoot, viteFile: null, redirectedFrom: null };
+  const owner = findPackageRoot(path.dirname(selected));
+  if (!owner || path.resolve(owner) === path.resolve(pkgRoot)) {
+    return { pkgRoot, viteFile: selected, redirectedFrom: null };
+  }
+  const relative = path.relative(pkgRoot, owner);
+  if (relative.startsWith("..") || path.isAbsolute(relative)) {
+    throw new Error(`Vite config ${selected} belongs to a package outside ${pkgRoot}; pass --target <app-package>`);
+  }
+  if (!opts.vite && !opts.viteFrom && linkedOwners.size === 0) {
+    const owners = new Set(candidates.map(({ owner }) => owner)
+      .filter((dir) => dir && path.resolve(dir) !== path.resolve(pkgRoot)));
+    if (owners.size > 1) {
+      throw new Error(`Multiple Vite app packages found under ${pkgRoot}: ${[...owners].join(", ")}. Pass --target <app-package>`);
+    }
+  }
+  return { pkgRoot: owner, viteFile: selected, redirectedFrom: pkgRoot };
+}
+
+/** Undo only the exact hooks this installer previously wrote to a parent package. */
+function removeMiswiredParentHooks(parentRoot, dryRun, log) {
+  const pkg = readConsumerPkg(parentRoot);
+  if (!pkg) return;
+  const deps = { ...(pkg.data.dependencies || {}), ...(pkg.data.devDependencies || {}) };
+  if (deps[PKG_NAME]) return;
+  const scripts = { ...(pkg.data.scripts || {}) };
+  const installedCommands = {
+    [SYNC_SCRIPT]: "node scripts/fynns-ui-bootstrap.mjs",
+    [PREPARE_SCRIPT]: "node scripts/fynns-ui-bootstrap.mjs --prepare",
+    [EXPORTS_SCRIPT]: EXPORTS_SCRIPT_CMD,
+    [GATE_SCRIPT]: GATE_SCRIPT_CMD,
+    [UPDATE_SCRIPT]: UPDATE_SCRIPT_CMD,
+  };
+  if (!Object.entries(installedCommands).some(([name, cmd]) => scripts[name] === cmd) && scripts[SYNC_SCRIPT] !== SYNC_SCRIPT_CMD) return;
+  let changed = false;
+  for (const [name, cmd] of Object.entries(installedCommands)) {
+    if (scripts[name] === cmd || (name === SYNC_SCRIPT && scripts[name] === SYNC_SCRIPT_CMD)) { delete scripts[name]; changed = true; }
+  }
+  for (const name of ["predev", "prebuild", "prepreview"]) {
+    const before = scripts[name];
+    if (typeof before !== "string") continue;
+    const next = before.replace(/^npm run fynns-ui:prepare && /, "").replace(/^npm run fynns-ui:gate && /, "")
+      .replace(/^npm run fynns-ui:check-update(?: && )?/, "");
+    if (next !== before) {
+      if (next) scripts[name] = next;
+      else delete scripts[name];
+      changed = true;
+    }
+  }
+  if (typeof scripts.postinstall === "string") {
+    const before = scripts.postinstall;
+    const next = before.replace(/^npm run fynns-ui:prepare && /, "").replace(/^npm run fynns-ui:gate(?: && )?/, "");
+    if (next !== before) {
+      if (next) scripts.postinstall = next;
+      else delete scripts.postinstall;
+      changed = true;
+    }
+  }
+  if (!changed) return;
+  if (!dryRun) {
+    pkg.data.scripts = scripts;
+    fs.writeFileSync(pkg.path, `${JSON.stringify(pkg.data, null, 2)}\n`);
+  }
+  log.push({ step: "parent_hooks", status: dryRun ? "dry-run" : "removed", file: pkg.path,
+    detail: "removed installer-generated hooks from package without UI core dependency" });
+}
+
+function hasMiswiredParentHooks(parentRoot) {
+  const pkg = readConsumerPkg(parentRoot);
+  if (!pkg) return false;
+  const deps = { ...(pkg.data.dependencies || {}), ...(pkg.data.devDependencies || {}) };
+  if (deps[PKG_NAME]) return false;
+  const scripts = pkg.data.scripts || {};
+  return scripts[SYNC_SCRIPT] === SYNC_SCRIPT_CMD ||
+    scripts[SYNC_SCRIPT] === "node scripts/fynns-ui-bootstrap.mjs" ||
+    scripts[PREPARE_SCRIPT] === "node scripts/fynns-ui-bootstrap.mjs --prepare" ||
+    scripts[EXPORTS_SCRIPT] === EXPORTS_SCRIPT_CMD ||
+    scripts[GATE_SCRIPT] === GATE_SCRIPT_CMD ||
+    scripts[UPDATE_SCRIPT] === UPDATE_SCRIPT_CMD;
 }
 
 function pickTsconfig(opts, gitRoot, viteFile) {
@@ -743,7 +896,7 @@ function checkMode(pkgRoot, viteFile, tsconfigFile, gitRoot) {
   const npmrc = path.join(pkgRoot, ".npmrc");
   if (fs.existsSync(npmrc)) {
     const npmrcText = readText(npmrc);
-    if (/_authToken=\$\{NODE_AUTH_TOKEN\}/.test(npmrcText) && !process.env.NODE_AUTH_TOKEN?.trim()) {
+    if (npmrcHasActiveEmptyAuth(npmrcText) && !process.env.NODE_AUTH_TOKEN?.trim()) {
       issues.push(
         `.npmrc has _authToken=\${NODE_AUTH_TOKEN} — empty env causes E401; switch to zero-token sibling .npmrc (see llm/CONSUME.md)`,
       );
@@ -763,6 +916,9 @@ function checkMode(pkgRoot, viteFile, tsconfigFile, gitRoot) {
       );
     }
     if (!hasDedupe(t)) issues.push(`vite missing react dedupe: ${viteFile}`);
+    if (!hasNoStoreDevHeader(t)) {
+      issues.push(`vite dev server missing Cache-Control: no-store (prevents stale @fynns/ui ESM in embedded browsers): ${viteFile}`);
+    }
   } else {
     issues.push("no vite.config.* found to validate");
   }
@@ -835,18 +991,37 @@ function main() {
     console.error(String(e.message || e));
     process.exit(1);
   }
-  const pkgRoot = findPackageRoot(targetAbs);
-  if (!pkgRoot) {
+  const targetPkgRoot = findPackageRoot(targetAbs);
+  if (!targetPkgRoot) {
     console.error(`No package.json found walking up from ${targetAbs}`);
     process.exit(1);
   }
 
+  let resolved;
+  try {
+    resolved = resolveVitePackageRoot(targetPkgRoot, opts);
+  } catch (e) {
+    console.error(String(e.message || e));
+    process.exit(1);
+  }
+  const { pkgRoot, viteFile, redirectedFrom } = resolved;
+  const parentRoots = [...new Set([redirectedFrom, path.resolve(gitRoot) !== path.resolve(pkgRoot) ? gitRoot : null]
+    .filter(Boolean))];
+  if (redirectedFrom) {
+    log.push({ step: "target", status: "redirected", detail: `${redirectedFrom} → ${pkgRoot} (Vite app package)` });
+  }
+
   const version = opts.version || `^${coreVersion()}`;
-  const viteFile = pickVite(opts, pkgRoot);
   const tsconfigFile = pickTsconfig(opts, pkgRoot, viteFile);
 
   if (opts.check) {
     const result = checkMode(pkgRoot, viteFile, tsconfigFile, gitRoot);
+    for (const parentRoot of parentRoots) {
+      if (hasMiswiredParentHooks(parentRoot)) {
+        result.issues.push(`installer-generated UI hooks are on parent package ${parentRoot} without ${PKG_NAME}; re-run --wire-only to move them to ${pkgRoot}`);
+        result.ok = false;
+      }
+    }
     const out = {
       ok: result.ok,
       action: "check",
@@ -863,6 +1038,30 @@ function main() {
     process.exit(result.ok ? 0 : 1);
   }
 
+  if (opts.recoveryOnly) {
+    for (const parentRoot of parentRoots) removeMiswiredParentHooks(parentRoot, opts.dryRun, log);
+    wireUpdateHooks(pkgRoot, opts.dryRun, log);
+    const out = { ok: true, action: "recovery-only", consumerRoot: pkgRoot, dryRun: opts.dryRun, log };
+    if (opts.json) console.log(JSON.stringify(out, null, 2));
+    else for (const step of log) console.log(`${step.step}: ${step.status}${step.detail ? ` (${step.detail})` : ""}`);
+    return;
+  }
+
+  if (opts.devCacheOnly) {
+    if (!viteFile) {
+      console.error(`No Vite config found under ${pkgRoot}`);
+      process.exit(1);
+    }
+    wireViteDevCache(viteFile, opts.dryRun, log);
+    const ok = !log.some((step) => step.step === "vite_dev_cache" && step.status === "manual");
+    const out = { ok, action: "dev-cache-only", consumerRoot: pkgRoot, viteFile, dryRun: opts.dryRun, log };
+    if (opts.json) console.log(JSON.stringify(out, null, 2));
+    else for (const step of log) console.log(`${step.step}: ${step.status}${step.detail ? ` (${step.detail})` : ""}`);
+    process.exit(ok ? 0 : 1);
+  }
+
+  for (const parentRoot of parentRoots) removeMiswiredParentHooks(parentRoot, opts.dryRun, log);
+
   ensureNpmrc(pkgRoot, opts.dryRun, log, { packages: opts.packages });
   if (!opts.skipInstall && !opts.wireOnly) {
     const ok = opts.packages
@@ -877,6 +1076,7 @@ function main() {
   if (viteFile) {
     const entryRel = entryRelFromVite(viteFile, pkgRoot);
     wireVite(viteFile, entryRel, opts.dryRun, log);
+    wireViteDevCache(viteFile, opts.dryRun, log);
   } else {
     log.push({ step: "vite_alias", status: "manual", detail: "no vite.config found" });
   }

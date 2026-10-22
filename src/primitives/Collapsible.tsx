@@ -21,7 +21,8 @@ export type CollapsibleProps = {
    * put meaning in `title`.
    */
   icon?: ReactNode;
-  /** Optional right-aligned content in the header (e.g. action buttons). Not part of the toggle button. */
+  /** Optional right-aligned header content. Buttons/InfoHint/menu triggers use
+   * size="sm" (32dp); core clamps wrapped header buttons. Not part of the toggle. */
   actions?: ReactNode;
   /**
    * Outer chrome. Default `card` — bordered shell for padded copy / forms.

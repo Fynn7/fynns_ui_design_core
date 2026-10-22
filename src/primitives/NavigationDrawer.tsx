@@ -9,14 +9,25 @@ import {
   type ButtonHTMLAttributes,
   type ForwardedRef,
   type HTMLAttributes,
+  type KeyboardEvent,
+  type MouseEvent,
   type ReactNode,
 } from "react";
 import { trailingIsRowAction } from "./catalogRowGeometry";
 import { DialogFrame, type DrawerSide } from "./DialogFrame";
 import { ChevronRightIcon, ICON_SIZE, PlusIcon } from "./icons";
 import { Spinner } from "./Loading";
+import {
+  NavigationDrawerRenameDialog,
+  resolveRenameLabels,
+  useNavigationDrawerRename,
+  type NavigationDrawerRenameLabels,
+} from "./navigationDrawerRename";
 import { OverflowTip, overflowTipText } from "./OverflowTip";
 import { syncScrollEdgeFade } from "./scrollEdgeFade";
+import { isNavigationDrawerActivation } from "./navigationDrawerActivation";
+
+export type { NavigationDrawerRenameLabels };
 
 /** True when any nested destination (or nested group) reports `active`. */
 function hasActiveDestination(node: ReactNode): boolean {
@@ -57,7 +68,8 @@ export type NavigationDrawerVariant = "modal" | "standard";
 export type NavigationDrawerProps = {
   /**
    * - `modal` — slides over content with scrim (default). Requires `open` /
-   *   `onClose`.
+   *   `onClose`. Navigation / new-chat / footer actions request closure;
+   *   search, group disclosure and menu triggers stay open.
    * - `standard` — permanent / always-visible sheet (no overlay). Prefer for
    *   medium+ layouts; use `NavigationRail` when space is tighter.
    */
@@ -97,6 +109,9 @@ export type NavigationDrawerProps = {
    * `.fynns-control-cluster--toolbar-end` / `.fynns-control-row` /
    * `.fynns-nav-drawer-new-chat` as **direct** children are covered
    * (≥ **0.5.222** / **0.5.256**) — not only `:has()` wrappers.
+   * For a distinct data section after those tools, mark its first direct
+   * child `.fynns-content-boundary` in every loading/result state; this
+   * replaces the ordinary sibling step with 24dp without moving later rows.
    * Do **not** wrap destinations in `.fynns-unit-stack`.
    * Session / history create → `NavigationDrawerNewChat` (not icon-only
    * `--toolbar-end`). Mode catalog tools still use `--toolbar-end`.
@@ -111,7 +126,10 @@ export type NavigationDrawerProps = {
    * — soft end fade only when truncated via `data-fade`) +
    * settings `IconButton` `size="sm"` end (core optical glyph align — not
    * TopAppBar `trailing`. Live: sandbox Layouts
-   * `#layouts-demo-shell` + SandboxShell.
+   * `#layouts-demo-shell` + SandboxShell. This prop also pins the account row
+   * in `variant="modal"` session drawers; placing that row in a generic
+   * `Drawer` body instead leaves it directly after the session content. Live:
+   * `#layouts-demo-chat-product`.
    */
   footer?: ReactNode;
   /**
@@ -120,6 +138,8 @@ export type NavigationDrawerProps = {
    * `stopPropagation` keep their own row menus.
    */
   onContextMenu?: HTMLAttributes<HTMLDivElement>["onContextMenu"];
+  /** Optional list host bindings, e.g. SelectionArea.areaProps. Core keeps scroll geometry. */
+  bodyProps?: HTMLAttributes<HTMLDivElement>;
 };
 
 function DrawerSheet({
@@ -128,6 +148,7 @@ function DrawerSheet({
   className,
   children,
   onContextMenu,
+  bodyProps,
   ...navRest
 }: {
   headline?: ReactNode;
@@ -135,6 +156,7 @@ function DrawerSheet({
   className?: string;
   children?: ReactNode;
   onContextMenu?: HTMLAttributes<HTMLDivElement>["onContextMenu"];
+  bodyProps?: HTMLAttributes<HTMLDivElement>;
 } & HTMLAttributes<HTMLElement>) {
   const bodyRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
@@ -201,9 +223,13 @@ function DrawerSheet({
         <div className="fynns-nav-drawer-headline">{headline}</div>
       ) : null}
       <div
+        {...bodyProps}
         ref={bodyRef}
-        className="fynns-nav-drawer-body fynns-scroll"
-        onContextMenu={onContextMenu}
+        className={["fynns-nav-drawer-body fynns-scroll", bodyProps?.className].filter(Boolean).join(" ")}
+        onContextMenu={(event) => {
+          bodyProps?.onContextMenu?.(event);
+          if (!event.defaultPrevented) onContextMenu?.(event);
+        }}
       >
         {children}
       </div>
@@ -239,6 +265,7 @@ export function NavigationDrawer({
   className,
   children,
   onContextMenu,
+  bodyProps,
 }: NavigationDrawerProps) {
   if (variant === "standard") {
     return (
@@ -250,6 +277,7 @@ export function NavigationDrawer({
           .join(" ")}
         aria-label={ariaLabel}
         onContextMenu={onContextMenu}
+        bodyProps={bodyProps}
       >
         {children}
       </DrawerSheet>
@@ -278,6 +306,14 @@ export function NavigationDrawer({
         headline={headline}
         footer={footer}
         onContextMenu={onContextMenu}
+        bodyProps={bodyProps}
+        onClickCapture={(event) => {
+          if (!open || !isNavigationDrawerActivation(event.target, event.currentTarget)) return;
+          if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          queueMicrotask(() => {
+            if (!event.nativeEvent.defaultPrevented) onClose();
+          });
+        }}
       >
         {children}
       </DrawerSheet>
@@ -290,6 +326,8 @@ export type NavigationDrawerHeadlineProps = HTMLAttributes<HTMLDivElement>;
 /**
  * Static **section** label inside the drawer body (M3 headline) — not the
  * sheet `headline` prop, and not a place for IconButtons / counts.
+ * First body title clears the sheet edge by 24dp; Divider→title is 16dp.
+ * Core owns this clearance: do not add margins or reset body/headline padding.
  * For collapsible Cursor-style folders use `NavigationDrawerGroup`.
  */
 export function NavigationDrawerHeadline({
@@ -427,6 +465,10 @@ export function NavigationDrawerGroup({
   );
 }
 
+/**
+ * Localized copy for the core rename dialog. Every field is a **human
+ * sentence** — no counts, no parenthetical glosses.
+ */
 export type NavigationDrawerItemProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
   "children"
@@ -457,12 +499,43 @@ export type NavigationDrawerItemProps = Omit<
    * visible. Live: Layouts `#layouts-demo-navigation-drawer` mode entries.
    */
   trailing?: ReactNode;
+  /**
+   * Enable the **core rename flow**: double-click the destination (or press
+   * `F2` while it has focus) opens the core rename `Dialog` (title + field +
+   * ghost Cancel / primary Save). Commit through `onRename`.
+   *
+   * The gesture completes wherever the destination stays mounted. A modal
+   * drawer activates the destination and closes the sheet on the first click,
+   * so there the context-menu rename remains the entry point.
+   */
+  renamable?: boolean;
+  /**
+   * Commit the trimmed label. Fires only when the name actually changed and
+   * is not empty; the consumer owns the data (persist it and re-render
+   * `label`).
+   */
+  onRename?: (nextLabel: string) => void;
+  /** Localized copy for the core rename dialog. */
+  renameLabels?: Partial<NavigationDrawerRenameLabels>;
+  /**
+   * Controlled open state of the rename dialog. Use it to open the **same**
+   * core dialog from the item context menu (the workspace recipe) instead of
+   * shipping a second rename surface. Requires `renamable` (otherwise no
+   * dialog is rendered) and `onRenameOpenChange` — without that callback the
+   * double-click / F2 gesture cannot open the dialog.
+   */
+  renameOpen?: boolean;
+  /** Notified when the rename dialog opens or closes. */
+  onRenameOpenChange?: (open: boolean) => void;
 };
 
 /**
  * Single navigation drawer destination — icon + label + optional count badge
  * and/or hover-reveal trailing action, with a full-width pill active
  * indicator (`secondary-container`).
+ *
+ * `renamable` adds the **core rename flow**: double-click (or `F2`) opens the
+ * core rename `Dialog`; the consumer commits through `onRename`.
  */
 export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
   {
@@ -474,6 +547,14 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
     className,
     type = "button",
     "aria-label": ariaLabel,
+    renamable = false,
+    onRename,
+    renameLabels,
+    renameOpen,
+    onRenameOpenChange,
+    onDoubleClick,
+    onKeyDown,
+    disabled,
     ...rest
   }: NavigationDrawerItemProps,
   ref: ForwardedRef<HTMLButtonElement>,
@@ -517,15 +598,45 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
     .filter(Boolean)
     .join(" ");
 
+  // —— core rename flow ——
+  const rename = useNavigationDrawerRename({
+    renamable,
+    label,
+    disabled,
+    onRename,
+    renameOpen,
+    onRenameOpenChange,
+  });
+  const renameCopy = resolveRenameLabels(renameLabels);
+
+  const handleDoubleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    onDoubleClick?.(event);
+    if (event.defaultPrevented || !renamable || disabled) return;
+    // The gesture replaces the browser word selection.
+    event.preventDefault();
+    rename.open();
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    onKeyDown?.(event);
+    if (event.defaultPrevented || !renamable || disabled) return;
+    if (event.key !== "F2") return;
+    event.preventDefault();
+    rename.open();
+  };
+
   const item = (
     <button
       {...rest}
       ref={ref}
       type={type}
       className={rootClass}
+      disabled={disabled}
       aria-current={active ? "page" : undefined}
       aria-label={resolvedAriaLabel}
       aria-labelledby={resolvedAriaLabel == null ? labelId : undefined}
+      onDoubleClick={handleDoubleClick}
+      onKeyDown={handleKeyDown}
     >
       {icon != null ? (
         <span className="fynns-nav-drawer-icon" aria-hidden>
@@ -539,7 +650,16 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
     </button>
   );
 
-  if (endAction == null) return item;
+  const renameDialog = renamable ? (
+    <NavigationDrawerRenameDialog
+      open={rename.visible}
+      value={rename.value}
+      onValueChange={rename.setValue}
+      onCommit={rename.commit}
+      onCancel={rename.cancel}
+      labels={renameCopy}
+    />
+  ) : null;
 
   const hostClass = [
     "fynns-nav-drawer-item-host",
@@ -549,13 +669,24 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
     .filter(Boolean)
     .join(" ");
 
+  const row =
+    endAction == null ? (
+      item
+    ) : (
+      <div className={hostClass}>
+        {item}
+        <span className="fynns-nav-drawer-item-trailing fynns-nav-drawer-item-trailing--end">
+          {endAction}
+        </span>
+      </div>
+    );
+
+  if (renameDialog == null) return row;
   return (
-    <div className={hostClass}>
-      {item}
-      <span className="fynns-nav-drawer-item-trailing fynns-nav-drawer-item-trailing--end">
-        {endAction}
-      </span>
-    </div>
+    <>
+      {row}
+      {renameDialog}
+    </>
   );
 });
 
@@ -568,7 +699,7 @@ export type NavigationDrawerNewChatProps = Omit<
    * `新会话` — ChatGPT sidebar grammar.
    */
   label: string;
-  /** Shows a spinner and disables the control. */
+  /** @deprecated Permanently archived ring wait. Prefer disabled + aria-busy with content-position skeletons. */
   loading?: boolean;
   /**
    * Optional trailing chrome on the same row (typically `DropdownMenu`

@@ -1,6 +1,7 @@
-/** Internal busy glyph for Button / overlays — not part of the public barrel. */
+/** Permanently archived ring geometry — not a public loading primitive. */
 export type SpinnerSize = "sm" | "md" | "lg";
 
+/** @deprecated Permanently archived. Prefer content-position skeletons, not a busy glyph. */
 export function Spinner({
   label,
   size = "md",
@@ -14,7 +15,7 @@ export function Spinner({
     .filter(Boolean)
     .join(" ");
   return (
-    <span className={classes} role="status" aria-label={label}>
+    <span className={classes} role="status" aria-label={label} data-loading-appearance="archived-ring">
       <span className="fynns-loading-spinner-ring" aria-hidden />
       <span className="fynns-sr-only">{label}</span>
     </span>

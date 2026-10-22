@@ -562,6 +562,9 @@ export function ChatActivityStep({
  * Wave 2 multi-step agent / tool-call chain (Cursor-style status tree).
  * Collapsible header + vertical rail + step rows. Compose via
  * `ChatMessage.thinking` (alone or above `ChatThinking`) — UI chrome only.
+ * Header is intrinsic: tool-count labels and Thinking/Thought share the same
+ * short label→chevron gap, independent of output width or expanded state.
+ * Keep labels concise; do not stretch header/label with consumer CSS.
  *
  * Open policy (uncontrolled): force open while `streaming` unless the user
  * pinned closed; trigger stays enabled so the tree can collapse mid-run.

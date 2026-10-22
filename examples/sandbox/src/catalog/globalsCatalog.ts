@@ -55,6 +55,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["图标文字按钮", "icon and text", "icon label"],
   },
   {
+    id: "button-icon-label-matrix",
+    categoryId: "actions",
+    label: "Button · icon + label matrix",
+    keywords: ["按钮图标间距", "button icon gap", "button variants", "取消按钮"],
+  },
+  {
     id: "split-button",
     categoryId: "actions",
     label: "SplitButton",
@@ -108,6 +114,11 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "menu",
       "submenu",
       "DropdownMenuSub",
+      "DropdownMenuRemovableItem",
+      "trash",
+      "remove",
+      "垃圾桶",
+      "sandbox-menu-row-action",
       "nested",
       "fieldblock",
       "matchTriggerWidth",
@@ -212,6 +223,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["多行", "textarea", "文本域"],
   },
   {
+    id: "text-selection-composer",
+    categoryId: "textInputs",
+    label: "TextSelectionComposer",
+    keywords: ["选区", "引用", "提及", "hover", "selection", "reference", "文本编辑"],
+  },
+  {
     id: "tabs",
     categoryId: "tabs",
     label: "Tabs",
@@ -234,6 +251,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     categoryId: "selection",
     label: "Radio",
     keywords: ["单选", "radio"],
+  },
+  {
+    id: "tag-input",
+    categoryId: "textInputs",
+    label: "TagInput",
+    keywords: ["标签输入", "tags", "comma", "chips", "sandbox-tag-input"],
   },
   {
     id: "chip",
@@ -288,6 +311,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     categoryId: "communication",
     label: "InlineAlert",
     keywords: ["告警", "alert", "banner", "warning", "error", "提示条"],
+  },
+  {
+    id: "section-notice",
+    categoryId: "communication",
+    label: "SectionNotice",
+    keywords: ["区域提示", "详情", "缓存", "notice", "actionable", "details"],
   },
   {
     id: "sandbox-inline-alert-recovery",
@@ -376,10 +405,40 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     ],
   },
   {
+    id: "chat-chevron",
+    categoryId: "communication",
+    label: "ChatThinking / ChatActivity · chevron gap",
+    keywords: ["chevron", "箭头", "间距", "read", "tool summary", "Thinking", "Thought"],
+  },
+  {
+    id: "chat-question",
+    categoryId: "communication",
+    label: "ChatQuestion · chronological conversation",
+    keywords: ["问题卡片", "其他", "自由文本", "顺序", "question", "other", "chronological", "ChatThinkingStack"],
+  },
+  {
+    id: "thinking-reference",
+    categoryId: "communication",
+    label: "ChatThinking · Copilot reference",
+    keywords: ["thinking", "copilot", "curve", "弧线", "reference"],
+  },
+  {
+    id: "thinking-clock",
+    categoryId: "communication",
+    label: "ChatThinking · clock updates",
+    keywords: ["秒数刷新", "计时", "闪烁", "elapsed", "timer", "clock", "shimmer", "稳定标题"],
+  },
+  {
+    id: "thinking-details",
+    categoryId: "communication",
+    label: "ChatThinking · nested details",
+    keywords: ["thinking", "nested", "details", "reasoning", "缩进", "灰色小字"],
+  },
+  {
     id: "thinking",
     categoryId: "communication",
     label: "ChatThinking",
-    keywords: ["思维", "thinking", "reasoning", "thought", "披露"],
+    keywords: ["思维", "thinking", "reasoning", "thought", "披露", "status", "disclosure", "ChatThinkingStack"],
   },
   {
     id: "activity",
@@ -543,6 +602,22 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     ],
   },
   {
+    id: "dialog-viewport",
+    categoryId: "containment",
+    label: "Dialog viewport workspace",
+    keywords: [
+      "dialog",
+      "viewport",
+      "workspace",
+      "codeblock",
+      "editor",
+      "large",
+      "非全屏",
+      "大对话框",
+      "代码编辑",
+    ],
+  },
+  {
     id: "empty-state",
     categoryId: "patterns",
     label: "EmptyState",
@@ -551,7 +626,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
   {
     id: "busy-region",
     categoryId: "patterns",
-    label: "BusyRegion",
+    label: "BusyRegion / LoadingSkeleton",
     keywords: [
       "忙碌",
       "busy",
@@ -637,7 +712,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
   {
     id: "busy-scrim",
     categoryId: "patterns",
-    label: "BusyScrim",
+    label: "AppLoadingScreen / BusyScrim",
     keywords: ["遮罩", "scrim", "blocking", "busy"],
   },
   {
@@ -701,13 +776,19 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "code-block",
     categoryId: "patterns",
     label: "CodeBlock",
-    keywords: ["代码", "code", "syntax", "高亮"],
+    keywords: ["代码", "code", "syntax", "高亮", "ExpandToggle", "Show more", "Show less", "展开", "收起"],
   },
   {
     id: "diff-view",
     categoryId: "patterns",
     label: "DiffView",
     keywords: ["diff", "unified", "对比", "变更"],
+  },
+  {
+    id: "diff-dialog",
+    categoryId: "patterns",
+    label: "DiffDialog",
+    keywords: ["diff", "patch", "review", "对比", "审阅", "变更"],
   },
   {
     id: "breadcrumb",

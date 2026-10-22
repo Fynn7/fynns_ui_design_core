@@ -87,6 +87,19 @@
   color: var(--fynns-color-text-muted);
 }
 
+/* Decorative leading glyphs have no button disk to provide optical inset.
+ * Preserve the shell's 4dp capsule edge, then add field padding around the
+ * 16dp glyph: 16dp shell-to-glyph and 16dp glyph-to-text (including row gap).
+ * Interactive affixes retain their existing 32dp target and 4dp edge. */
+.fynns-field-affix--leading:has(> svg) {
+  padding-inline: var(--fynns-layout-field-pad-inline);
+}
+
+.fynns-field-affix--leading > svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
 /*
  * In-field affix IconButtons (password reveal, clear, …): shell min-height is
  * 40dp (`--fynns-size-icon-target`); default md 40dp disk fills the row.

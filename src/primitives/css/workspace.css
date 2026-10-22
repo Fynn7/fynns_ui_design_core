@@ -1,0 +1,128 @@
+/* Canvas chrome is an overlay. Rounded toolbars never pretend to be flush shell rows. */
+.fynns-workspace-panes {
+  display: flex;
+  flex: 1 1 0;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.fynns-workspace-canvas {
+  position: relative;
+  isolation: isolate;
+  container: fynns-workspace-canvas / inline-size;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  background: var(--fynns-color-app-bg);
+}
+
+.fynns-workspace-tools {
+  position: absolute;
+  inset-block-start: var(--fynns-layout-unit-stack-gap);
+  inset-inline-start: var(--fynns-layout-unit-stack-gap);
+  max-width: calc(100% - var(--fynns-layout-unit-stack-gap) * 2);
+  pointer-events: none;
+}
+
+.fynns-workspace-tools > * {
+  pointer-events: auto;
+}
+
+.fynns-docked-tools-inset {
+  padding: var(--fynns-layout-unit-stack-gap);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.fynns-workspace-notice-stack {
+  position: absolute;
+  inset-block-start: var(--fynns-layout-unit-stack-gap);
+  inset-inline-end: var(--fynns-layout-unit-stack-gap);
+  width: max-content;
+  max-width: min(var(--fynns-layout-snackbar-max-width), calc(100% - var(--fynns-layout-unit-stack-gap) * 2));
+  max-height: calc(100% - var(--fynns-layout-unit-stack-gap) * 2);
+  overflow-x: clip;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.fynns-workspace-notice-entry {
+  display: grid;
+  grid-template-rows: 1fr;
+  padding-block-end: var(--fynns-layout-unit-stack-gap);
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    grid-template-rows var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    padding-block-end var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    opacity var(--fynns-duration-fast) var(--fynns-ease-standard),
+    transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-workspace-notice-entry[data-state="entering"],
+.fynns-workspace-notice-entry[data-state="exiting"] {
+  grid-template-rows: 0fr;
+  padding-block-end: 0;
+  opacity: 0;
+  transform: translateY(calc(-1 * var(--fynns-space-sm)));
+}
+
+.fynns-workspace-notice-entry[data-state="exiting"] {
+  pointer-events: none;
+}
+
+.fynns-workspace-notice-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.fynns-workspace-notice {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline-start: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-control-stack-gap);
+  padding: var(--fynns-layout-unit-stack-gap);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-workspace-notice--error { background: var(--fynns-color-snackbar-error-surface); }
+.fynns-workspace-notice--warning { background: var(--fynns-color-snackbar-warning-surface); }
+.fynns-workspace-notice--info { background: var(--fynns-color-snackbar-info-surface); }
+.fynns-workspace-notice--success { background: var(--fynns-color-snackbar-success-surface); }
+
+.fynns-workspace-notice-message {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--fynns-layout-unit-stack-gap);
+}
+
+.fynns-workspace-notice-text { overflow-wrap: anywhere; }
+.fynns-workspace-notice-icon { display: flex; align-items: center; }
+.fynns-workspace-notice--error .fynns-workspace-notice-icon { color: var(--fynns-color-danger); }
+.fynns-workspace-notice--warning .fynns-workspace-notice-icon { color: var(--fynns-color-warning); }
+.fynns-workspace-notice--info .fynns-workspace-notice-icon { color: var(--fynns-color-info); }
+.fynns-workspace-notice--success .fynns-workspace-notice-icon { color: var(--fynns-color-success); }
+
+/* Keep top/end notices clear of tools even on narrow or inspector-squeezed canvases. */
+@container fynns-workspace-canvas (max-width: 50rem) {
+  .fynns-workspace-tools {
+    inset-block-start: auto;
+    inset-block-end: var(--fynns-layout-unit-stack-gap);
+  }
+  .fynns-workspace-canvas:has(> .fynns-workspace-tools) > .fynns-workspace-notice-stack {
+    max-height: calc(100% - var(--fynns-toolbar-height) - var(--fynns-layout-unit-stack-gap) * 3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-workspace-notice-entry,
+  .fynns-workspace-notice-entry[data-state] {
+    transition-duration: var(--fynns-duration-instant);
+    transform: none;
+  }
+}

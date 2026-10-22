@@ -9,6 +9,16 @@ export type IconProps = Omit<SVGProps<SVGSVGElement>, "ref"> & { size?: number }
 /** Default glyph size in CSS pixels — matches `--fynns-size-icon` (16dp). */
 export const ICON_SIZE = 16;
 
+/** Global project/catalog home; always icon-only ghost chrome. */
+export function HomeIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" />
+      <path d="M9 21v-8h6v8" />
+    </svg>
+  );
+}
+
 function svgProps({ size = ICON_SIZE, className, ...rest }: IconProps) {
   return {
     width: size,
@@ -62,6 +72,18 @@ export function ArrowLeftIcon(props: IconProps) {
     <svg {...svgProps(props)}>
       <line x1="19" y1="12" x2="5" y2="12" />
       <polyline points="12 19 5 12 12 5" />
+    </svg>
+  );
+}
+
+/** Two-way transfer — hand a payload off to another surface and take it back. */
+export function ArrowLeftRightIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <line x1="8" y1="8" x2="16" y2="8" />
+      <polyline points="13 5 16 8 13 11" />
+      <line x1="16" y1="16" x2="8" y2="16" />
+      <polyline points="11 13 8 16 11 19" />
     </svg>
   );
 }

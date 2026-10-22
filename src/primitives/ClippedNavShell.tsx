@@ -12,7 +12,9 @@ import {
   type ReactNode,
 } from "react";
 import { refreshOverlayScrollbars } from "../theme/overlayScrollbar";
+import { isDevEnv } from "./devEnv";
 import { readRemPx, readVarPx } from "./layoutMeasure";
+import { isClippedNavDrawerOverlay, isNavigationDrawerActivation } from "./navigationDrawerActivation";
 
 export type ClippedNavShellNavMode = "drawer" | "rail" | "hidden";
 
@@ -52,6 +54,8 @@ export type ClippedNavShellProps = {
    * consumer can **close** destinations (`hidden`) — not densify to an
    * icon-only rail. Fired from `useLayoutEffect` using **target** drawer
    * width (not mid-transition layout).
+   * Also requests closure after navigation / Back when the nav slot overlays
+   * the canvas. Docked columns keep their current open state.
    */
   onNavCrowded?: () => void;
   /**
@@ -67,10 +71,11 @@ export type ClippedNavShellProps = {
   /**
    * Identity of the current `nav` body (root destinations vs mode / drill-in
    * catalog, search preview, …). When this changes while the destination
-   * track is **open**, the shell runs an **in-column Shared Axis X** swap
+   * track is **open and docked**, the shell runs an **in-column Shared Axis X** swap
    * (short horizontal slide + staggered fade) — track **width stays open**.
    * Pass `navDirection="back"` when exiting a mode (TopAppBar ←). Omit
-   * `navKey` to hard-swap with no motion. Live: `#layouts-demo-drill-in`.
+   * `navKey` to hard-swap with no motion. An overlay drawer requests closure
+   * on Back instead of keeping the column open. Live: `#layouts-demo-drill-in`.
    */
   navKey?: string;
   /**
@@ -109,6 +114,14 @@ type NavAxisSwap = {
   toKey: string;
 };
 
+/** Nested workspaces own their inspectors; they must not crowd this shell. */
+function shellOwnedElement(root: Element, selector: string): Element | null {
+  const owner = root.closest(".fynns-clipped-nav-shell");
+  return Array.from(root.querySelectorAll(selector)).find(
+    element => element.closest(".fynns-clipped-nav-shell") === owner,
+  ) ?? null;
+}
+
 /**
  * Whether a **target** labeled-drawer width would starve main / EndAside floors
  * (or force EndAside overlay) in `host` — ignores CSS transition mid-frames.
@@ -132,7 +145,8 @@ export function wouldClippedNavDrawerCrowd(
     drawerWidthPx ?? (readVarPx(root, "--fynns-navdrawer-width") || 280);
   const mainMin = readVarPx(root, "--fynns-layout-main-min-width") || 160;
   const main = root.querySelector(".fynns-clipped-nav-shell-main");
-  const aside = main?.querySelector(
+  const aside = main && shellOwnedElement(
+    main,
     ".fynns-end-aside-track:not([data-state='closing'])",
   );
   const asideMin = aside
@@ -160,7 +174,8 @@ export function wouldClippedNavDrawerCrowd(
  * consumers may pass `null` when `navMode="hidden"`. Pass `navKey` when the
  * drawer **body** identity changes (root ↔ drill-in / mode catalog) so the
  * column runs **Shared Axis X** (short slide + staggered fade) while **width
- * stays open** — not close→swap→open. Use `navDirection="back"` on mode exit.
+ * stays open** when docked — not close→swap→open. Use `navDirection="back"`
+ * on mode exit; overlay navigation and Back request closure via `onNavCrowded`.
  * In `drawer` mode the nav|main seam is draggable (paints
  * `--fynns-navdrawer-width` live via rAF, commits on pointerup; clamped by
  * navdrawer min/max and remaining room for main / EndAside mins).
@@ -248,12 +263,23 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
    */
   useLayoutEffect(() => {
     if (navKey === undefined) return;
-    if (committedNavKeyRef.current === navKey) return;
+    if (committedNavKeyRef.current === navKey && (!axisSwap || axisSwap.toKey === navKey)) return;
 
     if (navMode === "hidden" || phase !== "open") {
       committedNavKeyRef.current = navKey;
       setAxisSwap(null);
       setAxisPhase("idle");
+      return;
+    }
+
+    if (
+      navDirectionRef.current === "back" && rootRef.current &&
+      isClippedNavDrawerOverlay(rootRef.current)
+    ) {
+      committedNavKeyRef.current = navKey;
+      setAxisSwap(null);
+      setAxisPhase("idle");
+      onNavCrowdedRef.current?.();
       return;
     }
 
@@ -389,10 +415,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
   const squashedDrawerWarnedRef = useRef(false);
   const narrowDrawerWarnedRef = useRef(false);
   useEffect(() => {
-    // Avoid bare `process` (consumer tsc may lack @types/node).
-    const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } })
-      .process?.env?.NODE_ENV;
-    if (nodeEnv === "production") return;
+    if (!isDevEnv()) return;
     if (navMode !== "rail" || phase === "closed") {
       squashedDrawerWarnedRef.current = false;
       return;
@@ -416,9 +439,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
   }, [navMode, phase]);
 
   useEffect(() => {
-    const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } })
-      .process?.env?.NODE_ENV;
-    if (nodeEnv === "production") return;
+    if (!isDevEnv()) return;
     if (typeof window === "undefined") return;
     const mq = window.matchMedia("(max-width: 56.25rem)");
     const warn = () => {
@@ -464,6 +485,8 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     );
 
     const isCrowded = () => {
+      // Overlay drawers do not consume a main-column track; navigation dismisses them.
+      if (isClippedNavDrawerOverlay(root)) return false;
       /* Always read the live CSS var — this effect intentionally omits
        * drawerWidthPx from deps (drag stutter); a closed-over state would
        * go stale after pointerup / external width changes. */
@@ -489,7 +512,8 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
       if (body && main) {
         const mainW = main.clientWidth;
         const mainMin = readVarPx(root, "--fynns-layout-main-min-width");
-        const aside = main.querySelector(
+        const aside = shellOwnedElement(
+          main,
           ".fynns-end-aside-track:not([data-state='closing'])",
         );
         const asideMin = aside
@@ -603,9 +627,9 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     const tokenMax = readVarPx(root, "--fynns-navdrawer-max-width") || 448;
     const mainMin = readVarPx(root, "--fynns-layout-main-min-width") || 160;
     const main = root.querySelector(".fynns-clipped-nav-shell-main");
-    const hasAside = !!main?.querySelector(
+    const hasAside = !!(main && shellOwnedElement(main,
       ".fynns-end-aside-track:not([data-state='closing'])",
-    );
+    ));
     const asideMin = hasAside
       ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 280
       : 0;
@@ -700,9 +724,9 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     const tokenMax = readVarPx(root, "--fynns-navdrawer-max-width") || 448;
     const mainMin = readVarPx(root, "--fynns-layout-main-min-width") || 160;
     const main = root.querySelector(".fynns-clipped-nav-shell-main");
-    const hasAside = !!main?.querySelector(
+    const hasAside = !!(main && shellOwnedElement(main,
       ".fynns-end-aside-track:not([data-state='closing'])",
-    );
+    ));
     const asideMin = hasAside
       ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 280
       : 0;
@@ -726,6 +750,18 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
           className="fynns-clipped-nav-shell-nav"
           data-state={navMode === "hidden" ? "closed" : "open"}
           aria-hidden={navMode === "hidden" || undefined}
+          onClickCapture={(event) => {
+            const root = rootRef.current;
+            if (navMode !== "drawer" || !root || !isClippedNavDrawerOverlay(root) ||
+                !isNavigationDrawerActivation(event.target, event.currentTarget)) return;
+            if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            // Capture survives row stopPropagation; defer until the consumer action runs.
+            queueMicrotask(() => {
+              if (!event.nativeEvent.defaultPrevented && root.isConnected && root.getAttribute("data-nav") === "drawer") {
+                onNavCrowdedRef.current?.();
+              }
+            });
+          }}
           {...(navMode === "hidden" ? ({ inert: true } as { inert: boolean }) : {})}
         >
           {activeAxis && renderedNav != null ? (

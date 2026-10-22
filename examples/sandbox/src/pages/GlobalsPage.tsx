@@ -1,3 +1,8 @@
+import { ContentRhythmDemo } from "./ContentRhythmDemo";
+import { ResponsiveHeaderDemo } from "../components/ResponsiveHeaderDemo";
+import { DiffViewDemo, DiffDialogDemo } from "../components/DiffDemo";
+import { TagInputDemo } from "../components/TagInputDemo";
+import { ContentBoundaryDemo } from "../components/ContentBoundaryDemo";
 import {
   Autocomplete,
   ArchiveIcon,
@@ -8,7 +13,9 @@ import {
   BottomSheet,
   Breadcrumb,
   BusyRegion,
+  LoadingSkeleton,
   BusyScrim,
+  AppLoadingScreen,
   Button,
   MessageSquareIcon,
   useBusyTask,
@@ -40,6 +47,7 @@ import {
   ChatActivityArtifact,
   ChatActivityStep,
   ChatThinking,
+  ChatThinkingStack,
   ChatThread,
   ClipboardIcon,
   ListChecksIcon,
@@ -69,6 +77,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuRemovableItem,
   DropdownMenuSeparator,
   DropdownMenuSub,
   Dropzone,
@@ -91,6 +100,7 @@ import {
   Drawer,
   IconButton,
   InfoIcon,
+  CheckIcon,
   CheckCircleIcon,
   AlertTriangleIcon,
   InlineAlert,
@@ -129,6 +139,10 @@ import {
   TableHeaderCell,
   TableRow,
   RevealMore,
+  ExpandToggle,
+  ExpandableContent,
+  ExpandableText,
+  ExpandableCodeBlock,
   useRevealMore,
   REVEAL_MORE_DEFAULT_INITIAL,
   REVEAL_MORE_DEFAULT_STEP,
@@ -160,12 +174,20 @@ import {
 import { ChatComposerModelMenuSections } from "../components/ChatComposerModelMenuSections";
 import { ChatComposerModeTogglesEndActions } from "../components/ChatComposerModeTogglesEndActions";
 import { ChatTodoComposerDemo } from "../components/ChatTodoComposerDemo";
+import { ChatQuestionSequenceDemo } from "../components/ChatQuestionSequenceDemo";
+import { ChatThinkingReferenceDemo } from "../components/ChatThinkingReferenceDemo";
+import { ChatThinkingDetailsDemo } from "../components/ChatThinkingDetailsDemo";
+import { ChatThinkingClockDemo } from "../components/ChatThinkingClockDemo";
+import { TextSelectionComposerDemo } from "../components/TextSelectionComposerDemo";
+import { ChatChevronDemo } from "../components/ChatChevronDemo";
 import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { ChartAnalyticsDemo } from "../components/ChartAnalyticsDemo";
 import { ChatEmptySurfaceStarters } from "../components/ChatEmptySurfaceStarters";
 import { IconsLibraryDemo } from "../components/IconsLibraryDemo";
+import { InlineAlertDemo } from "../components/WorkspaceChromeDemo";
+import { SectionNoticeDemo } from "../components/SectionNoticeDemo";
 import { ProviderSettingsManageShell } from "../components/ProviderSettingsManageShell";
 import { TokenList } from "../components/TokenList";
 import {
@@ -1221,6 +1243,41 @@ function OverflowBoundsDemo() {
   );
 }
 
+function MenuRemovalDemo() {
+  const { t } = useLocale();
+  const [items, setItems] = useState<Array<"A" | "B" | "C">>(["A", "B", "C"]);
+  const rows = items.map((id) => {
+    const label = t(`globals.menuSubItem${id}`);
+    return (
+      <DropdownMenuRemovableItem
+        key={id}
+        icon={<FolderOpenIcon />}
+        removeLabel={`${t("globals.menuRowActionDeleteAria")}: ${label}`}
+        onRemove={() => setItems((current) => current.filter((item) => item !== id))}
+      >
+        {label}
+      </DropdownMenuRemovableItem>
+    );
+  });
+  const body = items.length ? rows : <EmptyState title={t("globals.menuRowActionEmpty")} />;
+  return (
+    <div id="sandbox-menu-row-action" className="sandbox-globals-row">
+      <DropdownMenu trigger={t("globals.menuRowActionTrigger")} ariaLabel={t("globals.menuRowActionAria")}>
+        {body}
+      </DropdownMenu>
+      <DropdownMenu trigger={t("globals.menuTrigger")} ariaLabel={t("globals.menuAria")}>
+        <DropdownMenuSub trigger={t("globals.menuSubTrigger")} ariaLabel={t("globals.menuSubAria")}>
+          {body}
+        </DropdownMenuSub>
+      </DropdownMenu>
+      <Button variant="ghost" onClick={() => setItems(["A", "B", "C"])}>
+        {t("globals.menuRowActionReset")}
+      </Button>
+      <SandboxHelp text={t("globals.menuRowActionHelp")} />
+    </div>
+  );
+}
+
 /**
  * Live stage proving `--fynns-radius-*` is system-wide: multiple primitives
  * share the same token ladder (not Card-only). Samples are grouped by M3
@@ -1232,7 +1289,8 @@ export type GlobalsPageProps = {
 };
 
 export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const [toggleDemoExpanded, setToggleDemoExpanded] = useState(false);
   const [openCategories, setOpenCategories] = useState<
     Partial<Record<GlobalsCategoryId, boolean>>
   >(() => loadSandboxUiSession()?.openCategories ?? {});
@@ -1307,6 +1365,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [fullscreenFlushOpen, setFullscreenFlushOpen] = useState(false);
   const [drawerNestedScrollOpen, setDrawerNestedScrollOpen] = useState(false);
   const [dialogNestedScrollOpen, setDialogNestedScrollOpen] = useState(false);
+  const [dialogViewportOpen, setDialogViewportOpen] = useState(false);
+  const [dialogViewportCode, setDialogViewportCode] = useState(
+    DIALOG_NESTED_SCROLL_JSON,
+  );
   const [fullscreenLocale, setFullscreenLocale] = useState("zh");
   const [fullscreenPath, setFullscreenPath] = useState("");
   const [fullscreenFlushXml, setFullscreenFlushXml] = useState(FULLSCREEN_FLUSH_XML);
@@ -1322,6 +1384,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [busyRegionColdBody, setBusyRegionColdBody] = useState(true);
   const [busyRegionFieldBusy, setBusyRegionFieldBusy] = useState(false);
   const [busyScrimOpen, setBusyScrimOpen] = useState(false);
+  const [appLoadingOpen, setAppLoadingOpen] = useState(false);
+  const [appLoadingCustomLogo, setAppLoadingCustomLogo] = useState(false);
+  const [appLoadingName, setAppLoadingName] = useState<string | undefined>();
   const [busyScrimDeterminateOpen, setBusyScrimDeterminateOpen] = useState(false);
   const [busyPaintBad, setBusyPaintBad] = useState(false);
   const busyPaintGood = useBusyTask();
@@ -1511,6 +1576,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     experimental: formExperimental,
     onExperimentalChange: setFormExperimental,
   };
+
+  useEffect(() => {
+    if (!appLoadingOpen) return;
+    const timer = window.setTimeout(() => setAppLoadingOpen(false), 2000);
+    return () => window.clearTimeout(timer);
+  }, [appLoadingOpen]);
 
   useEffect(() => {
     if (!busyScrimOpen) return;
@@ -1717,14 +1788,59 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <div className="sandbox-globals-row">
           <Button variant="tonal" size="sm">
             <>
-              <EyeIcon size={16} aria-hidden />
+              <EyeIcon aria-hidden />
               {t("globals.btnViewDetails")}
             </>
           </Button>
           <Button variant="ghost" size="sm">
-            <ClipboardIcon size={16} aria-hidden />
+            <ClipboardIcon aria-hidden />
             {t("globals.btnCopyText")}
           </Button>
+        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="button-icon-label-matrix">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <div className="sandbox-globals-row">
+            <Button>
+              <CheckIcon aria-hidden />
+              {t("globals.btnApply")}
+            </Button>
+            <Button variant="tonal">
+              <RefreshIcon aria-hidden />
+              {t("globals.btnRefresh")}
+            </Button>
+            <Button variant="elevated">
+              <EyeIcon aria-hidden />
+              {t("globals.btnViewDetails")}
+            </Button>
+            <Button variant="default">
+              <SaveIcon aria-hidden />
+              {t("globals.btnSave")}
+            </Button>
+            <Button variant="ghost">
+              <CloseIcon aria-hidden />
+              {t("globals.btnCancel")}
+            </Button>
+            <Button variant="danger">
+              <TrashIcon aria-hidden />
+              {t("globals.btnDelete")}
+            </Button>
+          </div>
+          <div className="sandbox-globals-row">
+            <Button variant="tonal" size="sm">
+              <ClipboardIcon aria-hidden />
+              {t("globals.btnCopyText")}
+            </Button>
+            <Button variant="tonal">
+              <ClipboardIcon aria-hidden />
+              {t("globals.btnCopyText")}
+            </Button>
+            <Button variant="tonal" size="lg">
+              <ClipboardIcon aria-hidden />
+              {t("globals.btnCopyText")}
+            </Button>
+          </div>
+          <SandboxHelp text={t("globals.btnIconLabelHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="split-button">
@@ -1953,6 +2069,17 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
         </GlobalsDemo>
         <GlobalsDemo id="info-hint">
+        <div id="sandbox-status-hint" className="fynns-unit-stack">
+          <Card title={t("globals.infoHintCompleteAria")} actions={
+            <InfoHint icon={<CheckIcon aria-hidden />} size="sm"
+              ariaLabel={t("globals.infoHintCompleteAria")}
+              content={t("globals.infoHintCompleteBody")} />
+          }>
+            <InfoHint icon={<CheckIcon aria-hidden />}
+              ariaLabel={t("globals.infoHintCompleteAria")}
+              content={t("globals.infoHintCompleteBody")} />
+          </Card>
+        </div>
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <InfoHint
             content={t("globals.infoHintIconBody")}
@@ -1989,6 +2116,52 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               />
             </ControlRow>
           </ControlStack>
+          <div id="sandbox-control-row-tip-wrap" style={{ width: "var(--fynns-layout-dialog-max-width-sm)", maxWidth: "100%" }}>
+            <ControlStack columns={1}>
+              <ControlRow
+                label={
+                  <>
+                    <OverflowTip content={t("globals.infoHintWrapLabel")}>
+                      {t("globals.infoHintWrapLabel")}
+                    </OverflowTip>
+                    <InfoHint
+                      size="sm"
+                      content={t("globals.infoHintNarrowBody")}
+                      ariaLabel={t("globals.infoHintNarrowAria")}
+                    />
+                  </>
+                }
+              >
+                <Switch
+                  label=""
+                  ariaLabel={t("globals.infoHintWrapLabel")}
+                  checked={switchOn}
+                  onCheckedChange={setSwitchOn}
+                />
+              </ControlRow>
+              <ControlRow
+                label={
+                  <>
+                    <OverflowTip content={t("globals.infoHintRowLabel")}>
+                      {t("globals.infoHintRowLabel")}
+                    </OverflowTip>
+                    <InfoHint
+                      size="sm"
+                      content={t("globals.infoHintRowBody")}
+                      ariaLabel={t("globals.infoHintRowAria")}
+                    />
+                  </>
+                }
+              >
+                <Switch
+                  label=""
+                  ariaLabel={t("globals.infoHintRowSwitch")}
+                  checked={switchOn}
+                  onCheckedChange={setSwitchOn}
+                />
+              </ControlRow>
+            </ControlStack>
+          </div>
           <div
             id="sandbox-control-row-tip-switch-narrow"
             className="sandbox-select-narrow-host"
@@ -2275,6 +2448,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </DropdownMenu>
           <SandboxHelp text={t("globals.menuSubHelp")} />
         </div>
+        <MenuRemovalDemo />
         <div id="sandbox-scroll-menu-stack">
           <SandboxHelp text={t("globals.scrollMenuStackHelp")} />
           <div className="sandbox-scroll-menu-stack fynns-scroll">
@@ -2693,6 +2867,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
             <SandboxHelp text={t("globals.textareaHelp")} />
           </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="text-selection-composer">
+          <TextSelectionComposerDemo key={locale} />
+        </GlobalsDemo>
+        <GlobalsDemo id="tag-input">
+          <TagInputDemo key={locale} />
         </GlobalsDemo>
         </div>
       </>
@@ -3257,6 +3437,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="inline-alert">
+        <InlineAlertDemo />
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <InlineAlert severity="info" message={t("globals.inlineAlertInfo")} />
           <InlineAlert severity="success" message={t("globals.inlineAlertSuccess")} />
@@ -3265,6 +3446,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <InlineAlert severity="success" message={t("globals.inlineAlertWrap")} />
         </div>
         <SandboxHelp text={t("globals.inlineAlertHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="section-notice">
+          <SectionNoticeDemo />
         </GlobalsDemo>
         <GlobalsDemo id="sandbox-inline-alert-recovery">
         <div
@@ -3314,6 +3498,38 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="snackbar">
         <div className="sandbox-globals-row">
+          {(["default", "info", "success", "warning", "error"] as const).map((severity) => (
+            <Button
+              key={severity}
+              size="sm"
+              variant="tonal"
+              onClick={() => snackbar(t("globals.snackbarStatusMessage"), {
+                severity,
+                duration: "long",
+                dismissible: true,
+                dismissAriaLabel: t("globals.snackbarDismiss"),
+              })}
+            >
+              {t(`globals.snackbarVariant_${severity}`)}
+            </Button>
+          ))}
+          {(["info", "success", "warning", "error"] as const).map((severity) => (
+            <Button
+              key={`${severity}-text`}
+              size="sm"
+              variant="ghost"
+              onClick={() => snackbar(t("globals.snackbarStatusMessage"), {
+                severity,
+                icon: false,
+                duration: "long",
+              })}
+            >
+              {t(`globals.snackbarText_${severity}`)}
+            </Button>
+          ))}
+          <Button size="sm" variant="ghost" onClick={() => snackbar(t("globals.snackbarShort"), { icon: true })}>
+            {t("globals.snackbarDefaultIcon")}
+          </Button>
           <Button
             size="sm"
             variant="tonal"
@@ -3344,6 +3560,40 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             size="sm"
             variant="tonal"
             onClick={() =>
+              snackbar(t("globals.snackbarShort"), {
+                action: {
+                  label: t("globals.snackbarView"),
+                  onClick: () => snackbar(t("globals.snackbarViewed")),
+                  variant: "tonal",
+                },
+                dismissible: true,
+                dismissAriaLabel: t("globals.snackbarDismiss"),
+              })
+            }
+          >
+            {t("globals.snackbarActionDismissBtn")}
+          </Button>
+          <Button
+            size="sm"
+            variant="tonal"
+            onClick={() =>
+              snackbar(t("globals.snackbarShort"), {
+                action: {
+                  label: t("globals.snackbarView"),
+                  onClick: () => snackbar(t("globals.snackbarViewed")),
+                  variant: "tonal",
+                },
+                duration: "long",
+                dismissible: false,
+              })
+            }
+          >
+            {t("globals.snackbarActionOnlyBtn")}
+          </Button>
+          <Button
+            size="sm"
+            variant="tonal"
+            onClick={() =>
               snackbar(t("globals.snackbarIndefiniteMsg"), {
                 duration: "indefinite",
                 dismissible: true,
@@ -3353,6 +3603,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           >
             {t("globals.snackbarIndefiniteBtn")}
           </Button>
+        </div>
+        <div className="fynns-unit-stack" id="sandbox-snackbar-inline-reference">
+          {(["info", "success", "warning", "error"] as const).map((severity) => (
+            <InlineAlert key={severity} severity={severity} message={t("globals.snackbarStatusMessage")} />
+          ))}
         </div>
         <SandboxHelp text={t("globals.snackbarHelp")} />
         </GlobalsDemo>
@@ -4115,18 +4370,34 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </ChatMessage>
         </div>
         </GlobalsDemo>
+        <GlobalsDemo id="chat-chevron">
+          <ChatChevronDemo />
+        </GlobalsDemo>
+        <GlobalsDemo id="chat-question">
+          <ChatQuestionSequenceDemo key={locale} />
+        </GlobalsDemo>
+        <GlobalsDemo id="thinking-reference">
+          <ChatThinkingReferenceDemo />
+        </GlobalsDemo>
+        <GlobalsDemo id="thinking-details">
+          <ChatThinkingDetailsDemo key={locale} />
+        </GlobalsDemo>
+        <GlobalsDemo id="thinking-clock">
+          <ChatThinkingClockDemo key={locale} />
+        </GlobalsDemo>
         <GlobalsDemo id="thinking">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <SandboxHelp text={t("globals.thinkingActionsHelp")} />
-          <div className="sandbox-globals-row sandbox-globals-row--stack sandbox-globals-thinking-actions">
+          <ChatThinkingStack>
             {thinkingActions.map((action) => (
               <ChatThinking
                 key={action}
+                variant="status"
                 streaming
                 streamingLabel={action}
               />
             ))}
-          </div>
+          </ChatThinkingStack>
           <ChatThinking
             durationMs={3800}
             streamingLabel={t("globals.thinkingStreaming")}
@@ -4150,6 +4421,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             {thinkingStreaming
               ? undefined
               : t("globals.thinkingAnswer")}
+          </ChatMessage>
+          <ChatMessage
+            role="assistant"
+            thinking={
+              <ChatThinking
+                durationMs={thinkingDoneMs}
+                label={t("globals.thinkingLabel")}
+                durationLabel={(n) => t("globals.thinkingDuration").replace("{n}", String(n))}
+              >
+                {Array(8).fill(t("globals.thinkingBody")).join(" ")}
+              </ChatThinking>
+            }
+          >
+            {Array(8).fill(t("globals.thinkingAnswer")).join(" ")}
           </ChatMessage>
           <div className="sandbox-globals-row">
             <Button
@@ -5750,6 +6035,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="card">
+          <ResponsiveHeaderDemo />
         <div className="sandbox-globals-cards">
           <Card
             className="sandbox-globals-card"
@@ -6690,6 +6976,47 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </Dialog>
         <SandboxHelp text={t("globals.dialogNestedScrollHelp")} />
         </GlobalsDemo>
+        <GlobalsDemo id="dialog-viewport">
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Button size="sm" onClick={() => setDialogViewportOpen(true)}>
+            {t("globals.dialogViewportOpen")}
+          </Button>
+        </div>
+        <Dialog
+          open={dialogViewportOpen}
+          onOpenChange={setDialogViewportOpen}
+          title={t("globals.dialogViewportTitle")}
+          description={t("globals.dialogViewportDescription")}
+          size="viewport"
+          showCloseButton
+          closeAriaLabel={t("globals.dialogClose")}
+          feet={
+            <div className="fynns-control-cluster fynns-control-cluster--end-align">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setDialogViewportOpen(false)}
+              >
+                {t("globals.dialogCreateCancel")}
+              </Button>
+              <Button size="sm" onClick={() => setDialogViewportOpen(false)}>
+                {t("globals.dialogCreateAction")}
+              </Button>
+            </div>
+          }
+        >
+          <CodeBlock
+            variant="editable"
+            label="sample.config.json"
+            language="json"
+            wrap={false}
+            autoGrow={false}
+            value={dialogViewportCode}
+            onChange={setDialogViewportCode}
+          />
+        </Dialog>
+        <SandboxHelp text={t("globals.dialogViewportHelp")} />
+        </GlobalsDemo>
       </>
         )}
       </GlobalsCategory>
@@ -6733,8 +7060,39 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="busy-region">
+        <ContentBoundaryDemo />
+        <div id="sandbox-loading-skeleton" className="fynns-unit-stack">
+          <SandboxHelp text={t("globals.loadingSkeletonHelp")} />
+          <LoadingSkeleton id="sandbox-loading-skeleton-text" label={t("globals.busyRegionLabel")} />
+          <BusyRegion busy={busyRegion} label={t("globals.busyRegionLabel")}
+            skeleton={<LoadingSkeleton variant="block" fill aria-hidden />}>
+            <Surface data-loading-target="preview" padded
+              style={{ height: "var(--fynns-layout-skeleton-block-height)" }}>
+              {t("globals.busyRegionBody")}
+            </Surface>
+          </BusyRegion>
+        </div>
+        <div className="fynns-unit-stack">
+          <SandboxHelp text={t("globals.loadingSkeletonPaneHelp")} />
+          <div id="sandbox-loading-chat-pane" className="sandbox-loading-chat-stage">
+            {busyRegionFill ? <BusyRegion busy fill label={t("globals.busyRegionLabel")} /> : (
+              <Chat>
+                <ChatThread>
+                  <ChatMessage role="assistant">{t("globals.busyRegionBody")}</ChatMessage>
+                </ChatThread>
+              </Chat>
+            )}
+          </div>
+          <div id="sandbox-loading-chat-thread" className="sandbox-fill-column-stage">
+            <Chat>
+              <ChatThread empty={<BusyRegion busy fill label={t("globals.busyRegionLabel")} />} />
+            </Chat>
+          </div>
+        </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Collapsible title={t("globals.archivedLoadingTitle")}>
           <BusyRegion
+            id="sandbox-archived-loading-ring"
             busy={busyRegion}
             label={t("globals.busyRegionLabel")}
             message={t("globals.busyRegionMessage")}
@@ -6743,6 +7101,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <p style={{ margin: 0 }}>{t("globals.busyRegionBody")}</p>
             </Card>
           </BusyRegion>
+            <SandboxHelp text={t("globals.archivedLoadingHelp")} />
+          </Collapsible>
           <div className="sandbox-globals-row">
             <Button size="sm" onClick={() => setBusyRegion(true)} disabled={busyRegion}>
               {t("globals.busyRegionStart")}
@@ -6767,7 +7127,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             busy={busyRegionDeterminate}
             indicator="linear"
             label={t("globals.busyRegionLabel")}
-            message={t("globals.busyRegionMessage")}
             value={0.55}
           >
             <Card title={t("globals.busyRegionTitle")}>
@@ -6780,7 +7139,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               busy
               indicator="linear"
               label={t("globals.busyRegionNarrowLabel")}
-              message={t("globals.busyRegionNarrowMessage")}
               value={0.35}
             />
           </div>
@@ -6805,7 +7163,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 fill
                 busy={busyRegionFill}
                 label={t("globals.busyRegionFillLabel")}
-                message={t("globals.busyRegionFillMessage")}
               />
             </FillColumn>
           </div>
@@ -6886,7 +7243,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   fill
                   busy
                   label={t("globals.paneLoadErrorBusyLabel")}
-                  message={t("globals.paneLoadErrorBusyMessage")}
                 />
               ) : paneLoadPhase === "error" ? (
                 <div className="fynns-unit-stack">
@@ -6954,7 +7310,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <BusyRegion
               busy
               label={t("globals.busyRegionDialogLabel")}
-              message={t("globals.busyRegionDialogMessage")}
             />
           </Dialog>
           <SandboxHelp text={t("globals.busyRegionDialogHelp")} />
@@ -6964,7 +7319,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <BusyRegion
                 busy
                 label={t("globals.busyRegionColdLabel")}
-                message={t("globals.busyRegionColdMessage")}
               />
             ) : (
               <div className="fynns-unit-stack">
@@ -7027,7 +7381,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <BusyRegion
                 busy={busyRegionFieldBusy}
                 label={t("globals.busyRegionFieldBusyLabel")}
-                message={t("globals.busyRegionFieldBusyMessage")}
               >
                 <CodeBlock
                   variant="plain"
@@ -7229,6 +7582,30 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="busy-scrim">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <SandboxHelp text={t("globals.appLoadingScreenHelp")} />
+          <Button id="sandbox-app-loading-open" onClick={() => {
+            setAppLoadingCustomLogo(false);
+            setAppLoadingName(undefined);
+            setAppLoadingOpen(true);
+          }}>{t("globals.appLoadingScreenOpen")}</Button>
+          <Button id="sandbox-app-loading-custom-open" variant="tonal" onClick={() => {
+            setAppLoadingCustomLogo(true);
+            setAppLoadingName(undefined);
+            setAppLoadingOpen(true);
+          }}>{t("globals.appLoadingScreenCustomOpen")}</Button>
+          <Button id="sandbox-app-loading-core-open" variant="ghost" onClick={() => {
+            setAppLoadingCustomLogo(false);
+            setAppLoadingName("");
+            setAppLoadingOpen(true);
+          }}>{t("globals.appLoadingScreenCoreOpen")}</Button>
+          <AppLoadingScreen
+            open={appLoadingOpen}
+            label={t("globals.appLoadingScreenLabel")}
+            name={appLoadingName}
+            logoSrc={appLoadingCustomLogo ? `data:image/svg+xml,${encodeURIComponent(
+              '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M32 8 56 32 32 56 8 32Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/></svg>',
+            )}` : undefined}
+          />
           <Button onClick={() => setBusyScrimOpen(true)}>
             {t("globals.busyScrimOpen")}
           </Button>
@@ -7238,13 +7615,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <BusyScrim
             open={busyScrimOpen}
             label={t("globals.busyScrimLabel")}
-            message={t("globals.busyScrimMessage")}
           />
           <BusyScrim
             open={busyScrimDeterminateOpen}
             indicator="linear"
             label={t("globals.busyScrimLabel")}
-            message={t("globals.busyScrimMessage")}
             value={0.7}
           />
           <SandboxHelp text={t("globals.busyScrimHelp")} />
@@ -7512,7 +7887,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   ? (busyTaskAbort.label ?? t("globals.busyPaintLabel"))
                   : t("globals.busyPaintLabel")
             }
-            message={t("globals.busyPaintMessage")}
           />
         </div>
         </GlobalsDemo>
@@ -7759,6 +8133,42 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
         </GlobalsDemo>
         <GlobalsDemo id="code-block">
+        <div id="sandbox-content-expand" className="fynns-content-flow">
+          <ExpandableCodeBlock
+            id="sandbox-expand-preview"
+            label={t("globals.codeBlockLabel")}
+            language="text"
+            code={Array.from({ length: 24 }, (_, i) => `export const field${i + 1} = "var(--fynns-color-text)";`).join("\n")}
+            copyAriaLabel={t("globals.codeBlockCopy")}
+            expandLabel={t("globals.chatExpand")}
+            collapseLabel={t("globals.chatCollapse")}
+          />
+        </div>
+        <div id="sandbox-content-expand-text" className="fynns-content-flow">
+          <SandboxHelp text="ExpandableText: measured line preview; short text needs no disclosure." />
+          <ExpandableText text={"Supporting information helps readers explore a topic without losing their place. The opening lines remain visible, and the complete description can be revealed when more context is useful. A short description needs no extra control. ".repeat(8)}
+            expandLabel={t("globals.chatExpand")} collapseLabel={t("globals.chatCollapse")} />
+          <ExpandableText text={t("globals.codeBlockLabel")}
+            expandLabel={t("globals.chatExpand")} collapseLabel={t("globals.chatCollapse")} />
+        </div>
+        <div id="sandbox-content-expand-units" className="fynns-content-flow">
+          <SandboxHelp text="ExpandableContent: the preview, extra fields and disclosure share one card shell." />
+          <Card title={t("globals.codeBlockLabel")}>
+            <ExpandableContent
+              expandLabel={t("globals.chatExpand")} collapseLabel={t("globals.chatCollapse")}
+              preview={<p>{t("globals.codeBlockLongLine")}</p>}>
+              <CodeBlock variant="plain" language="ts" code="export const ready = true;"
+                copyAriaLabel={t("globals.codeBlockCopy")} />
+              <Input aria-label={t("globals.codeBlockLabel")} defaultValue={t("globals.codeBlockLabel")} />
+            </ExpandableContent>
+          </Card>
+        </div>
+        <div className="fynns-content-flow">
+          <ExpandToggle expanded={toggleDemoExpanded} onExpandedChange={setToggleDemoExpanded}
+            controls="sandbox-expand-toggle-detail" expandLabel={t("globals.chatExpand")}
+            collapseLabel={t("globals.chatCollapse")} />
+          <p id="sandbox-expand-toggle-detail" hidden={!toggleDemoExpanded}>{t("globals.codeBlockLongLine")}</p>
+        </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <CodeBlock
             label={t("globals.codeBlockLabel")}
@@ -7945,6 +8355,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="diff-view">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <DiffViewDemo />
           <DiffView
             maxHeight={12 * 16}
             lines={[
@@ -7956,6 +8367,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <SandboxHelp text={t("globals.diffViewHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="diff-dialog">
+          <DiffDialogDemo />
         </GlobalsDemo>
       </>
         )}
@@ -8098,13 +8512,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               leading={
                 <>
                   <StatusBarItem>{t("globals.statusBarBranch")}</StatusBarItem>
-                  <StatusBarItem>
-                    {t("globals.statusBarWorkspace")}
-                  </StatusBarItem>
-                </>
-              }
-              trailing={
-                <>
                   <StatusBarItem
                     onClick={() =>
                       snackbar(t("globals.statusBarProblemsToast"), {
@@ -8115,6 +8522,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   >
                     {t("globals.statusBarProblems")}
                   </StatusBarItem>
+                  <StatusBarItem>
+                    {t("globals.statusBarWorkspace")}
+                  </StatusBarItem>
+                </>
+              }
+              trailing={
+                <>
                   <StatusBarItem>
                     {t("globals.statusBarEncoding")}
                   </StatusBarItem>
@@ -8382,6 +8796,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Button size="sm" variant="default">{t("globals.rhythmGridD")}</Button>
         </Grid>
         <SandboxHelp text={t("globals.rhythmAgentHint")} />
+        <ContentRhythmDemo />
         </GlobalsDemo>
 
         <GlobalsDemo id="provider-settings">

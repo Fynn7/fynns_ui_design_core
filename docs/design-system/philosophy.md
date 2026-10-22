@@ -55,6 +55,12 @@ belong in a consumer’s own doc.
    keeps full `--fynns-layout-content-inset` (18dp) even when FieldStack is the
    first child. **Breadcrumb** path links stay undecorated (real `Button` `ghost`
    `sm`). Tooltips also describe *dynamic* state (e.g. why a control is disabled).
+   **Popup ownership:** Tooltip hover/focus belongs to its DOM trigger, never
+   to portaled menu/submenu descendants. Core suppresses the trigger tooltip
+   and cancels pending hover while its `aria-haspopup` control has
+   `aria-expanded="true"`; clipped rows retain their own OverflowTip. Consumers
+   can keep wrapping DropdownMenu in Tooltip without local open-state patches.
+   Browser regression: `e2e/treaty/tooltip-menu-portal.spec.ts`.
    **Positioning conventions** (tooltip must not cover its trigger or adjacent
    related content):
    - Icon buttons → default `side="top" align="center"`.
@@ -123,8 +129,10 @@ belong in a consumer’s own doc.
    only. Vertical scroll hosts must pin `overflow-x: clip` (not bare
    `overflow: auto`). Live `#page-scroll` (scroll mid-pane → both edges fade) /
    `#sandbox-fill-column-guide` (scroll capped guide Surface → bottom edge fades).
-5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
-   `CircularProgress` (inline / determinate), `BusyScrim` (fullscreen blocking) /
+5. **Always show loading / empty / error state.** Use [content-position skeletons](loading.md) for upcoming UI / text;
+   loading copy is accessible-only, never visible. Rings are permanently archived
+   / deprecated and strongly discouraged; `LoadingSkeleton`
+   (matching content footprints), `LinearProgress value` (real determinate progress), `BusyScrim` (fullscreen blocking) /
    `BusyRegion` (sectional **soft frosted blur** + tokenized gray mask
    `--fynns-color-busy-region-mask` + **one** progress chrome + message —
    never `--fynns-color-overlay` / BusyScrim; never a consumer `surface-*`

@@ -7,7 +7,9 @@ import { OverflowTip, overflowTipText } from "./OverflowTip";
  * Button primitive. The single source of truth for `<button>` styling across
  * fynns apps. Default variant is `primary` (M3 filled). Style axes are
  * `variant`, `size`, `active`, `iconOnly`, `loading` only; any other visual
- * tweak must go through `--fynns-*` overrides, never inline color.
+ * tweak must go through `--fynns-*` overrides, never inline color. Consumer
+ * action buttons should normally render a semantic leading icon followed by a
+ * visible label; core supplies their alignment and one shared control gap.
  */
 export type ButtonVariant =
   | "default"
@@ -27,7 +29,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   danger?: boolean;
   /** Layout-only: renders a square icon button. */
   iconOnly?: boolean;
-  /** Shows a spinner and disables the control. */
+  /** @deprecated Permanently archived ring wait. Prefer disabled + aria-busy with content-position skeletons. */
   loading?: boolean;
   children?: ReactNode;
 };
@@ -91,8 +93,11 @@ export const Button = forwardRef(function Button(
       type={type}
       className={classes}
       disabled={disabled || loading}
-      aria-busy={loading || undefined}
-      aria-pressed={active || undefined}
+      aria-busy={
+        (rest["aria-busy"] as boolean | "true" | "false" | undefined) ??
+        (loading || undefined)
+      }
+      aria-pressed={rest["aria-pressed"] ?? (active || undefined)}
     >
       {loading ? (
         iconOnly ? (

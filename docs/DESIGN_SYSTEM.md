@@ -31,12 +31,17 @@ day-to-day consume. Publish / optional Packages bumps:
 | --- | --- |
 | Design philosophy & UX principles | [`design-system/philosophy.md`](design-system/philosophy.md) |
 | Hard rules (Do / Don't) | [`design-system/hard-rules.md`](design-system/hard-rules.md) |
+| Workspace defaults / error feedback | [`design-system/workspace-chrome.md`](design-system/workspace-chrome.md) |
 | Tokens | [`design-system/tokens.md`](design-system/tokens.md) |
 | Component catalog (Keep set) | [`design-system/catalog.md`](design-system/catalog.md) |
 | Platform targeting | [`design-system/platform.md`](design-system/platform.md) |
+| Content expansion | [`design-system/content-expansion.md`](design-system/content-expansion.md) |
 | Content density | [`design-system/content-density.md`](design-system/content-density.md) |
+| Body / caption / gallery spacing | [`design-system/content-rhythm.md`](design-system/content-rhythm.md) |
 | Chrome type & row proportion | [`design-system/chrome-proportion.md`](design-system/chrome-proportion.md) |
 | Form rhythm (toolbar / FieldStack / inset) | [`design-system/form-rhythm.md`](design-system/form-rhythm.md) |
+| Categorized settings / immediate save / path drafts | [`design-system/settings.md`](design-system/settings.md) |
+| Editable tag list | [`design-system/tag-input.md`](design-system/tag-input.md) |
 | Icons | [`design-system/icons.md`](design-system/icons.md) |
 | Adding to the system | [`design-system/contributing.md`](design-system/contributing.md) |
 
@@ -45,18 +50,25 @@ day-to-day consume. Publish / optional Packages bumps:
 | Topic | Anchor |
 | --- | --- |
 | Form / FieldStack / Dialog | `#form-recipe`, `#field-header`, `#sandbox-field-stack-grid-select` |
+| Categorized settings dialog | `#layouts-demo-settings-dialog` |
 | List catalogs / density | `#list`, `#page-scroll`, `#sandbox-list-status-action`, `#sandbox-list-repo-path-actions`, `#sandbox-list-recipe-catalog` |
 | Timeline | `#timeline` |
 | Toolbar / ControlRow / end-align | `#rhythm` |
 | Provider Manage (active-only status) | `#provider-settings` |
 | Banner strip + dismiss center | `#banner` |
-| Busy / loading | `#busy-region`, `#sandbox-pane-load-error` |
+| Workspace chrome / persistent InlineAlert | `#layouts-demo-workspace-chrome` / `#sandbox-inline-alert-dismiss` |
+| One canvas toolbar / document menu / continuous inspector / persistent notices | `#layouts-demo-canvas-workspace` |
+| Busy / loading ([skeleton convention](design-system/loading.md)) | `#sandbox-loading-skeleton`, `#sandbox-loading-content-boundary`, `#busy-region`, `#sandbox-pane-load-error` |
 | Busy hang guards (timeout/abort) | `#busy-paint`, `#sandbox-busy-task-timeout`, `#sandbox-busy-task-abort`, `#sandbox-busy-task-generation`, `#sandbox-button-loading-task`, `#sandbox-confirm-loading-trap`, `#sandbox-chat-busy-no-stop` |
 | CodeBlock file body | `#code-block` |
+| Chat question / Other input / thinking variants / event order | `#chat-question` / `#thinking` ([contract](../llm/CHAT_SEQUENCE.md)) |
+| Tool summary / Thinking / Thought label→chevron gap | `#chat-chevron` ([contract](../llm/CHAT_SEQUENCE.md)) |
 | Env key FieldHeader | `#env-check` / `#password` / `#provider-settings` |
 | Card head Select / draft / chrome icons | `#sandbox-card-head-select`, `#sandbox-card-draft-actions`, `#sandbox-card-chrome-icon-actions`, `#sandbox-card-head-primary-end` |
 | Destination shell / EndAside | `#layouts-demo-shell`, `#layouts-demo-drill-in`, `#layouts-demo-fill-column` |
 | Mode drawer / bulk | `#layouts-demo-navigation-drawer` |
+| Session sidebar / context menus | `#sandbox-chat-sessions-drawer` / `#layouts-demo-chat-sessions-drawer` |
+| Scoped list selection / Ctrl+A / batch menus | `#sandbox-list-selection` / `#layouts-demo-list-selection` ([contract](../llm/LIST_SELECTION.md)) |
 | Mode drawer catalog load fail | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` |
 | Command chrome proportion | `#command-palette` |
 | Flush-start overlay | `#fullscreen-flush` |

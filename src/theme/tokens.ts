@@ -41,6 +41,10 @@ export const COLOR_TOKENS = {
   "border-strong": "#164038",
   text: "#e2f0ed",
   "text-muted": "#7a9e98",
+  /** Neutral secondary ink for structured reasoning, independent of brand hue. */
+  "chat-thinking-text": "#8fa1aa",
+  "chat-thinking-heading": "#adc3ce",
+  "chat-thinking-code": "#e9b17a",
   accent: "#2dd4bf",
   "accent-dim": "#14b8a6",
   /** Primary hover state. oklch(78% 0.12 192) */
@@ -80,6 +84,11 @@ export const COLOR_TOKENS = {
   danger: "#f87171",
   "danger-border": "rgba(248, 113, 113, 0.5)",
   info: "#60a5fa",
+  /** Flat snackbar tones: InlineAlert's 12% semantic wash rendered on the app canvas. */
+  "snackbar-info-surface": "color-mix(in srgb, var(--fynns-color-info) 12%, var(--fynns-color-app-bg))",
+  "snackbar-success-surface": "color-mix(in srgb, var(--fynns-color-success) 12%, var(--fynns-color-app-bg))",
+  "snackbar-warning-surface": "color-mix(in srgb, var(--fynns-color-warning) 12%, var(--fynns-color-app-bg))",
+  "snackbar-error-surface": "color-mix(in srgb, var(--fynns-color-danger) 12%, var(--fynns-color-app-bg))",
   /** Keyboard ring fill — keep faint (fields use quiet border-mix instead). */
   focus: "rgba(45, 212, 191, 0.22)",
   overlay: "rgba(0, 0, 0, 0.48)",
@@ -90,6 +99,11 @@ export const COLOR_TOKENS = {
    * (full-viewport BusyScrim only — too dark for sectional wells).
    */
   "busy-region-mask": "rgba(0, 0, 0, 0.20)",
+  /** Quiet skeleton fill and ChatThinking-like accent-into-muted sweep. */
+  "skeleton-base": "color-mix(in srgb, var(--fynns-color-text-muted) 16%, var(--fynns-color-app-bg))",
+  "skeleton-highlight": "color-mix(in srgb, var(--fynns-color-accent) 24%, var(--fynns-color-skeleton-base))",
+  "app-loading-logo-base": "color-mix(in srgb, var(--fynns-color-text-muted) 40%, var(--fynns-color-app-bg))",
+  "app-loading-logo-highlight": "var(--fynns-color-text-muted)",
   /** Legacy toast surface; kept for backward compatibility. */
   "toast-surface": "#062126",
   "control-surface": "rgba(255, 255, 255, 0.02)",
@@ -371,6 +385,8 @@ export const Z_TOKENS = {
   "scroll-overlay-flyout": "66",
   toast: "70",
   tooltip: "8000",
+  /** Opaque startup covers every application layer, including portaled rails / tips. */
+  "app-loading": "8100",
 } as const;
 
 /**
@@ -617,7 +633,8 @@ export const TOOLBAR_TOKENS = {
   height: "var(--fynns-layout-bar-height)",
   "pad-inline": "0.5rem",
   "pad-block": "0.25rem",
-  "actions-gap": "0.125rem",
+  /** Pure icon actions share the canonical 4dp cluster rhythm. */
+  "actions-gap": "var(--fynns-layout-control-cluster-gap)",
   /** IconButton / Fab sm hit target inside the bar. */
   "action-size": "2.5rem",
   /** Matches `--fynns-size-icon` (16dp). */
@@ -792,6 +809,8 @@ export const CHATMESSAGE_TOKENS = {
    * `name-size` — no separate THINKING_* token group.
    */
   "thinking-gap": "0.375rem",
+  /** Consecutive quiet status rows: unit breath + existing thinking clearance. */
+  "thinking-stack-gap": "calc(var(--fynns-layout-unit-stack-gap) + var(--fynns-chatmessage-thinking-gap))",
   /** Gap between optional icon / label / chevron in the thinking trigger row. */
   "thinking-trigger-gap": "0.375rem",
   /**
@@ -810,12 +829,46 @@ export const CHATMESSAGE_TOKENS = {
    */
   "thinking-body-pad-block": "var(--fynns-layout-field-stack-gap)",
   "thinking-body-pad-inline": "0",
+  /** Structured reasoning: compact neutral text with indented nested disclosures. */
+  "thinking-font": '"Segoe UI", Arial, sans-serif',
+  "thinking-text-top": "0.375rem",
+  "thinking-static-gap": "1rem",
+  "thinking-reference-block-inset": "0.5rem",
+  "thinking-detail-size": "0.875rem",
+  "thinking-detail-line-height": "1.5714285714",
+  "thinking-detail-gap": "0.5rem",
+  "thinking-detail-indent": "1.25rem",
+  /** Quiet curved branch into each nested thinking row; never a status dot. */
+  "thinking-connector-width": "0.5rem",
+  "thinking-connector-stroke": "1px",
+  "thinking-connector-radius": "0.5rem",
+  "thinking-connector-color": "color-mix(in srgb, var(--fynns-color-chat-thinking-text) 20%, transparent)",
+  "thinking-guide-inset": "0.5rem",
+  "thinking-group-inset": "1.125rem",
+  "thinking-group-gap": "2.125rem",
+  /** Root gap owns heading-to-first-row spacing; do not stack another top inset. */
+  "thinking-group-top": "0",
+  "thinking-root-gap": "0.875rem",
+  "thinking-child-gap": "0.75rem",
+  "thinking-icon-size": "0.875rem",
+  "thinking-dot-size": "0.625rem",
+  "thinking-label-inset": "1.5rem",
+  "thinking-body-guide-inset": "0.3125rem",
+  "thinking-artifact-radius": "0.3125rem",
+  "thinking-artifact-pad-block": "0.125rem",
+  "thinking-artifact-pad-inline": "0.375rem",
+  "thinking-artifact-gap": "0.375rem",
+  "thinking-artifact-line-height": "1rem",
+  "thinking-inline-code-pad-block": "0.125rem",
+  "thinking-inline-code-pad-inline": "0.3125rem",
+  "thinking-reference-inset": "0.8125rem",
   /**
    * `ChatActivity` Wave 2 chain chrome (collapsible header + status tree).
    * Separate from `thinking-*` — single-block vs multi-step rail.
    */
   "activity-gap": "0.375rem",
-  "activity-trigger-gap": "0.375rem",
+  /** Tool-count summaries and Thinking/Thought share one label→chevron gap. */
+  "activity-trigger-gap": "var(--fynns-chatmessage-thinking-trigger-gap)",
   /**
    * Vertical gap between step rows (rail spans this + half next band).
    * Aliases `unit-stack-gap` (16dp) — same breath as Timeline `item-gap`
@@ -893,6 +946,20 @@ export const CHAT_TOKENS = {
    * second independent layout literal.
    */
   "thread-pad-inline": "var(--fynns-layout-dialog-inset)",
+  /**
+   * Block inset above the first turn. Aliases **`thread-gap`**, never
+   * `content-pad-block`: a thread resting at the top must read as one
+   * continuous column, so the opening turn breathes exactly like every turn
+   * below it. A narrower top (16dp against a 32dp gap) pinned the first
+   * bubble to the ceiling and read as clipped.
+   */
+  "thread-pad-block-start": "var(--fynns-chat-thread-gap)",
+  /**
+   * Block inset at the scroll end, before the composer clearance the thread
+   * adds on top of it. Kept separate from `thread-pad-block-start` because
+   * the two ends answer different questions (first turn vs. docked composer);
+   * consumers reusing this key for their own thread floor keep 16dp.
+   */
   "thread-pad-block": "var(--fynns-layout-content-pad-block)",
   /** Scroll/fade clearance above sticky composer (~28dp). */
   "composer-scroll-pad": "1.75rem",
@@ -1215,6 +1282,33 @@ export const CAROUSEL_TOKENS = {
 } as const;
 
 /**
+ * Menu row end action (`DropdownMenuItem` `trailing`, ≥ **0.5.307**) —
+ * overlay-reveal strip inside the 48dp menu row, same vocabulary as List
+ * `--with-end` / NavDrawer. `--fynns-menu-<key>`.
+ */
+export const MENU_TOKENS = {
+  /**
+   * Row end action disk — the 32dp `sm` IconButton strip. A bare `md`
+   * IconButton is clamped to it by `overlays.css` so it cannot outgrow the
+   * 48dp row (same clamp as the NavDrawer item end cluster).
+   */
+  "actions-disk": "2rem",
+  /**
+   * Preceding content → overlay row action (hover / focus-within / coarse).
+   * Aliases `--fynns-layout-control-cluster-gap` (4dp) — the rhythm of any
+   * sibling immediately left of an IconButton, not a new menu gap.
+   */
+  "actions-gap": "var(--fynns-layout-control-cluster-gap)",
+  /**
+   * End action opacity fade (idle → hover / focus-within). Aliases
+   * `--fynns-duration-slow` (360ms) — same family as List / NavDrawer /
+   * ChatMessage `actions-reveal`. Do **not** use `duration-fast` (140ms reads
+   * as snap).
+   */
+  "actions-reveal": "var(--fynns-duration-slow)",
+} as const;
+
+/**
  * Navigation rail geometry (at 16px rem).
  * Container 80dp; destination highlight wraps icon (+ label when shown).
  * Icon-only / unlabeled hover = TopAppBar IconButton target (40dp).
@@ -1355,6 +1449,10 @@ export const NAVDRAWER_TOKENS = {
   "headline-size": "0.875rem",
   "headline-line": "1.25",
   "headline-pad-block": "0.5rem",
+  /** Sheet edge / chrome divider to the first title line box: 24dp. */
+  "title-edge-inset": "var(--fynns-layout-dialog-inset)",
+  /** Internal Divider to section title line box: 16dp. */
+  "title-divider-gap": "var(--fynns-layout-unit-stack-gap)",
   /** Section / sheet title inset past body pad (aligns with item icon column). */
   "headline-pad-inline": "1rem",
   /**
@@ -1411,10 +1509,19 @@ export const LAYOUT_TOKENS = {
   /** Plain Table text caps at a share of the viewport, with a desktop ceiling. */
   "table-text-max-width": "min(40vw, 32rem)",
   "dialog-max-width": "32rem",
+  /** Floating selection-reference input capsule; consumers may override its width. */
+  "selection-composer-width": "28rem",
   /** Within M3 basic dialog max (560dp). Ceiling only — panel is content-fit. */
   "dialog-max-width-sm": "24rem",
   "dialog-max-width-md": "32rem",
   "dialog-max-width-lg": "35rem",
+  /** Categorized preferences: inset two-pane dialog, compact top nav on narrow hosts. */
+  "settings-dialog-width": "52rem",
+  "settings-nav-width": "11rem",
+  "settings-content-min-height": "22rem",
+  /** Large inset workspace dialog; distinct from M3 basic and fullscreen. */
+  "dialog-viewport-width": "88vw",
+  "dialog-viewport-height": "82dvh",
   /** Content side sheet (M3 ~400dp); not NavigationDrawer width. */
   "drawer-width": "25rem",
   /**
@@ -1501,6 +1608,17 @@ export const LAYOUT_TOKENS = {
    * read as a corrupted / glitchy frame (heavy blur → that risk).
    */
   "busy-region-backdrop-blur": "3px",
+  "skeleton-line-sm": "0.5rem",
+  "skeleton-line-md": "1.25rem",
+  "skeleton-line-lg": "1.5rem",
+  "skeleton-row-gap": "1.75rem",
+  "skeleton-block-height": "8rem",
+  "app-loading-logo-size": "3rem",
+  /** Permanently archived loading ring geometry (legacy calls only). */
+  "loading-ring-sm": "1rem",
+  "loading-ring-md": "1.6rem",
+  "loading-ring-lg": "2.5rem",
+  "loading-ring-stroke": "2px",
   /**
    * Soft cap for `FillColumn` `header` on `DestinationAppShell` canvas when the
    * preview band hosts a Card / PageScroll — keeps Chat visible in `main`.
@@ -1709,6 +1827,16 @@ export const LAYOUT_TOKENS = {
    */
   "unit-stack-gap": "1rem",
   /**
+   * Control / tools band → first data-content unit (24dp). Apply the
+   * `.fynns-content-boundary` marker to that first unit in every request state,
+   * including its skeleton, so loading does not move the content start.
+   */
+  "content-boundary-gap": "1.5rem",
+  /** Content rhythm: image→caption 8dp; tiles and prose blocks 16dp. */
+  "media-caption-gap": "var(--fynns-space-sm)",
+  "media-grid-gap": "var(--fynns-layout-unit-stack-gap)",
+  "media-min-width": "12rem",
+  /**
    * Max inline size for `Switch` `labelSide="end"` captions (7rem).
    * Ellipsis when the ControlStack / Card host is narrower than the label —
    * prefer truncation over overflowing the frame.
@@ -1752,6 +1880,12 @@ export const LAYOUT_TOKENS = {
    * `end-aside-sheet-height` when a taller canvas is needed.
    */
   "end-aside-sheet-max-height": "min(52dvh, 22rem)",
+  /**
+   * Absolute viewport ceiling for a narrow EndAside, even when a consumer
+   * raises the preferred sheet max-height for a large preview. Preserve room
+   * for the main canvas and its docked Chat composer.
+   */
+  "end-aside-sheet-viewport-max-height": "60dvh",
   /**
    * Preferred main canvas size beside `EndAside` (`flex-basis`). Shrink with
    * `min-width: 0` in CSS — never `min(token, 100%)` of the flex parent row.
@@ -2025,6 +2159,22 @@ export const CODE_TOKENS = {
   invalid: "#f44747",
 } as const;
 
+/** Read-only unified diff: theme-relative surfaces and bounded reading geometry. */
+const DIFF_TOKENS = {
+  "add-ink": "color-mix(in srgb, var(--fynns-color-success) 65%, var(--fynns-color-text))",
+  "del-ink": "color-mix(in srgb, var(--fynns-color-danger) 65%, var(--fynns-color-text))",
+  "muted-ink": "color-mix(in srgb, var(--fynns-color-text-muted) 65%, var(--fynns-color-text))",
+  "add-bg": "color-mix(in srgb, var(--fynns-color-success) 7%, var(--fynns-color-surface-1))",
+  "del-bg": "color-mix(in srgb, var(--fynns-color-danger) 7%, var(--fynns-color-surface-1))",
+  "add-emphasis": "color-mix(in srgb, var(--fynns-color-success) 16%, transparent)",
+  "del-emphasis": "color-mix(in srgb, var(--fynns-color-danger) 16%, transparent)",
+  "syntax-strength": "35%",
+  "gutter-width": "3.5ch",
+  "marker-width": "2ch",
+  "ratio-size": "0.5rem",
+  "ratio-gap": "0.125rem",
+} as const;
+
 /** Ungrouped tokens. Emitted as `--fynns-<key>` (no sub-prefix). */
 export const MISC_TOKENS = {
   "border-hairline": "1px",
@@ -2055,6 +2205,9 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
       "border-strong": "#a8ccc4",
       text: "#0d2e2c",
       "text-muted": "#5a7a74",
+      "chat-thinking-text": "#62696e",
+      "chat-thinking-heading": "#475a65",
+      "chat-thinking-code": "#855020",
       accent: "#0d9488",
       "accent-dim": "#0f766e",
       "accent-hover": "#14b8a6",
@@ -2178,6 +2331,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["avatar", AVATAR_TOKENS],
   ["fab", FAB_TOKENS],
   ["fabmenu", FABMENU_TOKENS],
+  ["menu", MENU_TOKENS],
   ["appbar", APPBAR_TOKENS],
   ["bottomappbar", BOTTOM_APPBAR_TOKENS],
   ["statusbar", STATUSBAR_TOKENS],
@@ -2203,6 +2357,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],
   ["code", CODE_TOKENS],
+  ["diff", DIFF_TOKENS],
   ["", MISC_TOKENS],
 ];
 

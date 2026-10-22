@@ -45,3 +45,22 @@ test(`${SLUG}: composite host shows New chat, empty sessions, starters, composer
   expect(stageBox).toBeTruthy();
   expect(bodyBox!.height).toBeGreaterThan(stageBox!.height * 0.85);
 });
+
+test("narrow session modal keeps the account footer at the panel bottom", async ({
+  page,
+}) => {
+  await openLayoutsDemo(page, "chat-product");
+  const demo = layoutsDemo(page, "chat-product");
+  await demo
+    .getByRole("button", { name: /Sample session sidebar|示例会话侧栏/i })
+    .click();
+
+  const panel = page.locator(".fynns-dialog-panel--nav-drawer");
+  await expect(panel).toBeVisible();
+  await expect(panel.getByText(/No conversations|暂无会话/i)).toBeVisible();
+  const panelBox = await panel.boundingBox();
+  const footerBox = await panel.locator(".fynns-nav-drawer-footer").boundingBox();
+  expect(panelBox).toBeTruthy();
+  expect(footerBox).toBeTruthy();
+  expect(panelBox!.y + panelBox!.height - (footerBox!.y + footerBox!.height)).toBeLessThan(4);
+});

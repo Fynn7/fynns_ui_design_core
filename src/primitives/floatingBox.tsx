@@ -454,6 +454,8 @@ export function useFloatingBoxPosition(
   floatingEl: HTMLElement | null,
   open: boolean,
   opts: FloatingBoxOpts & {
+    /** Virtual text/range anchor; placement still uses the shared collision solver. */
+    getAnchorRect?: () => DOMRect;
     /**
      * `element` (default ≥ **0.5.254**) — measure `anchorEl` itself (Menu /
      * Select / Fab). `controlChild` — prefer the visible child control inside
@@ -475,6 +477,7 @@ export function useFloatingBoxPosition(
     sides,
     anchorMode = "element",
     estimateWhenUnmeasured = true,
+    getAnchorRect,
   } = opts;
   const sidesKey = sides?.join(",") ?? "";
   const [box, setBox] = useState<FloatingBoxPosition | null>(null);
@@ -489,7 +492,7 @@ export function useFloatingBoxPosition(
       : undefined;
     const compute = () => {
       const rect =
-        anchorMode === "element"
+        getAnchorRect ? getAnchorRect() : anchorMode === "element"
           ? anchorEl.getBoundingClientRect()
           : anchorTargetRect(anchorEl);
       const w = floatingEl?.offsetWidth ?? 0;
@@ -525,6 +528,7 @@ export function useFloatingBoxPosition(
         ? new ResizeObserver(compute)
         : null;
     ro?.observe(floatingEl as Element);
+    ro?.observe(anchorEl);
     window.addEventListener("scroll", compute, true);
     window.addEventListener("resize", compute);
     return () => {
@@ -542,6 +546,7 @@ export function useFloatingBoxPosition(
     sidesKey,
     anchorMode,
     estimateWhenUnmeasured,
+    getAnchorRect,
   ]);
 
   return box;

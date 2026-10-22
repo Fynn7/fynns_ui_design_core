@@ -1,0 +1,25 @@
+.fynns-tag-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-label-control-gap);
+  min-width: 0;
+}
+
+.fynns-tag-input .fynns-chip-set,
+.fynns-tag-input .fynns-chip {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.fynns-tag-input .fynns-chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fynns-tag-input .fynns-chip-face {
+  min-width: 0;
+}
+
+.fynns-tag-input .fynns-chip-remove-btn {
+  flex-shrink: 0;
+}

@@ -19,6 +19,21 @@ controls look top-heavy). Do **not** stuff the timestamp into `ControlRow`
 body). Live: Globals `#rhythm`. Pasteable recipe:
 [`llm/consumer-cursor-rule.mdc`](../../llm/consumer-cursor-rule.mdc).
 
+**Preference rows with help:** use `ControlStack columns={1}` and one
+`ControlRow` per preference. Put visible text (a custom label may use
+`OverflowTip`) and `InfoHint size="sm"` in `label`; put only the track-only
+`Switch` in `children`. Core reserves a separate label-end track for the help
+target, centers it on its own row, and wraps long text inside the remaining
+label space. All help targets and switches then share their respective edges.
+Choose a Dialog `size` that lets most labels read comfortably (`md` for a
+multi-row settings panel with longer labels); the size is a ceiling, so text
+must still reflow at smaller viewports. Do not solve collisions by absolute
+positioning, negative margins, hidden overflow, or a consumer override of
+`.fynns-*` geometry. Check rendered rectangles at the narrowest supported
+viewport and with longest localized labels: label, help target, Switch, panel
+edges, and adjacent rows must not intersect. Live:
+`#sandbox-control-row-tip-wrap` / `#sandbox-control-row-tip-switch-narrow`.
+
 | Role | Token / host |
 | --- | --- |
 | Between ControlRows (toolbar) | `--fynns-layout-control-stack-gap` (**8dp**) |
@@ -26,7 +41,7 @@ body). Live: Globals `#rhythm`. Pasteable recipe:
 | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
 | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
 | Sibling IconButtons in one cluster | `--fynns-layout-control-cluster-gap` (**4dp**). List short text meta → first `--with-end` IconButton uses optical `--fynns-list-end-actions-gap` (≥ **0.5.62**) |
-| Labeled Buttons in one cluster / Dialog foot | `--fynns-layout-action-cluster-gap` (**8dp**, ≥ **0.5.52**/80) |
+| Labeled Buttons / Menu triggers in a Toolbar, cluster or Dialog foot | `--fynns-layout-action-cluster-gap` (**8dp**, ≥ **0.5.52**/80) |
 | TopAppBar IconButtons + NavigationRail destinations | `--fynns-layout-chrome-icon-gap` |
 | Control → supporting / error hint; FieldBlock control→FieldHint | `--fynns-layout-field-hint-gap` (**8dp**) |
 | FieldHeader / FieldBlock label→control | `field-label-control-gap` (**12dp**) |
@@ -37,7 +52,52 @@ body). Live: Globals `#rhythm`. Pasteable recipe:
 | Unit siblings / `.fynns-unit-stack` | `unit-stack-gap` (**16dp**) |
 | Nested surface frames (`chrome="plain"`, `.fynns-nest`) | `nest-gap` |
 
+**Action row (hard):** use `Toolbar` for docked or floating tools and
+`.fynns-control-cluster` for other action groups. If a row contains any
+labeled Button or DropdownMenu trigger, the whole row uses
+`--fynns-layout-action-cluster-gap` (**8dp**) in both directions, including
+Button↔Menu, Button↔IconButton and wrapped Tooltip triggers. Icon-only rows
+use `--fynns-layout-control-cluster-gap` (**4dp**). Core owns these gaps;
+never use private 0/2/4dp action containers, per-button margins or outer
+Toolbar `gap` overrides. SplitButton's joined internal segments remain
+flush; neighboring independent controls still need 8dp. On narrow hosts,
+wrap or adapt the composition instead of compressing the gap. Live:
+`#sandbox-action-spacing`.
+
+**Narrow section headers (≥ 0.5.312):** Card and Collapsible keep a fitting
+action strip on one row. When the strip no longer fits the actual container,
+core moves it below the title and wraps controls at their normal size and
+spacing. Nested `.fynns-control-cluster` helpers hug their content but remain
+bounded by the header; they must not force an unbounded nowrap strip. This is
+container-driven, including narrow panes in wide windows. Keep using `actions`
+and the shared cluster; do not hide actions, compress targets, or override core
+CSS in consumers. Live: `#sandbox-header-actions-responsive` under `#card`.
+
+**Drawer title boundary (hard):** a title line box clears the sheet's top
+edge / app-bar divider by `--fynns-navdrawer-title-edge-inset`
+(aliases `dialog-inset`, **24dp**). An internal Divider→section title uses
+`--fynns-navdrawer-title-divider-gap` (aliases `unit-stack-gap`, **16dp**).
+Core counts sheet/body/headline padding once; destination Item↔Item remains
+4dp and tools↔destinations remains 8dp. Use `NavigationDrawerHeadline`
+for a static body section title, Group for a collapsible section. Reserve
+sheet `headline` for standalone drawers; omit `drawerHeadline` on
+DestinationAppShell where TopAppBar already owns the title. Do not add bare
+headings, negative margins or reset drawer body/headline padding. Live:
+`#sandbox-navdrawer-title-spacing`.
+
 ## FieldStack semantic clusters
+
+Categorized settings use the shared two-pane dialog recipe in
+[Settings](settings.md), live `#layouts-demo-settings-dialog`. Keep preference
+rows compact and path drafts independent of category navigation.
+
+**Input decorative leading glyph:** pass the standard glyph through `leading`.
+Core reserves 16dp from the shell's inner edge to the glyph and 16dp from glyph
+to text, including when a trailing Save action is present. An IconButton owns a
+32dp hit target and retains the 4dp capsule edge; a bare decorative SVG gets its
+own inner field padding. Do not use a consumer margin or pad the icon manually.
+Live: `#input` and Settings → Advanced; geometry regression also checks the
+standalone Input sample so the rule is not limited to the settings prototype.
 
 When building inspector / settings / Dialog / multi-section forms, **partition
 by meaning** with `FieldStack` — do not leave every FieldBlock / ControlBlock as
@@ -92,6 +152,11 @@ inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges of heads
 `content-inset` for **block** pad and stacks direct children with
 `unit-stack-gap`. **`Surface` `padded`** (≥ **0.5.157**): equal `content-inset`
 on **all** edges — same as Card body; never mix `content-pad-block` or rem/`px`.
+`Surface` defaults to **unpadded** for canvas / iframe wells. A saved-text
+preview or form inside a Surface must opt into `padded`: rounded overflow
+otherwise clips edge glyphs and leaves labels/actions against the frame.
+Use `.fynns-content-flow` for preview prose so wrapped lines inherit
+`--fynns-line-height-body`; keep labels/actions outside text-selection wrappers.
 Nested surface-owning child → **`chrome="plain"`**: body pad =
 `content-inset`; column gap = `nest-gap` so the child reads as a secondary inset
 frame — **plain ≠ flush** (never cancel with negative margins, zero body pad, or

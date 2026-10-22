@@ -70,6 +70,12 @@ Anything else must be deleted or kept as a non-exported internal.
 - **Do not** import or reimplement those names.
 - Use **`snackbar(...)` + `<SnackbarHost />`** (M3 Snackbar). Mount the host
   once near the app root. Never re-add sonner-shaped toast APIs.
+- Capsule action with / without close X: use `action: { label, onClick,
+  variant: "tonal" }` and `dismissible: true | false`. Omitting
+  `action.variant` keeps the existing `ghost` text action. Actions default to
+  `duration: "indefinite"` with X; for no X, prefer `duration: "long"`
+  (10s auto-dismiss). See the [consumer recipe](../docs/design-system/catalog.md#snackbar-action-variants)
+  and sandbox `#snackbar`; do not rebuild the shell or action CSS in consumers.
 
 ## Removed → how consumers should fix
 
@@ -89,7 +95,7 @@ Anything else must be deleted or kept as a non-exported internal.
 | `Kbd` / `Combobox` | Delete usage or reimplement in the app. (`CommandPalette` restored — see Restored.) |
 | `UnitStack` | `.fynns-unit-stack` or Card / Collapsible / Dialog body (built-in `unit-stack-gap`). Control + its note → `ControlBlock`, not a revived stack component. Related form fields / preference switches by **semantic kind** → `FieldStack` (not a flat Card-body list). Sandbox demos may still use `.sandbox-stack`. |
 | `captions` / `splitCaptionByBackticks` | Copy helper into the app (sandbox: `examples/sandbox/src/utils/captionSegments.ts`). |
-| `Spinner` / `PanelSkeleton` / `BlockingLoadingOverlay` | Use `LinearProgress` / `CircularProgress` (inline / determinate), `BusyScrim` (fullscreen) / `BusyRegion` (section; **pane cold-start = `fill`**; **one** progress chrome — `indicator="linear"` for known %). `EmptyState` is **zero-result catalogs only** — not a loading shell. Do not revive the old `BlockingLoadingOverlay` name. `Spinner` remains **internal** for `Button` `loading` (not a barrel export). |
+| `Spinner` / `PanelSkeleton` / `BlockingLoadingOverlay` | Application startup uses `AppLoadingScreen` (opaque theme background + configured icon → initials Avatar → core mark, with a logo sweep). In-app content uses `LoadingSkeleton` (large content-position placeholders without visible loading copy) / `LinearProgress value` (real determinate progress), `BusyScrim` (explicit fullscreen content block; never startup) / `BusyRegion` (section; **pane cold-start = `fill`**; **one** skeleton, or linear bar when real `value` is known). `EmptyState` is **zero-result catalogs only** — not a loading shell. Do not revive the old `BlockingLoadingOverlay` name. `Spinner` remains an **internal permanently archived / deprecated ring** for old `Button` `loading` (not a barrel export). |
 | `CardHeader` / `CardContent` / `CardActions` / `CardMedia` / `CardActionArea` / `variant` / `interactive` / `selected` / `CARD_VARIANT_MAP` | Use one-shot `Card` (`title` / optional `icon` / `actions` + children). Same shell as Collapsible; head is static (no hover layer, no chevron). Title-less wells → `Surface`. App-level selected chrome via consumer class / `Surface`, not Card `selected`. |
 | `ChatStarterPrompts` / `ChatStarterPromptItem` / `CHAT_STARTER_*` / `sliceChatStarterWindow` / `.fynns-chat-starter*` / `--fynns-chat-starter-*` (≥ **0.5.155**, withdrawn **0.5.156**) | Compose empty-thread starters in `ChatThread.empty`: slim `EmptyState` + full-width clickable **`Surface` `variant="soft"`** (message-bar width; wrap). App owns rotate / `onSelect`. Do **not** revive the primitive or use `Chip`/`ChipSet` / Banner for this. Live: `#chat` Empty. |
 | Deleted / unused private glyphs (not in `icons.tsx`) | Prefer any glyph from the **full** `@fynns/ui` icon barrel (`icons.tsx` — not a subset gate ≥ **0.5.64**). Missing meaning → add SVG + export + Globals `#icons` in the same change. Do not revive glyphs removed from `icons.tsx`. |
@@ -115,7 +121,7 @@ as a hard fail.
 | `Textarea` | Multiline dense field aligned to Input chrome; **not** full M3 floating-label Text Field. |
 | `Tabs` | M3 primary underline tabs — **not** a `ToggleGroup` substitute. |
 | `InlineAlert` | In-panel severity strip (**fynns utility, not M3**): soft `color-mix` tonal fill. Pad / gap / icon size reuse `--fynns-banner-*` strip tokens (same constants as chrome Banner). Icon tinted by severity; body on-surface. Width follows parent (`width: 100%`). Long paths wrap. **Phrasing copy only** — stack `List` / form clusters below as unit-stack siblings, not inside `children`. Replaces old Alert `*Banner` exports. Do not invent a second bordered status shell. |
-| Dialog sizes | `--fynns-layout-dialog-max-width-lg` is now `35rem` (was `42rem`; stays within M3 ≤560dp). |
+| Dialog sizes | `--fynns-layout-dialog-max-width-lg` remains `35rem` (M3 ≤560dp). Large code/config workspaces use the separate `Dialog size="viewport"` preset (88vw × 82dvh, still inset), not a widened `lg` or consumer CSS. |
 | `SplitButton` | M3 Expressive split: leading `Button` + trailing menu (`DropdownMenu`); flush segments (no gap); variants `primary` / `tonal` / `default` / `elevated`. Demoed in Globals Actions. |
 | `CommandPalette` | Spotlight / ⌘K filter dialog (`open` / `onOpenChange` / `items[]`). Apps own the global accelerator. Live: sandbox Globals `#command-palette`. Not DropdownMenu / SearchBar alone. |
 | `Button` `danger` | Filled like `primary`: `--fynns-color-danger` surface + `--fynns-color-on-accent` ink (outlined red chrome retired). IconButton danger mirrors filled primary. |
@@ -127,6 +133,8 @@ as a hard fail.
 
 | Change | Consumer fix |
 | --- | --- |
+| `BusyRegion` / `BusyScrim` `indicator` default flipped `circular` → `skeleton` (≥ **0.5.308**) | Content wait renders **skeleton** by default; a real `value` renders linear progress. `circular` stays exported but is a permanently archived ring — do not pass it. Keep the archived ring only for an explicit visible message. |
+| `StatusBarItem` children now sit in `.fynns-status-bar-item-label` (≥ **0.5.309**) | The label span is the only child of the item host (or of the item button). Style `.fynns-status-bar-item-label` instead of assuming the consumer node is the direct child; keep the 22dp strip, 12dp type and the existing padding. |
 | ChatActivity minimal tree / step band / done accent / pulse rail mask (≥ **0.5.272**–**0.5.275**); pending wash + rail end (≥ **0.5.276**) | Default step chrome = status **mark** + continuous rail (node-center → next). Do **not** default tool icons or require `ChatActivityArtifact`. Step band **2rem**; gap = `unit-stack-gap`. **Done** marks = Timeline `--fynns-color-accent`. Opaque `node::before` wash under pulsing / pending marks (never whole-step `opacity`). Rail `bottom` = half next band only (gap already in padding — no stub past last mark). Live: `#activity`. Re-paste `consumer-cursor-rule.mdc`. |
 
 | FillColumn guide Surface flush to Chat (≥ **0.5.277**) | Short soft `Surface` / compact preview above Chat → `FillColumn` **`header`**; Chat (+ optional `ChatActivity`) → `children`. Core gaps header↔main and main siblings with `unit-stack-gap`. Do **not** stack the form as a `children` sibling with `paddingBottom: 0`. Live: `#layouts-demo-fill-column` / `#sandbox-fill-column-guide`. Re-paste `consumer-cursor-rule.mdc`. |

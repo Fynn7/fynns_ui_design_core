@@ -18,6 +18,31 @@ export const LAYOUTS_LEAD_KEY: MessageKey = "layouts.lead";
 
 export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
   {
+    id: "settings-dialog",
+    label: "Settings dialog",
+    keywords: ["settings", "preferences", "general", "advanced", "设置", "常规", "高级"],
+  },
+  {
+    id: "chat-session-menu",
+    label: "Chat session menu alignment",
+    keywords: ["chat", "session", "menu", "alignment", "会话", "菜单", "对齐"],
+  },
+  {
+    id: "canvas-workspace",
+    label: "Canvas workspace",
+    keywords: ["canvas", "floating", "docked", "toolbar", "menu", "inspector", "save", "retry", "画布", "浮层", "工具条", "菜单", "侧栏", "保存", "重试"],
+  },
+  {
+    id: "workspace-chrome",
+    label: "Workspace chrome",
+    keywords: ["home", "new", "rename", "inspector", "InlineAlert", "snackbar", "工作区", "重命名", "错误提示"],
+  },
+  {
+    id: "nav-drawer-rename",
+    label: "Double-click rename",
+    keywords: ["rename", "double click", "F2", "重命名", "双击", "导航抽屉"],
+  },
+  {
     id: "shell",
     label: "DestinationAppShell",
     keywords: [
@@ -64,6 +89,16 @@ export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
       "chat product",
       "产品壳",
     ],
+  },
+  {
+    id: "chat-sessions-drawer",
+    label: "ChatSessionsDrawer",
+    keywords: ["session", "会话", "sidebar", "右键菜单", "context menu", "rename", "delete"],
+  },
+  {
+    id: "list-selection",
+    label: "SelectionArea",
+    keywords: ["selection", "多选", "全选", "Ctrl+A", "Ctrl+Shift", "range", "context menu"],
   },
   {
     id: "chat-aside",

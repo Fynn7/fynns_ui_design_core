@@ -17,7 +17,7 @@ import {
   type ChatCitationsProps,
 } from "./ChatCitation";
 import { ChatMarkdown } from "./ChatMarkdown";
-import { ChevronDownIcon } from "./icons";
+import { ExpandToggle } from "./ExpandToggle";
 import {
   CHAT_MESSAGE_COLLAPSE_AFTER_CHARS,
   resolveChatCollapse,
@@ -107,7 +107,10 @@ export type ChatMessageProps = Omit<
   /**
    * Optional reasoning disclosure between `name` and the answer bubble
    * (typically `<ChatThinking>…</ChatThinking>`). Core does not hide this on
-   * `error` — the app decides whether to pass it. Ignored for `system`.
+   * `error` — the app decides whether to pass it. Keep the same disclosure
+   * mounted after streaming ends and as the answer grows; preserve completed
+   * thought text instead of clearing this slot on a status transition.
+   * Ignored for `system`.
    */
   thinking?: ReactNode;
   /**
@@ -380,20 +383,14 @@ export function ChatMessage({
             </div>
             {showCollapseToggle ? (
               <div className="fynns-chat-message-collapse">
-                <button
-                  type="button"
+                <ExpandToggle
                   className="fynns-chat-message-collapse-toggle"
-                  aria-expanded={expanded}
-                  aria-controls={bodyId}
-                  onClick={() => setExpanded((v) => !v)}
-                >
-                  {expanded ? collapseLabel : expandLabel}
-                  <ChevronDownIcon
-                    size={14}
-                    aria-hidden
-                    className="fynns-chat-message-collapse-chevron"
-                  />
-                </button>
+                  expanded={expanded}
+                  controls={bodyId}
+                  onExpandedChange={setExpanded}
+                  expandLabel={expandLabel}
+                  collapseLabel={collapseLabel}
+                />
               </div>
             ) : null}
           </div>

@@ -1,10 +1,15 @@
 import {
+  Button,
   ClippedNavShell,
   DropdownMenu,
   DropdownMenuItem,
   EmptyState,
   FillColumn,
   MoreHorizontalIcon,
+  IconButton,
+  PanelRightIcon,
+  TopAppBar,
+  Tooltip,
   NavigationDrawer,
   NavigationDrawerItem,
   NavigationDrawerNewChat,
@@ -31,9 +36,10 @@ import { ChatConversationDemo } from "./ChatConversationDemo";
  *
  * Live: `#layouts-demo-chat-product`.
  */
-export function ChatProductLayoutsDemo() {
+export function ChatProductLayoutsDemo({ withTopBar = false }: { withTopBar?: boolean }) {
   const { t } = useLocale();
   const [navOpen, setNavOpen] = useState(true);
+  const [modalNavOpen, setModalNavOpen] = useState(false);
   const [sessionsEmpty, setSessionsEmpty] = useState(true);
   const [sessionsExpanded, setSessionsExpanded] = useState(false);
   const [demoEpoch, setDemoEpoch] = useState(0);
@@ -93,6 +99,9 @@ export function ChatProductLayoutsDemo() {
           checked={navOpen}
           onCheckedChange={setNavOpen}
         />
+        <Button variant="ghost" onClick={() => setModalNavOpen(true)}>
+          {t("globals.navDrawerSessionAria")}
+        </Button>
         <Switch
           labelSide="end"
           label={t("layouts.chatProductSessionsEmpty")}
@@ -109,6 +118,48 @@ export function ChatProductLayoutsDemo() {
           }}
         />
       </div>
+      <NavigationDrawer
+        variant="modal"
+        open={modalNavOpen}
+        onClose={() => setModalNavOpen(false)}
+        ariaLabel={t("globals.navDrawerSessionAria")}
+        headline={t("globals.navDrawerSessionAria")}
+        footer={
+          <NavDrawerFooterAccount
+            accountLabel={t("layouts.chatProductAccountLabel")}
+            settingsLabel={t("globals.appBarSettings")}
+            onSettingsClick={() => setModalNavOpen(false)}
+          />
+        }
+      >
+        <NavigationDrawerNewChat
+          label={t("globals.navDrawerSessionNew")}
+          onClick={() => {
+            resetToNewChatLanding();
+            setModalNavOpen(false);
+          }}
+        />
+        {sessionsEmpty ? (
+          <EmptyState
+            size="sm"
+            title={t("layouts.chatProductSessionsEmptyTitle")}
+            description={t("layouts.chatProductSessionsEmptyBody")}
+          />
+        ) : (
+          <>
+            <NavigationDrawerItem
+              label={t("layouts.chatProductSessionA")}
+              active={activeSession === "alpha"}
+              onClick={() => setModalNavOpen(false)}
+            />
+            <NavigationDrawerItem
+              label={t("layouts.chatProductSessionB")}
+              active={activeSession === "beta"}
+              onClick={() => setModalNavOpen(false)}
+            />
+          </>
+        )}
+      </NavigationDrawer>
       <div className="sandbox-chat-product-stage sandbox-chat-landing-host">
         {/*
          * New-chat landing matches product chrome without TopAppBar
@@ -118,7 +169,9 @@ export function ChatProductLayoutsDemo() {
           className="fynns-destination-app-shell"
           navMode={navOpen ? "drawer" : "hidden"}
           onNavCrowded={() => setNavOpen(false)}
-          topBar={null}
+          topBar={withTopBar ? <TopAppBar title={t("layouts.chatProductChatLabel")} trailing={
+            <Tooltip content="Inspector"><IconButton aria-label="Inspector" variant="ghost" size="sm"><PanelRightIcon /></IconButton></Tooltip>
+          } /> : null}
           nav={
             <NavigationDrawer
               variant="standard"
@@ -244,6 +297,7 @@ export function ChatProductLayoutsDemo() {
                 sendLabel={t("layouts.fillColumnSend")}
                 starterItems={starterItems}
                 landing={isNewChatLanding}
+                activeSessionId={activeSession}
                 onFirstSend={() => {
                   setSessionsEmpty(false);
                   setActiveSession("alpha");

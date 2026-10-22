@@ -18,6 +18,8 @@ export type CardProps = {
   icon?: ReactNode;
   /** Optional right-aligned header actions — **interactive chrome only**
    * (`IconButton` / `Button` / `InfoHint` / one `.fynns-control-cluster`).
+   * Buttons must use size="sm" (32dp target; shared 16dp glyph). Core clamps
+   * header buttons to sm even through Tooltip/cluster/helper wrappers.
    * Never path / branch / mono meta text (`src-path`) — put that in the body
    * (or title when it is the section name). */
   actions?: ReactNode;

@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 /**
  * Hard gate: consumer named imports from `@fynns/ui` must exist on the linked
- * `@fynn7/ui-design-core` barrel (src/index.ts + export * re-exports).
+ * `@fynn7/ui-design-core` barrel (src/index.ts + export * re-exports), and a
+ * Vite consumer must disable dev browser caching of native ESM responses.
+ * Declared app dependencies and their CLI artifacts must also be installed.
  *
  * Catches stale sibling checkouts before Vite serves a blank page with
  * "does not provide an export named ...".
@@ -10,11 +12,14 @@
  *   node scripts/check-ui-exports.mjs --target <consumer-pkg>
  *   node scripts/check-ui-exports.mjs --target ../my-app/apps/web --json
  *
- * Exit 1 when any imported symbol is missing from the linked barrel.
+ * Exit 1 for dependency, export, static workspace or dev-cache failures.
  */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { hasNoStoreDevHeader } from "./vite-dev-cache.mjs";
+import { checkWorkspaceFiles, fixWorkspaceFiles } from "./check-workspace-ui.mjs";
+import { checkConsumerDependencies } from "./check-consumer-deps.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PKG_NAME = "@fynn7/ui-design-core";
@@ -27,12 +32,13 @@ const SKIP_DIRS = new Set([
   "build",
   "coverage",
   ".vite",
+  ".fynns-ui-recovery",
   "playwright-report",
   "test-results",
 ]);
 
 function usage() {
-  return `Usage: node scripts/check-ui-exports.mjs --target <dir> [--json]
+  return `Usage: node scripts/check-ui-exports.mjs --target <dir> [--json] [--fix]
 
 Scan consumer sources for named imports from ${ALIAS} and verify each symbol
 exists on the linked ${PKG_NAME} barrel (${ENTRY_REL}).
@@ -40,12 +46,14 @@ exists on the linked ${PKG_NAME} barrel (${ENTRY_REL}).
 Options:
   --target <dir>  Consumer package root (default: cwd)
   --json          Machine-readable result on stdout
+  --fix           Migrate literal Cancel variants and simple InlineAlert retry rows,
+                  then run the full gate. Review the source diff before shipping.
   -h, --help
 `;
 }
 
 function parseArgs(argv) {
-  const out = { target: process.cwd(), json: false, help: false };
+  const out = { target: process.cwd(), json: false, fix: false, help: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     const next = () => {
@@ -56,6 +64,7 @@ function parseArgs(argv) {
     if (a === "-h" || a === "--help") out.help = true;
     else if (a === "--target") out.target = next();
     else if (a === "--json") out.json = true;
+    else if (a === "--fix") out.fix = true;
     else throw new Error(`Unknown argument: ${a}\n${usage()}`);
   }
   return out;
@@ -278,7 +287,6 @@ export function scanConsumerImports(pkgRoot) {
     }
     if (!source.includes(ALIAS)) continue;
     const names = collectFynnsUiImports(source);
-    if (names.size === 0) continue;
     byFile.set(file, [...names].sort());
     for (const n of names) all.add(n);
   }
@@ -310,31 +318,67 @@ export function checkUiExports(pkgRoot) {
       imports: [],
       exports: [],
       barrelPath: null,
+      issues: [{ code: "linked-core-missing", message: `Linked ${PKG_NAME} barrel not found. Run ensure-sibling --install.` }],
     };
   }
 
   const exports = collectBarrelExports(barrelPath);
   const { imports, files } = scanConsumerImports(pkgRoot);
   const missing = [...imports].filter((n) => !exports.has(n)).sort();
+  const viteConfig = ["ts", "mts", "js", "mjs", "cjs"]
+    .map((ext) => path.join(pkgRoot, `vite.config.${ext}`))
+    .find((file) => fs.existsSync(file));
+  const staleBrowserCache = viteConfig && !hasNoStoreDevHeader(fs.readFileSync(viteConfig, "utf8"));
+  const errors = [];
+  const issues = [];
+  const addIssue = (code, message) => { issues.push({ code, message }); errors.push(message); };
+  let dependencies;
+  try {
+    dependencies = fs.existsSync(path.join(pkgRoot, "package.json"))
+      ? checkConsumerDependencies(pkgRoot)
+      : { ok: true, checked: 0, issues: [], skipped: "Source-only target without a package manifest" };
+  }
+  catch (error) {
+    dependencies = { ok: false, issues: [{ code: "consumer-dependency-tooling", message: error.message }] };
+  }
+  for (const issue of dependencies.issues) addIssue(issue.code, issue.message);
+  let workspaceViolations = [];
+  try {
+    workspaceViolations = checkWorkspaceFiles([...files.keys()], pkgRoot);
+    if (workspaceViolations.length) addIssue("workspace-contract", "Consumer source violates the Workspace UI contract (docs/design-system/workspace-chrome.md):\n" +
+      workspaceViolations.map(v => `${path.relative(pkgRoot, v.file)}:${v.line} [${v.rule}] ${v.message}`).join("\n") +
+      `\nFix consumer JSX, not the sibling checkout. Run safe migrations, then review the source diff:\n` +
+      `  node "${path.join(__dirname, "check-ui-exports.mjs")}" --target "${pkgRoot}" --fix\n` +
+      `Unsupported/dynamic cases remain errors; then rerun this gate. Pulling core or skipping sibling sync cannot fix consumer source.`);
+  } catch (error) { addIssue("workspace-tooling", error.message); }
+  if (missing.length) {
+    addIssue("missing-exports", `${ALIAS} imports missing from linked ${PKG_NAME}: ${missing.join(", ")}\n` +
+      `Barrel: ${barrelPath}\n` +
+      `Fix: sync sibling UI core then retry:\n` +
+      `  node node_modules/@fynn7/ui-design-core/scripts/ensure-sibling-ui-core.mjs --target "${pkgRoot}" --update\n` +
+      `  (or: git -C ../fynns_ui_design_core pull)\n` +
+      `Skip auto-sync only while editing core locally: FYNNS_UI_SKIP_SIBLING_SYNC=1`);
+  }
+  if (staleBrowserCache) {
+    addIssue("dev-cache", `Vite dev config lacks server.headers Cache-Control: no-store: ${viteConfig}\n` +
+      `An embedded browser can serve an old ${ALIAS} barrel and crash despite a valid export.\n` +
+      `Fix: run node node_modules/@fynn7/ui-design-core/scripts/install-as-npm.mjs --target "${pkgRoot}" --dev-cache-only`);
+  }
 
   return {
-    ok: missing.length === 0,
+    ok: errors.length === 0,
     missing,
     imports: [...imports].sort(),
     exportsCount: exports.size,
     barrelPath,
+    viteConfig: viteConfig ?? null,
+    workspaceViolations,
+    dependencies,
+    issues,
     files: Object.fromEntries(
       [...files.entries()].map(([f, names]) => [path.relative(pkgRoot, f) || f, names]),
     ),
-    error:
-      missing.length === 0
-        ? null
-        : `${ALIAS} imports missing from linked ${PKG_NAME}: ${missing.join(", ")}\n` +
-          `Barrel: ${barrelPath}\n` +
-          `Fix: sync sibling UI core then retry:\n` +
-          `  node node_modules/@fynn7/ui-design-core/scripts/ensure-sibling-ui-core.mjs --target "${pkgRoot}" --update\n` +
-          `  (or: git -C ../fynns_ui_design_core pull)\n` +
-          `Skip auto-sync only while editing core locally: FYNNS_UI_SKIP_SIBLING_SYNC=1`,
+    error: errors.length ? errors.join("\n\n") : null,
   };
 }
 
@@ -352,16 +396,27 @@ function main() {
   }
 
   const pkgRoot = findPkgRoot(opts.target);
-  const result = checkUiExports(pkgRoot);
+  let fixes = [];
+  let result;
+  try {
+    if (opts.fix && resolveLinkedBarrel(pkgRoot)) fixes = fixWorkspaceFiles([...scanConsumerImports(pkgRoot).files.keys()], pkgRoot);
+    result = checkUiExports(pkgRoot);
+  } catch (error) {
+    const message = String(error.message || error);
+    result = { ok: false, error: message, issues: [{ code: opts.fix ? "workspace-migration" : "gate-tooling", message }] };
+  }
 
   if (opts.json) {
-    process.stdout.write(`${JSON.stringify({ pkgRoot, ...result }, null, 2)}\n`);
+    process.stdout.write(`${JSON.stringify({ pkgRoot, ...result, ...(opts.fix ? { fixes } : {}) }, null, 2)}\n`);
   } else if (result.ok) {
     console.log(
-      `[fynns-ui] export gate ok: ${result.imports.length} @fynns/ui import(s) match barrel (${result.exportsCount} symbols)`,
+      `[fynns-ui] consumer gate ok: ${result.dependencies.skipped ? "dependency check skipped (source-only target)" : "dependencies ready"}; ${result.imports.length} @fynns/ui import(s) match barrel (${result.exportsCount} symbols); static UI/cache checks passed`,
     );
   } else {
     console.error(`[fynns-ui] ${result.error}`);
+  }
+  if (opts.fix && !opts.json) {
+    for (const fix of fixes) console.log(`[fynns-ui] migrated ${path.relative(pkgRoot, fix.file)} (${fix.rules.join(", ")})`);
   }
 
   process.exit(result.ok ? 0 : 1);

@@ -958,11 +958,6 @@
   box-sizing: border-box;
 }
 
-/* ChatThinking activity gallery — denser than unit siblings. */
-.sandbox-globals-thinking-actions {
-  gap: var(--fynns-layout-field-hint-gap);
-}
-
 /* Empty-thread starter: full-width clickable Surface soft (app-owned). */
 .sandbox-chat-empty {
   width: 100%;
@@ -1784,6 +1779,17 @@
  * Narrow × tall stage (~45% width of a typical laptop pane, full demo height)
  * to prove FillColumn docks Chat composer without a dead band below.
  */
+.sandbox-loading-chat-stage {
+  height: 75dvh;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-app-bg);
+}
+
 .sandbox-fill-column-stage {
   box-sizing: border-box;
   width: min(100%, 22rem);
@@ -2180,3 +2186,36 @@
   }
 }
 
+
+/* StatusBar owns the full width below both workspace panes. */
+.sandbox-status-workbench {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  background: var(--fynns-color-app-bg);
+}
+
+.sandbox-status-workbench-body {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 1fr);
+  min-height: calc(var(--fynns-statusbar-height) * 10);
+}
+
+.sandbox-status-workbench-canvas,
+.sandbox-status-workbench-aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  gap: var(--fynns-space-md);
+  border: 0;
+  border-radius: 0;
+  line-height: var(--fynns-line-height-body);
+}
+
+.sandbox-status-workbench-aside {
+  border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  background: var(--fynns-color-surface-1);
+}

@@ -15,7 +15,9 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { Button, type ButtonSize, type ButtonVariant } from "./Button";
-import { CheckIcon, ChevronDownIcon, ChevronRightIcon } from "./icons";
+import { CheckIcon, ChevronDownIcon, ChevronRightIcon, TrashIcon } from "./icons";
+import { IconButton } from "./IconButton";
+import { Tooltip } from "./Tooltip";
 import { useFloatingBoxPosition, type Align } from "./floatingBox";
 import { OverflowTip, overflowTipText } from "./OverflowTip";
 
@@ -28,6 +30,10 @@ type MenuContextValue = {
   menuId: string;
   /** Outermost DropdownMenu panel id (outside-click seatbelt). */
   rootMenuId: string;
+  /** Id of the currently open direct-child submenu (sibling mutual exclusion). */
+  openSub: string | null;
+  /** Claim (`id`) or release (`null`) the sibling-exclusive submenu slot. */
+  requestSubOpen: (id: string | null) => void;
 };
 
 const MenuContext = createContext<MenuContextValue | null>(null);
@@ -101,6 +107,8 @@ export function MenuSurface({
   const [menuEl, setMenuEl] = useState<HTMLDivElement | null>(null);
   const [mounted, setMounted] = useState(open);
   const [presenting, setPresenting] = useState(open);
+  /** Sibling-exclusive slot: at most one direct-child submenu open per surface. */
+  const [openSub, setOpenSub] = useState<string | null>(null);
 
   const setPanelRef = useCallback(
     (el: HTMLDivElement | null) => {
@@ -123,6 +131,10 @@ export function MenuSurface({
   }, [open, mounted]);
 
   useEffect(() => {
+    if (!open) setOpenSub(null);
+  }, [open]);
+
+  useEffect(() => {
     if (!open || !presenting || !menuEl) return;
     const items = itemSelector(menuEl);
     items[0]?.focus();
@@ -133,22 +145,29 @@ export function MenuSurface({
     const items = itemSelector(menuEl);
     if (items.length === 0) return;
     const current = document.activeElement as HTMLElement | null;
-    const index = current ? items.indexOf(current) : -1;
+    // Row actions share their row's place in vertical keyboard navigation.
+    const currentItem = current?.closest(".fynns-menu-item-host")
+      ?.querySelector<HTMLElement>(".fynns-menu-item") ?? current;
+    const index = currentItem ? items.indexOf(currentItem) : -1;
 
     if (event.key === "ArrowDown") {
       event.preventDefault();
+      event.stopPropagation();
       const next = index < 0 ? 0 : (index + 1) % items.length;
       items[next]?.focus();
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
+      event.stopPropagation();
       const next =
         index < 0 ? items.length - 1 : (index - 1 + items.length) % items.length;
       items[next]?.focus();
     } else if (event.key === "Home") {
       event.preventDefault();
+      event.stopPropagation();
       items[0]?.focus();
     } else if (event.key === "End") {
       event.preventDefault();
+      event.stopPropagation();
       items[items.length - 1]?.focus();
     } else if (event.key === "Escape") {
       event.preventDefault();
@@ -169,12 +188,13 @@ export function MenuSurface({
 
   return createPortal(
     <MenuContext.Provider
-      value={{ close: onClose, closeRoot, menuId, rootMenuId }}
+      value={{ close: onClose, closeRoot, menuId, rootMenuId, openSub, requestSubOpen: setOpenSub }}
     >
       <div
         ref={setPanelRef}
         id={menuId}
         role="menu"
+        tabIndex={-1}
         aria-label={ariaLabel}
         aria-hidden={!presenting}
         {...(!presenting ? { inert: true } : {})}
@@ -475,6 +495,17 @@ export type DropdownMenuItemProps = ButtonHTMLAttributes<HTMLButtonElement> & {
    * (ChatGPT-style destructive More-menu rows). Default is neutral text.
    */
   tone?: "default" | "danger";
+  /**
+   * Trailing row action (`IconButton` / `Tooltip` + `IconButton`), rendered as
+   * a **sibling** of the row button — a button inside a button is invalid, so
+   * it can never be part of `children`. Idle-hidden and revealed on row hover /
+   * `focus-within` (coarse pointer keeps it visible); the row's inline pad
+   * expands on reveal so the label never runs under the glyph. Activating the
+   * slot closes the whole menu like a normal pick. Prefer `size="sm"` ghost.
+   * For trash removal that keeps the menu open, use `DropdownMenuRemovableItem`.
+   * ≥ **0.5.307**. Live: `#sandbox-menu-row-action`.
+   */
+  trailing?: ReactNode;
 };
 
 export function DropdownMenuItem({
@@ -483,12 +514,14 @@ export function DropdownMenuItem({
   className,
   closeOnSelect = true,
   tone = "default",
+  trailing,
   onClick,
   ...rest
 }: DropdownMenuItemProps) {
   const ctx = useMenuContext(true);
   const tip = overflowTipText(children);
-  return (
+  const trailingRef = useRef<HTMLSpanElement>(null);
+  const item = (
     <button
       {...rest}
       type="button"
@@ -509,9 +542,104 @@ export function DropdownMenuItem({
       </span>
     </button>
   );
+
+  if (trailing == null) return item;
+
+  return (
+    <div
+      className="fynns-menu-item-host"
+      role="presentation"
+      onClick={(event) => {
+        // A pick inside the end-action slot closes the menu like a row pick
+        // (the row button never saw this click).
+        if (trailingRef.current?.contains(event.target as Node)) ctx?.closeRoot();
+      }}
+    >
+      {item}
+      <span ref={trailingRef} className="fynns-menu-item-trailing">
+        {trailing}
+      </span>
+    </div>
+  );
 }
 
 DropdownMenuItem.displayName = "DropdownMenuItem";
+
+export type DropdownMenuRemovableItemProps = Omit<DropdownMenuItemProps, "trailing"> & {
+  /** Update the owned collection to remove this item. Does not close any menu. */
+  onRemove: () => void;
+  /** Localized, item-specific accessible name, also used as the trash tooltip. */
+  removeLabel: string;
+  /** Disable only removal (for example while a deletion request is pending). */
+  removeDisabled?: boolean;
+};
+
+/** Menu row with a built-in trash action. Selection keeps normal row semantics;
+ * removal keeps root and nested menus open and moves focus to a nearby row.
+ * The owner removes the item from its data in `onRemove`; failed requests must
+ * keep the item and expose an error. Live: `#sandbox-menu-row-action`.
+ */
+export function DropdownMenuRemovableItem({
+  onRemove,
+  removeLabel,
+  removeDisabled = false,
+  disabled,
+  onKeyDown,
+  ...rest
+}: DropdownMenuRemovableItemProps) {
+  const ctx = useMenuContext(true);
+  const removeRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <DropdownMenuItem
+      {...rest}
+      disabled={disabled}
+      onKeyDown={(event) => {
+        onKeyDown?.(event);
+        if (!event.defaultPrevented && event.key === "ArrowRight" && !removeDisabled) {
+          event.preventDefault();
+          event.stopPropagation();
+          removeRef.current?.focus();
+        }
+      }}
+      trailing={
+        <Tooltip content={removeLabel}>
+          <IconButton
+            ref={removeRef}
+            size="sm"
+            variant="ghost"
+            aria-label={removeLabel}
+            disabled={disabled || removeDisabled}
+            onKeyDown={(event) => {
+              if (event.key === "ArrowLeft") {
+                event.preventDefault();
+                event.stopPropagation();
+                event.currentTarget.closest(".fynns-menu-item-host")
+                  ?.querySelector<HTMLButtonElement>(".fynns-menu-item")?.focus();
+              }
+            }}
+            onClick={(event) => {
+              // Do not let the generic trailing slot close the root or select the row.
+              event.stopPropagation();
+              const panel = ctx ? document.getElementById(ctx.menuId) : null;
+              const row = event.currentTarget.closest(".fynns-menu-item-host")
+                ?.querySelector<HTMLElement>(".fynns-menu-item");
+              const items = itemSelector(panel);
+              const index = row ? items.indexOf(row) : -1;
+              // Focus before the owner unmounts the action; an empty menu stays focusable.
+              (items[index + 1] ?? items[index - 1] ?? panel)?.focus();
+              onRemove();
+            }}
+          >
+            <TrashIcon aria-hidden />
+          </IconButton>
+        </Tooltip>
+      }
+    />
+  );
+}
+
+DropdownMenuRemovableItem.displayName = "DropdownMenuRemovableItem";
 
 export type DropdownMenuCheckboxItemProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -650,9 +778,13 @@ export type DropdownMenuSubProps = {
 
 /**
  * Nested submenu row inside a `DropdownMenu` / `MenuSurface`.
- * Opens on hover / focus / ArrowRight; panel docks to the **end** (right in
- * LTR) of the row via `useFloatingBoxPosition` (≥ **0.5.288**). Live
- * `#sandbox-menu-submenu`.
+ * Opens on hover / ArrowRight (Enter / Space confirms); panel docks to the
+ * **end** (right in LTR) of the row via `useFloatingBoxPosition`
+ * (≥ **0.5.288**). Focus alone never auto-opens (root auto-focus must not
+ * cascade into the first submenu). Sibling submenus are mutually exclusive:
+ * opening one instantly preempts the others through the parent surface's
+ * `openSub` slot (the claim happens at actual open time, so grazing a row
+ * on the way to another panel never steals it). Live `#sandbox-menu-submenu`.
  */
 export function DropdownMenuSub({
   trigger,
@@ -680,8 +812,14 @@ export function DropdownMenuSub({
   const openSoon = useCallback(() => {
     if (disabled) return;
     clearTimers();
-    openTimer.current = setTimeout(() => setOpen(true), 80);
-  }, [clearTimers, disabled]);
+    // Claim the sibling-exclusive slot at actual open time (not on
+    // mouseenter), so grazing this row en route elsewhere never preempts.
+    openTimer.current = setTimeout(() => {
+      openTimer.current = null;
+      setOpen(true);
+      parent.requestSubOpen(subId);
+    }, 80);
+  }, [clearTimers, disabled, parent, subId]);
 
   const closeSoon = useCallback(() => {
     clearTimers();
@@ -691,9 +829,26 @@ export function DropdownMenuSub({
   const stayOpen = useCallback(() => {
     clearTimers();
     setOpen(true);
-  }, [clearTimers]);
+    parent.requestSubOpen(subId);
+  }, [clearTimers, parent, subId]);
 
   useEffect(() => () => clearTimers(), [clearTimers]);
+
+  // Sibling mutual exclusion: a claimed slot closes this panel instantly
+  // (layout effect — before paint, so two panels never overlap a frame).
+  useLayoutEffect(() => {
+    if (parent.openSub !== null && parent.openSub !== subId && open) {
+      clearTimers();
+      setOpen(false);
+    }
+  }, [parent.openSub, subId, open, clearTimers]);
+
+  const release = useCallback(() => {
+    clearTimers();
+    setOpen(false);
+    parent.requestSubOpen(null);
+    itemRef.current?.focus();
+  }, [clearTimers, parent]);
 
   useEffect(() => {
     if (!panelEl) return;
@@ -745,16 +900,19 @@ export function DropdownMenuSub({
         onClick={(event) => {
           event.preventDefault();
           if (disabled) return;
+          clearTimers();
           setOpen(true);
+          parent.requestSubOpen(subId);
         }}
         onKeyDown={(event) => {
           if (disabled) return;
           if (event.key === "ArrowRight" || event.key === "Enter" || event.key === " ") {
             event.preventDefault();
+            clearTimers();
             setOpen(true);
+            parent.requestSubOpen(subId);
           }
         }}
-        onFocus={openSoon}
       >
         {icon ? <span className="fynns-menu-item-icon">{icon}</span> : null}
         <span className="fynns-menu-item-label">{label}</span>
@@ -764,7 +922,7 @@ export function DropdownMenuSub({
       </button>
       <MenuSurface
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={release}
         id={subId}
         ariaLabel={ariaLabel ?? (typeof tip === "string" ? tip : "Submenu")}
         className="fynns-menu--sub"

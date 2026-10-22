@@ -200,6 +200,7 @@ export const DestinationAppShell = forwardRef<
     aside != null && asideToggleLabel ? (
       <Tooltip content={asideToggleLabel}>
         <IconButton
+          variant="ghost"
           aria-label={asideToggleLabel}
           aria-pressed={asideOpen}
           onClick={() => setAsideOpen(!asideOpen)}
@@ -230,6 +231,7 @@ export const DestinationAppShell = forwardRef<
             <>
               <Tooltip content={navOpen ? collapseNavLabel : expandNavLabel}>
                 <IconButton
+                  variant="ghost"
                   aria-label={navOpen ? collapseNavLabel : expandNavLabel}
                   aria-pressed={navOpen}
                   onClick={toggleNav}

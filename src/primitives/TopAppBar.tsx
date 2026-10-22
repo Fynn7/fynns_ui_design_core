@@ -8,7 +8,7 @@ export type TopAppBarProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
   title?: ReactNode;
   /** Leading control — typically an `IconButton` (back / menu). */
   leading?: ReactNode;
-  /** Trailing actions — typically one or more `IconButton`s. */
+  /** Trailing actions — IconButton/menu wrappers share core's fixed 40dp circular target. */
   trailing?: ReactNode;
   /**
    * Size: `sm` 40dp (inline title), `md` 80dp / `lg` 104dp (title below the

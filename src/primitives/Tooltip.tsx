@@ -1,4 +1,4 @@
-import type { CSSProperties, FocusEvent, ReactNode } from "react";
+import type { CSSProperties, FocusEvent, MouseEvent, ReactNode } from "react";
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { DURATION_TOKENS } from "../theme/motionTokens";
@@ -113,9 +113,18 @@ export function Tooltip({
     clearHideTimer();
   };
 
+  // Both supported compositions: Tooltip around a popup trigger, and
+  // OverflowTip inside one. Query only the DOM anchor; portaled menu items
+  // may have their own tooltips and must remain independent.
+  const popupExpanded = () => {
+    const anchor = anchorRef.current;
+    const selector = '[aria-haspopup]:not([aria-haspopup="false"])[aria-expanded="true"]';
+    return Boolean(anchor?.closest(selector) || anchor?.querySelector(selector));
+  };
+
   /** Open immediately (focus, warm consecutive hover, interactive re-enter, or after show delay). */
   const showNow = () => {
-    if (disabled) return;
+    if (disabled || popupExpanded()) return;
     clearTimers();
     setOpen(true);
   };
@@ -125,7 +134,7 @@ export function Tooltip({
    * (another tip is open or closed within the skip window) — then open now.
    */
   const scheduleShow = () => {
-    if (disabled) return;
+    if (disabled || popupExpanded()) return;
     clearHideTimer();
     if (open) return;
     if (isTooltipWarm()) {
@@ -135,8 +144,7 @@ export function Tooltip({
     if (showTimerRef.current) return;
     showTimerRef.current = setTimeout(() => {
       showTimerRef.current = null;
-      if (disabled) return;
-      setOpen(true);
+      showNow();
     }, SHOW_DELAY_MS);
   };
 
@@ -161,8 +169,27 @@ export function Tooltip({
   };
 
   useEffect(() => {
-    if (disabled && open) hideNow();
+    if (disabled) hideNow();
   }, [disabled, open]);
+
+  // The popup can update in a child without rerendering this Tooltip. Its
+  // expanded ARIA state is the shared contract, including controlled menus
+  // and keyboard opens. Cancel already-open tips and pending hover timers.
+  useLayoutEffect(() => {
+    const anchor = anchorRef.current;
+    if (!anchor) return;
+    const sync = () => {
+      if (popupExpanded()) hideNow();
+    };
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(anchor.closest('[aria-haspopup]') ?? anchor, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["aria-expanded", "aria-haspopup"],
+    });
+    return () => observer.disconnect();
+  });
 
   /**
    * OverflowTip flips `disabled` after measure. If the pointer is already
@@ -216,22 +243,59 @@ export function Tooltip({
         : { left: caretPos, right: "auto", transform: "translateX(-50%) rotate(45deg)" };
 
   const onTriggerBlur = (e: FocusEvent<HTMLSpanElement>) => {
+    if (!anchorRef.current?.contains(e.target as Node)) return;
+    const next = e.relatedTarget as Node | null;
+    // Focus returning into the anchor (e.g. menu closed, focus restored to
+    // the trigger) is not a leave — the matching focus event re-shows.
+    if (next && anchorRef.current?.contains(next)) return;
     if (!interactive) {
       hideNow();
       return;
     }
-    const next = e.relatedTarget as Node | null;
     if (next && floatingRef.current?.contains(next)) return;
     scheduleHide();
   };
+
+  /**
+   * Focus inside the anchor shows the tip — but menu / dialog panels portal
+   * to `document.body` while staying React-descendants of this span, so
+   * focus bubbling up from an open menu must be ignored (otherwise the
+   * trigger tip re-opens and sticks while the menu has focus).
+   */
+  const onTriggerFocus = (e: FocusEvent<HTMLSpanElement>) => {
+    if (!anchorRef.current?.contains(e.target as Node)) return;
+    showNow();
+  };
+
+  const onTriggerMouseEnter = (e: MouseEvent<HTMLSpanElement>) => {
+    // React synthesizes enter along the React tree, including portals.
+    // Hovering a menu item is not hovering its trigger's DOM anchor.
+    if (!anchorRef.current?.contains(e.target as Node)) return;
+    scheduleShow();
+  };
+
+  /**
+   * Native `mouseleave` seatbelt: React derives `onMouseLeave` from
+   * `mouseout` along the *React* tree, so moving the pointer onto a
+   * portaled React-descendant (open menu) never dispatches it — while the
+   * DOM pointer has truly left the anchor. The native event is DOM-based
+   * and fires correctly in that case.
+   */
+  useEffect(() => {
+    const el = anchorRef.current;
+    if (!el) return;
+    const onLeave = () => scheduleHide();
+    el.addEventListener("mouseleave", onLeave);
+    return () => el.removeEventListener("mouseleave", onLeave);
+  });
 
   return (
     <span
       ref={anchorRef}
       className={["fynns-tooltip-trigger", className ?? ""].filter(Boolean).join(" ")}
-      onMouseEnter={scheduleShow}
+      onMouseEnter={onTriggerMouseEnter}
       onMouseLeave={scheduleHide}
-      onFocus={showNow}
+      onFocus={onTriggerFocus}
       onBlur={onTriggerBlur}
       aria-describedby={open ? tooltipId : undefined}
     >

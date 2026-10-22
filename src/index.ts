@@ -6,6 +6,11 @@
  */
 import "./theme/theme.css";
 import "./primitives/primitives.css";
+export * from "./primitives/SectionNotice";
+export * from "./primitives/ChatSessionsDrawer";
+export * from "./primitives/ChatSessionMenu";
+export * from "./primitives/SelectionArea";
+export * from "./primitives/useListSelection";
 import { ensureOverlayScrollbars } from "./theme/overlayScrollbar";
 
 ensureOverlayScrollbars();
@@ -23,6 +28,7 @@ export {
   AlertTriangleIcon,
   ArchiveIcon,
   ArrowLeftIcon,
+  ArrowLeftRightIcon,
   ArrowUpIcon,
   BarChartIcon,
   BotIcon,
@@ -43,6 +49,7 @@ export {
   FileIcon,
   FolderOpenIcon,
   GlobeIcon,
+  HomeIcon,
   ICON_SIZE,
   InfoIcon,
   LayoutGridIcon,
@@ -74,6 +81,8 @@ export {
 export type { IconProps } from "./primitives/icons";
 
 /* Primitives — named keep-list only */
+export { LoadingSkeleton } from "./primitives/LoadingSkeleton";
+export type { LoadingSkeletonProps } from "./primitives/LoadingSkeleton";
 export { Button } from "./primitives/Button";
 export type { ButtonProps, ButtonSize, ButtonVariant } from "./primitives/Button";
 export { SplitButton } from "./primitives/SplitButton";
@@ -84,6 +93,8 @@ export type {
 } from "./primitives/SplitButton";
 export { IconButton } from "./primitives/IconButton";
 export { Input } from "./primitives/Input";
+export { TagInput } from "./primitives/TagInput";
+export type { TagInputProps } from "./primitives/TagInput";
 export type { InputProps, InputSize, InputVariant } from "./primitives/Input";
 export { SearchBar, SearchBarResult } from "./primitives/SearchBar";
 export type {
@@ -143,6 +154,7 @@ export {
   DropdownMenuCheckboxItem,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuRemovableItem,
   DropdownMenuSeparator,
   DropdownMenuSub,
 } from "./primitives/DropdownMenu";
@@ -150,6 +162,7 @@ export type {
   DropdownMenuCheckboxItemProps,
   DropdownMenuGroupProps,
   DropdownMenuItemProps,
+  DropdownMenuRemovableItemProps,
   DropdownMenuProps,
   DropdownMenuSeparatorProps,
   DropdownMenuSubProps,
@@ -169,11 +182,14 @@ export type {
 export { InfoHint } from "./primitives/InfoHint";
 export type { InfoHintProps, InfoHintTone } from "./primitives/InfoHint";
 export { snackbar, SnackbarHost } from "./primitives/Snackbar";
+export { WorkspaceNoticeStack } from "./primitives/WorkspaceNoticeStack";
+export type { WorkspaceNotice, WorkspaceNoticeAction, WorkspaceNoticeStackProps } from "./primitives/WorkspaceNoticeStack";
 export type {
   SnackbarAction,
   SnackbarDuration,
   SnackbarHostProps,
   SnackbarOptions,
+  SnackbarSeverity,
 } from "./primitives/Snackbar";
 export { FullscreenDialog, Dialog, DialogShell, ConfirmDialog } from "./primitives/Dialog";
 export type {
@@ -189,6 +205,12 @@ export type { DrawerProps } from "./primitives/Drawer";
 export { BottomSheet } from "./primitives/BottomSheet";
 export type { BottomSheetProps, BottomSheetSize } from "./primitives/BottomSheet";
 export { Textarea } from "./primitives/Textarea";
+export { TextSelectionComposer } from "./primitives/TextSelectionComposer";
+export type {
+  TextSelectionComposerProps,
+  TextSelectionComposerSelection,
+  TextSelectionComposerSubmit,
+} from "./primitives/TextSelectionComposer";
 export type {
   TextareaProps,
   TextareaSize,
@@ -259,6 +281,8 @@ export type {
   LinearProgressProps,
 } from "./primitives/Progress";
 export { BusyScrim, BusyRegion } from "./primitives/Busy";
+export { AppLoadingScreen } from "./primitives/AppLoadingScreen";
+export type { AppLoadingScreenProps } from "./primitives/AppLoadingScreen";
 export type {
   BusyScrimProps,
   BusyRegionProps,
@@ -342,6 +366,7 @@ export type {
   NavigationDrawerItemProps,
   NavigationDrawerNewChatProps,
   NavigationDrawerProps,
+  NavigationDrawerRenameLabels,
 } from "./primitives/NavigationDrawer";
 export { Divider } from "./primitives/Divider";
 export type { DividerProps } from "./primitives/Divider";
@@ -395,10 +420,17 @@ export type {
 } from "./primitives/ChatCitation";
 export {
   ChatThinking,
+  ChatThinkingStack,
 } from "./primitives/ChatThinking";
 export type {
+  ChatThinkingText,
+  ChatThinkingArtifact,
+  ChatThinkingDetail,
   ChatThinkingProps,
+  ChatThinkingStackProps,
 } from "./primitives/ChatThinking";
+export { ChatQuestion } from "./primitives/ChatQuestion";
+export type { ChatQuestionProps, ChatQuestionOption, ChatQuestionAnswer } from "./primitives/ChatQuestion";
 export {
   ChatActivity,
   ChatActivityArtifact,
@@ -452,6 +484,8 @@ export type {
   TableRowProps,
 } from "./primitives/Table";
 export { RevealMore } from "./primitives/RevealMore";
+export { ExpandToggle } from "./primitives/ExpandToggle";
+export type { ExpandToggleProps } from "./primitives/ExpandToggle";
 export type { RevealMoreProps } from "./primitives/RevealMore";
 export {
   REVEAL_MORE_DEFAULT_INITIAL,
@@ -478,7 +512,12 @@ export type {
   DiffLineKind,
   DiffViewLine,
   DiffViewProps,
+  DiffSource,
+  DiffFile,
+  DiffLabels,
 } from "./primitives/DiffView";
+export { DiffDialog } from "./primitives/DiffDialog";
+export type { DiffDialogProps } from "./primitives/DiffDialog";
 export {
   highlightCode,
   highlightWithProfile,
@@ -495,3 +534,10 @@ export type {
   CodeTokenKind,
   SimpleHighlightProfile,
 } from "./primitives/codeHighlight";
+
+export { ExpandableContent } from "./primitives/ExpandableContent";
+export type { ExpandableContentProps } from "./primitives/ExpandableContent";
+export { ExpandableText } from "./primitives/ExpandableText";
+export type { ExpandableTextProps } from "./primitives/ExpandableText";
+export { ExpandableCodeBlock } from "./primitives/ExpandableCodeBlock";
+export type { ExpandableCodeBlockProps } from "./primitives/ExpandableCodeBlock";

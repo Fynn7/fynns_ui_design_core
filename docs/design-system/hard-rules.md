@@ -1,13 +1,49 @@
 # Hard rules (Do / Don't)
 
+Body, captions and media streams must follow [Content rhythm](content-rhythm.md):
+body line height, 8dp media→caption, 16dp gallery and content-block gaps.
+Use the core CSS recipe; never compress these with local margins or line heights.
+
 ← back to [Design system index](../DESIGN_SYSTEM.md)
 
+- **DO** follow [Workspace chrome and error feedback](workspace-chrome.md) in
+  every greenfield app: one top-bar ghost inspector toggle, icon-only Home and
+  Back, first navigation element = New resource menu, item context menu rename
+  (the same core rename dialog also opens on a double-click of the
+  destination), horizontal low-emphasis inspector actions, ghost Cancel and one
+  primary Save.
+  **DON'T** use all-cap chrome or duplicate inspector close controls. Errors
+  default to snackbar; persistent InlineAlert uses core content width, centered
+  icon/text/ghost X and 16dp text→dismiss gap. Live
+  `#layouts-demo-workspace-chrome` / `#sandbox-inline-alert-dismiss` /
+  `#layouts-demo-nav-drawer-rename`.
+
+- **DO** use `StatusBar` + `StatusBarItem` for desktop workspace bottom
+  status. Place one full-width bar after the main/inspector row. Core owns
+  22dp height, 12dp type, vertically centered text with top/bottom breathing
+  room, 8dp item padding, rectangular full-height actions and narrow-label
+  ellipsis. Workspace status/diagnostics go left; contextual values go right.
+  **DON'T** build a private footer, use bare text in the slots, override height,
+  padding or line-height, add text margins, pills or consumer color overrides.
+  Live `#status-bar` / `#layouts-demo-status-bar`. Reference:
+  [VS Code status-bar CSS](https://github.com/microsoft/vscode/blob/main/src/vs/workbench/browser/parts/statusbar/media/statusbarpart.css)
+  and [placement guidelines](https://code.visualstudio.com/api/ux-guidelines/status-bar);
+  keep the core dark-teal theme and canonical spacing tokens.
 - **DO** build UI from `@fynns/ui` components. Reach for an existing primitive
   before writing a new control.
 - **DO** style with `--fynns-*` tokens only: `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`, `var(--fynns-shadow-lg)`,
   `var(--fynns-duration-fast)`, etc. Missing value →
   [`src/theme/tokens.ts`](../../src/theme/tokens.ts) + `npm run gen:theme`.
+- **DO** default consumer app action Buttons to **semantic leading icon +
+  visible label** across every variant and size: `CloseIcon` + Cancel,
+  `CheckIcon` + Apply, `RefreshIcon` + Refresh, etc. Put both directly inside
+  `Button`; the primitive owns exactly one `--fynns-space-2` gap. **DON'T** add
+  icon margin, consumer `gap`, literal whitespace, `&nbsp;`, or make the icon
+  separately focusable. Visible label → icon `aria-hidden`. Compact,
+  self-evident chrome may use `IconButton` + `Tooltip` + `aria-label`; arbitrary
+  values/actions without a stable glyph may stay text-only rather than gaining
+  a meaningless decorative icon. Live `#globals-demo-button-icon-label-matrix`.
 - **DO** group inspector / settings / Dialog form options with **`FieldStack`**
   by **semantic kind** (identity fields together, radio/checkbox choices
   together, preference switches together, …) — not one flat list of FieldBlocks
@@ -143,26 +179,45 @@
   `supportingText` — the strip row is cross-axis **center** (icon | body |
   trailing). Dismiss only via `onDismiss` **inside** the rounded host — never a
   sibling `IconButton` outside the strip. Live `#banner`.
-- **DON'T** put two+ `loading` spinners in one `.fynns-control-cluster`; leave
-  `IconButton` `loading` showing spinner **and** glyph (core ≥ **0.5.80** =
-  spinner-only for iconOnly); stack BusyRegion/BusyScrim with chrome `loading`
+- [Content-position skeletons](loading.md) reserve exactly the UI / text that
+  will appear there. Whole-application startup / reopening uses AppLoadingScreen
+  instead: opaque theme background, centered icon and clipped sweep. Identity
+  priority = configured project icon → initials Avatar → core mark. Never use
+  whole-window text rows or translucent startup chrome.
+  Content skeletons paint only their bars: roots, wrappers and BusyRegion /
+  BusyScrim skeleton backdrops stay transparent, without dimming wash, backdrop
+  blur or shadow panels, including refreshes over mounted content in both themes.
+  Preserve the host surface; never add a dark loading panel or consumer CSS override.
+  Content waits have no visible loading copy; labels are
+  accessible-only. BusyRegion / BusyScrim default to the large, full-width
+  thick text skeleton: six rows without fill, adaptive rows with fill and
+  omitted lines. Pane cold-start retains core dialog-inset; no zero-padding
+  well or fixed six-row whole-pane wait. Explicit block is for images / iframes / canvas.
+  Keep the large text pattern; no compact busy skeletons or small centered text emblems. Ring styles,
+  CircularProgress, explicit busy `message` / `circular`, and Button `loading`
+  are permanently archived / deprecated and strongly discouraged in consumers.
+  Prefer disabled + aria-busy actions while the content skeleton owns the wait.
+  Real `value` uses one linear bar. No private shimmer CSS.
+- **DON'T** put two+ archived `loading` rings in one `.fynns-control-cluster`; leave
+  `IconButton` `loading` showing ring **and** glyph (core ≥ **0.5.80** =
+  ring-only for iconOnly); stack BusyRegion/BusyScrim with chrome `loading`
   on the same wait host — **one** progress chrome per wait. Live `#rhythm`
   end-align / `#busy-region`.
 - **DON'T** twin the same in-flight wait as **Card / Collapsible `actions`
   primary `loading`** **and** every (or many) path-catalog row rebuild
   `IconButton` `loading` — **information redundancy (hard)** (≥ **0.5.265**).
-  One shared batch task → **one** ring on the batch CTA; list rows stay
-  `disabled` **without** `loading`. One per-row rebuild → ring **only** on that
+  Archived callers only: one shared batch task → **one** ring on the batch CTA; list rows stay
+  `disabled` **without** `loading`. One per-row legacy rebuild → ring **only** on that
   row's IconButton; Card primary stays `disabled` without a second ring. Never
   `loading={busy === "run"}` on both the head Button and every row Refresh.
   Live `#sandbox-list-repo-path-actions`. Failure: CONSUMER_TREATY Card batch
   CTA + ListItem row twin loading rings.
 - **DON'T** swap `IconButton` children for a nested `CircularProgress` while
-  busy — use the stock **`loading`** prop (Spinner; iconOnly = spinner-only).
+  busy. New UI uses disabled + aria-busy with content-position skeletons;
+  only archived callers keep stock **`loading`** (ring-only for iconOnly).
   Nesting `CircularProgress` on `variant="primary"` / `danger` paints an
   accent ring on an accent fill (looks like a blank disk — core ≥ **0.5.217**
-  retints nested rings to `currentColor` as a safety net, but the API is still
-  `loading`). Live `#icon-button` / `#sandbox-iconbutton-primary-loading`.
+  retints nested rings to `currentColor` as an archived compatibility safety net). Live `#icon-button` / `#sandbox-iconbutton-primary-loading`.
   Failure: CONSUMER_TREATY IconButton busy swaps CircularProgress instead of
   loading.
 - **DON'T** put service status in ControlRow `__controls` (Chip/badge/meta) —
@@ -176,6 +231,17 @@
   meta text; failure detail → **`InfoHint`** on the row — **never** a sibling
   `FieldHint` that repeats `tool：error…`. Prefer short status + Button;
   do not teach multi-row OK/Fail walls in Globals.
+- **DON'T** squeeze independent labeled action controls into 0/2/4dp gaps.
+  Use Toolbar or `.fynns-control-cluster`: the whole labeled/mixed row is
+  8dp, including Button↔Menu and Button↔IconButton; icon-only rows are 4dp.
+  SplitButton is joined internally. Core owns Toolbar **inner** spacing;
+  outer `gap` cannot repair it. See [form rhythm](form-rhythm.md), live
+  `#sandbox-action-spacing`.
+- **DON'T** crowd drawer section titles against chrome / Dividers: first
+  title line box clears the sheet edge by 24dp (`title-edge-inset`), internal
+  Divider→title by 16dp (`title-divider-gap`). Use NavigationDrawerHeadline
+  for body sections; never reset body/headline padding or use negative margins.
+  See [form rhythm](form-rhythm.md), live `#sandbox-navdrawer-title-spacing`.
 - **DON'T** left-pack ControlRow / `.fynns-control-cluster` **Buttons** (or
   action+meta strips) under the label — clusters **default end-pack**
   (`justify-content: flex-end`, ≥ **0.5.158**). Start packing is **opt-in
@@ -206,6 +272,16 @@
   / a tip-only cluster. Do **not** invent consumer `flex-direction: column` /
   private wrap overrides. Live `#info-hint`. Failure: CONSUMER_TREATY
   ControlRow InfoHint stacks above Switch.
+- **DON'T** ship visually colliding controls even when each component's props
+  are valid. In preference rows, the label text must wrap within its track;
+  the trailing `InfoHint` target, `Switch`, panel edge, and neighboring rows
+  must have distinct rendered rectangles. Keep the tip in `ControlRow label`
+  and the track-only Switch in `children`; use `ControlStack columns={1}` and
+  choose a fitting Dialog `size` (`md` for several long rows). Verify at the
+  narrowest supported width and longest localized labels. No absolute offsets,
+  negative margins, clipping, or consumer `.fynns-*` restyles to conceal a
+  collision. Live `#sandbox-control-row-tip-wrap`. Failure: CONSUMER_TREATY
+  preference InfoHint overlaps Switch / uneven icon column.
 - **DON'T** let `.fynns-table-meta` hard-clip past a Card / unit-stack /
   narrow host **without** `…` — core ≥ **0.5.231** applies
   `overflow: hidden` + `text-overflow: ellipsis` + `min-width: 0` /
@@ -304,6 +380,17 @@
   ghost Copy/Save instead of IconButton+Tooltip; **FieldBlock labeled Save key
   instead of IconButton+Tooltip**; **FieldBlock Save IconButton wraps under
   Input**.
+- **Card / Collapsible header density:** all Button / IconButton / InfoHint /
+  menu button triggers use `size="sm"` (32dp target, shared 16dp glyph). Core
+  CSS clamps header buttons even through Tooltip/cluster/helper wrappers;
+  never enlarge a filled primary disk in the header. Body controls follow
+  their own density rules. Keep the existing title band and inset rhythm.
+- **Status detail glyphs:** use `InfoHint icon={<CheckIcon aria-hidden />}`
+  with a meaningful `ariaLabel` and `content` for completed/available results.
+  EyeIcon means view/reveal, never completion. Keep the stock circular hover
+  and keyboard-focus target; no tiny private span/SVG Tooltip triggers.
+  Decorative static icons without detail belong with visible status text.
+  Live `#info-hint` / `#sandbox-status-hint`.
 - **DON'T** put `variant="primary"` (filled) **leading** a multi-control
   `.fynns-control-cluster` in Card / Collapsible `actions` (or densified head
   strips) — LTR order is secondary ghost/tonal IconButtons **then primary last**
@@ -351,6 +438,16 @@
   trigger for long option labels — menu stays shell-width; labels ellipsize
   (≥ **0.5.238**). Live `.sandbox-select-narrow-host` under `#select`.
   Failure: CONSUMER_TREATY Select menu wider than narrow trigger.
+- **MUST** expose the exact, complete text of **every** ellipsized or
+  line-clamped UI label in a hover/focus Tooltip. Prefer the primitive's string
+  prop so core can add `OverflowTip` automatically; when the truncating content
+  is a custom `ReactNode` or consumer-owned element, wrap the actual text node
+  in `OverflowTip` at the call site. The Tooltip appears only while the text is
+  really clipped. Never use native `title=`, and never treat an intentionally
+  narrow drawer/sidebar as an exception. In particular, pass a string to
+  `ControlRow label` instead of hand-authoring
+  `.fynns-control-row__label-text`; custom label markup owns its own
+  `OverflowTip`.
 - **DON'T** hard-clip truncated Select / Autocomplete / SearchBar result /
   Menu item / FieldBlock Menu trigger / Card·Collapsible title /
   NavigationDrawerItem / **NavigationDrawerGroup** label / TopAppBar title /
@@ -367,7 +464,8 @@
   `NavigationDrawerGroup` `label` is `ReactNode` (≥ **0.5.242**); prefer a
   **string** so core wraps `OverflowTip` (full worktree path on hover) — do
   **not** cast ReactNode `as unknown as string`. List `__grow` /
-  `.fynns-table-meta` ReactNode cells → wrap at the call site (sandbox
+  `.fynns-table-meta` ReactNode cells and all other custom truncating nodes →
+  wrap at the call site (sandbox
   `#list` run-summary). Live `#select` / `#autocomplete` / `#search-bar` /
   `#sandbox-menu-field-match` / `#card` / `#toggle-group` / `#activity` /
   `#list` / `#layouts-demo-shell`. Failure: CONSUMER_TREATY truncated option
@@ -403,6 +501,15 @@
   rows — use keep-set `DropdownMenuSub` (hover / ArrowRight; panel docks end
   via floatingBox). Live `#sandbox-menu-submenu`. Failure: CONSUMER_TREATY
   DropdownMenu missing nested submenu.
+- **DO** use `DropdownMenuRemovableItem` for a menu row with a trash action:
+  `removeLabel` supplies the item-specific Tooltip and accessible name;
+  `onRemove` updates the owned collection. Removal keeps root and submenu
+  open, does not select the row, and focuses the next enabled row, previous
+  row, or empty menu. ArrowRight enters the trash action; ArrowLeft returns
+  to the row. Pending deletion may use `removeDisabled`; keep failed rows
+  and show `InlineAlert`. Show `EmptyState` after the last removal.
+  Ordinary `DropdownMenuItem.trailing` still closes the menu. Live
+  `#sandbox-menu-row-action`. Failure: CONSUMER_TREATY menu trash closes menu.
 - **DON'T** leave Menu / Button icons riding the inline SVG baseline strut
   (chevron looks 高 / 歪) — core icons default `.fynns-icon { display: block }`
   (≥ **0.5.254**); Menu chevron lives in `.fynns-menu-trigger-trailing`. Do
@@ -436,10 +543,20 @@
   (≥ **0.5.288**). Do **not** invent consumer `max-width` / manual `slice` /
   private chip-label CSS. Live `#sandbox-chat-composer-leading-menus` /
   `#chat`. Failure: CONSUMER_TREATY ChatComposer leading Menu label hard-clips.
-- **DON'T** shrink `ChatComposer` `endActions` until buttons disappear behind
-  the capsule edge. Core promotes crowded ≤26rem composers to a full-width
-  draft and wrapping action rows. Keep icon hit targets whole; let menu labels
-  ellipsize inside their own triggers.
+- **DON'T** compress a chat host until `ChatComposer` buttons or menu triggers
+  wrap, stack, clip or lose their hit targets. **The complete action toolbar
+  always stays on one horizontal row**, including leading + model + mode
+  switches + Send/Stop. Core may move the draft above that row at ≤26rem;
+  only editor text becomes multiline. Reserve at least
+  `--fynns-layout-chat-min-width`, increasing the host minimum for the actual
+  controls, menu floors, gaps and all insets. Clamp pane drag/keyboard and
+  restored sizes; enforce native window minima. Browser hosts must collapse
+  navigation / preview into the core overlay or sheet before crowding chat.
+  Never hide the problem with horizontal scrolling, shell clipping or private
+  `.fynns-*` CSS. See `llm/CHAT_COMPOSER_LAYOUT.md` single action row contract.
+  Live `#sandbox-chat-composer-thinking-toggle-narrow` /
+  `#sandbox-chat-composer-leading-menus-narrow`. Failure: CONSUMER_TREATY
+  ChatComposer action toolbar wraps under pane/window compression.
 - **DON'T** park the **model** picker in `ChatComposer` `leading` (stays
   start-clustered) — put it in `endActions` (end / right, before Send) with
   `align="end"` (≥ **0.5.288**). Volume / tools stay in `leading`. Do **not**
@@ -541,9 +658,16 @@
   `Sessions: 50`, `每页 100 行`) — options are **digits only**; noun once via
   sibling `.fynns-table-meta` + `ariaLabel`. Live `#pagination`. Failure:
   CONSUMER_TREATY Pagination Select option repeats noun.
+- **DON'T** make the outer `ClippedNavShell` / `DestinationAppShell` a scroll
+  container. Core uses `overflow: clip`; `overflow: hidden` still permits
+  focus / `scrollIntoView` to scroll chrome during layout overflow, lifting
+  nav + main off the viewport bottom while the sticky TopAppBar stays put.
+  Keep scrolling inside the canvas / PageScroll / drawer body (`fynns-scroll`).
+  Live sandbox Components `#form-recipe` / `#layouts-demo-shell`. Failure:
+  CONSUMER_TREATY shell scrollIntoView leaves bottom gap.
 - **DON'T** hard-swap `ClippedNavShell` `nav` while `navMode` stays `"drawer"`
   for root ↔ drill-in / mode catalog — pass **`navKey`** + **`navDirection`**
-  so the body Shared-Axis-X slides (core ≥ **0.5.183**; width stays open —
+  so the docked body Shared-Axis-X slides (core ≥ **0.5.183**; width stays open —
   not close→swap→open).   Core ≥ **0.5.198** finishes the morph without leaving
   an outgoing catalog / second Y rail ghost on Back; ≥ **0.5.201** hides
   `--out` on the first prepare paint (not only `--out-run`); ≥ **0.5.202**
@@ -551,6 +675,48 @@
   the whole morph, and `refreshOverlayScrollbars` updates **synchronously**
   (no rAF defer — stale rails for one paint = Back Y flash). Live
   `#layouts-demo-drill-in`. (≥ **0.5.202**/ **0.5.203**)
+- **DO** dismiss an overlay navigation drawer after a destination, New chat,
+  footer navigation action, or Back to root. Core `ClippedNavShell` detects the
+  nav slot's actual absolute/fixed layout and requests `onNavCrowded` closure;
+  keep that callback wired to the controlled open state. Back uses a changed
+  `navKey` with `navDirection="back"`. Docked columns retain their open state
+  and Shared Axis X swap. `NavigationDrawer variant="modal"` requests `onClose`
+  after the same navigation actions. Search, group disclosure, menu triggers,
+  disabled actions and cancelled clicks keep the drawer open.
+- **DO** use `ChatQuestion` for in-thread questions: concise radio choices +
+  final Other with inline Input by default. Only explicit special structures
+  may omit Other or add detailed copy. `ChatThinking variant="status"` /
+  `"disclosure"` in `ChatThinkingStack` owns uniform quiet row rhythm;
+  consumers must not clone or restyle this anatomy. Live `#chat-question` /
+  `#thinking`; recipe: [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
+- **DON'T** place generic Collapsible/Card/Surface, Button, attempt tabs or a
+  timeline inside ChatThinking. Only muted small thought text and indented
+  nested ChatThinking belong there. Core adds short, faint curved connectors
+  and thin nesting guides with icon/dot columns, matching the reference
+  anatomy. Decorative dots are not status/accuracy signals. Inline code and
+  non-interactive artifact labels are core-owned text adornments. Prefer `details`;
+  results, questions and all actions stay outside. Live `#thinking-details`.
+- **DON'T** replay Thinking entry motion for elapsed seconds, counts or phase
+  text updates. Keep rows and detail IDs stable; never key by label/time.
+  Core preserves the title, OverflowTip, disclosure and streaming sweep.
+  Prefer `summary` for elapsed copy, sample timestamp-derived wall time once
+  per second, stop on settlement and keep clocks outside live regions.
+  Live `#thinking-clock`; [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
+- **DON'T** stretch ChatActivity tool-count headers or push their chevron to
+  the body/panel end. `ChatActivity` and `ChatThinking` share the label→chevron
+  token (`thinking-trigger-gap`, default 6dp; `activity-trigger-gap` aliases
+  it). Same labels keep the same chevron position across output growth,
+  expand/collapse and host resizing; longer labels move it with the text end.
+  Headers stay intrinsic, bodies fill the column. No consumer header/label
+  `flex: 1`, `width: 100%`, `space-between`, auto margins or custom geometry.
+  Live `#chat-chevron`; [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
+- **DON'T** reorder Chat UI by role/type/completion. Prompts, LLM calls/replies,
+  thinking and question/result cards share one chronological list: append new
+  events below earlier ones with stable keys; streaming/completion updates in
+  place. Questions interrupt thinking stacks; later activity starts after the
+  question. Never dock a perpetual result/question or move answered cards.
+  Only composer/task-summary chrome is docked. Live `#chat-question`; contract:
+  [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
 - **DON'T** invent shell/column/chat insets as raw `rem`/`px` or private CSS
   vars — reuse `--fynns-layout-*` (see **Inset decision tree**). Don't ship
   broken chrome type/row proportion (see **Chrome type & row proportion** /
@@ -583,6 +749,7 @@
   sheet-max / content-sized settings column with dead gutters. Live
   `#page-scroll` / `#overlays`. ≥ **0.5.142** names chat/dialog misuse
   explicitly.
+- **Content-preview disclosure:** use `ExpandToggle` directly below long prose / readonly code previews at the content start edge. It is plain text + a flipping chevron, with semantic button behavior and focus feedback; never use `Button` chrome or put it in an action cluster. Keep download / submit actions separate. `ChatMessage` uses the same primitive internally. The host controls preview height; preserve full Copy data. This toggles existing content; `RevealMore` adds catalog rows and retains its tonal Button. Live `#code-block` / `#sandbox-content-expand`.
 - **DON'T** dump every row of a Card / PageScroll **data Table** when the
   catalog can grow past ~10 rows — use `useRevealMore` + `RevealMore` (default
   **10** / step **10**, ≥ **0.5.144**): slice in the app; foot = **tonal**
@@ -715,6 +882,13 @@
 - **DON'T** invent a chat / session-history product layout that skips the
   keep-set tree — default = **`ClippedNavShell`** + session
   `NavigationDrawer` (`NavigationDrawerNewChat` …) + **`FillColumn` → `Chat`**.
+  When the session rail must overlay a narrow viewport, use the **same**
+  `NavigationDrawer` with `variant="modal"`, `open`, `onClose`, and its
+  `footer` prop. Keep `NavigationDrawerNewChat` and the empty/history list in
+  `children`; put the account row in `footer`. A generic `Drawer` places every
+  child in its scrolling body, so an account row appended after the empty state
+  sits halfway down the panel instead of at the bottom. Live modal and
+  permanent examples: `#layouts-demo-chat-product`.
   New-chat landing = greeting + soft starters + `ChatComposer` inside
   `ChatThread.empty` (centered); active thread docks composer under
   `ChatThread` inside Chat. Flat destination roots stay on
@@ -722,6 +896,36 @@
   `PageScroll` as chat main scroll, Chip starters, or Trash+Plus twin. Live
   `#layouts-demo-chat-product`. Failure: CONSUMER_TREATY chat product /
   session host wrong tree.
+- **DON'T** reset `.fynns-fill-column-main` top or inline padding: core owns
+  `--fynns-layout-dialog-inset` around the main well so inserted notices do
+  not hug the top or side edges. Chat keeps its own conversation insets and
+  bottom docking. Live `#layouts-demo-fill-column`.
+- **DON'T** insert a transient request error as an InlineAlert above Chat.
+  Use `snackbar(message, { severity: "error", duration: "long",
+  dismissible: true })` with one root SnackbarHost. Default snackbar keeps
+  the theme surface without an icon; status variants use **flat tonal fills
+  matching InlineAlert rendered on app-bg** (12% semantic color, 88% canvas),
+  on-surface text and matching icons. No frosted glass, backdrop blur,
+  see-through content or white pastel. Do not change InlineAlert.
+  `icon: true` enables an icon on the
+  default; `false` / `null` hides one without changing the surface.
+  Persistent notices/recovery remain InlineAlert. Live `#snackbar`.
+- **DON'T** let transient feedback lift or resize the chat suite or shell.
+  SnackbarHost is a fixed body portal, never an in-flow footer. Showing,
+  replacing and dismissing it must not change nav / FillColumn / thread /
+  composer / preview bounds, thread scroll position or bottom docking.
+  No snackbar-specific spacer, padding, flex row or reserved shell height.
+  Core flat tonal fills prevent underlying text from showing through; keep
+  InlineAlert intact. Live `#layouts-demo-fill-column`.
+- **DON'T** let the first turn hug the thread ceiling: top inset is
+  `--fynns-chat-thread-pad-block-start`, aliased to **`chat-thread-gap`**
+  (**2rem**), so the opening bubble breathes exactly like the turns below it
+  (**0.5.306** — it was `content-pad-block` **16dp**, half a gap). The scroll
+  end keeps its own pair (`thread-pad-block` **16dp** + `composer-scroll-pad`
+  ≥44dp) because it answers a different question. Do **not** set
+  `padding` / `margin` on `.fynns-chat-thread`, re-alias
+  `pad-block-start` to a narrower token, or collapse both ends into one
+  `padding-block` shorthand. Live `#chat` / `#layouts-demo-chat-product`.
 - **DON'T** inset mode `--toolbar-end` Plus (or preference Switch) with Item
   `item-pad-inline-end` so it sits ~16dp short of destination **Item pill
   outer** — Plus / Switch / **pill outer** share one trailing edge (body
@@ -839,12 +1043,20 @@
   core ≥ **0.5.263** sizes that column `flex: 0 0 auto` + `min-height: 100%`
   so pad-block-end joins scroll overflow (never `flex:1` inside the scrolling
   host, which ate bottom breath). Live `#layouts-demo-shell`.
+- **DON'T** let a narrow EndAside bottom sheet consume the docked Chat. Core
+  caps the sheet at `--fynns-layout-end-aside-sheet-viewport-max-height`
+  (60dvh); keep a taller Preview inside its own scrollable sheet. If the main
+  Chat reserves room for the overlay, track the sheet's visible height as it
+  expands and collapses, not the requested maximum or a stale open-state
+  guess. The task-list `ChatComposer` shell is content-sized even when its
+  progress list is present. Live `#layouts-demo-shell` / `#sandbox-chat-composer-todos`.
 - **DON'T** pad destination labels with redundant meta (`· N`, parenthetical
   glosses) unless asked — short name + optional Item `badge`. Don't pass
   `drawerHeadline` / sheet `headline` under DestinationAppShell / TopAppBar
   title (omit; Groups for body sections). Live `#layouts-demo-shell`.
 - **DON'T** rename tokens to non-`--fynns-*` forms; invent consumer
-  `width`/`min-width` on `.fynns-dialog-panel` (use FieldStack + `size="lg"`);
+  `width`/`min-width` on `.fynns-dialog-panel` (use FieldStack + `size="lg"`,
+  or `size="viewport"` for a large inset code/config workspace);
   pin CodeBlock/Textarea to fixed height on PageScroll catalogs (default
   autoGrow; `autoGrow={false}` only for height-resolved fill hosts); set main
   app chrome to `--fynns-font-serif`. Live `#form-recipe` / `#code-block`.

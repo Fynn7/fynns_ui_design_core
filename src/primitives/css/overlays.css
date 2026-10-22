@@ -393,6 +393,79 @@
   gap: var(--fynns-space-sm);
 }
 
+/*
+ * Menu row end action (`DropdownMenuItem` `trailing`, ≥ **0.5.307**): the List
+ * `--with-end` / NavDrawer overlay-reveal vocabulary inside the 48dp menu row.
+ * The action is a **sibling** of the row button (a button in a button is
+ * invalid HTML), idle-hidden, revealed on row hover / `focus-within`; the
+ * row's inline pad expands on reveal so the label never runs under the glyph.
+ * Coarse pointer has no hover to reveal with → always visible. Do **not** add a
+ * second `tone="danger"` row for the same op — one row, one hover action.
+ * Live: `#sandbox-menu-row-action`.
+ */
+.fynns-menu-item-host {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.fynns-menu-item-host > .fynns-menu-item-trailing {
+  position: absolute;
+  inset-inline-end: var(--fynns-space-md);
+  inset-block: 0;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fynns-menu-actions-reveal) var(--fynns-ease-out);
+}
+
+.fynns-menu-item-host:hover > .fynns-menu-item-trailing,
+.fynns-menu-item-host:focus-within > .fynns-menu-item-trailing {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Recipe prefers size="sm"; a bare md IconButton is clamped to the 32dp strip
+ * so it cannot outgrow the 48dp row (same clamp as the NavDrawer end cluster). */
+.fynns-menu-item-host > .fynns-menu-item-trailing .fynns-btn--icon {
+  width: var(--fynns-menu-actions-disk);
+  height: var(--fynns-menu-actions-disk);
+  min-width: var(--fynns-menu-actions-disk);
+  min-height: var(--fynns-menu-actions-disk);
+}
+
+.fynns-menu-item-host > .fynns-menu-item {
+  /* Idle: full-bleed label. Reveal: clear the measured end cluster. */
+  padding-inline-end: var(--fynns-space-md);
+  transition: padding-inline-end var(--fynns-menu-actions-reveal)
+    var(--fynns-ease-out);
+}
+
+.fynns-menu-item-host:hover > .fynns-menu-item,
+.fynns-menu-item-host:focus-within > .fynns-menu-item {
+  padding-inline-end: calc(
+    var(--fynns-menu-actions-disk) + var(--fynns-menu-actions-gap) +
+      var(--fynns-space-md)
+  );
+}
+
+@media (hover: none), (pointer: coarse) {
+  .fynns-menu-item-host > .fynns-menu-item-trailing {
+    opacity: 1;
+    pointer-events: auto;
+    transition: none;
+  }
+
+  .fynns-menu-item-host > .fynns-menu-item {
+    padding-inline-end: calc(
+      var(--fynns-menu-actions-disk) + var(--fynns-menu-actions-gap) +
+        var(--fynns-space-md)
+    );
+  }
+}
+
 /* ---------- Tooltip / InfoHint ---------- */
 .fynns-tooltip-trigger {
   display: inline-flex;
@@ -1183,7 +1256,7 @@
 }
 
 /* ---------- Toast ---------- */
-/* ---------- BusyScrim / BusyRegion (M3 scrim + progress + message) ---------- */
+/* ---------- BusyScrim / BusyRegion (skeleton or measured progress + message) ---------- */
 .fynns-busy-stack {
   display: flex;
   flex-direction: column;
@@ -1196,6 +1269,55 @@
   min-width: 0;
   padding: var(--fynns-space-lg);
   box-sizing: border-box;
+}
+
+.fynns-busy-skeleton {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Content placeholders occupy the upcoming component, never a centered glyph. */
+.fynns-busy-stack--skeleton {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  gap: 0;
+  align-items: stretch;
+}
+.fynns-busy-region--skeleton > .fynns-busy-region-content {
+  visibility: hidden;
+}
+/* Bare pane cold-start has no Chat / PageScroll content inset yet. Core owns
+ * this breathing room; explicit slots and refreshes keep their exact bounds. */
+.fynns-busy-region--fill.fynns-busy-region--default-skeleton
+  > .fynns-busy-region-content:empty
+  + .fynns-busy-region-overlay--skeleton {
+  padding: var(--fynns-layout-dialog-inset);
+}
+/* These canonical hosts already reserve the content inset. */
+.fynns-fill-column-main
+  .fynns-busy-region--fill.fynns-busy-region--default-skeleton
+  > .fynns-busy-region-content:empty
+  + .fynns-busy-region-overlay--skeleton {
+  padding: 0;
+  padding-block-end: var(--fynns-layout-dialog-inset);
+}
+:is(.fynns-content-column, .fynns-chat-thread-inner)
+  .fynns-busy-region--fill.fynns-busy-region--default-skeleton
+  > .fynns-busy-region-content:empty
+  + .fynns-busy-region-overlay--skeleton {
+  padding: 0;
+}
+.fynns-busy-region:not(.fynns-busy-region--fill)
+  > .fynns-busy-region-content:empty
+  + .fynns-busy-region-overlay--skeleton {
+  min-height: var(--fynns-layout-skeleton-block-height);
+}
+.fynns-busy-scrim--skeleton {
+  padding: var(--fynns-layout-dialog-inset);
 }
 
 .fynns-busy-stack--linear {
@@ -1231,6 +1353,54 @@
 
 .fynns-busy-scrim .fynns-busy-message {
   color: var(--fynns-color-text);
+}
+
+/* Startup has no upcoming content positions yet: show only the application mark. */
+.fynns-busy-scrim.fynns-app-loading-screen {
+  background: var(--fynns-color-app-bg);
+  z-index: var(--fynns-z-app-loading);
+  padding: var(--fynns-layout-dialog-inset);
+  box-sizing: border-box;
+}
+.fynns-app-loading-logo {
+  display: block;
+  width: var(--fynns-layout-app-loading-logo-size);
+  height: var(--fynns-layout-app-loading-logo-size);
+  max-width: 100%;
+  max-height: 100%;
+  background-color: var(--fynns-color-app-loading-logo-base);
+  background-image: linear-gradient(90deg,
+    var(--fynns-color-app-loading-logo-base) 0%,
+    var(--fynns-color-app-loading-logo-base) 30%,
+    var(--fynns-color-app-loading-logo-highlight) 50%,
+    var(--fynns-color-app-loading-logo-base) 70%,
+    var(--fynns-color-app-loading-logo-base) 100%);
+  background-size: 400% 100%;
+  -webkit-mask-image: var(--fynns-app-loading-logo-source);
+  mask-image: var(--fynns-app-loading-logo-source);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: fynns-chat-thinking-shimmer var(--fynns-duration-thinking-shimmer) linear infinite;
+}
+.fynns-avatar.fynns-app-loading-avatar {
+  width: var(--fynns-layout-app-loading-logo-size);
+  height: var(--fynns-layout-app-loading-logo-size);
+}
+.fynns-app-loading-avatar .fynns-avatar-initials {
+  color: transparent;
+  background-color: var(--fynns-color-app-loading-logo-base);
+  background-image: linear-gradient(90deg,
+    var(--fynns-color-app-loading-logo-base) 0%,
+    var(--fynns-color-app-loading-logo-highlight) 50%,
+    var(--fynns-color-app-loading-logo-base) 100%);
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: fynns-chat-thinking-shimmer var(--fynns-duration-thinking-shimmer) linear infinite;
 }
 
 .fynns-busy-region {
@@ -1329,10 +1499,28 @@
   min-width: 0;
 }
 
+/* Skeletons paint only their bars. Keep these mode overrides after the generic
+ * busy masks so refreshes over mounted children never gain a dark rectangle.
+ * Blocking skeletons still capture focus/input; startup owns its opaque theme
+ * background through AppLoadingScreen, independently of these content modes. */
+.fynns-busy-region-overlay.fynns-busy-region-overlay--skeleton,
+.fynns-busy-scrim.fynns-busy-scrim--skeleton {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.fynns-busy-region-overlay.fynns-busy-region-overlay--skeleton {
+  place-items: stretch;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .fynns-loading-spinner-ring {
-    animation-duration: var(--fynns-duration-reduced-motion-spin);
+  .fynns-loading-skeleton-bar,
+  .fynns-app-loading-logo,
+  .fynns-app-loading-avatar .fynns-avatar-initials {
+    animation: none;
   }
+  .fynns-app-loading-logo,
+  .fynns-app-loading-avatar .fynns-avatar-initials { background-image: none; }
 }
 
 /* ---------- Snackbar (M3) ---------- */
@@ -1374,6 +1562,55 @@
 .fynns-snackbar[data-state="open"] {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Match InlineAlert's rendered tone on the canvas with a uniform flat fill. */
+.fynns-snackbar--info {
+  background: var(--fynns-color-snackbar-info-surface);
+}
+
+.fynns-snackbar--success {
+  background: var(--fynns-color-snackbar-success-surface);
+}
+
+.fynns-snackbar--warning {
+  background: var(--fynns-color-snackbar-warning-surface);
+}
+
+.fynns-snackbar--error {
+  background: var(--fynns-color-snackbar-error-surface);
+}
+
+.fynns-snackbar:not(.fynns-snackbar--default) {
+  border-color: transparent;
+}
+
+.fynns-snackbar__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: var(--fynns-banner-icon-size);
+  height: var(--fynns-banner-icon-size);
+  color: var(--fynns-color-info);
+  line-height: 0;
+}
+
+.fynns-snackbar__icon svg {
+  width: var(--fynns-banner-icon-size);
+  height: var(--fynns-banner-icon-size);
+}
+
+.fynns-snackbar--success .fynns-snackbar__icon {
+  color: var(--fynns-color-success);
+}
+
+.fynns-snackbar--warning .fynns-snackbar__icon {
+  color: var(--fynns-color-warning);
+}
+
+.fynns-snackbar--error .fynns-snackbar__icon {
+  color: var(--fynns-color-danger);
 }
 
 .fynns-snackbar__message {

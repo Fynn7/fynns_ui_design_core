@@ -19,7 +19,7 @@
     "Before writing app code for @fynns/ui, read llm/CONSUME.md; look props up with `node scripts/api.mjs <Name>` instead of reading source files.",
     "Day-to-day consume: public sibling ../fynns_ui_design_core + file: dependency @fynn7/ui-design-core + Vite/tsconfig alias @fynns/ui -> node_modules/@fynn7/ui-design-core/src/index.ts. No NODE_AUTH_TOKEN, no git submodule, no obsolete package names @fynns/ui / @fynns/ui-design-core.",
     "Consumer .npmrc: @fynn7:registry=https://registry.npmjs.org; never commit _authToken=${NODE_AUTH_TOKEN}. E401 = leftover Packages .npmrc.",
-    "Vite resolve.dedupe [react, react-dom]; tsconfig target/lib ES2022+; vite-env.d.ts with vite/client when tsc runs against the sources.",
+    "Vite resolve.dedupe [react, react-dom] and server.headers Cache-Control: no-store for development; tsconfig target/lib ES2022+; vite-env.d.ts with vite/client when tsc runs against the sources.",
     "API-only: props / children / labels; never restyle .fynns-*, never hardcode hex/px; missing capability lands in the core first, then refresh the sibling. Do not edit node_modules/@fynn7/ui-design-core.",
     "Default chrome DestinationAppShell -> PageScroll -> Card / List / EmptyState; Dialog for modals; snackbar + SnackbarHost for transient feedback; BusyRegion / BusyScrim for loading. Rules index: llm/CONSUMER_TREATY.md; purged symbols: llm/BREAKING_PURGE.md.",
     "Installer writes .cursor/rules/fynns-ui-consumer.mdc and AGENTS.md (from llm/consumer-AGENTS.md) when missing; re-sync the Cursor rule with --sync-consumer-rule after treaty updates."
@@ -44,7 +44,7 @@
       "npm": "npm run consume:install -- --target <CONSUMER_ROOT> --sibling --json"
     },
     "check": {
-      "description": "Validate dependency + .npmrc + alias + dedupe + consumer rule hash + no leftover submodule tree (exit 1 if incomplete).",
+      "description": "Validate dependency + .npmrc + alias + dedupe + dev no-store header + consumer rule hash + no leftover submodule tree (exit 1 if incomplete).",
       "argv": ["node", "scripts/install-as-npm.mjs", "--target", "<CONSUMER_ROOT>", "--check", "--json"],
       "npm": "npm run consume:check -- --target <CONSUMER_ROOT> --json"
     },
@@ -52,9 +52,26 @@
       "description": "Dependency already present; only patch .npmrc / Vite / tsconfig / hooks / rule files.",
       "argv": ["node", "scripts/install-as-npm.mjs", "--target", "<CONSUMER_ROOT>", "--wire-only", "--json"]
     },
+    "repairDevCache": {
+      "description": "Existing consumer: patch only the Vite dev Cache-Control: no-store header; preserve custom scripts and rule files.",
+      "argv": ["node", "scripts/install-as-npm.mjs", "--target", "<CONSUMER_ROOT>", "--dev-cache-only", "--json"]
+    },
     "checkExports": {
-      "description": "Hard gate: every named @fynns/ui import must exist on the linked barrel.",
+      "description": "Read-only hard gate: declared app dependencies/CLI artifacts, named @fynns/ui imports, Vite dev cache policy and consumer workspace composition; JSON issues[].code/message distinguishes each failure. Not a substitute for app typecheck/build/startup.",
       "argv": ["node", "scripts/check-ui-exports.mjs", "--target", "<CONSUMER_ROOT>", "--json"]
+    },
+    "checkDependencies": {
+      "description": "Read-only app dependency/devDependency and CLI/main artifact readiness; accepts hoisted installs and optional omissions.",
+      "argv": ["node", "scripts/check-consumer-deps.mjs", "--target", "<CONSUMER_ROOT>", "--json"]
+    },
+    "repairDependencies": {
+      "description": "Run npm install --include=dev in the actual app package with normal hooks, preserve failures and verify install artifacts. Never run inside install hooks.",
+      "argv": ["node", "scripts/check-consumer-deps.mjs", "--target", "<CONSUMER_ROOT>", "--repair", "--json"],
+      "npm": "npm run consume:repair-deps -- --target <CONSUMER_ROOT>"
+    },
+    "repairWorkspace": {
+      "description": "Explicitly migrate literal Cancel variants and simple InlineAlert retry rows, review the source diff, then run the full strict gate. Dynamic cases remain manual; recovery behavior is preserved.",
+      "argv": ["node", "scripts/check-ui-exports.mjs", "--target", "<CONSUMER_ROOT>", "--fix", "--json"]
     },
     "api": {
       "description": "Print props / signatures / token names on demand instead of reading source files.",
@@ -76,7 +93,8 @@
     "package.json depends on @fynn7/ui-design-core (prefer file: sibling)",
     ".npmrc scopes @fynn7 to registry.npmjs.org (no empty _authToken)",
     "node_modules/@fynn7/ui-design-core/src/index.ts exists after npm install",
-    "vite.config.* has resolve.alias[\"@fynns/ui\"] pointing at that entry and resolve.dedupe [react, react-dom]",
+    "the app package's declared dependencies/devDependencies and CLI/main artifacts are installed; a non-workspace root install alone is insufficient",
+    "vite.config.* has resolve.alias[\"@fynns/ui\"] pointing at that entry, resolve.dedupe [react, react-dom], and server.headers Cache-Control: no-store",
     "tsconfig paths map @fynns/ui to the same entry; target/lib ES2022+",
     "no git submodule left as the alias target",
     "clone -> npm install -> npm run dev needs no NODE_AUTH_TOKEN",

@@ -15,7 +15,7 @@ classes.
 - **Actions:** Button, IconButton, SplitButton (M3 Expressive; no `danger` on
   SplitButton; sizes `sm`/`md`/`lg`; `ghost` on Button/IconButton), Fab,
   FabMenu / FabMenuItem
-- **Fields:** Input, Textarea (default width 100%, autoGrow, soft
+- **Fields:** Input, [TagInput](tag-input.md) (controlled chips + Enter/blur comma input), Textarea (default width 100%, autoGrow, soft
   `--fynns-layout-textarea-max-height` ≥ **0.5.103**; `spellCheck={false}`
   default), FieldHeader / FieldBlock, Select (**soft-deprecated ≥ 0.5.236** —
   anatomy + Pagination carve-out; prefer `DropdownMenu`), Autocomplete
@@ -24,29 +24,134 @@ classes.
   SearchBarResult, Switch (dense track; `labelSide`), Checkbox, Radio, Chip /
   ChipSet (`assist`|`filter`|`input`|`suggestion` — never table-cell status),
   Slider, ToggleGroup, Tabs (M3 Primary underline)
-- **Feedback:** Banner, InlineAlert (phrasing copy only — never nest List /
-  FieldStack / CodeBlock inside), LinearProgress / CircularProgress,
-  BusyScrim `{ open, label, message?, value?, size?, indicator? }` /
+- **Selection reference:** TextSelectionComposer wraps Textarea, CodeBlock or
+  rendered text with an optional floating input + upward Send icon. Core owns
+  selection capture, capsule chrome, floatingBox positioning and motion;
+  consumers supply labels and `onSubmit({ prompt, selection: { text, start, end } })`.
+  `reveal="hover"` (default) reveals after selecting and hovering the area;
+  `reveal="selection"` reveals immediately. Keyboard/touch selection reveals in
+  either mode; Tab enters the input, Enter sends (IME composition is respected),
+  Shift+Tab / Escape return to the source. Hover does not steal focus; moving
+  across the gap to the capsule keeps it open. Whitespace-only selections/prompts
+  are ignored. Input focus preserves the captured reference; a new selection
+  clears the draft. Source edits, outside click/focus and Escape dismiss it.
+  Offsets are UTF-16 into the selected control's value, or the wrapper's
+  `textContent` for rendered text; keep one logical source per wrapper. Async
+  submission uses BusyRegion, prevents duplicate sends, closes on success and
+  retains selection/draft with InlineAlert on rejection (`errorMessage`).
+  Set `disabled` to turn the variant off. Override the theme token
+  `--fynns-layout-selection-composer-width` for width. Live:
+  `#text-selection-composer`. Import from `@fynns/ui`; do not rebuild selection
+  geometry, send chrome or model calls inside the primitive.
+- **Feedback:** SectionNotice (in-flow text, core disclosure and ghost actions;
+  no arbitrary nested components; live `#section-notice`,
+  [contract](section-notice.md)), WorkspaceNoticeStack (persistent actionable workspace overlays;
+  core top/end stacking, ghost recovery/X, stable ids and enter/exit/reflow),
+  Banner, InlineAlert (phrasing copy only — never nest List /
+  FieldStack / CodeBlock inside), LoadingSkeleton / LinearProgress,
+  CircularProgress (permanent archive / deprecated; strongly discouraged),
+  BusyScrim `{ open, label, message?, value?, size?, indicator?, skeleton? }` /
   BusyRegion `{ busy, label, children?, message?, value?, size?, fill?,
-  indicator? }` (soft frosted blur + `--fynns-color-busy-region-mask` when
-  children are mounted; empty cold-start ≥ **0.5.191** = chrome only — no
-  content-sized mask island; `indicator` `circular`|`linear`; never stack
-  ring on bar; `fill` for height-resolved cold-start), EmptyState,
+  indicator?, skeleton? }` (content skeletons paint only bars over transparent
+  backgrounds, including mounted-content refreshes; blocking skeleton backdrops
+  are also transparent. Soft frosted blur + `--fynns-color-busy-region-mask`
+  apply only to non-skeleton waits over mounted children; empty cold-start
+  ≥ **0.5.191** has no content-sized mask island. No visible skeleton loading
+  copy; explicit message / circular is permanently archived; real `value`
+  uses one linear bar; `fill` for height-resolved cold-start), EmptyState,
   **Chat** family (see below), Snackbar (`snackbar()` + `<SnackbarHost />`),
-  Tooltip, InfoHint
+  Tooltip, InfoHint (`icon` defaults to InfoIcon; completed/available result
+  details use `icon={<CheckIcon aria-hidden />}` + meaningful `ariaLabel` /
+  `content`; keep the stock hover/focus target, header `size="sm"`, no private
+  tiny SVG/span triggers; live `#info-hint` / `#sandbox-status-hint`)
 
-  **Loading placement (hard):**
+  Error feedback defaults to `snackbar`. Persistent actionable canvas errors use
+  `WorkspaceNoticeStack`; plain persistent in-panel copy uses `InlineAlert`.
+  InlineAlert is content-width and centers icon/text/close; pass `onDismiss`
+  and localized `dismissAriaLabel` for its ghost X (16dp after the message).
+  Never embed action Buttons or force full width. See
+  [Workspace chrome and error feedback](workspace-chrome.md), live
+  `#sandbox-inline-alert-dismiss`.
+
+  Canvas workspace: one floating editing Toolbar, one top-bar ghost icon
+  DropdownMenu for document commands, and `.fynns-workspace-panes` for a
+  continuous canvas/EndAside row directly below TopAppBar. No second toolbar
+  above the inspector. Live `#layouts-demo-canvas-workspace`.
+
+  <a id="snackbar-action-variants"></a>
+  **Snackbar action variants:** mount `<SnackbarHost />` once at the app root;
+  call `snackbar(message, options)` from `@fynns/ui`. Core owns the surface,
+  capsule button, close icon, positioning and motion. Live sandbox: `#snackbar`.
+
+  | Parameter | Purpose / default |
+  | --- | --- |
+  | `message` | Feedback text (first argument) |
+  | `severity` | `"default"` / omitted = original theme surface; `"info"`, `"success"`, `"warning"`, `"error"` = flat tones matching InlineAlert rendered on app-bg (12% semantic color, 88% app canvas) |
+  | `icon` | Default variant has no icon; status variants have matching icons. `true` enables the default info icon, `false` / `null` hides icons, a ReactNode replaces one |
+  | `action: { label, onClick, variant? }` | One labeled action; `variant: "tonal"` gives a filled capsule; omitted / `"ghost"` keeps the text action |
+  | `dismissible` | Show / hide the trailing X; defaults to `true` for indefinite duration |
+  | `dismissAriaLabel` | Localized accessible close label; defaults to `"Dismiss"` |
+  | `duration` | `"short"` = 4s, `"long"` = 10s, `"indefinite"` = until action / dismissal / replacement; with action defaults to indefinite, otherwise short |
+
+  ```tsx
+  import { snackbar, SnackbarHost } from "@fynns/ui";
+
+  // Mount <SnackbarHost /> once next to the app shell.
+  snackbar("Draft saved"); // Original theme surface, no icon.
+  snackbar("Draft saved", { icon: true }); // Optional info icon, same surface.
+  snackbar("Request failed. Please try again.", {
+    severity: "error", duration: "long", dismissible: true,
+  });
+  snackbar("Informational notice", { severity: "info", icon: false });
+
+  // Capsule action + close X; stays visible until acted on or dismissed.
+  snackbar("Draft saved", {
+    action: { label: "View draft", onClick: openDraft, variant: "tonal" },
+    dismissible: true,
+    dismissAriaLabel: "Dismiss",
+  });
+
+  // Capsule action without X; automatically dismisses after 10 seconds.
+  snackbar("Draft saved", {
+    action: { label: "View draft", onClick: openDraft, variant: "tonal" },
+    dismissible: false,
+    duration: "long",
+  });
+  ```
+
+  Clicking the action invokes `onClick`, then dismisses that snackbar. If the
+  callback shows a new snackbar, the new one stays visible. With no X, prefer
+  a finite duration; `indefinite` requires an action, `snackbar.dismiss(id)` or
+  replacement to remove it. Consumers supply labels and callbacks; do not
+  build another toast wrapper or override `.fynns-snackbar*` CSS.
+  Status backgrounds use `--fynns-color-snackbar-*-surface`: the original
+  InlineAlert's 12% semantic wash rendered on app-bg, stored as a flat opaque
+  fill. Keep on-surface body text and semantic icons. No frosted glass,
+  backdrop blur, see-through content, white pastel or theme-toast mixing.
+  InlineAlert's semantic tones remain the reference. Error snackbar uses `role="alert"` /
+  assertive announcements; other variants use status / polite. Transient
+  request failures use this API; persistent failures with recovery controls
+  remain InlineAlert. Reduced motion fades without translation.
+  **Snackbar never participates in app layout.** Mount one root SnackbarHost;
+  it portals a fixed overlay to `document.body`. Opening, replacing and
+  dismissing feedback must leave shell, nav, FillColumn, thread, composer and
+  preview geometry unchanged. Never reserve a footer row, spacer, dynamic
+  padding or reduced shell height for a snackbar. Flat status fills stay
+  uniform over text and controls; never shift the app or change InlineAlert.
+
+  **Loading placement (hard):** [Sweep skeleton convention](loading.md).
 
   | Scene | Use | Do **not** |
   | --- | --- | --- |
-  | Full-app block | `BusyScrim` | `EmptyState` + ring; revived `BlockingLoadingOverlay` |
-  | Pane cold-start | `BusyRegion` `fill` as FillColumn/shell child **or** PageScroll → `.fynns-content-column` (direct / thin section wrapper hosting only the fill — core ≥ **0.5.136** stretches scrollport + pass-through wrappers so BusyStack centers, does not overflow a collapsed overlay); hide section FieldHint until ready; empty host ≥ **0.5.191** paints chrome without frosted mask island | Nest under content-sized unit-stack/Card; EmptyState as loading; FieldHint + busy in one well; bare `fill` inside PageScroll without the content-column height chain; empty BusyRegion painting a content-sized mask “贴图色块” (fixed in core ≥ **0.5.191**) |
+  | Application startup / reopen | `AppLoadingScreen` with automatic configured icon → initials Avatar → core mark, opaque theme background and logo sweep | Whole-window text skeleton; translucent startup overlay; invented product logo; visible loading copy / ring |
+  | Explicit in-app blocking content wait | `BusyScrim` with matching content layout; prefer sectional BusyRegion | Reuse as application startup; EmptyState + ring; revived BlockingLoadingOverlay |
+  | Pane / Chat cold-start | `BusyRegion busy fill` as shell / FillColumn child, PageScroll → `.fynns-content-column`, or ChatThread.empty; thick text rows adapt to the resolved pane height with core-owned insets; omit `lines`, hide section FieldHint until ready; no frosted mask | Clear well padding; fixed six-row ceiling strip; content-sized unit-stack/Card around a pane wait; EmptyState as loading; FieldHint + busy in one well; broken PageScroll height chain |
   | Dialog/Card body load | `BusyRegion` (+ `fill` if height resolved); no pager siblings under empty overlay; drawer SearchBar **above** BusyRegion | Bare CircularProgress as body; wrap List+Select+Pagination so chrome flickers |
   | Refresh over existing | BusyRegion around List/table only | Unmount → EmptyState; consumer `surface-*` wash; wrap whole Card |
-  | Known % / unknown wait | `linear`+`value` / default `circular`; chrome `min(20rem,100%)` | Stack ring+bar; nest progress in `message` |
-  | Button/icon slot | Inline Spinner via `loading` + **`runLoadingTask` / `useLoadingTask`** (≥ **0.5.177**) | Page-level CircularProgress in the slot; bare `setLoading(true)` with no timeout/abort clear path |
-  | Multi-action footer | **At most one** `loading` in cluster | Twin `loading={busy}` rings |
-  | Card batch CTA + path List rows | **One** ring: batch → Card primary only; per-row → that IconButton only (≥ **0.5.265**) | Card `loading` **and** every row Refresh `loading` for the same run |
+  | Known % / unknown wait | real `value` → linear bar / content wait → matching large skeleton, accessible-only label | Stack ring+bar; nest progress in `message` |
+  | Button/icon slot | Existing `loading` ring is permanently archived / deprecated; prefer disabled + aria-busy action and content skeleton. Legacy calls keep **`runLoadingTask` / `useLoadingTask`** (≥ **0.5.177**) | Page-level CircularProgress in the slot; bare `setLoading(true)` with no timeout/abort clear path |
+  | Multi-action footer | **At most one** `loading` in cluster | Twin `loading={busy}` indicators |
+  | Card batch CTA + path List rows | Legacy only: **one** archived ring: batch → Card primary only; per-row → that IconButton only (≥ **0.5.265**) | Card `loading` **and** every row Refresh `loading` for the same run |
   | Section wait + chrome | BusyRegion only; header/foot `disabled` without `loading` | BusyRegion + chrome loading |
   | Zero-result catalog | `EmptyState` (`fill` if sole pane body) | EmptyState as loading; content-sized EmptyState as sole canvas child |
   | Hang / cancel guard | `runBusyTask` / `runLoadingTask` with `timeoutMs` and/or `signal` (+ `onError` for toast) | Forever BusyRegion/Scrim/`loading` when fetch never settles; empty catalog painted as BusyRegion |
@@ -70,8 +175,8 @@ classes.
   **paint-before-work:** `afterNextPaint` / `yieldToMain` /
   `runBusyTask(setBusy, task, options?)` / `useBusyTask()` /
   `runLoadingTask` / `useLoadingTask` (≥ **0.5.177**) — `flushSync` busy on →
-  wait one paint → then run the async task so `CircularProgress` can start
-  spinning. Does **not** keep the ring smooth through long sync / WASM compile
+  wait one paint → then run the async task so the skeleton can paint
+  before work. Does **not** keep the sweep smooth through long sync / WASM compile
   on the main thread (use a Worker or `yieldToMain` slices for that). Prefer
   over `setBusy(true)` then immediately blocking work.
   **Hang guards (≥ 0.5.177):** pass `timeoutMs` and/or `signal` so timeout /
@@ -95,7 +200,8 @@ classes.
     Preview above Chat → wrap with **`FillColumn`** (`header` = Preview,
     `children` = Chat or pane-boot `BusyRegion` `fill`). Only `ChatThread`
     scrolls (`role="log"` + `fynns-scroll`); composer docks at root; scroll-to-
-    bottom = 32dp elevated IconButton (not Fab). `empty` prefers `EmptyState`;
+    bottom = 32dp elevated IconButton (not Fab); it stays visually above any
+    overlay scrollbar crossing its footprint. `empty` prefers `EmptyState`;
     empty-thread starter prompts = app-owned full-width clickable
     **`Surface` `variant="soft"` `padded` `interactive`** rows inside
     `ChatThread.empty`
@@ -109,6 +215,46 @@ classes.
     (`--fynns-duration-base` / `--fynns-ease-emphasized`); reduced-motion =
     instant. `interactive` = Button-grammar state-layer hover/press. Do **not**
     use `Chip`/`ChipSet` or a dedicated starter primitive. Live `#chat` Empty.
+  - **Active conversation menu:** place **`ChatSessionMenu`** directly inside
+    `Chat`, before `ChatThread`. Core reserves a seat at the well's top-right
+    (standalone: 16dp top / end; FillColumn + own TopAppBar: well edge aligned
+    to the bar's end inset, with symmetric hover-circle clearance around its divider), outside the scrolling log, with one ghost
+    `MoreHorizontalIcon`, localized `label` for Tooltip + aria-label, and an
+    end-aligned portaled `DropdownMenu`. Pass `activeSessionId` (null disables
+    the trigger) and `renderMenu(sessionId)` returning `DropdownMenuItem`,
+    separators and `DropdownMenuSub` for nested choices such as Export chat
+    as… → Markdown (.md) / JSON (.json). The consumer owns callbacks, formats,
+    persistence and extra items; core owns appearance, floating positioning,
+    keyboard navigation and dismissal. Changing session ID or disabling the
+    menu closes the old menu tree. This targets the active conversation,
+    separately from sidebar multi-selection. Do not add private positioning,
+    trigger CSS or a second toolbar; keep Rename in the navigation item's
+    context menu. Recipe: [CHAT_SESSION_MENU.md](../../llm/CHAT_SESSION_MENU.md).
+    Live: `#layouts-demo-chat-product` / `#layouts-demo-chat-aside`.
+  - **Session-history menus:** use **`ChatSessionsDrawer`** (a composed
+    `NavigationDrawer` with scoped Ctrl / Cmd+A, Ctrl click, Shift range and
+    Ctrl+Shift additive range selection). Full selection uses the same batch
+    menu path as partial selection, including unrevealed rows. Pass
+    `labels.deleteSelected` + `onDeleteSelected`, or `renderMenu(context)` for
+    custom item / selection / area actions. Selection stays separate from the
+    active conversation. General lists and grouped sidebars use
+    **`SelectionArea`** + `scope.getItemProps` / `scope.menuTrigger`;
+    drawer host bindings go through `bodyProps`. Contract and recipes:
+    [`LIST_SELECTION.md`](../../llm/LIST_SELECTION.md). Live:
+    `#sandbox-list-selection`. The drawer defaults to `standard` and also
+    supports `modal`.
+    Pass `{ id, label, disabled? }` sessions, controlled `activeSessionId`,
+    localized `labels`, and `onNewChat` / `onSelect` / `onRename` / `onDelete` /
+    `onDeleteAll` callbacks. Row right-click = Rename + danger Delete;
+    blank scroll-body right-click = New chat + danger Delete all. Top More
+    exposes Delete all; row More exposes the same row actions. Core owns
+    mutually exclusive menus, Shift+F10 / Menu key, footer pinning, skeleton /
+    empty / error states, and RevealMore (5 / 5; optional `reveal` window).
+    Identity order is caller-owned; use `reveal.resetKey` only when the source
+    changes, not on every poll. Right-click never selects a session. Consumers
+    own rename / confirmation dialogs and persistence; do not duplicate menu
+    state, DOM target lookup, coordinates, or row action CSS. Live:
+    `#sandbox-chat-sessions-drawer` / `#layouts-demo-chat-sessions-drawer`.
   - **Product / session host (default for chat-like UIs):** compose
     **`ClippedNavShell`** (or drill-in with `navKey`; omit TopAppBar on
     new-chat landing) + session **`NavigationDrawer`**
@@ -116,8 +262,12 @@ classes.
     list `EmptyState` sm; session Items **label-only by default** — leading
     `icon` opt-in only when the glyph carries meaning ≥ **0.5.298**; row
     trailing prefer More; footer account) + main
-    **`FillColumn` → `Chat`**. **New-chat landing:** greeting `EmptyState` +
-    soft starters **centered above**; **`ChatComposer` inside `ChatThread.empty`**
+     **`FillColumn` → `Chat`**. For a narrow-screen session overlay, render
+     `NavigationDrawer` `variant="modal"` and pass the same account row through
+     `footer`; the session list remains in `children`. A content `Drawer`
+     scrolls all of its children together and does not pin an appended account
+     row. **New-chat landing:** greeting `EmptyState` + soft starters
+     **centered above**; **`ChatComposer` inside `ChatThread.empty`**
     pinned to the column bottom with the same
     `--fynns-chat-composer-inset-block` as a docked Chat composer (collapse
     docked composer row). Active thread: composer under `ChatThread` inside
@@ -151,7 +301,23 @@ classes.
     `#layouts-demo-chat-aside`. See [`CHAT_MOTION.md`](../../llm/CHAT_MOTION.md).
   - **Message lifecycle:** `streaming` = last-glyph color pulse only while answer
     text exists + `aria-busy`; `error`/`onRetry` = failed-generation footer;
-    `thinking`/`ChatThinking` = single-block reasoning (Wave 1); `ChatActivity`/
+    `thinking`/`ChatThinking` = single-block reasoning (Wave 1), with
+    `variant="status"` / `"disclosure"`; structured `details` owns muted text
+    and nested disclosures with circular elbows and nesting guides (live
+    `#thinking-reference` / `#thinking-details`), with all actions
+    and results outside. The structured root heading-to-first-row gap is
+    14dp (`thinking-root-gap`); `thinking-group-top` defaults to zero so
+    the first nested row does not receive a second top inset.
+    `ChatThinkingStack` owns equal spacing
+    for consecutive mixed rows. `ChatActivity` summaries and `ChatThinking`
+    share a short label→chevron gap; intrinsic headers must not stretch with
+    their bodies. Live `#chat-chevron`. Keep the
+    disclosure mounted with completed text after streaming, while the answer
+    grows, and through later status/error states. `streaming={false}` only
+    auto-collapses its body; the header and chevron stay available. Do not
+    gate the slot on the current step or clear its text at completion. The
+    trigger keeps its intrinsic label width, independent of body/answer length.
+    `ChatActivity`/
     Step = multi-step tool tree (Wave 2 — **minimal** ≥ **0.5.272**: default
     status **mark** + continuous rail, no default tool icons / file artifacts;
     step band **2rem** + gap `unit-stack-gap` ≥ **0.5.273**;
@@ -167,12 +333,21 @@ classes.
     `.fynns-chat-message-prose`; do **not** patch with consumer CSS. ARIA:
     [`llm/CHAT_ARIA_PARITY.md`](../../llm/CHAT_ARIA_PARITY.md). User edit UX (not in
     core yet): [`llm/CHAT_USER_EDIT_UX.md`](../../llm/CHAT_USER_EDIT_UX.md). Live
-    `#activity` / `#thinking`.
+    `#activity` / `#thinking`. `ChatQuestion` = Card + concise radio choices +
+    final Other/Input by default; `onSubmit` adds validated Continue, `readOnly`
+    retains the answered card in place. All chat events append chronologically;
+    split thinking stacks at intervening cards/prompts. Live `#chat-question`;
+    [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
 - **Overlay / sheets:** Dialog / DialogShell / ConfirmDialog / FullscreenDialog
-  (M3 basic + full-screen only). `ConfirmDialog` = title + supporting + foot
+  (M3 basic + large inset workspace + full-screen). `ConfirmDialog` = title +
+  supporting + foot
   (no close). `Dialog` optional `showCloseButton` for dismissible forms —
   **form bodies** (`FieldStack` / `FieldBlock` / `Textarea` / `CodeBlock`)
   stretch to the `size` ceiling (prefer `size="lg"` / M3 560dp). Centered
+  code/configuration workspaces may use `size="viewport"`: it retains scrim
+  margins + `radius-3xl`, resolves to a tokenized viewport share, and stretches
+  a direct CodeBlock through the body (`autoGrow={false}` for editable). Use
+  FullscreenDialog when the workflow truly owns the viewport. Centered
   non-confirm head block-start = `--fynns-layout-content-inset` (**18dp**, ≥
   **0.5.280**) — title ink top equals body-end / trailing primary IconButton
   bottom clearance (no consumer head-pad patch). Dismissible
@@ -195,7 +370,9 @@ classes.
   settings gear `sm` — **not** a destination Item; never wrap destinations in
   `.fynns-unit-stack`; SearchBar/tools ↔ destinations =
   `--fynns-navdrawer-search-gap` **8dp**; Item↔Item =
-  `--fynns-navdrawer-section-gap` **4dp**), SkipLink, Breadcrumb, Pagination
+  `--fynns-navdrawer-section-gap` **4dp**; Item `renamable` + `onRename` ships
+  the **core rename dialog** — double-click / `F2` opens it, `renameOpen` wires
+  the item context menu to the same dialog), SkipLink, Breadcrumb, Pagination
   (`.fynns-pagination-bar` = single M3/MUI footer row — never wrap to two rows;
   rows-per-page Select is the **stock** Keep-set Select — 40dp shell +
   portaled `.fynns-select-menu` like `#select` (≥ **0.5.208**); siblings share
@@ -212,8 +389,10 @@ classes.
   only — drill-in / dynamic drawer body → hand-compose `ClippedNavShell`
   (`#layouts-demo-drill-in`) and pass **`navKey`** + **`navDirection`**
   (root vs mode / catalog identity; `"back"` on mode exit) so the drawer
-  body runs **Shared Axis X** (short slide + fade) while track **width stays
-  open** — do **not** hard-swap `nav` or close→reopen the track. Low-level **`ClippedNavShell`**: full-bleed
+  body runs **Shared Axis X** (short slide + fade) while the docked track **width stays
+  open** — do **not** hard-swap `nav` or close→reopen the track. An overlay drawer
+  closes after navigation or Back via `onNavCrowded`; search, disclosure and
+  menu triggers keep it open. Low-level **`ClippedNavShell`**: full-bleed
   TopAppBar + `nav | main`; `navMode` `drawer`|`rail`|`hidden` must match the
   `nav` slot (shell never auto-swaps). Drawer seam resizable (rAF live width;
   commit on pointerup). Crowding watches main-column overflow too; predict
@@ -224,8 +403,12 @@ classes.
   main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet.
   `--fynns-layout-end-aside-sheet-height` defaults to `auto`; its
   `--fynns-layout-end-aside-sheet-max-height` ceiling defaults to
-  `min(52dvh, 22rem)`. Canvas consumers can set both on one shell instance and
-  reserve that height in the main canvas so controls stay reachable. Live
+  `min(52dvh, 22rem)`. The sheet also has a 60dvh viewport ceiling via
+  `--fynns-layout-end-aside-sheet-viewport-max-height`. Canvas consumers can
+  set the preferred height and maximum on one shell instance; when an overlay
+  covers a docked Chat, reserve the sheet's **measured visible height** in the
+  main canvas and update it as Collapsible content opens or closes. Reserving
+  the configured maximum strands the composer after the sheet shrinks. Live
   `#layouts-demo-shell`.
 - **Content:** List / ListItem (selected = `secondary-container` +
   `radius-3xl`; host paints whole-row wash; sibling gap =
@@ -242,7 +425,9 @@ classes.
   `.fynns-table-meta` never Chip), **`RevealMore` + `useRevealMore`** (long
   Card / PageScroll catalogs — Table default **10**/step **10** ≥ **0.5.144**;
   List pass **5**/step **5** via `REVEAL_MORE_LIST_DEFAULT_*` ≥ **0.5.145**;
-  foot outside wrap / after List), DiffView, CodeBlock (titled `default`
+  foot outside wrap / after List), [DiffView / DiffDialog](diff.md) (single-file
+  unified comparison + multi-file review Dialog; text or patch input; legacy
+  `lines` preserved), CodeBlock (titled `default`
   **requires** non-empty `label`; else `variant="plain"`; `label` ≠ `language`
   — always pass matching `language` / `codeLanguageFromPath`; editable
   autoGrow default on PageScroll; soft-wrap live highlight ≥ **0.5.52**;

@@ -4,6 +4,7 @@ import {
   AlertTriangleIcon,
   ArchiveIcon,
   ArrowLeftIcon,
+  ArrowLeftRightIcon,
   ArrowUpIcon,
   BarChartIcon,
   BotIcon,
@@ -24,6 +25,7 @@ import {
   FileIcon,
   FolderOpenIcon,
   GlobeIcon,
+  HomeIcon,
   InfoIcon,
   LayoutGridIcon,
   ListChecksIcon,
@@ -54,10 +56,12 @@ import {
 
 /** Full `@fynns/ui` icon library — consumers may use any glyph; not a subset gate. */
 const ICONS: { name: string; node: ReactNode }[] = [
+  { name: "Home", node: <HomeIcon /> },
   { name: "AlertCircle", node: <AlertCircleIcon /> },
   { name: "AlertTriangle", node: <AlertTriangleIcon /> },
   { name: "Archive", node: <ArchiveIcon /> },
   { name: "ArrowLeft", node: <ArrowLeftIcon /> },
+  { name: "ArrowLeftRight", node: <ArrowLeftRightIcon /> },
   { name: "ArrowUp", node: <ArrowUpIcon /> },
   { name: "BarChart", node: <BarChartIcon /> },
   { name: "Bot", node: <BotIcon /> },

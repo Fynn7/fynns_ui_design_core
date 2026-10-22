@@ -1,4 +1,5 @@
 import {
+  AlertCircleIcon,
   ArchiveIcon,
   ArrowLeftIcon,
   BarChartIcon,
@@ -80,12 +81,19 @@ import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { NavDrawerFooterAccount } from "../components/NavDrawerFooterAccount";
+import { NavDrawerRenameDemo } from "../components/NavDrawerRenameDemo";
 import { ChatEmptySurfaceStarters } from "../components/ChatEmptySurfaceStarters";
 import { ChatProductLayoutsDemo } from "../components/ChatProductLayoutsDemo";
+import { ChatSessionsDrawerDemo } from "../components/ChatSessionsDrawerDemo";
+import { ListSelectionDemo } from "../components/ListSelectionDemo";
 import { ChatAsideLayoutsDemo } from "../components/ChatAsideLayoutsDemo";
+import { ActionSpacingDemo, DrawerTitleSpacingDemo } from "../components/ChromeSpacingDemo";
 import { TokenList } from "../components/TokenList";
 import { layoutsDemoElementId } from "../catalog/layoutsCatalog";
 import { DrillInLayoutsDemo } from "./DrillInLayoutsDemo";
+import { WorkspaceChromeDemo } from "../components/WorkspaceChromeDemo";
+import { CanvasWorkspaceDemo } from "../components/CanvasWorkspaceDemo";
+import { SettingsDialogDemo } from "../components/SettingsDialogDemo";
 
 type RailId = "home" | "search" | "charts" | "all";
 
@@ -164,6 +172,7 @@ export function LayoutsPage() {
   const [navSearchQuery, setNavSearchQuery] = useState("");
   const [navSearchExpanded, setNavSearchExpanded] = useState(false);
   const [fillColumnDraft, setFillColumnDraft] = useState("");
+  const [fillColumnNotice, setFillColumnNotice] = useState(true);
   const [fillColumnPreviewDraft, setFillColumnPreviewDraft] = useState("");
   const [shellFooterShowAccountLabel, setShellFooterShowAccountLabel] =
     useState(true);
@@ -171,11 +180,15 @@ export function LayoutsPage() {
     useState(false);
 
   return (
-    <div className="sandbox-globals">
+    <div className="sandbox-globals sandbox-layouts">
       <div className="sandbox-globals-content">
         <p className="sandbox-globals-lead">{t("layouts.lead")}</p>
 
         <div className="sandbox-globals-section-body">
+          <LayoutsDemo id="settings-dialog"><SettingsDialogDemo /></LayoutsDemo>
+          <LayoutsDemo id="canvas-workspace"><CanvasWorkspaceDemo /></LayoutsDemo>
+          <LayoutsDemo id="workspace-chrome"><WorkspaceChromeDemo /></LayoutsDemo>
+          <LayoutsDemo id="nav-drawer-rename"><NavDrawerRenameDemo /></LayoutsDemo>
           <LayoutsDemo id="shell">
             <div className="sandbox-globals-row sandbox-globals-row--stack">
               <Switch
@@ -419,13 +432,37 @@ export function LayoutsPage() {
             <ChatProductLayoutsDemo />
           </LayoutsDemo>
 
+          <LayoutsDemo id="chat-session-menu">
+            <ChatProductLayoutsDemo withTopBar />
+          </LayoutsDemo>
+
+          <LayoutsDemo id="chat-sessions-drawer">
+            <ChatSessionsDrawerDemo />
+          </LayoutsDemo>
+
+          <LayoutsDemo id="list-selection">
+            <ListSelectionDemo />
+          </LayoutsDemo>
+
           <LayoutsDemo id="chat-aside">
             <ChatAsideLayoutsDemo />
           </LayoutsDemo>
 
           <LayoutsDemo id="fill-column">
+            <ControlRow label={t("layouts.fillColumnNoticeToggle")}>
+              <Switch label={null} ariaLabel={t("layouts.fillColumnNoticeToggle")}
+                checked={fillColumnNotice} onCheckedChange={setFillColumnNotice} />
+              <Button size="sm" onClick={() => snackbar(t("globals.snackbarRequestError"), {
+                severity: "error", duration: "long", dismissible: true,
+                dismissAriaLabel: t("globals.snackbarDismiss"),
+              })}>
+                <AlertCircleIcon aria-hidden />
+                {t("layouts.fillColumnRequestError")}
+              </Button>
+            </ControlRow>
             <div className="sandbox-fill-column-stage">
               <FillColumn>
+                {fillColumnNotice ? <InlineAlert severity="warning" message={t("layouts.fillColumnNotice")} /> : null}
                 <Chat label={t("layouts.fillColumnLabel")}>
                   <ChatThread
                     empty={
@@ -691,6 +728,7 @@ export function LayoutsPage() {
           </LayoutsDemo>
 
           <LayoutsDemo id="navigation-drawer">
+            <DrawerTitleSpacingDemo />
             <div
               className="sandbox-globals-row"
               style={{ alignItems: "stretch", flexWrap: "wrap" }}
@@ -1626,19 +1664,22 @@ export function LayoutsPage() {
           </LayoutsDemo>
 
           <LayoutsDemo id="status-bar">
-            <div className="sandbox-globals-status-bar">
+            <div className="sandbox-globals-status-bar sandbox-status-workbench">
+              <div className="sandbox-status-workbench-body">
+                <Surface padded className="sandbox-status-workbench-canvas">
+                  <FileIcon aria-hidden />
+                  <span>{t("globals.statusBarWorkspace")}</span>
+                </Surface>
+                <Surface padded className="sandbox-status-workbench-aside">
+                  <span>{t("globals.statusBarInspector")}</span>
+                  <span>{t("globals.statusBarEncoding")}</span>
+                </Surface>
+              </div>
               <StatusBar
                 aria-label={t("globals.statusBarAria")}
                 leading={
                   <>
                     <StatusBarItem>{t("globals.statusBarBranch")}</StatusBarItem>
-                    <StatusBarItem>
-                      {t("globals.statusBarWorkspace")}
-                    </StatusBarItem>
-                  </>
-                }
-                trailing={
-                  <>
                     <StatusBarItem
                       onClick={() =>
                         snackbar(t("globals.statusBarProblemsToast"), {
@@ -1649,6 +1690,13 @@ export function LayoutsPage() {
                     >
                       {t("globals.statusBarProblems")}
                     </StatusBarItem>
+                    <StatusBarItem>
+                      {t("globals.statusBarWorkspace")}
+                    </StatusBarItem>
+                  </>
+                }
+                trailing={
+                  <>
                     <StatusBarItem>
                       {t("globals.statusBarEncoding")}
                     </StatusBarItem>
@@ -1663,39 +1711,42 @@ export function LayoutsPage() {
           </LayoutsDemo>
 
           <LayoutsDemo id="toolbar">
+            <ActionSpacingDemo />
             <div className="sandbox-globals-toolbar">
-              <Toolbar
-                variant="docked"
-                aria-label={t("globals.toolbarDockedAria")}
-                floatingActionButton={
-                  <Tooltip content={t("globals.fabTip")}>
-                    <Fab size="sm" aria-label={t("globals.fabTip")}>
-                      <PlusIcon />
-                    </Fab>
+              <div className="fynns-docked-tools-inset">
+                <Toolbar
+                  variant="docked"
+                  aria-label={t("globals.toolbarDockedAria")}
+                  floatingActionButton={
+                    <Tooltip content={t("globals.fabTip")}>
+                      <Fab size="sm" aria-label={t("globals.fabTip")}>
+                        <PlusIcon />
+                      </Fab>
+                    </Tooltip>
+                  }
+                >
+                  <Tooltip content={t("globals.toolbarUndo")}>
+                    <IconButton aria-label={t("globals.toolbarUndo")}>
+                      <UndoIcon />
+                    </IconButton>
                   </Tooltip>
-                }
-              >
-                <Tooltip content={t("globals.toolbarUndo")}>
-                  <IconButton aria-label={t("globals.toolbarUndo")}>
-                    <UndoIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip content={t("globals.toolbarEdit")}>
-                  <IconButton aria-label={t("globals.toolbarEdit")}>
-                    <PencilIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip content={t("globals.toolbarSave")}>
-                  <IconButton aria-label={t("globals.toolbarSave")}>
-                    <SaveIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip content={t("globals.bottomAppBarDelete")}>
-                  <IconButton aria-label={t("globals.bottomAppBarDelete")}>
-                    <TrashIcon />
-                  </IconButton>
-                </Tooltip>
-              </Toolbar>
+                  <Tooltip content={t("globals.toolbarEdit")}>
+                    <IconButton aria-label={t("globals.toolbarEdit")}>
+                      <PencilIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.toolbarSave")}>
+                    <IconButton aria-label={t("globals.toolbarSave")}>
+                      <SaveIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.bottomAppBarDelete")}>
+                    <IconButton aria-label={t("globals.bottomAppBarDelete")}>
+                      <TrashIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Toolbar>
+              </div>
               <div
                 style={{
                   display: "flex",

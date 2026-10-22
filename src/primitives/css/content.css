@@ -72,8 +72,10 @@
 .fynns-card-head {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--fynns-space-2);
+  column-gap: var(--fynns-space-2);
+  row-gap: 0;
   min-width: 0;
   /*
    * One header height for every anatomy (title-only / icon / trailing IconButton).
@@ -128,16 +130,13 @@
   align-items: center;
   /* Disclose (icon/chevron) → title: a step above space-sm, under space-md. */
   gap: var(--fynns-space-3);
-  /*
-   * Prefer a readable title band (~40% flex-basis) when the host is wide.
-   * Do **not** hard-floor `min-width: 40%`: that + `actions` `flex: 0 0 auto`
-   * + Card `overflow: hidden` clips the end IconButton (danger trash) when
-   * the strip is denser than ~60% (ToggleGroup + icons — agents-hub lesson).
-   * Yield below 40% so chrome stays fully visible; title ellipsizes via
-   * `.fynns-card-title { min-width: 0 }`. Live: sandbox `#card` actions-strip.
-   */
-  flex: 1 1 40%;
+  /* A zero basis lets a fitting action strip keep one row. Once the strip
+   * exceeds the host, flex wrapping moves it below the title instead of
+   * clipping controls at the shell's overflow boundary. No viewport cutoff:
+   * this also adapts in a narrow pane of a wide window. */
+  flex: 1 1 0;
   min-width: 0;
+  min-height: calc(var(--fynns-size-icon-target) + 2 * var(--fynns-space-xs));
   /* Vertical rhythm comes from the shared head min-height + flex centering —
    * no padding-block (it fought IconButton+xs and caused variant drift). */
   padding-block: 0;
@@ -294,9 +293,14 @@
 .fynns-card-actions {
   position: relative;
   z-index: 1;
-  /* Hug chrome; never shrink under the lead — title yields instead (see lead). */
-  flex: 0 0 auto;
+  /* Hug when possible, then wrap within the actual header width. */
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  margin-inline-start: auto;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   align-items: center;
   gap: var(--fynns-space-2);
   /* Keep IconButton hover disks off the card edge (not full content-inset). */
@@ -304,21 +308,45 @@
   padding-inline-end: var(--fynns-space-xs);
 }
 
-/*
- * Header actions = one horizontal strip (M3). Every cluster under the actions
- * slot must hug + nowrap — including nested helper groups. A sole
- * `>` rule is not enough when helpers wrap themselves in `.fynns-control-cluster`
- * (`width: 100%` + wrap) and the head squeezes the strip: each nested group
- * claims a full row (~72dp tall stack). Prefer a flat outer cluster of
- * IconButtons; nested helpers must still stay one row.
- */
+/* Header buttons are always sm, including default-md / explicit-lg controls
+ * behind Tooltip, clusters or consumer helper wrappers. Body and portaled menu
+ * controls retain their own density. Keep the shared title band unchanged. */
+:is(.fynns-card-actions, .fynns-collapsible-actions) .fynns-btn {
+  min-height: var(--fynns-layout-field-header-action-row-min-height);
+  height: var(--fynns-layout-field-header-action-row-min-height);
+  font-size: var(--fynns-font-size-xs);
+  padding: 0 var(--fynns-space-md);
+}
+
+:is(.fynns-card-actions, .fynns-collapsible-actions) .fynns-btn.fynns-btn--icon {
+  width: var(--fynns-layout-field-header-action-row-min-height);
+  min-width: var(--fynns-layout-field-header-action-row-min-height);
+  height: var(--fynns-layout-field-header-action-row-min-height);
+  min-height: var(--fynns-layout-field-header-action-row-min-height);
+  padding: 0;
+}
+
+/* Nested helper groups hug on roomy headers, but must not force an unbounded
+ * nowrap strip in narrow cards. Bound every cluster, not just the outer one. */
 .fynns-card-actions .fynns-control-cluster,
 .fynns-collapsible-actions .fynns-control-cluster {
   width: auto;
-  max-width: none;
-  flex-wrap: nowrap;
-  flex: 0 0 auto;
+  max-width: 100%;
+  flex-wrap: wrap;
+  flex: 0 1 auto;
   min-width: 0;
+}
+
+/* A single long menu trigger must also fit on its own line. Its existing
+ * OverflowTip keeps the full label accessible without resizing the flyout. */
+:is(.fynns-card-actions, .fynns-collapsible-actions) .fynns-menu-root {
+  min-width: 0;
+  max-width: 100%;
+}
+
+:is(.fynns-card-actions, .fynns-collapsible-actions) .fynns-menu-root > .fynns-btn {
+  min-width: 0;
+  max-width: 100%;
 }
 
 /*
@@ -793,48 +821,94 @@ a.fynns-breadcrumb-link:visited {
 /* ---------- Loading ---------- */
 .fynns-loading-spinner {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
 }
 
-.fynns-loading-spinner--sm {
-  width: 1rem;
-  height: 1rem;
-}
-
-.fynns-loading-spinner--md {
-  width: 1.6rem;
-  height: 1.6rem;
-}
-
-.fynns-loading-spinner--lg {
-  width: 2.5rem;
-  height: 2.5rem;
-}
-
+/* Permanently archived / deprecated: legacy Button and text-based waits only. */
+.fynns-loading-spinner--sm { width: var(--fynns-layout-loading-ring-sm); height: var(--fynns-layout-loading-ring-sm); }
+.fynns-loading-spinner--md { width: var(--fynns-layout-loading-ring-md); height: var(--fynns-layout-loading-ring-md); }
+.fynns-loading-spinner--lg { width: var(--fynns-layout-loading-ring-lg); height: var(--fynns-layout-loading-ring-lg); }
 .fynns-loading-spinner-ring {
   width: 100%;
   height: 100%;
-  border: 3px solid color-mix(in srgb, var(--fynns-color-accent) 20%, transparent);
-  border-top-color: var(--fynns-color-accent);
+  border: var(--fynns-layout-loading-ring-stroke) solid color-mix(in srgb, currentColor 25%, transparent);
+  border-top-color: currentColor;
   border-radius: var(--fynns-radius-round);
   animation: fynns-spin var(--fynns-duration-loading-spin) linear infinite;
 }
 
-/* Filled buttons use accent/danger background — default accent ring is invisible there. */
-.fynns-btn--primary .fynns-loading-spinner-ring,
-.fynns-btn--danger .fynns-loading-spinner-ring {
-  border-color: color-mix(in srgb, currentColor 25%, transparent);
-  border-top-color: currentColor;
+.fynns-loading-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-skeleton-row-gap);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  --fynns-skeleton-height: var(--fynns-layout-skeleton-line-md);
+  --fynns-skeleton-fill: var(--fynns-color-skeleton-base);
+  --fynns-skeleton-peak: var(--fynns-color-skeleton-highlight);
+}
+
+.fynns-loading-skeleton--sm { --fynns-skeleton-height: var(--fynns-layout-skeleton-line-sm); }
+.fynns-loading-skeleton--lg { --fynns-skeleton-height: var(--fynns-layout-skeleton-line-lg); }
+
+.fynns-loading-skeleton-bar {
+  display: block;
+  flex-shrink: 0;
+  width: 100%;
+  height: var(--fynns-skeleton-height);
+  border-radius: var(--fynns-radius-pill);
+  background-color: var(--fynns-skeleton-fill);
+  background-image: linear-gradient(90deg,
+    var(--fynns-skeleton-fill) 0%, var(--fynns-skeleton-fill) 30%,
+    var(--fynns-skeleton-peak) 50%,
+    var(--fynns-skeleton-fill) 70%, var(--fynns-skeleton-fill) 100%);
+  background-size: 400% 100%;
+  animation: fynns-chat-thinking-shimmer var(--fynns-duration-thinking-shimmer) linear infinite;
+}
+
+.fynns-loading-skeleton--text > .fynns-loading-skeleton-bar:nth-child(3n + 1) {
+  width: 58%;
+}
+.fynns-loading-skeleton--text > .fynns-loading-skeleton-bar:nth-child(3n + 2) {
+  width: 82%;
+}
+
+.fynns-loading-skeleton--block {
+  height: var(--fynns-layout-skeleton-block-height);
+}
+.fynns-loading-skeleton--block > .fynns-loading-skeleton-bar {
+  height: 100%;
+  border-radius: var(--fynns-radius-sm);
+}
+.fynns-loading-skeleton--fill {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+.fynns-loading-skeleton--text.fynns-loading-skeleton--fill {
+  justify-content: space-between;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-loading-spinner-ring { animation: none; }
+  .fynns-loading-skeleton-bar {
+    animation: none;
+    background-image: none;
+  }
 }
 
 /*
  * Same trap for nested CircularProgress (consumer anti-pattern: swap IconButton
- * children instead of `loading`). Prefer `loading` — Spinner is the chrome glyph.
+ * children instead of `loading`). Prefer `loading` — the archived ring is retained only for compatibility.
  * ≥ **0.5.217**: on-accent / on-danger stroke so the ring is not accent-on-accent.
  */
 .fynns-btn--primary .fynns-circular-progress,
-.fynns-btn--danger .fynns-circular-progress {
+.fynns-btn--danger /* Permanently archived / deprecated loading ring. Compatibility only;
+ * strongly discouraged for consumers. New UI reserves content-position skeletons. */
+.fynns-circular-progress {
   color: currentColor;
 }
 
@@ -1165,11 +1239,13 @@ a.fynns-breadcrumb-link:visited {
 /* Soft tonal fill. Icon carries severity; body is on-surface (readable).
    Pad rhythm shared with Banner strip tokens. Not M3 — maps to Banner / Snackbar. */
 .fynns-inline-alert {
-  display: flex;
-  align-items: flex-start;
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  justify-self: start;
   gap: var(--fynns-banner-gap);
   box-sizing: border-box;
-  width: 100%;
+  width: fit-content;
   max-width: 100%;
   min-width: 0;
   margin: 0;
@@ -1187,7 +1263,6 @@ a.fynns-breadcrumb-link:visited {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-top: 0.125rem;
   flex: 0 0 auto;
   width: var(--fynns-banner-icon-size);
   height: var(--fynns-banner-icon-size);
@@ -1195,6 +1270,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-inline-alert__icon svg {
+  display: block;
   width: var(--fynns-banner-icon-size);
   height: var(--fynns-banner-icon-size);
 }
@@ -1204,6 +1280,14 @@ a.fynns-breadcrumb-link:visited {
   min-width: 0;
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+.fynns-inline-alert__dismiss {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  /* Icon→text stays Banner gap; text→X opens to the 16dp unit rhythm. */
+  margin-inline-start: calc(var(--fynns-layout-unit-stack-gap) - var(--fynns-banner-gap));
 }
 
 .fynns-inline-alert--info {
@@ -4501,6 +4585,9 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-fill-column-main {
+  box-sizing: border-box;
+  padding-block-start: var(--fynns-layout-dialog-inset);
+  padding-inline: var(--fynns-layout-dialog-inset);
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
@@ -4655,4 +4742,94 @@ a.fynns-breadcrumb-link:visited {
     :has(> .fynns-busy-region--fill)
   ):not(:has(> .fynns-empty-state--fill)) {
   flex-shrink: 0;
+}
+
+/* Content-preview disclosure, shared with ChatMessage. */
+.fynns-expand-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-2xs);
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--fynns-color-accent);
+  font: inherit;
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-body);
+  cursor: pointer;
+}
+
+.fynns-expand-toggle:hover {
+  color: var(--fynns-color-accent-hover);
+}
+
+.fynns-expand-toggle:focus {
+  outline: none;
+}
+
+.fynns-expand-toggle:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+  border-radius: var(--fynns-radius-sm);
+}
+
+.fynns-expand-toggle-chevron {
+  flex-shrink: 0;
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-expand-toggle[aria-expanded="true"]
+  .fynns-expand-toggle-chevron {
+  transform: rotate(180deg);
+}
+
+
+.fynns-expand-toggle { align-self: flex-start; }
+.fynns-expand-toggle:disabled { color: var(--fynns-color-text-muted); cursor: default; }
+
+/* Preview disclosure: complete shells and a shared 16dp footer rhythm. */
+.fynns-expandable-content,
+.fynns-expandable-content-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: var(--fynns-layout-unit-stack-gap);
+}
+.fynns-expandable-content-body[hidden] { display: none; }
+.fynns-expandable-content > * { flex-shrink: 0; }
+.fynns-expandable-text {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: var(--fynns-line-height-body);
+}
+.fynns-expandable-text[data-collapsed] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--fynns-preview-lines);
+  overflow: hidden;
+}
+
+.fynns-expand-toggle { max-width: 100%; text-align: start; }
+
+.fynns-expandable-code .fynns-code-block-pre { box-sizing: border-box; }
+
+/* One visual shell owns the code preview and its disclosure footer. */
+.fynns-expandable-code {
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-1);
+  overflow: hidden;
+  gap: 0;
+}
+.fynns-expandable-code > .fynns-code-block {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.fynns-expandable-code-foot {
+  padding-inline: var(--fynns-layout-content-inset);
+  padding-block-end: var(--fynns-layout-content-pad-block);
 }
