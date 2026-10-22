@@ -548,6 +548,7 @@ export function DropdownMenuItem({
   return (
     <div
       className="fynns-menu-item-host"
+      role="presentation"
       onClick={(event) => {
         // A pick inside the end-action slot closes the menu like a row pick
         // (the row button never saw this click).

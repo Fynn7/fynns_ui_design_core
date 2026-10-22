@@ -1713,6 +1713,7 @@ export function LayoutsPage() {
           <LayoutsDemo id="toolbar">
             <ActionSpacingDemo />
             <div className="sandbox-globals-toolbar">
+              <div className="fynns-docked-tools-inset">
               <Toolbar
                 variant="docked"
                 aria-label={t("globals.toolbarDockedAria")}
@@ -1745,6 +1746,7 @@ export function LayoutsPage() {
                   </IconButton>
                 </Tooltip>
               </Toolbar>
+              </div>
               <div
                 style={{
                   display: "flex",

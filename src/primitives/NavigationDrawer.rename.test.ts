@@ -65,6 +65,15 @@ function renameClosed() {
   return overlay?.getAttribute("data-state") === "closing";
 }
 
+/** Let the frame finish its enter transition so `data-state` reads "open". */
+async function settle() {
+  await act(async () => {
+    await new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve(null))),
+    );
+  });
+}
+
 function doubleClick(target: HTMLElement) {
   act(() => {
     target.dispatchEvent(
@@ -134,6 +143,34 @@ describe("NavigationDrawerItem core rename flow", () => {
     act(() => cancel.click());
     expect(onRename).not.toHaveBeenCalled();
     expect(renameClosed()).toBe(true);
+  });
+
+  it("keeps the dialog open when Enter commits an empty name", async () => {
+    const { host, onRename } = mount();
+    doubleClick(row(host));
+    await settle();
+    const field = dialog()!.querySelector<HTMLInputElement>("input")!;
+    act(() => {
+      const setter = Object.getOwnPropertyDescriptor(
+        HTMLInputElement.prototype,
+        "value",
+      )!.set!;
+      setter.call(field, "   ");
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    act(() => {
+      field.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Enter",
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+    });
+    await settle();
+    expect(onRename).not.toHaveBeenCalled();
+    expect(renameClosed()).toBe(false);
+    expect(dialog()).not.toBeNull();
   });
 
   it("opens the rename dialog with F2 on a focused row", () => {

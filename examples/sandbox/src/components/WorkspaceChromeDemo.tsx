@@ -93,16 +93,18 @@ export function WorkspaceChromeDemo() {
             </FieldBlock></FieldStack></Card> : <EmptyState title={c.empty} description={c.body} />}
           </PageScroll></div>
           <EndAside open={asideOpen}><PageScroll><Card title={c.inspector}>
-            <Toolbar variant="docked" aria-label={c.actions}>
-              <Tooltip content={c.front}><IconButton variant="ghost" aria-label={c.front}
-                onClick={() => snackbar(c.front)}><ArrowUpIcon /></IconButton></Tooltip>
-              <Tooltip content={c.rear}><IconButton variant="ghost" aria-label={c.rear}
-                onClick={() => snackbar(c.rear)}><ArrowUpIcon style={{ transform: "rotate(180deg)" }} /></IconButton></Tooltip>
-              <Tooltip content={c.duplicate}><IconButton variant="ghost" aria-label={c.duplicate}
-                onClick={() => snackbar(c.duplicate)}><ClipboardIcon /></IconButton></Tooltip>
-              <Tooltip content={c.remove}><IconButton variant="ghost" aria-label={c.remove}
-                onClick={() => snackbar(c.remove)}><TrashIcon /></IconButton></Tooltip>
-            </Toolbar>
+            <div className="fynns-docked-tools-inset">
+              <Toolbar variant="docked" aria-label={c.actions}>
+                <Tooltip content={c.front}><IconButton variant="ghost" aria-label={c.front}
+                  onClick={() => snackbar(c.front)}><ArrowUpIcon /></IconButton></Tooltip>
+                <Tooltip content={c.rear}><IconButton variant="ghost" aria-label={c.rear}
+                  onClick={() => snackbar(c.rear)}><ArrowUpIcon style={{ transform: "rotate(180deg)" }} /></IconButton></Tooltip>
+                <Tooltip content={c.duplicate}><IconButton variant="ghost" aria-label={c.duplicate}
+                  onClick={() => snackbar(c.duplicate)}><ClipboardIcon /></IconButton></Tooltip>
+                <Tooltip content={c.remove}><IconButton variant="ghost" aria-label={c.remove}
+                  onClick={() => snackbar(c.remove)}><TrashIcon /></IconButton></Tooltip>
+              </Toolbar>
+            </div>
           </Card></PageScroll></EndAside>
         </div>
       </ClippedNavShell>
@@ -124,12 +126,14 @@ export function InlineAlertDemo() {
   const c = copy[locale];
   const [visible, setVisible] = useState(true);
   return <div id="sandbox-inline-alert-dismiss" className="fynns-unit-stack">
-    <Toolbar variant="docked" aria-label={c.feedback}>
-      <Button variant="ghost" onClick={() => snackbar(c.failure, {
-        severity: "error", duration: "long", dismissible: true, dismissAriaLabel: c.dismiss,
-      })}><PlusIcon />{c.transient}</Button>
-      <Button variant="ghost" onClick={() => setVisible(true)}><PlusIcon />{c.restore}</Button>
-    </Toolbar>
+    <div className="fynns-docked-tools-inset">
+      <Toolbar variant="docked" aria-label={c.feedback}>
+        <Button variant="ghost" onClick={() => snackbar(c.failure, {
+          severity: "error", duration: "long", dismissible: true, dismissAriaLabel: c.dismiss,
+        })}><PlusIcon />{c.transient}</Button>
+        <Button variant="ghost" onClick={() => setVisible(true)}><PlusIcon />{c.restore}</Button>
+      </Toolbar>
+    </div>
     {visible && <InlineAlert severity="error" message={c.failure}
       onDismiss={() => setVisible(false)} dismissAriaLabel={c.dismiss} />}
     <div style={{ maxWidth: "var(--fynns-navdrawer-width)" }}>

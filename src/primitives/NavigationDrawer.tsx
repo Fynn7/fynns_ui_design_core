@@ -2,7 +2,6 @@ import {
   Children,
   forwardRef,
   isValidElement,
-  useEffect,
   useId,
   useLayoutEffect,
   useRef,
@@ -15,17 +14,20 @@ import {
   type ReactNode,
 } from "react";
 import { trailingIsRowAction } from "./catalogRowGeometry";
-import { Button } from "./Button";
 import { DialogFrame, type DrawerSide } from "./DialogFrame";
-import { Dialog } from "./Dialog";
-import { FieldBlock } from "./FieldHeader";
-import { FieldStack } from "./FieldStack";
-import { CheckIcon, ChevronRightIcon, CloseIcon, ICON_SIZE, PlusIcon } from "./icons";
-import { Input } from "./Input";
+import { ChevronRightIcon, ICON_SIZE, PlusIcon } from "./icons";
 import { Spinner } from "./Loading";
+import {
+  NavigationDrawerRenameDialog,
+  resolveRenameLabels,
+  useNavDrawerRename,
+  type NavigationDrawerRenameLabels,
+} from "./navigationDrawerRename";
 import { OverflowTip, overflowTipText } from "./OverflowTip";
 import { syncScrollEdgeFade } from "./scrollEdgeFade";
 import { isNavigationDrawerActivation } from "./navigationDrawerActivation";
+
+export type { NavigationDrawerRenameLabels };
 
 /** True when any nested destination (or nested group) reports `active`. */
 function hasActiveDestination(node: ReactNode): boolean {
@@ -467,24 +469,6 @@ export function NavigationDrawerGroup({
  * Localized copy for the core rename dialog. Every field is a **human
  * sentence** — no counts, no parenthetical glosses.
  */
-export type NavigationDrawerRenameLabels = {
-  /** Dialog title — e.g. "Rename document". */
-  title: string;
-  /** Field label — e.g. "Name". */
-  field: string;
-  /** Cancel action label — e.g. "Cancel". */
-  cancel: string;
-  /** Save action label — e.g. "Save". */
-  save: string;
-};
-
-const DEFAULT_RENAME_LABELS: NavigationDrawerRenameLabels = {
-  title: "Rename",
-  field: "Name",
-  cancel: "Cancel",
-  save: "Save",
-};
-
 export type NavigationDrawerItemProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
   "children"
@@ -520,10 +504,9 @@ export type NavigationDrawerItemProps = Omit<
    * `F2` while it has focus) opens the core rename `Dialog` (title + field +
    * ghost Cancel / primary Save). Commit through `onRename`.
    *
-   * Persistent drawers (`NavigationDrawer variant="standard"`) keep the row
-   * mounted, so the gesture completes there. In `variant="modal"` the first
-   * click activates the destination and closes the sheet — keep the
-   * context-menu rename there.
+   * The gesture completes wherever the destination stays mounted. A modal
+   * drawer activates the destination and closes the sheet on the first click,
+   * so there the context-menu rename remains the entry point.
    */
   renamable?: boolean;
   /**
@@ -537,7 +520,8 @@ export type NavigationDrawerItemProps = Omit<
   /**
    * Controlled open state of the rename dialog. Use it to open the **same**
    * core dialog from the item context menu (the workspace recipe) instead of
-   * shipping a second rename surface.
+   * shipping a second rename surface. Pair it with `onRenameOpenChange` —
+   * without that callback the gesture cannot open the dialog.
    */
   renameOpen?: boolean;
   /** Notified when the rename dialog opens or closes. */
@@ -575,7 +559,6 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
   ref: ForwardedRef<HTMLButtonElement>,
 ) {
   const labelId = useId();
-  const renameFieldId = `${labelId}-rename`;
 
   const badgeIsAction =
     badge != null &&
@@ -615,53 +598,22 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
     .join(" ");
 
   // —— core rename flow ——
-  const renameControlled = renameOpen !== undefined;
-  const [internalRenameOpen, setInternalRenameOpen] = useState(false);
-  const renameVisible = renameControlled ? renameOpen === true : internalRenameOpen;
-  /** `null` = untouched, so the field always starts from the current label. */
-  const [renameDraft, setRenameDraft] = useState<string | null>(null);
-  const renameValue = renameDraft ?? label;
-  const renameCopy = { ...DEFAULT_RENAME_LABELS, ...renameLabels };
-  const renameWarnedRef = useRef(false);
-
-  useEffect(() => {
-    if (!renamable || onRename != null || renameWarnedRef.current) return;
-    const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } })
-      .process?.env?.NODE_ENV;
-    if (nodeEnv === "production") return;
-    renameWarnedRef.current = true;
-    console.warn(
-      "[fynns] NavigationDrawerItem: `renamable` needs `onRename` to commit the new name. " +
-        "Without it the core rename dialog opens but Save discards the typed name.",
-    );
-  }, [renamable, onRename]);
-
-  const openRename = () => {
-    if (disabled) return;
-    setRenameDraft(null);
-    if (!renameControlled) setInternalRenameOpen(true);
-    onRenameOpenChange?.(true);
-  };
-
-  const closeRename = () => {
-    setRenameDraft(null);
-    if (!renameControlled) setInternalRenameOpen(false);
-    onRenameOpenChange?.(false);
-  };
-
-  const commitRename = () => {
-    const next = renameValue.trim();
-    closeRename();
-    if (!next || next === label) return;
-    onRename?.(next);
-  };
+  const rename = useNavDrawerRename({
+    renamable,
+    label,
+    disabled,
+    onRename,
+    renameOpen,
+    onRenameOpenChange,
+  });
+  const renameCopy = resolveRenameLabels(renameLabels);
 
   const handleDoubleClick = (event: MouseEvent<HTMLButtonElement>) => {
     onDoubleClick?.(event);
     if (event.defaultPrevented || !renamable || disabled) return;
     // The gesture replaces the browser word selection.
     event.preventDefault();
-    openRename();
+    rename.open();
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
@@ -669,7 +621,7 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
     if (event.defaultPrevented || !renamable || disabled) return;
     if (event.key !== "F2") return;
     event.preventDefault();
-    openRename();
+    rename.open();
   };
 
   const item = (
@@ -698,44 +650,14 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
   );
 
   const renameDialog = renamable ? (
-    <Dialog
-      open={renameVisible}
-      onOpenChange={(open) => {
-        if (!open) closeRename();
-      }}
-      title={renameCopy.title}
-      feet={
-        <div className="fynns-control-cluster fynns-control-cluster--end-align">
-          <Button variant="ghost" onClick={closeRename}>
-            <CloseIcon />
-            {renameCopy.cancel}
-          </Button>
-          <Button
-            variant="primary"
-            disabled={!renameValue.trim()}
-            onClick={commitRename}
-          >
-            <CheckIcon />
-            {renameCopy.save}
-          </Button>
-        </div>
-      }
-    >
-      <FieldStack>
-        <FieldBlock label={renameCopy.field} htmlFor={renameFieldId}>
-          <Input
-            id={renameFieldId}
-            value={renameValue}
-            onChange={(event) => setRenameDraft(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key !== "Enter") return;
-              event.preventDefault();
-              commitRename();
-            }}
-          />
-        </FieldBlock>
-      </FieldStack>
-    </Dialog>
+    <NavigationDrawerRenameDialog
+      open={rename.visible}
+      value={rename.value}
+      onValueChange={rename.setValue}
+      onCommit={rename.commit}
+      onCancel={rename.cancel}
+      labels={renameCopy}
+    />
   ) : null;
 
   const hostClass = [

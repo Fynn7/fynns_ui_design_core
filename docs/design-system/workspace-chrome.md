@@ -79,12 +79,13 @@ takes `renamable`, `onRename`, `renameLabels` and the optional controlled
   second dialog or an inline editor.
 - **Dialog chrome:** title, one `Name` field, `feet` = ghost Cancel (X) then
   the single primary Save; Save stays disabled while the name is empty.
-- **Commit rules:** `Enter` saves, `Escape` cancels, `Cancel` cancels.
-  `onRename` receives the trimmed name and fires only when it actually
+- **Commit rules:** `Enter` saves, `Escape` cancels, `Cancel` cancels. An empty
+  name is not a rename — Save stays disabled and `Enter` keeps the dialog
+  open. `onRename` receives the trimmed name and fires only when it actually
   changed; the consumer owns the data and re-renders `label`.
-- **Drawer variant:** the gesture completes in persistent drawers
-  (`variant="standard"`), which keep the row mounted. A modal drawer closes
-  on the first click, so keep its context-menu rename.
+- **Drawer variant:** the gesture completes wherever the destination stays
+  mounted. A modal drawer activates the destination and closes the sheet on
+  the first click, so there the context-menu rename remains the entry point.
 
 Live: `#layouts-demo-nav-drawer-rename` (persistent destinations) and
 `#layouts-demo-workspace-chrome` (context menu + double-click share one

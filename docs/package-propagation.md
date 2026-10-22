@@ -20,8 +20,9 @@ gesture and dialog (`renamable` + `onRename` + `renameLabels`, optional
 controlled `renameOpen` / `onRenameOpenChange`). Double-click a destination
 (or press `F2`) opens the core rename Dialog; `Enter` saves, `Escape` cancels.
 Consumers drop their own rename dialog and point the item context menu at
-the same dialog. Persistent drawers keep the row mounted, so the gesture
-completes there; modal drawers still close on the first click. See
+the same dialog. The gesture completes wherever the destination stays
+mounted; a modal drawer closes the sheet on the first click, so it keeps the
+context-menu rename. See
 [workspace contract](design-system/workspace-chrome.md).
 
 **Narrow header fix ≥ 0.5.312:** Card / Collapsible action strips and nested

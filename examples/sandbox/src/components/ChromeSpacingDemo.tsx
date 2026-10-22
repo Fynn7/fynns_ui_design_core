@@ -41,9 +41,11 @@ export function ActionSpacingDemo() {
   );
   return (
     <div id="sandbox-action-spacing" className="fynns-unit-stack">
-      <Toolbar variant="docked" aria-label={t("globals.toolbarDockedAria")}>
-        {actions}
-      </Toolbar>
+      <div className="fynns-docked-tools-inset">
+        <Toolbar variant="docked" aria-label={t("globals.toolbarDockedAria")}>
+          {actions}
+        </Toolbar>
+      </div>
       <Toolbar variant="floating" aria-label={t("globals.toolbarFloatingAria")}>
         {actions}
       </Toolbar>
