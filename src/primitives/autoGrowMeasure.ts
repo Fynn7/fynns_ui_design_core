@@ -56,3 +56,25 @@ export function measureCollapsedHeight(
   restoreScroll();
   return measured;
 }
+
+/**
+ * Read the content height of an autoGrow field.
+ *
+ * With no IME composition active the field is collapsed to read its
+ * intrinsic content height (see `measureCollapsedHeight`). While a
+ * composition is running the field must not be resized under the IME: the
+ * collapsed probe is a layout change on the focused field and can cancel the
+ * composition (a Chinese IME then swallows the composed text). The plain
+ * scroll height is exact whenever the content overflows the box; a box that is
+ * still too tall simply stays tall until the composition ends and the field
+ * is measured again.
+ */
+export function measureContentHeight(
+  el: HTMLElement,
+  borderY: number,
+  composing: boolean,
+): number {
+  if (composing) return el.scrollHeight + borderY;
+  return measureCollapsedHeight(el, (node) => node.scrollHeight + borderY);
+}
+

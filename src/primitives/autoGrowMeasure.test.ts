@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   captureScrollOffsets,
   measureCollapsedHeight,
+  measureContentHeight,
 } from "./autoGrowMeasure";
 
 function mountField() {
@@ -69,5 +70,27 @@ describe("autoGrow measurement keeps the page still", () => {
 
     expect(scroller.scrollTop).toBe(10);
     expect(field.scrollTop).toBe(20);
+  });
+});
+
+describe("autoGrow measurement under an IME composition", () => {
+  it("never collapses the field while a composition is active", () => {
+    const { field } = mountField();
+    field.style.height = "300px";
+
+    const measured = measureContentHeight(field, 2, true);
+
+    expect(measured).toBe(field.scrollHeight + 2);
+    expect(field.style.height).toBe("300px");
+  });
+
+  it("collapses and restores the field when no composition is active", () => {
+    const { field } = mountField();
+    field.style.height = "300px";
+
+    const measured = measureContentHeight(field, 2, false);
+
+    expect(measured).toBe(field.scrollHeight + 2);
+    expect(field.style.height).toBe("300px");
   });
 });

@@ -20,7 +20,7 @@ import {
   syncScrollEdgeFade,
   syncScrollEdgeFadeOnto,
 } from "./scrollEdgeFade";
-import { measureCollapsedHeight } from "./autoGrowMeasure";
+import { measureContentHeight } from "./autoGrowMeasure";
 import {
   highlightCode,
   highlightWithProfile,
@@ -270,6 +270,8 @@ export function CodeBlock(props: CodeBlockProps) {
   const emittedRef = useRef(editableText);
   const lastNotifiedRef = useRef(editableText);
   const focusedRef = useRef(false);
+  /* True between compositionstart and compositionend (CJK IME). */
+  const composingRef = useRef(false);
   const notifyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onChangeProp = editable ? props.onChange : undefined;
   const valueProp = editable ? props.value : undefined;
@@ -526,11 +528,10 @@ export function CodeBlock(props: CodeBlockProps) {
 
     /* Measure with the collapsed probe, but keep the page where it is: the
        0px probe shrinks every ancestor scroll range, so the browser clamps
-       their offsets and the page jumped back to the top on every keystroke. */
-    const contentBox = measureCollapsedHeight(
-      el,
-      (node) => node.scrollHeight + borderY,
-    );
+       their offsets and the page jumped back to the top on every keystroke.
+       An active IME composition skips the probe: collapsing the focused
+       field under the IME cancels the composition. */
+    const contentBox = measureContentHeight(el, borderY, composingRef.current);
     const next = Math.min(Math.max(contentBox, floor), cap);
     el.style.height = `${next}px`;
   }, [autoGrow, rows, showEditorOverlay]);
@@ -594,6 +595,18 @@ export function CodeBlock(props: CodeBlockProps) {
 
   const onInputFocus = () => {
     focusedRef.current = true;
+  };
+
+  /* CJK IME: the field must not be resized while a composition runs — a
+     collapsed probe under the IME cancels the composed text. Measure again
+     once the composition landed. */
+  const onInputCompositionStart = () => {
+    composingRef.current = true;
+  };
+
+  const onInputCompositionEnd = () => {
+    composingRef.current = false;
+    syncEditableHeightRef.current();
   };
 
   const onInputBlur = () => {
@@ -726,6 +739,8 @@ export function CodeBlock(props: CodeBlockProps) {
             onChange={onInputChange}
             onFocus={onInputFocus}
             onBlur={onInputBlur}
+            onCompositionStart={onInputCompositionStart}
+            onCompositionEnd={onInputCompositionEnd}
             onScroll={onInputScroll}
             spellCheck={false}
             autoComplete="off"

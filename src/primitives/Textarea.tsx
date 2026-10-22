@@ -15,7 +15,7 @@ import {
   clearScrollEdgeFade,
   syncScrollEdgeFade,
 } from "./scrollEdgeFade";
-import { measureCollapsedHeight } from "./autoGrowMeasure";
+import { measureContentHeight } from "./autoGrowMeasure";
 
 export type TextareaSize = "sm" | "md";
 export type TextareaVariant = "filled" | "outlined";
@@ -83,6 +83,8 @@ export const Textarea = forwardRef(function Textarea(
     value,
     defaultValue,
     onChange,
+    onCompositionStart,
+    onCompositionEnd,
     style,
     spellCheck = false,
     ...rest
@@ -96,6 +98,8 @@ export const Textarea = forwardRef(function Textarea(
   const hint = errorText ?? supportingText;
   const minRows = resolveMinRows(minRowsProp, rows);
   const localRef = useRef<HTMLTextAreaElement | null>(null);
+  /* True between compositionstart and compositionend (CJK IME). */
+  const composingRef = useRef(false);
 
   const setRefs = useCallback(
     (node: HTMLTextAreaElement | null) => {
@@ -147,10 +151,13 @@ export const Textarea = forwardRef(function Textarea(
 
     /* Measure with the collapsed probe, but keep the page where it is: the
        0px probe shrinks every ancestor scroll range, so the browser clamps
-       their offsets and the page jumped back to the top on every keystroke. */
-    const contentHeight = measureCollapsedHeight(
+       their offsets and the page jumped back to the top on every keystroke.
+       An active IME composition skips the probe: collapsing the focused
+       field under the IME cancels the composition. */
+    const contentHeight = measureContentHeight(
       el,
-      (node) => node.scrollHeight + borderY,
+      borderY,
+      composingRef.current,
     );
     let next = Math.min(Math.max(contentHeight, floor), cap);
     el.style.height = `${next}px`;
@@ -227,6 +234,18 @@ export const Textarea = forwardRef(function Textarea(
       value={value}
       defaultValue={defaultValue}
       onChange={handleChange}
+      /* CJK IME: never resize the field under an active composition — the
+         collapsed probe can cancel the composed text. Measure again when the
+         composition landed. */
+      onCompositionStart={event => {
+        composingRef.current = true;
+        onCompositionStart?.(event);
+      }}
+      onCompositionEnd={event => {
+        composingRef.current = false;
+        onCompositionEnd?.(event);
+        resize();
+      }}
       style={style}
       spellCheck={spellCheck}
       aria-invalid={isInvalid || undefined}
