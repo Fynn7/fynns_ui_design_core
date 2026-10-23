@@ -646,14 +646,15 @@ Use the core CSS recipe; never compress these with local margins or line heights
   **0.5.131**). Live `#password` / `#input`. Failure: CONSUMER_TREATY Input
   trailing affix far from shell edge; Input trailing md IconButton in field
   shell.
-- **DON'T** start **new** consumer screens on soft-deprecated **`Select`** /
-  **`Autocomplete`** (≥ **0.5.236**) — still exported + taught on Globals
-  `#select` / `#autocomplete` with `InlineAlert` warning, but prefer
-  **`DropdownMenu`** (`#menu`) for discrete picks and **`SearchBar`** /
-  **`CommandPalette`** for type-to-filter / commands. Temporary carve-out:
+- **DON'T** start **new** consumer screens on soft-deprecated **`Select`**
+  (≥ **0.5.236**) — still exported + taught on Globals `#select` with
+  `InlineAlert` warning, but prefer **`DropdownMenu`** (`#menu`) for discrete
+  picks, **`Autocomplete`** (`#autocomplete`) for body-region (form / prose)
+  type-to-filter, and **`SearchBar`** / **`CommandPalette`** for chrome /
+  global search and command pickers. Temporary carve-out:
   Pagination `.fynns-pagination-bar` rows-per-page may keep stock Select until
-  a Menu-based pager recipe lands. Failure: CONSUMER_TREATY Select Autocomplete
-  deprecated prefer Menu SearchBar.
+  a Menu-based pager recipe lands. Failure: CONSUMER_TREATY picker region
+  mismatch (new Select use / chrome SearchBar for form filter).
 - **DON'T** bake the page-size noun into every Select option (`Rows: 10`,
   `Sessions: 50`, `每页 100 行`) — options are **digits only**; noun once via
   sibling `.fynns-table-meta` + `ariaLabel`. Live `#pagination`. Failure:

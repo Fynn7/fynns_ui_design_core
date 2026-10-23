@@ -48,18 +48,15 @@ function optionLabel(option: AutocompleteOption): string {
 }
 
 /**
- * @deprecated Soft-deprecated ≥ **0.5.236** — still exported and taught on
- * Globals `#autocomplete`, but **strongly discouraged** for new consumer UI.
- * Prefer **`SearchBar`** (`#search-bar`) for type-to-filter, or
- * **`CommandPalette`** for command pickers. Do **not** start new screens on
- * Autocomplete. Failure: CONSUMER_TREATY Select Autocomplete deprecated prefer
- * Menu SearchBar.
- *
- * M3 Autocomplete — filterable text field + docked suggestion list.
+ * M3 Autocomplete — 正文区（表单 / 正文行）可筛选选择器：filterable text
+ * field + docked suggestion list, 表单密度（40dp field-shell），不是 chrome
+ * 56dp SearchBar。全局 / 顶栏搜索仍用 `SearchBar`（`#search-bar`），命令式
+ * 点选用 `CommandPalette`，离散选项用 `DropdownMenu`（`#menu`）。
  * Reuses the same SearchBar expand shell as `Select` (field hairline +
  * `.fynns-expand`); form density matches Input (40dp outlined), not chrome
  * SearchBar 56dp. Opens on click / type / ArrowDown (like Select), not on
- * focus alone.
+ * focus alone. Failure: CONSUMER_TREATY picker region mismatch (new Select
+ * use / chrome SearchBar for form filter).
  */
 export function Autocomplete({
   value,

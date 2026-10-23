@@ -81,9 +81,11 @@ ASCII `-`。
    overflow / 展开方位（含 `.fynns-select` / `.fynns-search-bar*` / `.fynns-menu` /
    `.fynns-field-shell` / `.fynns-field-affix`）。对照 `#select` / `#menu` /
    `#password` / `#input`；不对 → **只**在 core 约束。
-4c. **Select / Autocomplete 已软废弃（硬）**：新 UI 勿用。离散选项 →
-   `DropdownMenu`（`#menu`）；可筛选 / 命令式 → `SearchBar` / `CommandPalette`。
-   现有命中 → 推荐迁移。例外：Pagination 每页条数可暂留 stock Select。
+4c. **Select 已软废弃（硬）**：新 UI 勿用。离散选项 →
+   `DropdownMenu`（`#menu`）；正文区（表单 / 正文行）可筛选 →
+   `Autocomplete`（`#autocomplete`）；全局 / 顶栏搜索 → `SearchBar`；
+   命令式 → `CommandPalette`。
+   现有 Select 命中 → 推荐迁移。例外：Pagination 每页条数可暂留 stock Select。
 5. 样式只用 `var(--fynns-*)`。正文/chrome `--fynns-font-ui`；代码
    `--fynns-font-mono`；禁止主界面 serif。
 6. 瞬时反馈：`snackbar` + `<SnackbarHost />`。
@@ -236,7 +238,7 @@ sandbox `#anchor`。
 - **ChatComposer mode toggle buried in + Menu** — Thinking / Vision 等模式用 `ChatComposerToggle` 放 `endActions`（Model → Thinking → Vision → Send）+ Tooltip（窄壳仅图标时 tip 必留）；禁止埋进 leading `+` 菜单或消费仓自绘 chip。`#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-thinking-toggle-narrow`
 - **ChatComposer model Menu flat without source sections** — 模型 Menu 分 Local / Cloud / CLI（`DropdownMenuGroup` + Separator）；仅已配置源显示分区，皆无则禁用「No models available」。`#sandbox-chat-composer-model-sections`
 - **truncated option / chrome label lacks OverflowTip** — 溢出须 `…`+Tooltip 全文；禁止 `title=`。`#select` / `#card` / `#list`
-- **consumer restyles keep-set chrome / Select Autocomplete deprecated** — 铬改只在 core；新屏用 Menu/SearchBar。`#select` / `#menu`
+- **consumer restyles keep-set chrome / picker region mismatch** — 铬改只在 core；离散用 Menu、正文筛选 Autocomplete、全局 SearchBar。`#autocomplete` / `#select` / `#menu`
 - **outcome Chip as status / List path Switch+Chip+danger soup** — 结果标用 `.fynns-list-item-status`；目录 trailing 仅 ghost md 簇。`#list` / `#sandbox-list-repo-path-actions`
 - **List scroll-well meta/rail / spill / underlap / focus ring crack** — 勿私造 end pad/overflow/z-index。`#sandbox-list-repo-path-actions` / `#sandbox-list-status-action`
 - **FieldStack Grid centers / hugs max-content** — Grid `align-items: start`；列铺满父级；勿消费仓改回 center。`#sandbox-field-stack-grid-select` / `#form-recipe`

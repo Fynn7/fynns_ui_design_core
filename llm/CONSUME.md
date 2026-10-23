@@ -292,8 +292,9 @@ Pick primitives by job (details: `node scripts/api.mjs <Name>`; catalog:
    Missing capability → implement in this core first, then refresh the sibling.
 2. **No fakes:** no `@radix-ui/*`, `sonner`, native `<select>` / `<dialog>` /
    `alert()`, hand-rolled Collapsible, purged symbols
-   ([`BREAKING_PURGE.md`](BREAKING_PURGE.md)). `Select` / `Autocomplete` are
-   soft-deprecated — use `DropdownMenu` / `SearchBar`.
+   ([`BREAKING_PURGE.md`](BREAKING_PURGE.md)). `Select` is soft-deprecated —
+   discrete picks use `DropdownMenu`; body-region (form / prose) type-to-filter
+   uses `Autocomplete`; chrome / global search uses `SearchBar`.
 3. **Every state visible:** startup (`AppLoadingScreen`), content loading (`BusyRegion` / `BusyScrim`), empty
    (`EmptyState`), error (default `snackbar`; persistent recovery only:
    `InlineAlert` + Retry).

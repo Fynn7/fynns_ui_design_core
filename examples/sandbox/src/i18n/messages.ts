@@ -1298,10 +1298,8 @@ const en = {
   "globals.autocompleteAria": "Sample autocomplete",
   "globals.autocompletePlaceholder": "Filter colors…",
   "globals.autocompleteEmpty": "No matches",
-  "globals.autocompleteDeprecatedAlert":
-    "Deprecated (≥ 0.5.236): Autocomplete is kept for anatomy only — strongly discouraged. Prefer SearchBar (#search-bar) for type-to-filter, or CommandPalette for command pickers. Do not start new consumer screens on Autocomplete.",
   "globals.autocompleteHelp":
-    "DEPRECATED anatomy (≥ **0.5.236**) — still live for chrome teaching, but **strongly discouraged**. Prefer **SearchBar** (`#search-bar`) or **CommandPalette**. Historical: M3 Autocomplete — click/type to open, filter, then pick; docked `.fynns-search-bar--expanded` joined capsule (Select uses portaled `.fynns-select-menu` ≥ **0.5.208**). Failure: CONSUMER_TREATY Select Autocomplete deprecated prefer Menu SearchBar.",
+    "M3 Autocomplete — click/type to open, filter, then pick; docked `.fynns-search-bar--expanded` joined capsule at form density (40dp field-shell, not chrome 56dp; Select uses portaled `.fynns-select-menu` ≥ **0.5.208**). Failure: CONSUMER_TREATY picker region mismatch (new Select use / chrome SearchBar for form filter).",
   "globals.autocompleteSelected": "Selected: {value}",
   "globals.autocompleteOptTeal": "Teal",
   "globals.autocompleteOptCyan": "Cyan",
@@ -3826,10 +3824,8 @@ const zh: Record<MessageKey, string> = {
   "globals.autocompleteAria": "示例自动完成",
   "globals.autocompletePlaceholder": "筛选颜色…",
   "globals.autocompleteEmpty": "无匹配",
-  "globals.autocompleteDeprecatedAlert":
-    "已废弃（≥ 0.5.236）：Autocomplete 仅保留解剖展示 — 强烈不建议使用。可筛选请改用 SearchBar（#search-bar）；命令式点选请用 CommandPalette。禁止在新消费屏继续用 Autocomplete。",
   "globals.autocompleteHelp":
-    "已废弃解剖（≥ **0.5.236**）— 仍保留铬教学，但**强烈不建议**。优先 **SearchBar**（`#search-bar`）或 **CommandPalette**。历史：M3 Autocomplete — 点击/输入展开，筛选后点选；docked `.fynns-search-bar--expanded` 连体胶囊（Select ≥ **0.5.208** 为门户 `.fynns-select-menu`）。失败模式：CONSUMER_TREATY Select Autocomplete deprecated prefer Menu SearchBar。",
+    "M3 Autocomplete — 点击/输入展开，筛选后点选；docked `.fynns-search-bar--expanded` 连体胶囊，表单密度（40dp field-shell 不是 chrome 56dp；Select ≥ **0.5.208** 为门户 `.fynns-select-menu`）。失败模式：CONSUMER_TREATY picker region mismatch（新屏 Select / 表单用 chrome SearchBar）。",
   "globals.autocompleteSelected": "已选：{value}",
   "globals.autocompleteOptTeal": "青绿",
   "globals.autocompleteOptCyan": "青色",

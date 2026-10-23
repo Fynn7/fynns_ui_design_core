@@ -19,7 +19,7 @@ classes.
   `--fynns-layout-textarea-max-height` ≥ **0.5.103**; `spellCheck={false}`
   default), FieldHeader / FieldBlock, Select (**soft-deprecated ≥ 0.5.236** —
   anatomy + Pagination carve-out; prefer `DropdownMenu`), Autocomplete
-  (**soft-deprecated ≥ 0.5.236** — prefer `SearchBar` / `CommandPalette`),
+  (body-region type-to-filter; chrome / global search stays `SearchBar`),
   OtpInput, NumberInput, SearchBar /
   SearchBarResult, Switch (dense track; `labelSide`), Checkbox, Radio, Chip /
   ChipSet (`assist`|`filter`|`input`|`suggestion` — never table-cell status),
