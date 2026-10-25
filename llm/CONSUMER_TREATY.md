@@ -323,6 +323,8 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | chart tooltip clipped at plot edge | DESIGN_SYSTEM hard-rules | `#chart` |
 | chart tooltip edge clamp jitter | DESIGN_SYSTEM chart recipe | `—` |
 | catalog morph remounts ClippedNavShell (drawer bounce) | DESIGN_SYSTEM hard-rules | `—` |
+| hand-rolled app shell (TopAppBar + docked drawer outside a core shell) | [Workspace chrome](design-system/workspace-chrome.md) (App shell composition) / static gate `app-shell-slots` + consumer shell-import check | `#layouts-demo-shell` |
+| invented `--fynns-*` token (undefined var drops the declaration) | [Tokens](design-system/tokens.md) (Only reference tokens the core defines) / `api.mjs --tokens` / static gate `unknown-token` | `—` |
 | InlineAlert + orphan List for one catalog | DESIGN_SYSTEM content-density / List | `—` |
 | InlineAlert beside List in ControlStack | DESIGN_SYSTEM content-density / List | `#env-check` |
 | Components / Collapsible / List / controls nested inside InlineAlert | [SectionNotice contract](../docs/design-system/section-notice.md): plain text in InlineAlert; in-flow details/actions via SectionNotice string slots and action descriptors | `#section-notice` |

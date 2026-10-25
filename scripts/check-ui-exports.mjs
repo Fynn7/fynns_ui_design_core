@@ -1,18 +1,21 @@
 #!/usr/bin/env node
 /**
  * Hard gate: consumer named imports from `@fynns/ui` must exist on the linked
- * `@fynn7/ui-design-core` barrel (src/index.ts + export * re-exports), and a
+ * `@fynn7/ui-design-core` barrel (src/index.ts + export * re-exports),
+ * consumer `var(--fynns-*)` references must name a token the linked core
+ * defines (generated theme.css + primitives css), and a
  * Vite consumer must disable dev browser caching of native ESM responses.
  * Declared app dependencies and their CLI artifacts must also be installed.
  *
  * Catches stale sibling checkouts before Vite serves a blank page with
- * "does not provide an export named ...".
+ * "does not provide an export named ...", and invented tokens before surfaces
+ * silently collapse to one wash.
  *
  * Usage:
  *   node scripts/check-ui-exports.mjs --target <consumer-pkg>
  *   node scripts/check-ui-exports.mjs --target ../my-app/apps/web --json
  *
- * Exit 1 for dependency, export, static workspace or dev-cache failures.
+ * Exit 1 for dependency, export, token, static workspace or dev-cache failures.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -293,6 +296,77 @@ export function scanConsumerImports(pkgRoot) {
   return { files: byFile, imports: all };
 }
 
+/** Collect `--fynns-*` custom property definitions from the linked core checkout
+ * (generated theme.css plus component css). Consumers may only reference
+ * defined tokens; invented names silently drop the declaration and collapse
+ * the surface layering (e.g. phantom backgrounds with no topbar/drawer split).
+ * Verify a single name with: node scripts/api.mjs --tokens "<name>". */
+export function collectCoreTokenNames(coreRoot) {
+  const names = new Set();
+  const files = [path.join(coreRoot, "src", "theme", "theme.css")];
+  const cssDir = path.join(coreRoot, "src", "primitives", "css");
+  let entries = [];
+  try { entries = fs.readdirSync(cssDir, { withFileTypes: true }); } catch { /* optional */ }
+  for (const ent of entries) {
+    if (ent.isFile() && ent.name.endsWith(".css")) files.push(path.join(cssDir, ent.name));
+  }
+  for (const file of files) {
+    let text = "";
+    try { text = fs.readFileSync(file, "utf8"); } catch { continue; }
+    for (const m of text.matchAll(/(--fynns[a-zA-Z0-9_-]*[a-zA-Z0-9_])\s*:/g)) names.add(m[1]);
+  }
+  return names;
+}
+
+function lineOf(text, index) {
+  return text.slice(0, index).split("\n").length;
+}
+
+/** Fail consumer sources that reference a `--fynns-*` token the linked core
+ * does not define. Scans consumer css plus inline `var()` in js/ts sources. */
+export function checkConsumerTokenRefs(pkgRoot, coreRoot) {
+  const roots = ["src", "apps", "gui", "web", "client", "app"].map((d) => path.join(pkgRoot, d));
+  roots.push(pkgRoot);
+  const files = [];
+  const seen = new Set();
+  for (const root of roots) {
+    if (!fs.existsSync(root)) continue;
+    for (const f of walkFiles(root, (p) => /\.(css|tsx?|jsx?|mjs|cjs)$/.test(p))) {
+      const real = path.resolve(f);
+      if (seen.has(real) || real.includes(`${path.sep}node_modules${path.sep}`)) continue;
+      seen.add(real);
+      files.push(real);
+    }
+  }
+  const refs = [];
+  for (const file of files) {
+    let source = "";
+    try { source = fs.readFileSync(file, "utf8"); } catch { continue; }
+    const text = stripComments(source);
+    for (const m of text.matchAll(/var\(\s*(--fynns[a-zA-Z0-9_-]*[a-zA-Z0-9_])/g)) {
+      refs.push({ file: path.relative(pkgRoot, file) || file, line: lineOf(text, m.index ?? 0), token: m[1] });
+    }
+  }
+  if (!refs.length) return { ok: true, unknown: [], error: null };
+  const defined = collectCoreTokenNames(coreRoot);
+  if (!defined.size) {
+    return { ok: false, unknown: [], error: `Consumer sources reference --fynns-* tokens but core token definitions are unreadable under ${coreRoot}. Sync the sibling checkout first.` };
+  }
+  const unknown = refs.filter((r) => !defined.has(r.token));
+  unknown.sort((a, b) => a.file.localeCompare(b.file) || a.line - b.line);
+  return {
+    ok: unknown.length === 0,
+    unknown,
+    error: unknown.length
+      ? `Unknown --fynns-* token(s) referenced by consumer sources:\n` +
+        unknown.map((u) => `  ${u.file}:${u.line} ${u.token}`).join("\n") +
+        `\nUndefined tokens drop the declaration (no fallback) — surfaces collapse to one wash.` +
+        `\nFix: use a token defined by the linked core (verify: node "${path.join(coreRoot, "scripts", "api.mjs")}" --tokens "<name>"),` +
+        ` or add the token in core src/theme/tokens.ts and run npm run gen:theme.`
+      : null,
+  };
+}
+
 export function resolveLinkedBarrel(pkgRoot) {
   const entry = path.join(pkgRoot, ENTRY_REL);
   if (fs.existsSync(entry)) return entry;
@@ -342,6 +416,12 @@ export function checkUiExports(pkgRoot) {
     dependencies = { ok: false, issues: [{ code: "consumer-dependency-tooling", message: error.message }] };
   }
   for (const issue of dependencies.issues) addIssue(issue.code, issue.message);
+  let tokenRefs = { ok: true, unknown: [] };
+  try {
+    const coreRoot = path.dirname(path.dirname(barrelPath));
+    tokenRefs = checkConsumerTokenRefs(pkgRoot, coreRoot);
+    if (!tokenRefs.ok) addIssue("unknown-token", tokenRefs.error ?? "Unknown --fynns-* token references.");
+  } catch (error) { addIssue("token-tooling", error.message); }
   let workspaceViolations = [];
   try {
     workspaceViolations = checkWorkspaceFiles([...files.keys()], pkgRoot);
@@ -373,6 +453,7 @@ export function checkUiExports(pkgRoot) {
     barrelPath,
     viteConfig: viteConfig ?? null,
     workspaceViolations,
+    unknownTokens: tokenRefs.unknown ?? [],
     dependencies,
     issues,
     files: Object.fromEntries(

@@ -52,4 +52,15 @@ describe("workspace consumer contract", () => {
   it("rejects all-cap chrome but preserves code and natural-case labels", () => {
     expect(rules('const sample = <><h2>LOCAL WORKSPACE</h2><span>SOURCE</span><Button title="NEW DOCUMENT">New document</Button><CodeBlock code="HTTP JSON"/><code>HTTP JSON</code></>;').filter((v: string) => v === "natural-case")).toHaveLength(3);
   });
+  it("rejects a hand-rolled topbar+drawer shell outside ClippedNavShell", () => {
+    const shellImports = 'import { ClippedNavShell, DestinationAppShell, TopAppBar, NavigationDrawer, NavigationRail } from "@fynns/ui";';
+    const bad = (body: string) => checkWorkspaceSource(`${shellImports} const sample = ${body};`).map((v: { rule: string }) => v.rule);
+    expect(bad('<div><TopAppBar title="A"/><NavigationDrawer variant="standard"/></div>')).toContain("app-shell-slots");
+    expect(bad('<><TopAppBar title="A"/><NavigationRail/></>')).toContain("app-shell-slots");
+    expect(bad('<ClippedNavShell topBar={<TopAppBar title="A"/>} nav={<NavigationDrawer variant="standard"/>}><div/></ClippedNavShell>')).not.toContain("app-shell-slots");
+    expect(bad('<DestinationAppShell><TopAppBar title="A"/><NavigationDrawer variant="standard"/></DestinationAppShell>')).not.toContain("app-shell-slots");
+    expect(bad('<div><TopAppBar title="A"/></div>')).not.toContain("app-shell-slots");
+    expect(bad('<div><NavigationDrawer variant="standard"/></div>')).not.toContain("app-shell-slots");
+    expect(bad('<div><TopAppBar title="A"/><NavigationDrawer variant="modal" open onClose={() => {}}/></div>')).not.toContain("app-shell-slots");
+  });
 });

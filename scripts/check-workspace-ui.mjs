@@ -157,9 +157,29 @@ export function checkWorkspaceSource(text, filename = "sample.tsx", ts = compile
     ts.forEachChild(node, child => { count += toolbarCount(child, root, branch); });
     return count;
   };
+  // Docked app chrome without a shell ancestor. TopAppBar + docked
+  // NavigationDrawer/Rail must compose inside ClippedNavShell (topBar/nav) or
+  // DestinationAppShell — the shell owns the three region backgrounds and the
+  // separating hairlines. Same-file wrapper components defined elsewhere
+  // cannot be resolved here; those stay covered by treaty text + browser review.
+  const shellChrome = [];
+  const inAppShell = node => {
+    for (let parent = node.parent; parent; parent = parent.parent) {
+      const pname = tag(parent);
+      if (pname === "ClippedNavShell" || pname === "DestinationAppShell") return true;
+    }
+    return false;
+  };
   visitAll(source, node => {
     if (!opening(node)) return;
     const kind = tag(node);
+    if (kind === "TopAppBar" || kind === "NavigationDrawer" || kind === "NavigationRail") {
+      if (kind === "NavigationDrawer" && value(node, "variant") !== "standard") {
+        // Modal drawers overlay content and are legitimate outside a shell.
+      } else if (!inAppShell(node)) {
+        shellChrome.push({ kind, node });
+      }
+    }
     if (hasClass(node, "fynns-workspace-canvas") && toolbarCount(node, node) > 1) {
       report(node, "canvas-single-toolbar", "A canvas has only one floating editing Toolbar. Move document mode/layout/export commands into one top-bar ghost icon DropdownMenu, not a second toolbar.");
     }
@@ -286,6 +306,13 @@ export function checkWorkspaceSource(text, filename = "sample.tsx", ts = compile
       }
     }
   });
+  if (shellChrome.some(c => c.kind === "TopAppBar") && shellChrome.some(c => c.kind !== "TopAppBar")) {
+    report(
+      shellChrome.find(c => c.kind === "TopAppBar").node,
+      "app-shell-slots",
+      "TopAppBar + docked NavigationDrawer/Rail must compose inside ClippedNavShell (topBar/nav slots) or DestinationAppShell — the shell owns the topbar/drawer/main backgrounds and hairlines. Hand-rolled shell divs leave all three regions on one wash with no split.",
+    );
+  }
   return errors;
 }
 

@@ -23,6 +23,15 @@ Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`,
 `code` (CodeBlock highlight roles), plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
+**Only reference tokens the core defines.** Invented names (e.g. a remembered
+`--fynns-color-bg-canvas` / `-text-primary` / `-text-secondary` / `-text-link` /
+`-border-subtle` / `-bg-surface` — none of these exist) silently drop the
+declaration, so surfaces collapse to one wash with no region split. Verify
+before writing CSS: `node scripts/api.mjs --tokens "<name>"`. Missing values
+belong in core (`tokens.ts` + `npm run gen:theme`), never in consumer CSS.
+Static gate: consumer gate `unknown-token` (all consumers via
+`check:consumers`).
+
 Color tokens (`--fynns-color-*`):
 
 - Surfaces (elevation ladder): `app-bg` `#031417`, `surface-1` (panels),
