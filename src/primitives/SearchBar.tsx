@@ -42,14 +42,12 @@ export type SearchBarProps = Omit<
   expanded?: boolean;
   onExpandedChange?: (expanded: boolean) => void;
   /**
-   * - `chrome` (default) — elevated 56dp capsule (TopAppBar / page search).
-   * - `destination` — same height / type / icon gap as `NavigationDrawerItem`
-   *   (40dp); keeps chrome SearchBar surface / shadow / focus. Use in
-   *   destination drawers (e.g. GlobalSearch). Also auto-applied to plain
-   *   SearchBars inside `.fynns-nav-drawer-body`. Body sibling gap to
-   *   destinations is `--fynns-navdrawer-search-gap` (aliases layout
-   *   `control-stack-gap` / 8dp — matches Search↔Toggle in tools columns;
-   *   wider than Item↔Item `section-gap` 4dp).
+   * - `chrome` (default) — elevated capsule for TopAppBar / page search.
+   *   Shares the `NavigationDrawerItem` 40dp row geometry (height / label
+   *   type / icon gap / pads), so header search aligns with drawer rows.
+   * - `destination` — legacy alias; identical 40dp geometry. Kept for
+   *   compatibility (e.g. drawer GlobalSearch) — no visual difference.
+   *   Also auto-applied to plain SearchBars inside `.fynns-nav-drawer-body`.
    */
   density?: "chrome" | "destination";
   /** Accessible name for the search field (required when no visible label). */
@@ -62,9 +60,10 @@ export type SearchBarProps = Omit<
 };
 
 /**
- * M3 Search bar — elevated 56dp capsule for chrome search (not form fields).
- * Optional `density="destination"` matches `NavigationDrawerItem` geometry
- * (40dp / label type / icon gap) for drawer GlobalSearch. Optional docked
+ * M3 Search bar — elevated capsule for chrome search (not form fields).
+ * Renders the `NavigationDrawerItem` 40dp row geometry everywhere, so
+ * TopAppBar search aligns with drawer destinations. `density="destination"`
+ * remains as a no-op alias. Optional docked
  * results via `expanded` + `children` merge into one shell (Google-style).
  * Expand/collapse animates via `.fynns-expand` (including blur/Esc). Prefer
  * `Input` inside dense forms / toolbars (SearchInput removed).

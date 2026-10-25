@@ -591,7 +591,7 @@ export const APPBAR_TOKENS = {
 
 /**
  * Bottom app bar geometry (at 16px rem).
- * Height shares `--fynns-layout-bar-height` (56dp) with TopAppBar sm / SearchBar
+ * Height shares `--fynns-layout-bar-height` (56dp) with TopAppBar sm
  * (below stock M3 80dp). Actions / FAB share a 40dp control size inside the bar
  * (M3: FAB inside, no cradle).
  * `--fynns-bottomappbar-<key>`.
@@ -644,27 +644,28 @@ export const TOOLBAR_TOKENS = {
 } as const;
 
 /**
- * Search bar geometry (M3 SearchBar at 16px rem).
- * Collapsed capsule height shares `--fynns-layout-bar-height` (56dp); expanded
- * merges field + results into one shell.
+ * Search bar geometry.
+ * Unified row height shares `--fynns-navdrawer-item-height` (40dp) with
+ * `NavigationDrawerItem` — chrome search (TopAppBar / page) and the former
+ * `density="destination"` drawer variant render identical geometry.
+ * Expanded merges field + results into one shell.
  * Corner radius uses `--fynns-radius-3xl` (not a private searchbar token).
  * Prefer `Input` for dense form rows (SearchInput removed).
  * `--fynns-searchbar-<key>`.
  */
 export const SEARCHBAR_TOKENS = {
-  height: "var(--fynns-layout-bar-height)",
+  height: "var(--fynns-navdrawer-item-height)",
   /**
-   * Capsule edge chrome next to icons — layout `capsule-chrome-pad-inline`.
-   * Same token as Input field-shell **affix-owned** edges (≥ **0.5.237**).
-   * Text-only form edges still compose capsule + `field-pad-inline`.
+   * Field edge chrome next to icons — matches NavigationDrawerItem inline pads
+   * (both start/end are 1rem). Text-to-icon rhythm comes from `item-gap`.
    */
-  "pad-inline": "var(--fynns-layout-capsule-chrome-pad-inline)",
-  "icon-slot": "3rem",
-  /** Matches `--fynns-size-icon` (16dp). */
-  "icon-size": "1rem",
-  "input-pad-inline": "var(--fynns-layout-capsule-chrome-pad-inline)",
-  "font-size": "1rem",
-  "line-height": "1.5",
+  "pad-inline": "var(--fynns-navdrawer-item-pad-inline-start)",
+  "icon-slot": "var(--fynns-navdrawer-icon-size)",
+  /** Matches `--fynns-size-icon` (16dp), same as drawer item glyphs. */
+  "icon-size": "var(--fynns-navdrawer-icon-size)",
+  "input-pad-inline": "0px",
+  "font-size": "var(--fynns-navdrawer-label-size)",
+  "line-height": "var(--fynns-navdrawer-label-line)",
   "results-max-height": "20rem",
   /**
    * Inset around suggestion / Select option rows: shell and row highlights
@@ -925,7 +926,7 @@ export const CHATMESSAGE_TOKENS = {
  * Composer multiline: model C + compact morph (Cursor) — full-width text
  * above a bottom toolbar when `data-expanded`; collapsed toolbar uses
  * `display: contents` so leading | field | Send stay one ~44dp row
- * (32dp control + 6dp pad — Cursor-dense circle; not SearchBar 56dp chrome).
+ * (32dp control + 6dp pad — Cursor-dense circle; not SearchBar chrome).
  * Spec: `llm/CHAT_COMPOSER_LAYOUT.md`. `--fynns-chat-<key>`.
  */
 export const CHAT_TOKENS = {
@@ -966,8 +967,8 @@ export const CHAT_TOKENS = {
   /**
    * Soft floor for the collapsed single-line body (32dp control row).
    * With `composer-pad-block` 6dp×2 + hairline → ~44dp shell — Cursor-dense
-   * Send/Stop circle (one step below IconButton md 40dp), not SearchBar
-   * `--fynns-layout-bar-height` 56dp chrome. Expanded shell grows with wrap;
+   * Send/Stop circle (one step below IconButton md 40dp), not the taller
+   * TopAppBar `--fynns-layout-bar-height` 56dp chrome. Expanded shell grows with wrap;
    * controls move to the bottom toolbar (not mid-text center).
    */
   "composer-min-height": "2rem",

@@ -3454,6 +3454,7 @@
   width: 100%;
   min-height: var(--fynns-searchbar-height);
   height: var(--fynns-searchbar-height);
+  gap: var(--fynns-navdrawer-item-gap);
   padding-inline: var(--fynns-searchbar-pad-inline);
   border-radius: 0;
   background: transparent;
@@ -3519,7 +3520,7 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  gap: var(--fynns-space-2xs);
+  gap: 0;
   min-width: var(--fynns-searchbar-icon-slot);
   height: var(--fynns-searchbar-height);
   color: var(--fynns-color-text-muted);
@@ -3584,7 +3585,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 /*
  * Form density: Select / Autocomplete sit beside Input — use 40dp control
- * height + Input surface/radius/border, not chrome SearchBar 56dp capsule.
+ * height + Input surface/radius/border, not the chrome SearchBar capsule.
  * SearchBar itself keeps `--fynns-searchbar-height` / elevation.
  */
 .fynns-select.fynns-search-bar,
@@ -3930,8 +3931,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /*
- * Destination density — match NavigationDrawerItem row geometry only (40dp
- * height, label type, icon gap / size, item pads). Keep chrome SearchBar
+ * Destination density — historically matched NavigationDrawerItem row geometry
+ * (40dp height, label type, icon gap / size, item pads). The default chrome
+ * field now shares that geometry, so these rules only reaffirm it (and keep
+ * `density="destination"` a harmless alias). Keep chrome SearchBar
  * surface / elevation / focus border (do not restyle as a destination pill).
  * Auto-applied to plain SearchBars in drawer body so GlobalSearch densifies
  * without consumer restyles.
