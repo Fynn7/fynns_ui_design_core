@@ -3605,6 +3605,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-autocomplete .fynns-search-bar-field {
   min-height: var(--fynns-size-icon-target);
   height: var(--fynns-size-icon-target);
+  /*
+   * No leading icon — outer pad must equal the list outer pad
+   * (`--fynns-searchbar-results-pad-inline`) so trigger text
+   * (field pad + `space-md`) aligns to option text
+   * (list pad + `space-md`) when menu width = shell width.
+   * Was `searchbar-pad-inline` (1rem) → 8px right bias vs options.
+   */
+  padding-inline: var(--fynns-searchbar-results-pad-inline);
 }
 
 .fynns-select .fynns-search-bar-trailing,
