@@ -92,4 +92,22 @@ describe("ChatSessionsDrawer controlled session data", () => {
     update({ open: false });
     expect(currentMenu()).toBeNull();
   });
+
+  it("requests archive from the row menu without selecting the row", () => {
+    const onArchive = vi.fn();
+    const { host, props } = mount({ onArchive });
+    context(host.querySelector('[data-chat-session-id="other"]')!);
+    const item = Array.from(currentMenu()!.querySelectorAll("button")).find((el) => el.textContent === "Archive")!;
+    act(() => item.click());
+    expect(onArchive).toHaveBeenCalledExactlyOnceWith("other");
+    expect(props.onSelect).not.toHaveBeenCalled();
+  });
+
+  it("omits the archive action when archiving is not enabled", () => {
+    const { host } = mount();
+    context(host.querySelector('[data-chat-session-id="other"]')!);
+    const names = Array.from(currentMenu()!.querySelectorAll("button")).map((el) => el.textContent);
+    expect(names).not.toContain("Archive");
+    expect(names).toEqual(["Rename", "Delete"]);
+  });
 });
