@@ -1124,7 +1124,10 @@
 /*
  * Opaque rail punch under the mark / glyph (≥ **0.5.275**). Pulse / complete
  * fade the *child* only — never this wash — so a flashing node cannot reveal
- * the hairline rail (Timeline disc mask parity).
+ * the hairline rail (Timeline disc mask parity). The wash paints only where
+ * a rail actually runs (≥ 2 consecutive open steps): single-step trees have
+ * no rail, so the node stays transparent and the done/active dot renders as
+ * one solid disc with no surface halo in any theme.
  */
 .fynns-chat-activity-node::before {
   content: "";
@@ -1142,8 +1145,15 @@
   );
   translate: -50% -50%;
   border-radius: var(--fynns-radius-round);
-  background: var(--fynns-timeline-node-mask);
+  background: transparent;
   pointer-events: none;
+}
+
+.fynns-chat-activity-steps:has(
+  > .fynns-chat-activity-step-shell[data-state="open"]
+  + .fynns-chat-activity-step-shell[data-state="open"]
+) .fynns-chat-activity-node::before {
+  background: var(--fynns-timeline-node-mask);
 }
 
 /* Optional tool glyph on a done step — same accent as Timeline node glyphs. */
