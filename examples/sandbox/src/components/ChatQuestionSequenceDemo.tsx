@@ -57,6 +57,7 @@ export function ChatQuestionSequenceDemo() {
   const nextId = useRef(3);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
+  const [stopping, setStopping] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const pendingId = useRef<number | undefined>(undefined);
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -109,12 +110,21 @@ export function ChatQuestionSequenceDemo() {
   };
 
   const stop = () => {
+    // Simulate the silent wait after a stop request: the Stop action goes
+    // disabled + busy (淡灰 + spinner) until the host settles the run.
+    if (stopping) return;
     clearTimeout(timer.current);
-    const id = pendingId.current;
-    setEvents((items) => items.map((item): Event => item.id === id && item.kind === "thinking"
-      ? { ...item, rows: [{ label: c.stopped }] } : item));
-    pendingId.current = undefined;
-    setBusy(false);
+    setStopping(true);
+    const raw = getComputedStyle(document.documentElement).getPropertyValue("--fynns-duration-activity").trim();
+    const delay = Number.parseFloat(raw) * (raw.endsWith("ms") ? 1 : 1000);
+    timer.current = setTimeout(() => {
+      const id = pendingId.current;
+      setEvents((items) => items.map((item): Event => item.id === id && item.kind === "thinking"
+        ? { ...item, rows: [{ label: c.stopped }] } : item));
+      pendingId.current = undefined;
+      setStopping(false);
+      setBusy(false);
+    }, Number.isFinite(delay) ? delay : 0);
   };
 
   return (
@@ -148,7 +158,7 @@ export function ChatQuestionSequenceDemo() {
           })}
         </ChatThread>
         <ChatScrollToBottom />
-        <ChatComposer value={draft} onChange={setDraft} onSubmit={send} busy={busy} onStop={stop}
+        <ChatComposer value={draft} onChange={setDraft} onSubmit={send} busy={busy} onStop={stop} stopping={stopping}
           ariaLabel={c.placeholder} placeholder={c.placeholder} sendLabel={c.send} stopLabel={c.stop} />
       </Chat>
     </div>

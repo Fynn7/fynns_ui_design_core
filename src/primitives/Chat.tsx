@@ -267,6 +267,13 @@ export type ChatComposerProps = Omit<
   trailing?: ReactNode;
   busy?: boolean;
   onStop?: () => void;
+  /**
+   * Stop already requested and the host is waiting for the run to settle.
+   * The Stop action renders disabled + busy (IconButton `loading`:淡灰 +
+   * spinner via the sanctioned button chrome, no ad-hoc ring) and ignores
+   * repeat clicks / Esc until the host clears `busy`.
+   */
+  stopping?: boolean;
   /** When set, empty idle shows a mic in the primary slot (Send stays when text). */
   onDictate?: () => void;
   dictating?: boolean;
@@ -322,6 +329,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       trailing,
       busy = false,
       onStop,
+      stopping = false,
       onDictate,
       dictating = false,
       onStopDictate,
@@ -566,6 +574,11 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       if (e.defaultPrevented) return;
 
       if (e.key === "Escape" && busy && onStop) {
+        // Stop already requested: stay silent, do not re-fire while stopping.
+        if (stopping) {
+          e.preventDefault();
+          return;
+        }
         e.preventDefault();
         onStop();
         return;
@@ -607,7 +620,8 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
             size="sm"
             variant="primary"
             aria-label={stopLabel}
-            onClick={onStop}
+            onClick={stopping ? undefined : onStop}
+            loading={stopping}
             className="fynns-chat-composer-primary"
           >
             <StopSquareIcon />
