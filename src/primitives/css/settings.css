@@ -7,6 +7,16 @@
   max-width: min(100%, var(--fynns-layout-settings-dialog-width));
 }
 
+/* The settings window keeps one fixed width on every sub-page and state
+ * (General / Archived / empty): this pin is 0,5,0 so it beats the generic
+ * size form-host stretch (size-lg + FieldStack counts 0,4,0 via :has), which
+ * would otherwise pin the archived list to the smaller lg ceiling while a
+ * ControlStack-only sub-page stays content-fit. */
+.fynns-dialog-panel--centered.fynns-settings-dialog.fynns-settings-dialog:has(> .fynns-dialog-body) {
+  width: min(100%, var(--fynns-layout-settings-dialog-width));
+  max-width: min(100%, var(--fynns-layout-settings-dialog-width));
+}
+
 .fynns-settings-dialog > .fynns-dialog-head + .fynns-dialog-body {
   padding: 0;
 }
