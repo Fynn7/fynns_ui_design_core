@@ -161,6 +161,61 @@ perpetual “current result” card, move completed events, use CSS `order` /
 composer and optional composer task summary are docked. Scroll following
 changes the viewport, never event order or focus.
 
+## Live reveal contract (mandatory)
+
+A live run is a recording being written, not a state to re-render. The painted
+thread is append-only and single-flight:
+
+1. **Never rewrite painted history.** Do not collapse a finished run into a
+   summary, remove a row that merged into another row, re-sort a block inserted
+   mid-list, or replay an entrance on a row that is already visible. Terminal
+   state appends rows; it never replaces them. Opening a recorded run paints
+   its history at once because it is history, not a live step.
+2. **One new row at a time, top to bottom.** At most one row may begin its
+   entrance per cadence. Wrap the event list in `useChatSequencer` with stable
+   event keys; it reveals one queued row per
+   `--fynns-chat-entry-duration` and never reorders. Do not append an array of
+   new rows in one commit.
+3. **No empty frame.** From submit to the first recorded row, paint the user's
+   turn immediately and keep a live status row at the tail. Every real backend
+   phase needs a visible row while it runs: starting the run, the initial
+   frame, starting the harness, the model call, each tool call, saving the
+   frame/result, the closing answer, and stopping. A phase that produces no
+   row is a defect, not a gap.
+4. **No temporal inversion.** A later row waits until every painted row has
+   settled: entrance motion finished, media decoded or failed, streaming
+   stopped. Never let a middle row flicker, sweep or show a skeleton while a
+   newer row is already visible below it. `isSettled` on the sequencer is the
+   gate; image/iframe rows report load and error, streaming rows report their
+   open state.
+5. **The tail status is a status, not an event.** Keep one live status row
+   (`ChatThinking variant="status" streaming`) outside the recorded list. It
+   updates in place, changes wording only from recorded phases, and disappears
+   when the run is terminal and the queue is empty. It is the only persistent
+   animation at the tail.
+6. **Stable identity.** Keys come from recorded event identity (`id`, stable
+   timestamp plus kind), never the array index alone. Keep a key mounted while
+   its label, clock, count or streamed text changes; completion updates it in
+   place. A poll that returns the same event must not mount a second row.
+7. **Reduced motion.** With `prefers-reduced-motion: reduce`, the reveal
+   cadence is zero and entrance motion is removed; ordering and the tail
+   status remain.
+
+```tsx
+const { visibleItems, waiting } = useChatSequencer({
+  items: recordedEvents,              // one ordered, append-only list
+  getKey: (event) => event.id,        // stable recorded identity
+  seed: startedHere ? "first" : "all",
+  isSettled: (event) => !isStreaming(event) && mediaSettled(event.id),
+  resetKey: runId,
+});
+```
+
+Live review: sandbox `#layouts-demo-chat-product` appends a component and an
+assistant row through the sequencer, one at a time. The recorded ordering
+source remains the consumer's transport; core owns the gate and the cadence.
+
+
 Example: prompt → thinking rows → question → answer prompt → new thinking →
 result → next prompt → next call. Submission locks the original card in place
 and appends subsequent events. Retry appends a new call after the existing

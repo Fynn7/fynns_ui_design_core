@@ -91,6 +91,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | live session status as pane banner / ring replaces label or leading icon | DESIGN_SYSTEM content-density / `NavigationDrawerItem.running` + `ChatSessionsDrawerSession.running` | `#sandbox-chat-sessions-drawer` / `#sandbox-navdrawer-session-chrome` |
 | list Ctrl+A steals text editing / multi-select activates conversation / batch menu deletes one row | [LIST_SELECTION](LIST_SELECTION.md) / `SelectionArea` | `#sandbox-list-selection` / `#sandbox-chat-sessions-drawer` |
 | chat product / session host wrong tree | DESIGN_SYSTEM Content density / Chat product | `#layouts-demo-chat-product` |
+| live chat mounts rows in a batch / collapses history / blank start | DESIGN_SYSTEM Hard rules / [CHAT_SEQUENCE](CHAT_SEQUENCE.md) Live reveal | `#layouts-demo-chat-product` |
 | narrow session modal account row stranded below empty/history content | DESIGN_SYSTEM Hard rules / Chat product modal `NavigationDrawer footer` | `#layouts-demo-chat-product` |
 | chat aside host wrong tree | DESIGN_SYSTEM Content density / Chat aside | `#layouts-demo-chat-aside` |
 | FieldHeader inline InfoHint kissed | DESIGN_SYSTEM forms / FieldStack | `#info-hint` / `#form-recipe` |

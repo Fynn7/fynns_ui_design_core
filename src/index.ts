@@ -404,6 +404,12 @@ export type { ChatComposerToggleProps } from "./primitives/ChatComposerToggle";
 export { ChatMessage } from "./primitives/ChatMessage";
 export { ChatReveal } from "./primitives/ChatReveal";
 export type { ChatRevealProps } from "./primitives/ChatReveal";
+export { useChatSequencer } from "./primitives/useChatSequencer";
+export type {
+  ChatSequencerOptions,
+  ChatSequencerResult,
+  ChatSequencerSeed,
+} from "./primitives/useChatSequencer";
 export type {
   ChatMessageProps,
   ChatMessageRole,

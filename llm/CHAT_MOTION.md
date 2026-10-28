@@ -24,6 +24,14 @@ below are **fynns design decisions**, not claimed ChatGPT measurements.
 - The same rules apply in main chat and EndAside. `prefers-reduced-motion:
   reduce` removes the entrance animation. Motion never changes focus or live
   region semantics.
+- **Live rows are single-flight.** Appending three events in one state update
+  must not mount three rows in one commit. Use `useChatSequencer` with stable
+  keys; it paints one queued row per `--fynns-chat-entry-duration`, waits for
+  every painted row to settle (entry, media decode, streaming), and never
+  removes or reorders a row it already painted. Initial history still paints
+  immediately. A terminal state appends; it does not collapse the thread into a
+  summary. See [CHAT_SEQUENCE.md](CHAT_SEQUENCE.md) → Live reveal contract.
+
 
 ```tsx
 <ChatThread>

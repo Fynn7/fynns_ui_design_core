@@ -50,13 +50,14 @@ Grep 必须限定目录（`src/primitives` / `docs/design-system` / `llm`）并�
 5. 滚动容器必须 `fynns-scroll`（`PageScroll` 已封装），禁原生条。
 6. 加载 / 空 / 错误必显：应用开屏用 `AppLoadingScreen`（不透明主题背景 + 居中扫光 logo，自动优先已配置图标 → 字母缩写头像 → core 标记，无骨架 / 可见文案 / 加载圈；JS 配置图标传 `logoSrc`）；应用内用 `BusyRegion` / `BusyScrim` / `EmptyState` / `InlineAlert`；骨架仅在即将渲染的内容原位占位，加载画面无可见文案；`LoadingSkeleton` 默认加粗的宽幅文字骨架（非 fill 六行，fill 省略 lines 时按高度自适应铺满），内容冷启动画布内边距由 core 保留，禁止清零或在整窗格固定六行；Block 仅用于图片 / iframe 等整块内容，禁 compact / 小型居中文字徽记；真实 `value` 用线性进度；加载圈永久 archive/deprecated，强烈不推荐消费仓使用；瞬时用 `snackbar` + `<SnackbarHost />`。
    内容骨架只绘制条带：根节点、包装层、BusyRegion overlay / BusyScrim 骨架背景透明，冷启动 / 已有内容刷新及明暗主题均禁黑底、洗色、backdrop blur 和阴影面板；保留宿主主题表面，禁消费侧 `.fynns-*` 覆盖。AppLoadingScreen 仍不透明，阻塞骨架保留焦点 / 输入锁定。
-7. Popover / Tooltip 定位走 `floatingBox`，勿手写 ad-hoc 几何。
-8. a11y 默认在线；动效用 motion token，勿随意写 ms。
-9. 消费侧 UI 问题遵循 本机 `constrain-then-consumer` 完整技能（OpenCode：`@constrain-then-consumer`；Codex：`$constrain-then-consumer`）：同一 agent 完成 core 与指定消费仓的实施及真实页面验收。先查既有能力与实际依赖；可复用缺陷修 core，已有 API 的误用修消费调用，禁消费侧私有 CSS 补丁。尊重只改 core 的范围；不默认子代理、发布或全消费仓迁移。
-10. Sandbox / 文档不得含消费产品文案（`npm run check:no-consumer`）。
-11. **永久跳过**：TimePicker dial / LoadingIndicator / ButtonGroup / RangeSlider（已有数字 TimePicker 足够）。
-12. 勿 git commit / push，除非用户明确要求。
-13. 正文 / 图注用 `--fynns-line-height-body`；图文流用 `.fynns-content-flow`，图集用 `.fynns-media-gallery` + `figure.fynns-media-figure`。图→图注固定 8dp，图集行列与正文块间固定 16dp。禁止 tight/snug 压正文、清零 gap、负 margin 或 `<br>` 补间距。详见 `docs/design-system/content-rhythm.md` 与 sandbox `#sandbox-content-rhythm`。
+7. **Live chat is append-only, single-flight, gap-free**（强制）：已画出的行不得折叠/替换/重排/消失；完成态只追加。新行用 `useChatSequencer` 按 `--fynns-chat-entry-duration` 一次一条揭示，前一行 settle（入场/媒体/流式）后才出下一行；live 尾部始终有且仅有一条真实阶段状态行，从提交到结束不允许空帧或假死。详见 `llm/CHAT_SEQUENCE.md` Live reveal contract + `llm/CHAT_MOTION.md`；活例 `#layouts-demo-chat-product`。
+8. Popover / Tooltip 定位走 `floatingBox`，勿手写 ad-hoc 几何。
+9. a11y 默认在线；动效用 motion token，勿随意写 ms。
+10. 消费侧 UI 问题遵循 本机 `constrain-then-consumer` 完整技能（OpenCode：`@constrain-then-consumer`；Codex：`$constrain-then-consumer`）：同一 agent 完成 core 与指定消费仓的实施及真实页面验收。先查既有能力与实际依赖；可复用缺陷修 core，已有 API 的误用修消费调用，禁消费侧私有 CSS 补丁。尊重只改 core 的范围；不默认子代理、发布或全消费仓迁移。
+11. Sandbox / 文档不得含消费产品文案（`npm run check:no-consumer`）。
+12. **永久跳过**：TimePicker dial / LoadingIndicator / ButtonGroup / RangeSlider（已有数字 TimePicker 足够）。
+13. 勿 git commit / push，除非用户明确要求。
+14. 正文 / 图注用 `--fynns-line-height-body`；图文流用 `.fynns-content-flow`，图集用 `.fynns-media-gallery` + `figure.fynns-media-figure`。图→图注固定 8dp，图集行列与正文块间固定 16dp。禁止 tight/snug 压正文、清零 gap、负 margin 或 `<br>` 补间距。详见 `docs/design-system/content-rhythm.md` 与 sandbox `#sandbox-content-rhythm`。
 
 按钮操作组用 Toolbar / `.fynns-control-cluster`：含文字 Button / Menu 的整行 8dp，纯图标 4dp；禁止私人紧凑 gap / 按钮 margin，Toolbar 外层 gap 不控制内层。抽屉 section title 用 NavigationDrawerHeadline / Group；首标题距 sheet 上缘 24dp，内部 Divider→标题 16dp，禁止清零 body/headline padding。见 `docs/design-system/form-rhythm.md`。
 
