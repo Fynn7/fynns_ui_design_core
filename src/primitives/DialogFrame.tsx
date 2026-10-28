@@ -66,6 +66,15 @@ export function DialogFrame({
   const [rendered, setRendered] = useState(open);
   const [entered, setEntered] = useState(false);
   const managesPresence = dataStateProp === undefined;
+  // Exit animations keep the panel mounted for DIALOG_TRANSITION_MS. Freeze
+  // the last open children so a consumer that clears source data in the same
+  // tick as open=false cannot flash an empty body inside the closing panel.
+  const [exitChildren, setExitChildren] = useState<ReactNode>(children);
+
+  useEffect(() => {
+    if (!managesPresence || !open) return;
+    setExitChildren(children);
+  }, [children, open, managesPresence]);
 
   useEffect(() => {
     if (!managesPresence) return;
@@ -168,6 +177,7 @@ export function DialogFrame({
   };
 
   if (!visible) return null;
+  const content = managesPresence && !open && rendered ? exitChildren : children;
 
   const overlayVariantClass =
     variant === "drawer"
@@ -225,7 +235,7 @@ export function DialogFrame({
         tabIndex={-1}
         onKeyDown={onKeyDown}
       >
-        {children}
+        {content}
       </div>
     </div>,
     document.body,

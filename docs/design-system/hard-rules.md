@@ -984,10 +984,12 @@ Use the core CSS recipe; never compress these with local margins or line heights
   Live `#layouts-demo-fill-column` / `#sandbox-fill-column-guide`.
   Failure: CONSUMER_TREATY FillColumn guide Surface flush to Chat /
   FillColumn header mid-scroll hard clip (no edge fade).
-- **DON'T** clear `Dialog` / `ConfirmDialog` title/body source state in the
-  same tick as `open→false` — `DialogFrame` exit (~240ms) still paints props;
-  keep content until the next open. Never reuse a Confirm title as a Dialog
-  title fallback (exit flash / wrong head). Live `#sandbox-list-recipe-catalog`.
+- **DON'T** rely on consumers clearing `Dialog` / `ConfirmDialog` title/body
+  source state in the same tick as `open→false`: `DialogFrame` now freezes the
+  last open children for the exit (~240ms), so the closing panel cannot flash
+  empty copy. Keeping source state until the next open remains the simplest
+  diagnostic habit. Never reuse a Confirm title as a Dialog title fallback
+  (wrong head). Live `#sandbox-list-recipe-catalog`.
   Failure: CONSUMER_TREATY Dialog exit clears title/body (flash).
 - **DON'T** crush centered `Dialog` title top clearance below body end —
   non-confirm `.fynns-dialog-head` `padding-block-start` is
