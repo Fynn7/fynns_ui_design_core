@@ -2591,6 +2591,7 @@
 
 .fynns-nav-drawer-group-body .fynns-nav-drawer-item {
   padding-inline-start: var(--fynns-navdrawer-group-item-pad-inline-start);
+  --fynns-navdrawer-item-start-inset: var(--fynns-navdrawer-group-item-pad-inline-start);
 }
 
 .fynns-nav-drawer-item {
@@ -2606,6 +2607,8 @@
   margin: 0;
   padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
   padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+  /* Effective start inset, mirrored by the running ring's end inset. */
+  --fynns-navdrawer-item-start-inset: var(--fynns-navdrawer-item-pad-inline-start);
   border: 0;
   border-radius: var(--fynns-radius-3xl);
   background: transparent;
@@ -2735,7 +2738,21 @@
   align-items: center;
   justify-content: center;
   margin-inline-start: auto;
+  /* Mirror the row's effective start inset so text-left and ring-right match. */
+  margin-inline-end: calc(
+    var(--fynns-navdrawer-item-start-inset, var(--fynns-navdrawer-item-pad-inline-start)) -
+      var(--fynns-navdrawer-item-pad-inline-end)
+  );
   color: var(--fynns-color-accent);
+}
+
+/* `--with-end` rows idle with a 4dp end pad for the hover action disk; the
+ * ring keeps the full start inset by adding the difference. */
+.fynns-nav-drawer-item-host--with-end .fynns-nav-drawer-running {
+  margin-inline-end: calc(
+    var(--fynns-navdrawer-item-start-inset, var(--fynns-navdrawer-item-pad-inline-start)) -
+      var(--fynns-space-xs)
+  );
 }
 
 .fynns-nav-drawer-running + .fynns-nav-drawer-badge {
