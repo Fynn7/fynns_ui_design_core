@@ -109,4 +109,31 @@ describe("NavigationDrawerItem trailing overlay", () => {
     expect(deleteBtn?.classList.contains("fynns-btn--sm")).toBe(false);
     expect(deleteBtn?.classList.contains("fynns-btn--icon")).toBe(true);
   });
+
+  it("renders one running status ring at the row end and marks the row busy", () => {
+    const host = mount(
+      createElement(NavigationDrawerItem, {
+        label: "Running session",
+        running: true,
+        runningLabel: "Running",
+      }),
+    );
+    const item = host.querySelector(".fynns-nav-drawer-item");
+    expect(item?.getAttribute("aria-busy")).toBe("true");
+    const ring = item?.querySelector(
+      ".fynns-nav-drawer-running .fynns-loading-spinner",
+    );
+    expect(ring).not.toBeNull();
+    expect(ring?.getAttribute("role")).toBe("status");
+    expect(ring?.getAttribute("aria-label")).toBe("Running");
+    expect(item?.lastElementChild?.classList.contains("fynns-nav-drawer-running")).toBe(true);
+    expect(host.querySelector(".fynns-nav-drawer-item-host--with-end")).toBeNull();
+  });
+
+  it("omits the running chrome when the row is idle", () => {
+    const host = mount(createElement(NavigationDrawerItem, { label: "Idle session" }));
+    const item = host.querySelector(".fynns-nav-drawer-item");
+    expect(item?.hasAttribute("aria-busy")).toBe(false);
+    expect(host.querySelector(".fynns-nav-drawer-running")).toBeNull();
+  });
 });

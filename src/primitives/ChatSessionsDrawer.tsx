@@ -22,6 +22,11 @@ export type ChatSessionsDrawerSession = {
   /** Localized title, including any untitled fallback. */
   label: string;
   disabled?: boolean;
+  /**
+   * True while this session's run is live. Renders one small status ring at
+   * the row end; the drawer never grows a batch / running banner.
+   */
+  running?: boolean;
 };
 
 export type ChatSessionsDrawerLabels = {
@@ -40,6 +45,8 @@ export type ChatSessionsDrawerLabels = {
   emptyDescription?: string;
   /** Accessible loading label only; never visible copy. */
   loading: string;
+  /** Accessible status name for a row's running ring; never visible copy. */
+  runningLabel?: string;
   revealMore: string;
 };
 
@@ -133,6 +140,8 @@ export function ChatSessionsDrawer({
             {...scope.getItemProps(session.id)}
             data-chat-session-id={session.id} label={session.label}
             active={session.id === activeSessionId} disabled={session.disabled}
+            running={session.running}
+            runningLabel={labels.runningLabel}
             aria-haspopup="menu"
             onClick={() => { scope.closeMenu(); onSelect(session.id); }}
             trailing={scope.menuTrigger(session.id)} />)}

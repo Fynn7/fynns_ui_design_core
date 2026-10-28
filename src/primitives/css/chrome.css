@@ -2724,6 +2724,25 @@
 }
 
 /*
+ * Session / destination live-run state: one 16dp status ring at the row end.
+ * This is the explicit inline-row exception to the archived body-loader ring;
+ * never promote it to a pane banner, Card, busbar or extra chrome. The row
+ * carries `aria-busy`; the ring itself exposes the localized status name.
+ */
+.fynns-nav-drawer-running {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: auto;
+  color: var(--fynns-color-accent);
+}
+
+.fynns-nav-drawer-running + .fynns-nav-drawer-badge {
+  margin-inline-start: var(--fynns-space-xs);
+}
+
+/*
  * Mode / session row actions (`trailing` IconButton) — List `--with-end`
  * overlay reveal parity (≥ **0.5.221**). Idle: full-bleed label. Fine
  * pointer: reveal on host hover / focus-within. Coarse / no-hover: always

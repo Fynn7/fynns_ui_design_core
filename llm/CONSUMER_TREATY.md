@@ -88,6 +88,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | mode drawer toolbar trash+new twin | DESIGN_SYSTEM Hard rules / NavigationDrawerNewChat ≥ 0.5.256 | `#sandbox-navdrawer-session-chrome` |
 | session history leading icon by default | DESIGN_SYSTEM Hard rules / Content density ≥ 0.5.298 | `#sandbox-navdrawer-session-chrome` / `#sandbox-navdrawer-session-icon` |
 | session sidebar hardcoded context menus / right-click selects session | DESIGN_SYSTEM catalog / `ChatSessionsDrawer` | `#sandbox-chat-sessions-drawer` |
+| live session status as pane banner / ring replaces label or leading icon | DESIGN_SYSTEM content-density / `NavigationDrawerItem.running` + `ChatSessionsDrawerSession.running` | `#sandbox-chat-sessions-drawer` / `#sandbox-navdrawer-session-chrome` |
 | list Ctrl+A steals text editing / multi-select activates conversation / batch menu deletes one row | [LIST_SELECTION](LIST_SELECTION.md) / `SelectionArea` | `#sandbox-list-selection` / `#sandbox-chat-sessions-drawer` |
 | chat product / session host wrong tree | DESIGN_SYSTEM Content density / Chat product | `#layouts-demo-chat-product` |
 | narrow session modal account row stranded below empty/history content | DESIGN_SYSTEM Hard rules / Chat product modal `NavigationDrawer footer` | `#layouts-demo-chat-product` |
@@ -323,8 +324,8 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | chart tooltip clipped at plot edge | DESIGN_SYSTEM hard-rules | `#chart` |
 | chart tooltip edge clamp jitter | DESIGN_SYSTEM chart recipe | `—` |
 | catalog morph remounts ClippedNavShell (drawer bounce) | DESIGN_SYSTEM hard-rules | `—` |
-| hand-rolled app shell (TopAppBar + docked drawer outside a core shell) | [Workspace chrome](design-system/workspace-chrome.md) (App shell composition) / static gate `app-shell-slots` + consumer shell-import check | `#layouts-demo-shell` |
-| invented `--fynns-*` token (undefined var drops the declaration) | [Tokens](design-system/tokens.md) (Only reference tokens the core defines) / `api.mjs --tokens` / static gate `unknown-token` | `—` |
+| hand-rolled app shell (TopAppBar + docked drawer outside a core shell) | [Workspace chrome](../docs/design-system/workspace-chrome.md) (App shell composition) / static gate `app-shell-slots` + consumer shell-import check | `#layouts-demo-shell` |
+| invented `--fynns-*` token (undefined var drops the declaration) | [Tokens](../docs/design-system/tokens.md) (Only reference tokens the core defines) / `api.mjs --tokens` / static gate `unknown-token` | `—` |
 | InlineAlert + orphan List for one catalog | DESIGN_SYSTEM content-density / List | `—` |
 | InlineAlert beside List in ControlStack | DESIGN_SYSTEM content-density / List | `#env-check` |
 | Components / Collapsible / List / controls nested inside InlineAlert | [SectionNotice contract](../docs/design-system/section-notice.md): plain text in InlineAlert; in-flow details/actions via SectionNotice string slots and action descriptors | `#section-notice` |

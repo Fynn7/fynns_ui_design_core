@@ -103,6 +103,21 @@ describe("ChatSessionsDrawer controlled session data", () => {
     expect(props.onSelect).not.toHaveBeenCalled();
   });
 
+  it("renders a running session as a row-end status ring, not extra drawer chrome", () => {
+    const { host } = mount({
+      sessions: [
+        { id: "toolbar", label: "First", running: true },
+        { id: "other", label: "Second" },
+      ],
+    });
+    const row = host.querySelector('[data-chat-session-id="toolbar"]')!;
+    expect(row.getAttribute("aria-busy")).toBe("true");
+    const ring = row.querySelector(".fynns-nav-drawer-running .fynns-loading-spinner");
+    expect(ring).not.toBeNull();
+    expect(host.querySelector(".fynns-banner, .fynns-inline-alert, .fynns-busy-region")).toBeNull();
+    expect(host.querySelector('[data-chat-session-id="other"]')?.hasAttribute("aria-busy")).toBe(false);
+  });
+
   it("omits the archive action when archiving is not enabled", () => {
     const { host } = mount();
     context(host.querySelector('[data-chat-session-id="other"]')!);

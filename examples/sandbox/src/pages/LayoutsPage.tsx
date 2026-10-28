@@ -1221,6 +1221,11 @@ export function LayoutsPage() {
                     </DropdownMenu>
                   }
                 />
+                <NavigationDrawerItem
+                  label={`${t("globals.navDrawerSessionEntry")} 2`}
+                  running
+                  runningLabel={t("layouts.sessionsDrawerRunningState")}
+                />
               </NavigationDrawer>
             </div>
             <SandboxHelp text={t("globals.navDrawerSessionToolbarHelp")} />

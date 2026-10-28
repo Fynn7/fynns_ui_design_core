@@ -16,6 +16,7 @@ export function ChatSessionsDrawerDemo() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [runningId, setRunningId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [epoch, setEpoch] = useState(0);
   const labels = {
@@ -31,6 +32,7 @@ export function ChatSessionsDrawerDemo() {
     emptyTitle: t("layouts.chatProductSessionsEmptyTitle"),
     emptyDescription: t("layouts.chatProductSessionsEmptyBody"),
     loading: t("globals.busyRegionLabel"),
+    runningLabel: t("layouts.sessionsDrawerRunningState"),
     revealMore: t("globals.listRevealMore"),
   };
   const sessionLabel = (id: string) => `${t("globals.navDrawerSessionEntry")} ${id.toUpperCase()}`;
@@ -54,7 +56,11 @@ export function ChatSessionsDrawerDemo() {
     });
   };
   const props = {
-    sessions: visibleIds.map((id) => ({ id, label: sessionLabel(id) })),
+    sessions: visibleIds.map((id) => ({
+      id,
+      label: sessionLabel(id),
+      running: id === runningId,
+    })),
     activeSessionId: active,
     labels, busy,
     error: failed ? t("globals.navDrawerModeCatalogFailAlert") : null,
@@ -83,10 +89,12 @@ export function ChatSessionsDrawerDemo() {
     <div className="sandbox-globals-row">
       <Switch label={t("layouts.sessionsDrawerBusy")} labelSide="end" checked={busy} onCheckedChange={setBusy} />
       <Switch label={t("layouts.sessionsDrawerError")} labelSide="end" checked={failed} onCheckedChange={setFailed} />
+      <Switch label={t("layouts.sessionsDrawerRunning")} labelSide="end" checked={runningId !== null}
+        onCheckedChange={(checked) => setRunningId(checked ? "b" : null)} />
       <Button variant="ghost" onClick={() => {
         setIds(["a", "b", "c", "d", "e", "f", "g"]);
         setArchivedIds(["f", "g"]);
-        setActive("a"); setBusy(false); setFailed(false); setEpoch((prev) => prev + 1);
+        setActive("a"); setBusy(false); setFailed(false); setRunningId(null); setEpoch((prev) => prev + 1);
       }}>{t("globals.navDrawerModeRefreshTip")}</Button>
       <Button variant="ghost" onClick={() => setModalOpen(true)}>{t("layouts.sessionsDrawerModal")}</Button>
     </div>
