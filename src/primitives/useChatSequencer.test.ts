@@ -80,6 +80,22 @@ describe("useChatSequencer", () => {
     unmount();
   });
 
+  it("paints an appended complete row on the next task by default", () => {
+    vi.useFakeTimers();
+    const a: Item = { id: "a", text: "task" };
+    const b: Item = { id: "b", text: "answer" };
+    const { api, unmount } = mountHook({ items: [a], getKey: key });
+    expect(ids(api.current)).toEqual(["a"]);
+
+    api.setProps({ items: [a, b], getKey: key });
+    expect(ids(api.current)).toEqual(["a"]);
+    act(() => {
+      vi.advanceTimersByTime(0);
+    });
+    expect(ids(api.current)).toEqual(["a", "b"]);
+    unmount();
+  });
+
   it("reveals a run started here from its first row", () => {
     vi.useFakeTimers();
     const a: Item = { id: "a", text: "task" };

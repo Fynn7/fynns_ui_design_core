@@ -1,4 +1,5 @@
 import {
+  Fragment,
   useMemo,
   type ReactNode,
 } from "react";
@@ -18,10 +19,17 @@ export type ChatMarkdownProps = {
   /** Copy control on fenced `CodeBlock`s. @default "Copy" */
   copyAriaLabel?: string;
   /**
-   * Streaming R05 cue — wrap the last glyph (ChatMessage injects this when
+   * Streaming tail cue — wrap the last glyph (ChatMessage injects this when
    * the markdown host is the last body unit).
    */
   showCursor?: boolean;
+  /**
+   * Per-word fade for newly mounted text while the caller appends tokens.
+   * Existing words stay in stable inline spans and do not replay. Set `true`
+   * only while streaming; completed messages render plain text again.
+   * @default false
+   */
+  reveal?: boolean;
 };
 
 function join(...parts: Array<string | false | null | undefined>) {
@@ -37,23 +45,54 @@ function safeHref(href: string): string | undefined {
   return t;
 }
 
-function renderInlines(nodes: MdInline[]): ReactNode {
+/**
+ * Split a text run into whitespace-preserving word spans. Keys are local to
+ * the run: appending tokens keeps every earlier word's DOM node, so its fade
+ * does not replay. Punctuation stays attached to its word.
+ */
+function renderRevealWords(value: string): ReactNode[] {
+  const out: ReactNode[] = [];
+  let word = 0;
+  for (const part of value.split(/(\s+)/)) {
+    if (!part) continue;
+    if (/^\s+$/.test(part)) {
+      out.push(part);
+      continue;
+    }
+    const index = word;
+    word += 1;
+    out.push(
+      <span key={`w${index}`} className="fynns-chat-stream-word">
+        {part}
+      </span>,
+    );
+  }
+  return out;
+}
+
+function renderInlines(nodes: MdInline[], reveal = false): ReactNode {
   return nodes.map((node, i) => {
     switch (node.type) {
       case "text":
-        return <span key={i}>{node.value}</span>;
+        return reveal ? (
+          <Fragment key={i}>{renderRevealWords(node.value)}</Fragment>
+        ) : (
+          <span key={i}>{node.value}</span>
+        );
       case "code":
         return <code key={i}>{node.value}</code>;
       case "strong":
-        return <strong key={i}>{renderInlines(node.children)}</strong>;
+        return <strong key={i}>{renderInlines(node.children, reveal)}</strong>;
       case "em":
-        return <em key={i}>{renderInlines(node.children)}</em>;
+        return <em key={i}>{renderInlines(node.children, reveal)}</em>;
       case "del":
-        return <del key={i}>{renderInlines(node.children)}</del>;
+        return <del key={i}>{renderInlines(node.children, reveal)}</del>;
       case "link": {
         const href = safeHref(node.href);
         if (!href) {
-          return <span key={i}>{renderInlines(node.children)}</span>;
+          return (
+            <span key={i}>{renderInlines(node.children, reveal)}</span>
+          );
         }
         return (
           <a
@@ -63,7 +102,7 @@ function renderInlines(nodes: MdInline[]): ReactNode {
             target="_blank"
             rel="noopener noreferrer"
           >
-            {renderInlines(node.children)}
+            {renderInlines(node.children, reveal)}
           </a>
         );
       }
@@ -101,6 +140,7 @@ export function ChatMarkdown({
   className,
   copyAriaLabel = "Copy",
   showCursor = false,
+  reveal = false,
 }: ChatMarkdownProps) {
   const blocks = useMemo(() => parseChatMarkdown(source), [source]);
 
@@ -108,7 +148,7 @@ export function ChatMarkdown({
 
   const renderItem = (item: MdListItem, liKey: string) => (
     <li key={liKey} className="fynns-chat-markdown-li">
-      {renderInlines(item.children)}
+      {renderInlines(item.children, reveal)}
     </li>
   );
 
@@ -119,13 +159,13 @@ export function ChatMarkdown({
         case "paragraph":
           return (
             <p key={key} className="fynns-chat-markdown-p">
-              {renderInlines(block.children)}
+              {renderInlines(block.children, reveal)}
             </p>
           );
         case "heading":
           return (
             <HeadingTag key={key} depth={block.depth}>
-              {renderInlines(block.children)}
+              {renderInlines(block.children, reveal)}
             </HeadingTag>
           );
         case "code":

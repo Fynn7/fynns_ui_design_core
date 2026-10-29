@@ -7,7 +7,7 @@ import {
 } from "react";
 import { isChatStreamOpaqueHost } from "./chatBlockHost";
 
-/** Class on the last streamed glyph (R05 color pulse). */
+/** Class on the last streamed glyph (anchor for the tail dot). */
 export const CHAT_STREAM_TAIL_CLASS = "fynns-chat-message-stream-tail";
 
 /**

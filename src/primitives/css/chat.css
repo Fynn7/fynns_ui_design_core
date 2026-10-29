@@ -10,31 +10,12 @@
   box-sizing: border-box;
 }
 
-/* Only newly mounted content enters. ChatThread skips the initial history. */
-@keyframes fynns-chat-content-enter {
-  from {
-    opacity: 0;
-    transform: translateY(var(--fynns-chat-entry-offset));
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fynns-chat-message--enter,
-.fynns-chat-reveal--enter {
-  animation: fynns-chat-content-enter var(--fynns-chat-entry-duration)
-    var(--fynns-ease-out) backwards;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fynns-chat-message--enter,
-  .fynns-chat-reveal--enter {
-    animation: none;
-  }
-}
-
+/*
+ * Chat rows paint at full opacity in their final position. ChatGPT's own
+ * conversation CSS has no message entrance keyframes: appended turns simply
+ * extend the thread downward, and streaming text grows in place. Do not add a
+ * whole-row fade/rise here; the live cue is the tail dot below.
+ */
 /*
  * Dual placement — left/right resizable asides:
  * Host = aside **content** width (not viewport / full main). Composer = 100%.
@@ -219,17 +200,30 @@
   margin-block-start: var(--fynns-space-sm);
 }
 
-@keyframes fynns-chat-stream-tail {
-  /* Rest keeps inherited ink (links / del / …); only the mid peak tints. */
+/* ChatGPT streaming tail: a small ink dot after the newest glyph. */
+@keyframes fynns-chat-stream-dot {
   50% {
-    /* Same mid as ChatThinking shimmer — accent into muted (not into
-     * on-surface, which washed white; not full accent, which reads neon). */
-    color: color-mix(
-      in srgb,
-      var(--fynns-color-accent) 55%,
-      var(--fynns-color-text-muted)
-    );
+    opacity: 0.35;
   }
+}
+
+/*
+ * New streamed words fade in at the tail; earlier words keep their DOM nodes
+ * and never replay. Opacity only — no translate — so the paragraph fills
+ * downward without reflow or a whole-bubble fade.
+ */
+@keyframes fynns-chat-stream-word-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fynns-chat-stream-word {
+  animation: fynns-chat-stream-word-in var(--fynns-duration-fast)
+    var(--fynns-ease-out) both;
 }
 
 /* Bare answer text promoted by ChatMessage — block so it stacks with wells. */
@@ -379,8 +373,23 @@
   font-weight: inherit;
   line-height: inherit;
   letter-spacing: inherit;
-  /* R05 — last glyph color pulse; no extra caret box. */
-  animation: fynns-chat-stream-tail var(--fynns-chatmessage-stream-tail)
+}
+
+/*
+ * Dot after the newest glyph (ChatGPT `.result-streaming … :after {content:"●"}`).
+ * The dot is decorative ink, not copy: pseudo-element content stays out of
+ * selection and the accessible name.
+ */
+.fynns-chat-message-stream-tail::after {
+  content: "";
+  display: inline-block;
+  inline-size: 0.4em;
+  block-size: 0.4em;
+  margin-inline-start: 0.25em;
+  border-radius: 50%;
+  background: currentColor;
+  vertical-align: baseline;
+  animation: fynns-chat-stream-dot var(--fynns-chatmessage-stream-tail)
     var(--fynns-ease-in-out) infinite;
 }
 
@@ -1713,13 +1722,12 @@ a.fynns-chat-activity-artifact:hover {
     transition: none;
   }
 
-  .fynns-chat-message-stream-tail {
+  .fynns-chat-message-stream-tail::after {
     animation: none;
-    color: color-mix(
-      in srgb,
-      var(--fynns-color-accent) 55%,
-      var(--fynns-color-text-muted)
-    );
+  }
+
+  .fynns-chat-stream-word {
+    animation: none;
   }
 }
 

@@ -765,9 +765,8 @@ export const CHATMESSAGE_TOKENS = {
    */
   "actions-reveal": "var(--fynns-duration-slow)",
   /**
-   * Streaming incomplete cue — last glyph color pulse between on-surface text
-   * and ChatThinking-shimmer mid (accent→muted mix; R05). No extra caret
-   * glyph. Duration aliases thinking shimmer.
+   * Streaming incomplete cue — pulse duration for the small ink dot after the
+   * newest glyph. Aliases thinking shimmer.
    */
   "stream-tail": "var(--fynns-duration-thinking-shimmer)",
   /** Gap between error copy and Regenerate (ChatGPT failed-turn footer). */
@@ -930,9 +929,6 @@ export const CHATMESSAGE_TOKENS = {
  * Spec: `llm/CHAT_COMPOSER_LAYOUT.md`. `--fynns-chat-<key>`.
  */
 export const CHAT_TOKENS = {
-  /** New turns and caller-owned blocks rise gently into the conversation. */
-  "entry-offset": "0.75rem",
-  "entry-duration": "var(--fynns-duration-slow)",
   /**
    * Vertical gap between turns. ChatGPT clones use `gap-8` (2rem); live
    * turn shells also use `pb-10` (2.5rem) — lock the denser clone gap.

@@ -60,7 +60,7 @@ export function ChatConversationDemo({
     setDraft("");
     setTurns((items) => [...items, { id: ++nextId.current, kind: "user", text }]);
 
-    // A demo transport beat lets the two entrance states be inspected.
+    // A demo transport beat lets the appended component and answer be inspected.
     const raw = getComputedStyle(document.documentElement)
       .getPropertyValue("--fynns-duration-activity")
       .trim();

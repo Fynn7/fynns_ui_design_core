@@ -22,7 +22,6 @@ import { ArrowUpIcon, ChevronDownIcon, MicIcon, StopSquareIcon } from "./icons";
 import { IconButton } from "./IconButton";
 import { Tooltip } from "./Tooltip";
 import { clearScrollEdgeFade, syncScrollEdgeFadeOnto } from "./scrollEdgeFade";
-import { ChatEntranceContext } from "./chatEntrance";
 import { ChatComposerTodoList, type ChatComposerTodoListProps } from "./ChatComposerTodoList";
 import { refreshOverlayScrollbars } from "../theme/overlayScrollbar";
 
@@ -137,11 +136,6 @@ export function ChatThread({
     stickToBottom,
   } = useChatContext("ChatThread");
   const hasMessages = Children.count(children) > 0;
-  const [entranceReady, setEntranceReady] = useState(false);
-
-  useEffect(() => {
-    setEntranceReady(true);
-  }, []);
 
   useEffect(() => {
     const el = threadRef.current;
@@ -189,9 +183,7 @@ export function ChatThread({
       aria-relevant="additions"
     >
       <div className="fynns-chat-thread-inner">
-        <ChatEntranceContext.Provider value={entranceReady}>
-          {hasMessages ? children : empty}
-        </ChatEntranceContext.Provider>
+        {hasMessages ? children : empty}
       </div>
     </div>
   );

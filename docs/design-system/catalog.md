@@ -194,6 +194,8 @@ classes.
   `ChatMessage` (`user`|`assistant`|`system`; prefer `markdown` /
   `ChatMarkdown` L2 GFM: paragraphs, AT, fenced→CodeBlock, lists, GFM task
   labels as plain items, inline marks — not full tables/raw HTML).
+  `ChatMessage.streaming` sets `ChatMarkdown reveal` for the tail word fade;
+  do not enable `reveal` on recorded history.
 
   - **Shell:** `Chat` full-height flex; soft min
     `min(var(--fynns-layout-chat-min-width), 100%)`. Parent must resolve height —
@@ -293,13 +295,15 @@ classes.
     (narrow hosts can hit update-depth loops). Cap:
     `--fynns-chat-composer-max-height` (13rem). Layout authority:
     [`llm/CHAT_COMPOSER_LAYOUT.md`](../../llm/CHAT_COMPOSER_LAYOUT.md).
-  - **Message entrance:** newly mounted `ChatMessage` rows enter with a
-    tokenized rise/fade after `ChatThread`'s first paint. Wrap keyed non-message
-    results in `ChatReveal` (including blocks added inside an existing answer);
-    initial history stays still, and reduced motion paints immediately. Main
-    and EndAside use the same behavior. Live `#layouts-demo-chat-product` /
-    `#layouts-demo-chat-aside`. See [`CHAT_MOTION.md`](../../llm/CHAT_MOTION.md).
-  - **Message lifecycle:** `streaming` = last-glyph color pulse only while answer
+  - **Message append:** `ChatMessage` / `ChatReveal` rows paint at full opacity
+    in their final position. The thread grows downward; there is no per-row
+    fade, rise, scale or stagger (ChatGPT appends in place). Wrap keyed
+    non-message results in `ChatReveal` (including blocks added inside an
+    existing answer). Main and EndAside use the same behavior. Live
+    `#layouts-demo-chat-product` / `#layouts-demo-chat-aside`. See
+    [`CHAT_MOTION.md`](../../llm/CHAT_MOTION.md).
+  - **Message lifecycle:** `streaming` = newly mounted markdown words fade in
+    (opacity only) plus a small ink dot after the newest glyph only while answer
     text exists + `aria-busy`; `error`/`onRetry` = failed-generation footer;
     `thinking`/`ChatThinking` = single-block reasoning (Wave 1), with
     `variant="status"` / `"disclosure"`; structured `details` owns muted text

@@ -21,8 +21,10 @@ export type ChatSequencerOptions<T> = {
    */
   isSettled?: (item: T) => boolean;
   /**
-   * Delay between two reveals. Defaults to the core
-   * `--fynns-chat-entry-duration` (zero under reduced motion).
+   * Optional delay between two reveals. Core defaults to `0`: rows paint as
+   * soon as every painted row has settled, matching ChatGPT's append-first
+   * conversation (no entrance cadence). Pass a positive value only for
+   * deliberate staged demos; production chat must not stagger real events.
    */
   intervalMs?: number;
   /** Reset identity. Changes clear the visible window and seed again. */
@@ -42,20 +44,12 @@ type SequencerState = {
   pendingKeys: string[];
 };
 
-/** Read the core entrance duration once; reduced motion reveals without delay. */
+/**
+ * Core chat appends at the next task. A positive `intervalMs` is an explicit
+ * consumer opt-in for a staged demo, never the production default.
+ */
 function defaultIntervalMs(): number {
-  if (typeof window === "undefined" || typeof document === "undefined") return 0;
-  try {
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return 0;
-    const raw = getComputedStyle(document.documentElement)
-      .getPropertyValue("--fynns-chat-entry-duration")
-      .trim();
-    const value = Number.parseFloat(raw);
-    if (!Number.isFinite(value) || value <= 0) return 360;
-    return raw.endsWith("ms") ? value : raw.endsWith("s") ? value * 1000 : value;
-  } catch {
-    return 360;
-  }
+  return 0;
 }
 
 function seedState(

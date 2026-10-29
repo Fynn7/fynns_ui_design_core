@@ -718,13 +718,18 @@ Use the core CSS recipe; never compress these with local margins or line heights
   question. Never dock a perpetual result/question or move answered cards.
   Only composer/task-summary chrome is docked. Live `#chat-question`; contract:
   [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
-- **MUST** reveal live chat rows through `useChatSequencer` (or the identical
-  rule): one newly painted row per `--fynns-chat-entry-duration`, no row
-  removed/reordered/collapsed after paint, and no later row while any painted
-  row is still entering, loading media or streaming. Keep a real tail status
-  row from submit to settle; every backend phase needs a visible row. Terminal
-  state appends, never rewrites. Live `#layouts-demo-chat-product`; contract:
-  [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md) → Live reveal contract.
+- **MUST** append live chat rows through `useChatSequencer` (or the identical
+  rule): paint each queued row at full opacity as soon as every painted row has
+  settled (media loaded, streaming stopped), no row removed/reordered/collapsed
+  after paint, and no later row while a painted row is still streaming or
+  loading media. Core's default interval is **0** — no row entrance fade/rise
+  or stagger; ChatGPT appends in place and grows the thread downward. Streaming
+  markdown may fade only its newly mounted words (opacity, no translate); the
+  old words never replay. Keep a real
+  tail status row from submit to settle; every backend phase needs a visible
+  row. Terminal state appends, never rewrites. Live `#layouts-demo-chat-product`;
+  contract: [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md) → Live reveal
+  contract + [`CHAT_MOTION.md`](../../llm/CHAT_MOTION.md).
 - **DON'T** invent shell/column/chat insets as raw `rem`/`px` or private CSS
   vars — reuse `--fynns-layout-*` (see **Inset decision tree**). Don't ship
   broken chrome type/row proportion (see **Chrome type & row proportion** /

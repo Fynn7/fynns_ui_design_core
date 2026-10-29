@@ -1755,9 +1755,9 @@ const en = {
   "globals.chatUserBody":
     "Summarize the ChatMessage `streaming` prop in one sentence, then note that user bubbles cap at 70% of the row while short replies still shrink to fit.",
   "globals.chatAssistantMarkdown":
-    "streaming only paints incomplete cues (last-glyph color pulse + `aria-busy`); the app appends tokens itself.\n\n```bash\nnpm run sandbox\n```\n\nFenced blocks become `CodeBlock`; sibling units use `--fynns-chatmessage-body-stack-gap` (16dp / unit-stack-gap).\n\n### Checklist\n\n- Inline `code` pills\n- Plain ul/ol lists (GFM task markers become ordinary bullets — no interactive Checkbox)\n- *Italic* and **bold** work\n\n> Prefer `ChatMessage markdown` or `<ChatMarkdown>` — do not dump raw Markdown strings as bare children.",
+    "streaming only paints incomplete cues (tail ink dot + `aria-busy`); the app appends tokens itself.\n\n```bash\nnpm run sandbox\n```\n\nFenced blocks become `CodeBlock`; sibling units use `--fynns-chatmessage-body-stack-gap` (16dp / unit-stack-gap).\n\n### Checklist\n\n- Inline `code` pills\n- Plain ul/ol lists (GFM task markers become ordinary bullets — no interactive Checkbox)\n- *Italic* and **bold** work\n\n> Prefer `ChatMessage markdown` or `<ChatMarkdown>` — do not dump raw Markdown strings as bare children.",
   "globals.chatAssistantBody":
-    "streaming only paints incomplete cues (last-glyph color pulse + aria-busy); the app appends tokens itself.",
+    "streaming only paints incomplete cues (tail ink dot + aria-busy); the app appends tokens itself.",
   "globals.chatAssistantStackNote":
     "Bare string + CodeBlock siblings get `--fynns-chatmessage-body-stack-gap` (16dp / unit-stack-gap) — ChatMessage wraps bare text as `.fynns-chat-message-prose`; do not patch this gap in the consumer.",
   "globals.chatAssistantStackCode": "npm run sandbox",
@@ -1773,9 +1773,9 @@ const en = {
   "globals.chatMoreExportDemo": "Export (sandbox demo).",
   "globals.chatStreamingLabel": "Generating response",
   "globals.chatStreamFull":
-    "Streaming is a UI flag: last-glyph color pulse while incomplete, then clear it when the reply finishes.",
+    "Streaming is a UI flag: an ink dot follows the newest glyph while incomplete, then clears when the reply finishes.",
   "globals.chatRevealCard":
-    "This separate component enters the conversation through ChatReveal.",
+    "This separate component is appended to the conversation through ChatReveal.",
   "globals.chatStreamStart": "Simulate stream",
   "globals.chatStreamReset": "Reset",
   "globals.chatError": "There was an error generating a response.",
@@ -4317,8 +4317,8 @@ const zh: Record<MessageKey, string> = {
   "globals.chatMoreExportDemo": "导出（沙盒演示）。",
   "globals.chatStreamingLabel": "正在生成回复",
   "globals.chatStreamFull":
-    "streaming 是 UI 标志：未完成时末字换色脉冲，回复结束后关闭即可。",
-  "globals.chatRevealCard": "这个独立组件通过 ChatReveal 滑入对话。",
+    "streaming 是 UI 标志：未完成时最新字形后显示墨点，回复结束后关闭即可。",
+  "globals.chatRevealCard": "这个独立组件通过 ChatReveal 追加到对话。",
   "globals.chatStreamStart": "模拟流式输出",
   "globals.chatStreamReset": "重置",
   "globals.chatError": "生成回复时出错。",

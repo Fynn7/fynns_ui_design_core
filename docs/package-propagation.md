@@ -15,6 +15,17 @@ into consumer agent guidance. See [workspace contract](design-system/workspace-c
 
 ## Model
 
+**Chat append motion ≥ 0.5.315:** new `ChatMessage` / `ChatReveal` rows paint
+at full opacity in their final position. The previous rise/fade entrance and
+its stagger are gone; `useChatSequencer` defaults to interval **0** and only
+gates on settled rows. `ChatMessage.streaming` now paints a small ink dot after
+the newest glyph (ChatGPT's streaming tail) instead of pulsing the last glyph;
+new markdown words fade in place (opacity only) while earlier words stay put.
+`--fynns-chat-entry-offset` / `--fynns-chat-entry-duration` are removed; delete
+consumer delay code that read them. Linked source consumers receive this
+through their existing file dependency; verify append order and the tail dot in
+the actual app.
+
 **autoGrow scroll stability ≥ 0.5.314:** editable `CodeBlock` and `Textarea`
 measure their content height with a collapsed probe. The probe no longer
 moves the page: the previous height and every captured scroll offset are

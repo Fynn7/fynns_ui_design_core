@@ -1,5 +1,6 @@
 /**
- * Live reveal contract: one newly painted chat row at a time.
+ * Live append contract: rows extend the thread in order at full opacity.
+ * There is no per-row entrance fade/rise or staged cadence.
  * Live: #layouts-demo-chat-product
  */
 import { test, expect } from "@playwright/test";
@@ -13,7 +14,7 @@ test.beforeEach(async ({ page }) => {
   await resetSandboxSession(page);
 });
 
-test("a live reply paints one row at a time, top to bottom", async ({ page }) => {
+test("a live reply appends rows in order without an entrance fade", async ({ page }) => {
   await openLayoutsDemo(page, "chat-product");
   const demo = layoutsDemo(page, "chat-product");
   const thread = demo.locator(".fynns-chat-thread");
@@ -61,8 +62,20 @@ test("a live reply paints one row at a time, top to bottom", async ({ page }) =>
   expect(user).toBeTruthy();
   expect(reveal).toBeTruthy();
   expect(assistant).toBeTruthy();
-  // The queued component and the answer never mount in the same commit, and
-  // the answer waits for the component's entrance cadence.
-  expect(reveal!.t - user!.t).toBeGreaterThanOrEqual(250);
-  expect(assistant!.t - reveal!.t).toBeGreaterThanOrEqual(250);
+  // Same chronological order, but no staged cadence: rows may paint in the
+  // same frame. The old 250ms entrance beats must not come back.
+  expect(reveal!.t).toBeGreaterThanOrEqual(user!.t);
+  expect(assistant!.t).toBeGreaterThanOrEqual(reveal!.t);
+
+  for (const row of [
+    thread.locator(".fynns-chat-message--user").first(),
+    thread.locator(".fynns-chat-reveal").first(),
+    thread.locator(".fynns-chat-message--assistant").first(),
+  ]) {
+    await expect(row).toHaveCSS("animation-name", "none");
+    await expect(row).toHaveCSS("opacity", "1");
+  }
+  await expect(
+    thread.locator(".fynns-chat-message--enter, .fynns-chat-reveal--enter"),
+  ).toHaveCount(0);
 });
