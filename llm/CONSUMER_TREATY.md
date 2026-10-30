@@ -136,7 +136,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | PageScroll mid-scroll hard clip (no edge fade) | DESIGN_SYSTEM Hard rules / Scrollbar | `#page-scroll` |
 | Dialog / Drawer / Sheet body or other core scroll container hard-clips overflowing content (including a full-height CodeBlock inside a Dialog) | DESIGN_SYSTEM philosophy / Scrollbar: core `.fynns-scroll` automatically detects overflow and fades its vertical edges; render the core component without private scroll wrappers or mask CSS | `#dialog-nested-scroll` / `#drawer-nested-scroll` |
 | FillColumn header mid-scroll hard clip (no edge fade) | DESIGN_SYSTEM Hard rules / Scrollbar | `#sandbox-fill-column-guide` |
-| Textarea / bordered scroll-edge fade erases stroke | DESIGN_SYSTEM philosophy / Scrollbar (≥ **0.5.282**) | `#textarea` |
+| Textarea / bordered scroll-edge fade erases or breaks the stroke | DESIGN_SYSTEM philosophy / Scrollbar (≥ **0.5.316**: the frame paints the hairline, the inner viewport carries the fade) | `#textarea` |
 | Private selection-reference input / lost quote on focus / ad-hoc range flyout | DESIGN_SYSTEM catalog / TextSelectionComposer | `#text-selection-composer` |
 | PageScroll Card sheet-max-width under ControlRow | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
 | PageScroll form Card chat-max-width column | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |

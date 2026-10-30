@@ -384,10 +384,19 @@ input.fynns-input:focus::-webkit-scrollbar {
 .fynns-textarea {
   width: 100%;
   box-sizing: border-box;
+  /* Block inside `.fynns-textarea-viewport` — an inline textarea adds the
+     line-box leading below itself, so the frame grew ~5px past the well and
+     pushed the bottom fade ramp below the last glyph row. */
+  display: block;
   min-height: 6rem;
   resize: vertical;
   line-height: var(--fynns-line-height-body);
   font-family: inherit;
+  /* The frame owns border/fill/radius so the scroll-edge fade can never
+     erase the top stroke or slide its corner arcs (≥ **0.5.316**). */
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   /*
    * Multiline needs real block pad. `.fynns-input--sm` zeroes padding-block for
    * 32dp single-line Input — override here with layout field-pad-block.
@@ -395,6 +404,113 @@ input.fynns-input:focus::-webkit-scrollbar {
   padding-block: calc(
     var(--fynns-layout-field-pad-block) - var(--fynns-border-hairline)
   );
+}
+
+/*
+ * Textarea chrome frame. Rounded hairline + fill live outside the masked
+ * viewport: the fade is applied to `.fynns-textarea-viewport`, which clips the
+ * native inner editor to a plain box inside this frame. Masking the
+ * `<textarea>` itself let Chromium composite scrolled content past the border
+ * box and resolved the hairline strips against the shifted layer — content
+ * painted above the rounded top edge and the stroke broke at the corners.
+ */
+.fynns-textarea-frame {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-muted);
+  overflow: clip;
+}
+
+.fynns-textarea-frame--filled {
+  background: var(--fynns-color-input-fill);
+}
+
+.fynns-textarea-frame:focus-within {
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+}
+
+.fynns-textarea-frame--invalid {
+  border-color: var(--fynns-color-danger-border);
+}
+
+.fynns-textarea-frame--disabled,
+.fynns-textarea-frame--readonly {
+  background: var(--fynns-color-surface-head);
+  opacity: var(--fynns-opacity-muted);
+  cursor: not-allowed;
+}
+
+/* The masked content layer: exact host box, no border, soft vertical fades. */
+.fynns-textarea-viewport {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  overflow: clip;
+}
+
+.fynns-textarea-viewport[data-fade-top] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 100%
+  );
+}
+
+.fynns-textarea-viewport[data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+}
+
+.fynns-textarea-viewport[data-fade-top][data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+}
+
+/* Dim the whole frame once; the textarea keeps its own ink opacity at 1 so
+   the text is not muted twice (the old single-node control dimmed once). */
+.fynns-textarea:disabled,
+.fynns-textarea[readonly] {
+  background: transparent;
+  opacity: 1;
 }
 
 .fynns-textarea.fynns-input--sm {

@@ -13,6 +13,7 @@ import {
 } from "react";
 import {
   clearScrollEdgeFade,
+  copyScrollEdgeFadeAttrs,
   syncScrollEdgeFade,
 } from "./scrollEdgeFade";
 import { measureContentHeight } from "./autoGrowMeasure";
@@ -98,8 +99,25 @@ export const Textarea = forwardRef(function Textarea(
   const hint = errorText ?? supportingText;
   const minRows = resolveMinRows(minRowsProp, rows);
   const localRef = useRef<HTMLTextAreaElement | null>(null);
+  const viewportRef = useRef<HTMLDivElement | null>(null);
   /* True between compositionstart and compositionend (CJK IME). */
   const composingRef = useRef(false);
+
+  /**
+   * The fade mask lives on the inner viewport, never on the `<textarea>`: a
+   * mask on the native control lets Chromium composite its inner editor past
+   * the border box (content paints above the rounded top edge) and resolves
+   * the hairline strips against the wrong box. The frame owns border,
+   * background and radius, the viewport owns the clip and the fade, so the
+   * top stroke and its corner arcs stay whole.
+   */
+  const syncFade = useCallback(() => {
+    const el = localRef.current;
+    if (!el) return;
+    syncScrollEdgeFade(el);
+    const viewport = viewportRef.current;
+    if (viewport) copyScrollEdgeFadeAttrs(el, viewport);
+  }, []);
 
   const setRefs = useCallback(
     (node: HTMLTextAreaElement | null) => {
@@ -145,7 +163,7 @@ export const Textarea = forwardRef(function Textarea(
     // Empty: minRows floor only — ignore placeholder wrap scrollHeight.
     if (!el.value) {
       el.style.height = `${floor}px`;
-      syncScrollEdgeFade(el);
+      syncFade();
       return;
     }
 
@@ -167,8 +185,8 @@ export const Textarea = forwardRef(function Textarea(
       next = Math.min(Math.ceil(el.scrollHeight + borderY), cap);
       el.style.height = `${next}px`;
     }
-    syncScrollEdgeFade(el);
-  }, [autoGrow, maxRows, minRows]);
+    syncFade();
+  }, [autoGrow, maxRows, minRows, syncFade]);
 
   useLayoutEffect(() => {
     resize();
@@ -197,7 +215,8 @@ export const Textarea = forwardRef(function Textarea(
   useLayoutEffect(() => {
     const el = localRef.current;
     if (!el) return;
-    const sync = () => syncScrollEdgeFade(el);
+    const viewport = viewportRef.current;
+    const sync = () => syncFade();
     sync();
     el.addEventListener("scroll", sync, { passive: true });
     const ro =
@@ -209,8 +228,9 @@ export const Textarea = forwardRef(function Textarea(
       el.removeEventListener("scroll", sync);
       ro?.disconnect();
       clearScrollEdgeFade(el);
+      if (viewport) clearScrollEdgeFade(viewport);
     };
-  }, [autoGrow, maxRows, minRows]);
+  }, [autoGrow, maxRows, minRows, syncFade]);
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     onChange?.(event);
@@ -218,49 +238,58 @@ export const Textarea = forwardRef(function Textarea(
     if (value === undefined) resize();
     else {
       /* Controlled: value effect remeasures; fade after this paint's height. */
-      requestAnimationFrame(() => {
-        const node = localRef.current;
-        if (node) syncScrollEdgeFade(node);
-      });
+      requestAnimationFrame(syncFade);
     }
   };
 
   const control = (
-    <textarea
-      {...rest}
-      id={fieldId}
-      ref={setRefs}
-      rows={rows ?? (autoGrow ? minRows : undefined)}
-      value={value}
-      defaultValue={defaultValue}
-      onChange={handleChange}
-      /* CJK IME: never resize the field under an active composition — the
-         collapsed probe can cancel the composed text. Measure again when the
-         composition landed. */
-      onCompositionStart={event => {
-        composingRef.current = true;
-        onCompositionStart?.(event);
-      }}
-      onCompositionEnd={event => {
-        composingRef.current = false;
-        onCompositionEnd?.(event);
-        resize();
-      }}
-      style={style}
-      spellCheck={spellCheck}
-      aria-invalid={isInvalid || undefined}
-      aria-describedby={hint ? join(ariaDescribedBy, hintId) : ariaDescribedBy}
+    <div
       className={join(
-        "fynns-input",
-        "fynns-textarea",
-        "fynns-scroll",
-        autoGrow && "fynns-textarea--auto-grow",
-        size === "sm" && "fynns-input--sm",
-        variant === "filled" && "fynns-input--filled",
-        isInvalid && "fynns-input--invalid",
-        className,
+        "fynns-textarea-frame",
+        variant === "filled" && "fynns-textarea-frame--filled",
+        isInvalid && "fynns-textarea-frame--invalid",
+        rest.disabled && "fynns-textarea-frame--disabled",
+        rest.readOnly && "fynns-textarea-frame--readonly",
       )}
-    />
+    >
+      <div className="fynns-textarea-viewport" ref={viewportRef}>
+        <textarea
+          {...rest}
+          id={fieldId}
+          ref={setRefs}
+          rows={rows ?? (autoGrow ? minRows : undefined)}
+          value={value}
+          defaultValue={defaultValue}
+          onChange={handleChange}
+          /* CJK IME: never resize the field under an active composition — the
+             collapsed probe can cancel the composed text. Measure again when the
+             composition landed. */
+          onCompositionStart={event => {
+            composingRef.current = true;
+            onCompositionStart?.(event);
+          }}
+          onCompositionEnd={event => {
+            composingRef.current = false;
+            onCompositionEnd?.(event);
+            resize();
+          }}
+          style={style}
+          spellCheck={spellCheck}
+          aria-invalid={isInvalid || undefined}
+          aria-describedby={hint ? join(ariaDescribedBy, hintId) : ariaDescribedBy}
+          className={join(
+            "fynns-input",
+            "fynns-textarea",
+            "fynns-scroll",
+            autoGrow && "fynns-textarea--auto-grow",
+            size === "sm" && "fynns-input--sm",
+            variant === "filled" && "fynns-input--filled",
+            isInvalid && "fynns-input--invalid",
+            className,
+          )}
+        />
+      </div>
+    </div>
   );
 
   if (!hint) return control;

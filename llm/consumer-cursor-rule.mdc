@@ -192,7 +192,7 @@ sandbox `#anchor`。
 - **PageScroll mid-scroll hard clip** — 只用 keep-set `PageScroll`（渐隐已封装）；禁止裸 `overflow:auto`。`#page-scroll`
 - **Table H-scroll hard clip** — `.fynns-table-wrap.fynns-scroll` 左右渐隐已封装（`data-fade-left`/`right` ≥ **0.5.296**）；禁止私有 `mask-image` / 硬裁末列。`#table`
 - **FillColumn header mid-scroll hard clip** — canvas 封顶的 `header` 渐隐已封装（≥ **0.5.278**）；禁止私有 `mask-image`。Header **content-sized**（`flex: 0 0 auto` ≥ **0.5.279**），勿靠 flex-shrink 把短 guide Surface 压出嵌套滚动条。`#sandbox-fill-column-guide`
-- **Textarea scroll-edge fade erases border** — core mask 保留外缘 hairline 框（≥ **0.5.282**）；禁止私有 `mask-image` 再抹掉描边。`#textarea`
+- **Textarea scroll-edge fade erases border / breaks the top edge** — core 把描边与渐隐拆开：`.fynns-textarea-frame` 保留 hairline 与圆角，内层 `.fynns-textarea-viewport` 承担渐隐（≥ **0.5.316**）；禁止再 mask `<textarea>` 或私有 `mask-image`。`#textarea`
 - **overlay scrollbar above / buried under Select/Menu** — 页轨 z 在 modal-flyout 下；飞层轨用 scroll-overlay-flyout。`#sandbox-scroll-menu-stack`
 - **mode drawer tools↔filter crushed / toolbar-end md** — body 直接子间距 8dp；toolbar-end 盘 sm 32dp。`#layouts-demo-navigation-drawer`
 - **Dialog foot Delete leftmost / exit clears title** — Cancel 左、主确认右；`open→false` 同拍勿清空 title/body。`#sandbox-list-recipe-catalog`

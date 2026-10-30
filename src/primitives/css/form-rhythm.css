@@ -427,6 +427,8 @@
 .fynns-control-cluster--end-align > .fynns-select.fynns-control-cluster__grow,
 .fynns-control-cluster--end-align > .fynns-menu-root.fynns-control-cluster__grow,
 .fynns-control-cluster--end-align > .fynns-textarea.fynns-control-cluster__grow,
+.fynns-control-cluster--end-align
+  > .fynns-textarea-frame:has(.fynns-textarea.fynns-control-cluster__grow),
 .fynns-control-cluster--end-align > .fynns-field.fynns-control-cluster__grow,
 .fynns-control-cluster--end-align > .fynns-input.fynns-control-cluster__grow {
   flex: 1 1 0%;
@@ -491,13 +493,24 @@
 
 /* Textarea + row action (repeatable bullet rows): one nowrap row; delete centers
    on the autoGrow well — not pinned to the top band like Select + refresh. */
-.fynns-control-cluster--end-align:has(> .fynns-textarea.fynns-control-cluster__grow) {
+.fynns-control-cluster--end-align:has(> .fynns-textarea.fynns-control-cluster__grow),
+.fynns-control-cluster--end-align:has(
+    > .fynns-textarea-frame:has(.fynns-textarea.fynns-control-cluster__grow)
+  ) {
   align-items: center;
 }
 
 .fynns-control-cluster--end-align:has(> .fynns-textarea.fynns-control-cluster__grow)
   > .fynns-tooltip-trigger:has(.fynns-btn--icon),
 .fynns-control-cluster--end-align:has(> .fynns-textarea.fynns-control-cluster__grow)
+  > .fynns-btn--icon,
+.fynns-control-cluster--end-align:has(
+    > .fynns-textarea-frame:has(.fynns-textarea.fynns-control-cluster__grow)
+  )
+  > .fynns-tooltip-trigger:has(.fynns-btn--icon),
+.fynns-control-cluster--end-align:has(
+    > .fynns-textarea-frame:has(.fynns-textarea.fynns-control-cluster__grow)
+  )
   > .fynns-btn--icon {
   align-self: center;
   margin-block-start: 0;

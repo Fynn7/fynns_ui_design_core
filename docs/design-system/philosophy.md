@@ -117,9 +117,11 @@ belong in a consumer’s own doc.
    `data-fade-right`, same length `--fynns-layout-scroll-edge-fade-length`) —
    **built into overlay `.fynns-scroll` hosts** (≥ **0.5.296** for tables;
    PageScroll ≥ **0.5.247**; FillColumn header ≥ **0.5.278**); zero consumer
-   props / private mask CSS**. Masks keep the outer `--fynns-border-hairline` strip
-   opaque (≥ **0.5.282**) so Textarea / bordered wells do **not** fade their
-   stroke with the content. Not a hard clip
+   props / private mask CSS**. Bordered Textarea splits chrome from fade:
+   `.fynns-textarea-frame` paints the hairline + radius outside the masked
+   `.fynns-textarea-viewport` (≥ **0.5.316**), so the stroke and its corner
+   arcs never fade, break, or let scrolled glyphs paint above the top edge.
+   Not a hard clip
    into TopAppBar / canvas floor / Chat. Do **not** invent consumer `mask-image` on
    `.fynns-page-scroll` / `.fynns-fill-column-header`, and do **not** replace
    destination catalogs with a bare

@@ -1034,9 +1034,12 @@ button {
  * FillColumn header ≥ 0.5.278. Table wrap inline-axis ≥ **0.5.296**
  * (data-fade-left / data-fade-right).
  *
- * Textarea uses a separate multi-layer mask (≥ 0.5.282): opaque hairline
- * frame + inset content fade — a single vertical mask would erase side
- * strokes in the fade band.
+ * Textarea no longer masks the control (≥ **0.5.316**): the frame paints the
+ * hairline + fill and the inner `.fynns-textarea-viewport` takes a plain
+ * vertical gradient (fields.css). Masking the `<textarea>` itself made
+ * Chromium composite scrolled glyphs past the border box — text showed above
+ * the rounded top edge and the four hairline strips landed on the shifted
+ * layer, so the top stroke faded and its corner arcs broke.
  */
 /* Editable CodeBlock: never mask .fynns-code-block-input — Chromium keeps
  * ::selection stuck under mask-image while the caret host scrolls (>= 0.5.299).
@@ -1164,172 +1167,15 @@ button {
 }
 
 
-.fynns-textarea[data-fade-bottom] {
-  -webkit-mask-image:
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(
-      to bottom,
-      #000 0%,
-      #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
-      transparent 100%
-    );
-  -webkit-mask-size:
-    100% var(--fynns-border-hairline),
-    100% var(--fynns-border-hairline),
-    var(--fynns-border-hairline) 100%,
-    var(--fynns-border-hairline) 100%,
-    calc(100% - 2 * var(--fynns-border-hairline))
-      calc(100% - 2 * var(--fynns-border-hairline));
-  -webkit-mask-position:
-    0 0,
-    0 100%,
-    0 0,
-    100% 0,
-    var(--fynns-border-hairline) var(--fynns-border-hairline);
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-composite: source-over;
-  mask-image:
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(
-      to bottom,
-      #000 0%,
-      #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
-      transparent 100%
-    );
-  mask-size:
-    100% var(--fynns-border-hairline),
-    100% var(--fynns-border-hairline),
-    var(--fynns-border-hairline) 100%,
-    var(--fynns-border-hairline) 100%,
-    calc(100% - 2 * var(--fynns-border-hairline))
-      calc(100% - 2 * var(--fynns-border-hairline));
-  mask-position:
-    0 0,
-    0 100%,
-    0 0,
-    100% 0,
-    var(--fynns-border-hairline) var(--fynns-border-hairline);
-  mask-repeat: no-repeat;
-  mask-composite: add;
-}
-
-.fynns-textarea[data-fade-top] {
-  -webkit-mask-image:
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      #000 var(--fynns-layout-scroll-edge-fade-length),
-      #000 100%
-    );
-  -webkit-mask-size:
-    100% var(--fynns-border-hairline),
-    100% var(--fynns-border-hairline),
-    var(--fynns-border-hairline) 100%,
-    var(--fynns-border-hairline) 100%,
-    calc(100% - 2 * var(--fynns-border-hairline))
-      calc(100% - 2 * var(--fynns-border-hairline));
-  -webkit-mask-position:
-    0 0,
-    0 100%,
-    0 0,
-    100% 0,
-    var(--fynns-border-hairline) var(--fynns-border-hairline);
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-composite: source-over;
-  mask-image:
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      #000 var(--fynns-layout-scroll-edge-fade-length),
-      #000 100%
-    );
-  mask-size:
-    100% var(--fynns-border-hairline),
-    100% var(--fynns-border-hairline),
-    var(--fynns-border-hairline) 100%,
-    var(--fynns-border-hairline) 100%,
-    calc(100% - 2 * var(--fynns-border-hairline))
-      calc(100% - 2 * var(--fynns-border-hairline));
-  mask-position:
-    0 0,
-    0 100%,
-    0 0,
-    100% 0,
-    var(--fynns-border-hairline) var(--fynns-border-hairline);
-  mask-repeat: no-repeat;
-  mask-composite: add;
-}
-
-.fynns-textarea[data-fade-top][data-fade-bottom] {
-  -webkit-mask-image:
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      #000 var(--fynns-layout-scroll-edge-fade-length),
-      #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
-      transparent 100%
-    );
-  -webkit-mask-size:
-    100% var(--fynns-border-hairline),
-    100% var(--fynns-border-hairline),
-    var(--fynns-border-hairline) 100%,
-    var(--fynns-border-hairline) 100%,
-    calc(100% - 2 * var(--fynns-border-hairline))
-      calc(100% - 2 * var(--fynns-border-hairline));
-  -webkit-mask-position:
-    0 0,
-    0 100%,
-    0 0,
-    100% 0,
-    var(--fynns-border-hairline) var(--fynns-border-hairline);
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-composite: source-over;
-  mask-image:
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(#000, #000),
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      #000 var(--fynns-layout-scroll-edge-fade-length),
-      #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
-      transparent 100%
-    );
-  mask-size:
-    100% var(--fynns-border-hairline),
-    100% var(--fynns-border-hairline),
-    var(--fynns-border-hairline) 100%,
-    var(--fynns-border-hairline) 100%,
-    calc(100% - 2 * var(--fynns-border-hairline))
-      calc(100% - 2 * var(--fynns-border-hairline));
-  mask-position:
-    0 0,
-    0 100%,
-    0 0,
-    100% 0,
-    var(--fynns-border-hairline) var(--fynns-border-hairline);
-  mask-repeat: no-repeat;
-  mask-composite: add;
-}
+/*
+ * Textarea — chrome and fade are split (≥ **0.5.316**): the frame owns the
+ * hairline + fill and the inner `.fynns-textarea-viewport` carries a plain
+ * vertical mask (fields.css). Never mask the `<textarea>` itself: Chromium
+ * composites the native inner editor outside the border box under
+ * `mask-image`, so scrolled glyphs painted above the rounded top edge and the
+ * hairline strips landed on the wrong box. A single-node multi-layer mask
+ * would also fade the top stroke and cut its corner arcs.
+ */
 
 /*
  * Table wrap — inline-axis soft edge (≥ **0.5.296**). Driven by
