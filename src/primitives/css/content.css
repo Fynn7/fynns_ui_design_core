@@ -3784,6 +3784,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-stepper--horizontal .fynns-stepper-item {
   flex: 1 1 0;
   position: relative;
+  justify-content: center;
 }
 
 .fynns-stepper-circle {
@@ -3860,6 +3861,19 @@ a.fynns-breadcrumb-link:visited {
   font-weight: var(--fynns-font-weight-medium);
   color: var(--fynns-color-text);
   white-space: normal;
+}
+
+/*
+ * A label-only step centers its text on the 2rem circle; a step with a
+ * description keeps the label at the top so the circle never drifts into the
+ * second line. Horizontal items also center this block in their equal column.
+ */
+.fynns-stepper-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  min-height: 2rem;
 }
 
 .fynns-stepper-description {
