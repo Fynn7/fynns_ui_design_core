@@ -15,6 +15,13 @@ into consumer agent guidance. See [workspace contract](design-system/workspace-c
 
 ## Model
 
+**Rename dialog select-all ≥ 0.5.317:** the core `NavigationDrawerRenameDialog`
+focuses its `Name` field and selects the whole current label as soon as it
+opens (double-click, `F2` or controlled `renameOpen`), so typing replaces the
+name immediately. No API or consumer change; linked source consumers receive it
+through their existing file dependency. Verify in the actual app that the name
+is highlighted on open and that editing does not re-select the draft.
+
 **Chat append motion ≥ 0.5.315:** new `ChatMessage` / `ChatReveal` rows paint
 at full opacity in their final position. The previous rise/fade entrance and
 its stagger are gone; `useChatSequencer` defaults to interval **0** and only

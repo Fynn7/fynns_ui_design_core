@@ -79,7 +79,9 @@ takes `renamable`, `onRename`, `renameLabels` and the optional controlled
   context menu to the same dialog through `renameOpen` instead of shipping a
   second dialog or an inline editor.
 - **Dialog chrome:** title, one `Name` field, `feet` = ghost Cancel (X) then
-  the single primary Save; Save stays disabled while the name is empty.
+  the single primary Save; Save stays disabled while the name is empty. The
+  field is focused with its whole value selected on open, so typing replaces
+  the name.
 - **Commit rules:** `Enter` saves, `Escape` cancels, `Cancel` cancels. An empty
   name is not a rename — Save stays disabled and `Enter` keeps the dialog
   open. `onRename` receives the trimmed name and fires only when it actually
