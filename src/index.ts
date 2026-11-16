@@ -69,6 +69,7 @@ export {
   PlugIcon,
   RefreshIcon,
   SaveIcon,
+  ScanIcon,
   SearchIcon,
   SettingsIcon,
   SparklesIcon,
