@@ -48,6 +48,7 @@ export {
   EyeIcon,
   EyeOffIcon,
   FileIcon,
+  FileKindIcon,
   FolderOpenIcon,
   GlobeIcon,
   HomeIcon,
@@ -79,7 +80,7 @@ export {
   UploadIcon,
   WrenchIcon,
 } from "./primitives/icons";
-export type { IconProps } from "./primitives/icons";
+export type { FileKind, IconProps } from "./primitives/icons";
 
 /* Primitives — named keep-list only */
 export { LoadingSkeleton } from "./primitives/LoadingSkeleton";

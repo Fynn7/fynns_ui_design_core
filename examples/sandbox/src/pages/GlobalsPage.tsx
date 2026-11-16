@@ -7938,6 +7938,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             label={t("globals.dropzoneLabel")}
             hint={t("globals.dropzoneHint")}
             browseLabel={t("globals.dropzoneBrowse")}
+            actions={
+              <Button variant="ghost" size="sm" type="button">
+                <ClipboardIcon />
+                Paste image
+              </Button>
+            }
             onFiles={(files) => {
               const names = files.map((f) => f.name);
               setDropNames(names);

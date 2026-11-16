@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import type { ReactNode, SVGProps } from "react";
 
 /**
  * Minimal inline icon set so the core has zero icon-library dependency.
@@ -289,6 +289,115 @@ export function FileIcon(props: IconProps) {
       <polyline points="14 2 14 8 20 8" />
     </svg>
   );
+}
+
+/** Families used by `FileKindIcon` to give an attachment its own glyph. */
+export type FileKind =
+  | "file"
+  | "text"
+  | "code"
+  | "document"
+  | "sheet"
+  | "slide"
+  | "pdf"
+  | "image"
+  | "audio"
+  | "video"
+  | "archive";
+
+/** Document silhouette shared by the page-like file kinds. */
+const FILE_OUTLINE = (
+  <>
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+  </>
+);
+
+/**
+ * File-type glyph so attachments read at a glance: plain text and code keep
+ * line marks, PDFs and documents show a page, images, audio, video and
+ * archives use their own silhouette. Pair it with the file name; the glyph is
+ * decorative unless the caller adds a label.
+ */
+export function FileKindIcon({ kind = "file", ...props }: IconProps & { kind?: FileKind }) {
+  const svg = (children: ReactNode) => <svg {...svgProps(props)}>{children}</svg>;
+  switch (kind) {
+    case "image":
+      return svg(
+        <>
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <circle cx="8.5" cy="9.5" r="1.5" />
+          <path d="m21 15-4.5-4.5L7 20" />
+        </>,
+      );
+    case "video":
+      return svg(
+        <>
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="m10 9 5 3-5 3z" />
+        </>,
+      );
+    case "audio":
+      return svg(
+        <>
+          <path d="M9 18V6l10-2v10" />
+          <circle cx="6.5" cy="18" r="2.5" />
+          <circle cx="16.5" cy="14" r="2.5" />
+        </>,
+      );
+    case "archive":
+      return svg(
+        <>
+          <rect x="3" y="4" width="18" height="5" rx="1" />
+          <path d="M5 9v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9" />
+          <path d="M10 13h4" />
+        </>,
+      );
+    case "sheet":
+      return svg(
+        <>
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <path d="M3 10h18M3 15h18M9 4v16" />
+        </>,
+      );
+    case "slide":
+      return svg(
+        <>
+          <rect x="3" y="4" width="18" height="12" rx="2" />
+          <path d="M12 16v4M8 20h8M8 13v-2M12 13V8M16 13v-3" />
+        </>,
+      );
+    case "pdf":
+      return svg(
+        <>
+          {FILE_OUTLINE}
+          <path d="M9 20v-7h3a2 2 0 0 1 0 4H9" />
+        </>,
+      );
+    case "text":
+      return svg(
+        <>
+          {FILE_OUTLINE}
+          <path d="M8 13h8M8 17h8M8 21h4" />
+        </>,
+      );
+    case "code":
+      return svg(
+        <>
+          {FILE_OUTLINE}
+          <path d="m10 12-2 2 2 2M14 12l2 2-2 2" />
+        </>,
+      );
+    case "document":
+      return svg(
+        <>
+          {FILE_OUTLINE}
+          <path d="M8 12h8M8 16h8M8 20h5" />
+        </>,
+      );
+    default:
+      return svg(FILE_OUTLINE);
+  }
 }
 
 /** Tool / agent action glyph (ChatActivity done steps). */

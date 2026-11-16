@@ -3976,6 +3976,22 @@ a.fynns-breadcrumb-link:visited {
   gap: var(--fynns-space-sm);
 }
 
+.fynns-dropzone-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-dropzone-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-space-sm);
+}
+
 .fynns-dropzone-progress {
   width: 100%;
 }
