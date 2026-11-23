@@ -95,6 +95,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | narrow session modal account row stranded below empty/history content | DESIGN_SYSTEM Hard rules / Chat product modal `NavigationDrawer footer` | `#layouts-demo-chat-product` |
 | chat aside host wrong tree | DESIGN_SYSTEM Content density / Chat aside | `#layouts-demo-chat-aside` |
 | FieldHeader inline InfoHint kissed | DESIGN_SYSTEM forms / FieldStack | `#info-hint` / `#form-recipe` |
+| field label-row icon action in body / body cluster, not `FieldBlock actions` | DESIGN_SYSTEM form-rhythm / FieldBlock `actions` hard rule | `#field-header` |
 | Input type=number UA spinners | DESIGN_SYSTEM hard-rules (≥ **0.5.301**) | `#number-input` |
 | env key FieldHint under input (hint split) | DESIGN_SYSTEM forms / FieldStack | `#env-check` / `#password` |
 | env key status Chip (information redundancy) | DESIGN_SYSTEM forms / FieldStack | `#env-check` / `#password` |

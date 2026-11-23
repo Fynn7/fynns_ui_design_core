@@ -46,6 +46,7 @@ edges, and adjacent rows must not intersect. Live:
 | Control → supporting / error hint; FieldBlock control→FieldHint | `--fynns-layout-field-hint-gap` (**8dp**) |
 | FieldHeader / FieldBlock label→control | `field-label-control-gap` (**12dp**) |
 | FieldHeader label row with trailing sm IconButtons | `field-header-action-row-min-height` (**32dp**); any label-row actions in a FieldStack → all headers share the band |
+| FieldHeader / FieldBlock label-row icon actions | **always** pass via `FieldBlock actions` / `FieldHeader actions` (ghost `IconButton` + `Tooltip`); never render the icon action in the field body or a body control-cluster, which drops it below the label and breaks row alignment |
 | Related FieldBlocks in FieldStack | `field-stack-gap` (**12dp**); +description → 16dp; +cluster → 32dp |
 | Sibling ControlBlocks in FieldStack | visual **16dp** (`unit-stack-gap`) |
 | Adjacent FieldStacks (fields → switches) | `form-cluster-gap` (**32dp**) + Divider |
@@ -102,6 +103,14 @@ standalone Input sample so the rule is not limited to the settings prototype.
 When building inspector / settings / Dialog / multi-section forms, **partition
 by meaning** with `FieldStack` — do not leave every FieldBlock / ControlBlock as
 a flat Card-body sibling.
+
+**Label-row actions (hard):** an icon action that belongs to a field label row
+(expand-to-editor, reset, info) must be passed through `FieldBlock actions` /
+`FieldHeader actions` as a ghost `IconButton` + `Tooltip`. Rendering that icon
+inside the field body or a body control-cluster drops it below the label, so
+it no longer shares the label's row — a misalignment consumers must not fix
+with private CSS. Core's `field-header__actions` reserves the 32dp band and
+aligns it with the label; use it instead. Live: `#field-header`.
 
 - **Same kind → one `FieldStack`:** consecutive related Input/Select/Textarea/
   Otp FieldBlocks, **or** same-kind choice cluster (Radio / Checkbox / Slider
