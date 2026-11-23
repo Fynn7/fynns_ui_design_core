@@ -546,6 +546,18 @@ export function GlobeIcon(props: IconProps) {
   );
 }
 
+/** Expand-to-editor glyph (four corner arrows pointing out), e.g. a maximize / open-in-editor affordance. */
+export function MaximizeIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+      <path d="M16 3h3a2 2 0 0 1 2 2v3" />
+      <path d="M21 16v3a2 2 0 0 1-2 2h-3" />
+      <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+    </svg>
+  );
+}
+
 export function BarChartIcon(props: IconProps) {
   return (
     <svg {...svgProps(props)}>

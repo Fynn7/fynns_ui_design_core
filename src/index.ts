@@ -56,6 +56,7 @@ export {
   InfoIcon,
   LayoutGridIcon,
   ListChecksIcon,
+  MaximizeIcon,
   MenuIcon,
   MessageSquareIcon,
   MicIcon,
