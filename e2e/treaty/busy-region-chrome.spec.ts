@@ -17,6 +17,19 @@ test.beforeEach(async ({ page }) => {
   await resetSandboxSession(page);
 });
 
+test(`${SLUG}: skeleton overlay stays inside its region`, async ({ page }) => {
+  await openGlobalsDemo(page, "busy-region", "BusyRegion");
+  const demo = globalsDemo(page, "busy-region");
+  await demo.getByRole("button", { name: "Show busy" }).click();
+
+  const overlay = demo.locator(".fynns-busy-region-overlay--skeleton").first();
+  await expect(overlay).toBeVisible();
+  // A custom slot with more rows than the content fits must be clipped, not
+  // painted over the sections that follow the busy region.
+  const overflow = await overlay.evaluate((el) => getComputedStyle(el).overflow);
+  expect(overflow, SLUG).toBe("hidden");
+});
+
 test(`${SLUG}: Show busy uses region overlay, not button loading`, async ({
   page,
 }) => {
