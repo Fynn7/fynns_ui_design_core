@@ -111,6 +111,35 @@ function ordered(edits: Edit[]): Edit[] {
   return out;
 }
 
+// Inline emphasis compares words, not characters: a character diff of prose
+// matches stray letters and splits a changed phrase into many tiny pieces.
+// A token is a word, a run of whitespace, or one other character (so a
+// punctuation mark, an emoji or a symbol changes on its own).
+const INLINE_TOKEN = /[\p{L}\p{M}\p{N}_]+|\s+|[^\p{L}\p{M}\p{N}_\s]/gu;
+function inlineTokens(text: string): string[] { return text.match(INLINE_TOKEN) ?? []; }
+
+/**
+ * Changed ranges that only whitespace separates become one range, so a
+ * changed phrase reads as one highlight. Whitespace at the edges of a range
+ * is not part of the change (the alignment may pick either neighbouring
+ * space); a range of whitespace alone is dropped.
+ */
+function joinRanges(text: string, ranges: Array<[number, number]>): Array<[number, number]> {
+  const joined: Array<[number, number]> = [];
+  for (const range of ranges) {
+    const last = joined[joined.length - 1];
+    if (last && /^\s*$/u.test(text.slice(last[1], range[0]))) last[1] = range[1];
+    else joined.push([range[0], range[1]]);
+  }
+  const out: Array<[number, number]> = [];
+  for (const [start, end] of joined) {
+    const slice = text.slice(start, end);
+    const lead = slice.length - slice.trimStart().length, trail = slice.length - slice.trimEnd().length;
+    if (start + lead < end - trail) out.push([start + lead, end - trail]);
+  }
+  return out;
+}
+
 export function emphasize(rows: DiffRow[]) {
   const fileBudget: Budget = { remaining: DIFF_LIMITS.steps };
   for (let i = 0; i < rows.length;) {
@@ -124,17 +153,21 @@ export function emphasize(rows: DiffRow[]) {
       const local: Budget = { remaining: Math.min(10_000, fileBudget.remaining) };
       const initial = local.remaining;
       try {
-        const edits = myers(Array.from(old.text), Array.from(next.text), local);
-        const same = edits.filter(e => e.type === "same").length;
-        if (same < Math.max(Array.from(old.text).length, Array.from(next.text).length) * 0.35) continue;
+        const edits = myers(inlineTokens(old.text), inlineTokens(next.text), local);
+        // Too little in common (measured in characters, whitespace aside) is a
+        // rewrite, not an edit: the whole line stays the highlight.
+        const same = edits.filter(e => e.type === "same").reduce((sum, e) => sum + e.text.trim().length, 0);
+        if (same < Math.max(old.text.trim().length, next.text.trim().length) * 0.35) continue;
         let a = 0, b = 0;
-        old.emphasis = []; next.emphasis = [];
+        const oldRanges: Array<[number, number]> = [], newRanges: Array<[number, number]> = [];
         for (const edit of edits) {
           const length = edit.text.length;
-          if (edit.type === "del") { old.emphasis.push([a, a + length]); a += length; }
-          else if (edit.type === "add") { next.emphasis.push([b, b + length]); b += length; }
+          if (edit.type === "del") { oldRanges.push([a, a + length]); a += length; }
+          else if (edit.type === "add") { newRanges.push([b, b + length]); b += length; }
           else { a += length; b += length; }
         }
+        old.emphasis = joinRanges(old.text, oldRanges);
+        next.emphasis = joinRanges(next.text, newRanges);
       } catch (error) { if (!(error instanceof ComparisonLimit)) throw error; }
       finally { fileBudget.remaining -= initial - local.remaining; }
     }
