@@ -79,7 +79,16 @@
 .fynns-diff-row--del .fynns-diff-marker { color: var(--fynns-diff-del-ink); }
 .fynns-diff-code { font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; min-width: 0; color: var(--fynns-color-text); }
 .fynns-diff-token { color: color-mix(in srgb, var(--fynns-diff-token-ink) var(--fynns-diff-syntax-strength), var(--fynns-color-text)); }
-.fynns-diff-code mark { color: inherit; border-radius: var(--fynns-radius-xs); background: var(--fynns-diff-add-emphasis); }
+/* One continuous band: a highlight split by syntax tokens or a line wrap must
+   not read as a row of pills, so marks are square and clone across wraps. */
+.fynns-diff-code mark {
+  color: inherit;
+  border-radius: 0;
+  padding: 0;
+  background: var(--fynns-diff-add-emphasis);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
 .fynns-diff-row--del mark { background: var(--fynns-diff-del-emphasis); }
 .fynns-diff-body--nowrap .fynns-diff-rows { width: max-content; min-width: 100%; }
 .fynns-diff-body--nowrap .fynns-diff-code { white-space: pre; overflow-wrap: normal; }

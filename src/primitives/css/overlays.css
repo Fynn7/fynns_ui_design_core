@@ -1511,6 +1511,12 @@
 }
 .fynns-busy-region-overlay.fynns-busy-region-overlay--skeleton {
   place-items: stretch;
+  /* A skeleton slot occupies the mounted content's footprint, never the space
+   * below it. Custom slots with an explicit row count can be taller than a
+   * short field; clip them to the region so bars never paint over following
+   * siblings (Collapsibles, footers, the next section). Prefer `fill` on the
+   * slot so rows adapt to the height instead of being trimmed. */
+  overflow: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {

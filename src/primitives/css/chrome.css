@@ -2591,6 +2591,7 @@
 
 .fynns-nav-drawer-group-body .fynns-nav-drawer-item {
   padding-inline-start: var(--fynns-navdrawer-group-item-pad-inline-start);
+  --fynns-navdrawer-item-start-inset: var(--fynns-navdrawer-group-item-pad-inline-start);
 }
 
 .fynns-nav-drawer-item {
@@ -2606,6 +2607,8 @@
   margin: 0;
   padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
   padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+  /* Effective start inset, mirrored by the running ring's end inset. */
+  --fynns-navdrawer-item-start-inset: var(--fynns-navdrawer-item-pad-inline-start);
   border: 0;
   border-radius: var(--fynns-radius-3xl);
   background: transparent;
@@ -2721,6 +2724,39 @@
   height: var(--fynns-navdrawer-badge-dot);
   border-radius: var(--fynns-radius-round);
   background: var(--fynns-color-danger);
+}
+
+/*
+ * Session / destination live-run state: one 16dp status ring at the row end.
+ * This is the explicit inline-row exception to the archived body-loader ring;
+ * never promote it to a pane banner, Card, busbar or extra chrome. The row
+ * carries `aria-busy`; the ring itself exposes the localized status name.
+ */
+.fynns-nav-drawer-running {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: auto;
+  /* Mirror the row's effective start inset so text-left and ring-right match. */
+  margin-inline-end: calc(
+    var(--fynns-navdrawer-item-start-inset, var(--fynns-navdrawer-item-pad-inline-start)) -
+      var(--fynns-navdrawer-item-pad-inline-end)
+  );
+  color: var(--fynns-color-accent);
+}
+
+/* `--with-end` rows idle with a 4dp end pad for the hover action disk; the
+ * ring keeps the full start inset by adding the difference. */
+.fynns-nav-drawer-item-host--with-end .fynns-nav-drawer-running {
+  margin-inline-end: calc(
+    var(--fynns-navdrawer-item-start-inset, var(--fynns-navdrawer-item-pad-inline-start)) -
+      var(--fynns-space-xs)
+  );
+}
+
+.fynns-nav-drawer-running + .fynns-nav-drawer-badge {
+  margin-inline-start: var(--fynns-space-xs);
 }
 
 /*
@@ -3454,6 +3490,7 @@
   width: 100%;
   min-height: var(--fynns-searchbar-height);
   height: var(--fynns-searchbar-height);
+  gap: var(--fynns-navdrawer-item-gap);
   padding-inline: var(--fynns-searchbar-pad-inline);
   border-radius: 0;
   background: transparent;
@@ -3519,7 +3556,7 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  gap: var(--fynns-space-2xs);
+  gap: 0;
   min-width: var(--fynns-searchbar-icon-slot);
   height: var(--fynns-searchbar-height);
   color: var(--fynns-color-text-muted);
@@ -3584,7 +3621,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 /*
  * Form density: Select / Autocomplete sit beside Input — use 40dp control
- * height + Input surface/radius/border, not chrome SearchBar 56dp capsule.
+ * height + Input surface/radius/border, not the chrome SearchBar capsule.
  * SearchBar itself keeps `--fynns-searchbar-height` / elevation.
  */
 .fynns-select.fynns-search-bar,
@@ -3604,6 +3641,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-autocomplete .fynns-search-bar-field {
   min-height: var(--fynns-size-icon-target);
   height: var(--fynns-size-icon-target);
+  /*
+   * No leading icon — outer pad must equal the list outer pad
+   * (`--fynns-searchbar-results-pad-inline`) so trigger text
+   * (field pad + `space-md`) aligns to option text
+   * (list pad + `space-md`) when menu width = shell width.
+   * Was `searchbar-pad-inline` (1rem) → 8px right bias vs options.
+   */
+  padding-inline: var(--fynns-searchbar-results-pad-inline);
 }
 
 .fynns-select .fynns-search-bar-trailing,
@@ -3930,8 +3975,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /*
- * Destination density — match NavigationDrawerItem row geometry only (40dp
- * height, label type, icon gap / size, item pads). Keep chrome SearchBar
+ * Destination density — historically matched NavigationDrawerItem row geometry
+ * (40dp height, label type, icon gap / size, item pads). The default chrome
+ * field now shares that geometry, so these rules only reaffirm it (and keep
+ * `density="destination"` a harmless alias). Keep chrome SearchBar
  * surface / elevation / focus border (do not restyle as a destination pill).
  * Auto-applied to plain SearchBars in drawer body so GlobalSearch densifies
  * without consumer restyles.

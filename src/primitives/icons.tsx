@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import type { ReactNode, SVGProps } from "react";
 
 /**
  * Minimal inline icon set so the core has zero icon-library dependency.
@@ -121,6 +121,19 @@ export function SearchIcon(props: IconProps) {
     <svg {...svgProps(props)}>
       <circle cx="11" cy="11" r="8" />
       <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    </svg>
+  );
+}
+
+/** Scan / viewfinder — four corner brackets around a centre line (document recognition). */
+export function ScanIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+      <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+      <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+      <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+      <line x1="7" y1="12" x2="17" y2="12" />
     </svg>
   );
 }
@@ -291,6 +304,115 @@ export function FileIcon(props: IconProps) {
   );
 }
 
+/** Families used by `FileKindIcon` to give an attachment its own glyph. */
+export type FileKind =
+  | "file"
+  | "text"
+  | "code"
+  | "document"
+  | "sheet"
+  | "slide"
+  | "pdf"
+  | "image"
+  | "audio"
+  | "video"
+  | "archive";
+
+/** Document silhouette shared by the page-like file kinds. */
+const FILE_OUTLINE = (
+  <>
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+  </>
+);
+
+/**
+ * File-type glyph so attachments read at a glance: plain text and code keep
+ * line marks, PDFs and documents show a page, images, audio, video and
+ * archives use their own silhouette. Pair it with the file name; the glyph is
+ * decorative unless the caller adds a label.
+ */
+export function FileKindIcon({ kind = "file", ...props }: IconProps & { kind?: FileKind }) {
+  const svg = (children: ReactNode) => <svg {...svgProps(props)}>{children}</svg>;
+  switch (kind) {
+    case "image":
+      return svg(
+        <>
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <circle cx="8.5" cy="9.5" r="1.5" />
+          <path d="m21 15-4.5-4.5L7 20" />
+        </>,
+      );
+    case "video":
+      return svg(
+        <>
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="m10 9 5 3-5 3z" />
+        </>,
+      );
+    case "audio":
+      return svg(
+        <>
+          <path d="M9 18V6l10-2v10" />
+          <circle cx="6.5" cy="18" r="2.5" />
+          <circle cx="16.5" cy="14" r="2.5" />
+        </>,
+      );
+    case "archive":
+      return svg(
+        <>
+          <rect x="3" y="4" width="18" height="5" rx="1" />
+          <path d="M5 9v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9" />
+          <path d="M10 13h4" />
+        </>,
+      );
+    case "sheet":
+      return svg(
+        <>
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <path d="M3 10h18M3 15h18M9 4v16" />
+        </>,
+      );
+    case "slide":
+      return svg(
+        <>
+          <rect x="3" y="4" width="18" height="12" rx="2" />
+          <path d="M12 16v4M8 20h8M8 13v-2M12 13V8M16 13v-3" />
+        </>,
+      );
+    case "pdf":
+      return svg(
+        <>
+          {FILE_OUTLINE}
+          <path d="M9 20v-7h3a2 2 0 0 1 0 4H9" />
+        </>,
+      );
+    case "text":
+      return svg(
+        <>
+          {FILE_OUTLINE}
+          <path d="M8 13h8M8 17h8M8 21h4" />
+        </>,
+      );
+    case "code":
+      return svg(
+        <>
+          {FILE_OUTLINE}
+          <path d="m10 12-2 2 2 2M14 12l2 2-2 2" />
+        </>,
+      );
+    case "document":
+      return svg(
+        <>
+          {FILE_OUTLINE}
+          <path d="M8 12h8M8 16h8M8 20h5" />
+        </>,
+      );
+    default:
+      return svg(FILE_OUTLINE);
+  }
+}
+
 /** Tool / agent action glyph (ChatActivity done steps). */
 export function WrenchIcon(props: IconProps) {
   return (
@@ -420,6 +542,18 @@ export function GlobeIcon(props: IconProps) {
       <circle cx="12" cy="12" r="10" />
       <path d="M2 12h20" />
       <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </svg>
+  );
+}
+
+/** Expand-to-editor glyph (four corner arrows pointing out), e.g. a maximize / open-in-editor affordance. */
+export function MaximizeIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+      <path d="M16 3h3a2 2 0 0 1 2 2v3" />
+      <path d="M21 16v3a2 2 0 0 1-2 2h-3" />
+      <path d="M3 16v3a2 2 0 0 0 2 2h3" />
     </svg>
   );
 }

@@ -1,8 +1,12 @@
 import {
+  ArchiveIcon,
   Button,
+  ArchivedChatsSettingsDialog,
   ClippedNavShell,
+  ContextMenu,
   DropdownMenu,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   EmptyState,
   FillColumn,
   MoreHorizontalIcon,
@@ -19,7 +23,7 @@ import {
   TrashIcon,
   snackbar,
 } from "@fynns/ui";
-import { useState } from "react";
+import { useState, type KeyboardEvent, type MouseEvent } from "react";
 import { useLocale } from "../i18n";
 import { SandboxHelp } from "./SandboxHelp";
 import { NavDrawerFooterAccount } from "./NavDrawerFooterAccount";
@@ -46,6 +50,51 @@ export function ChatProductLayoutsDemo({ withTopBar = false }: { withTopBar?: bo
   const [activeSession, setActiveSession] = useState<"alpha" | "beta" | null>(
     null,
   );
+  /** ChatGPT-style archive: archived ids hide from history, restore via settings. */
+  const [archivedIds, setArchivedIds] = useState<Array<"alpha" | "beta">>(["beta"]);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [rowMenu, setRowMenu] = useState<{
+    open: boolean;
+    x: number;
+    y: number;
+    targetId: "alpha" | "beta" | null;
+  }>({ open: false, x: 0, y: 0, targetId: null });
+
+  const sessionLabel = (id: "alpha" | "beta") =>
+    id === "alpha" ? t("layouts.chatProductSessionA") : t("layouts.chatProductSessionB");
+  const visibleIds = (["alpha", "beta"] as const).filter(
+    (id) => !sessionsEmpty && !archivedIds.includes(id),
+  );
+
+  const archiveSession = (id: "alpha" | "beta") => {
+    if (archivedIds.includes(id)) return;
+    const remaining = visibleIds.filter((visible) => visible !== id);
+    setArchivedIds((prev) => [...prev, id]);
+    if (activeSession === id) {
+      if (remaining.length > 0) {
+        setActiveSession(remaining[0]);
+      } else {
+        // Archiving the last visible session lands on new-chat, like ChatGPT.
+        setActiveSession(null);
+        setSessionsEmpty(true);
+        setSessionsExpanded(false);
+        setDemoEpoch((value) => value + 1);
+      }
+    }
+    snackbar(t("layouts.chatProductArchiveToast"), {
+      dismissAriaLabel: t("globals.snackbarDismiss"),
+    });
+  };
+
+  const unarchiveSession = (id: string) => {
+    if (id !== "alpha" && id !== "beta") return;
+    setArchivedIds((prev) => prev.filter((archived) => archived !== id));
+    setSessionsEmpty(false);
+    setActiveSession(id);
+    snackbar(t("layouts.chatProductUnarchiveToast"), {
+      dismissAriaLabel: t("globals.snackbarDismiss"),
+    });
+  };
 
   const starterItems = [
     {
@@ -84,8 +133,79 @@ export function ChatProductLayoutsDemo({ withTopBar = false }: { withTopBar?: bo
     setSessionsEmpty(true);
     setSessionsExpanded(false);
     setActiveSession(null);
+    setArchivedIds(["beta"]);
+    setRowMenu((prev) => ({ ...prev, open: false, targetId: null }));
     setDemoEpoch((value) => value + 1);
   };
+
+  const closeRowMenu = () =>
+    setRowMenu((prev) => ({ ...prev, open: false, targetId: null }));
+
+  /** Right-click a history row opens the same actions as the row More menu. */
+  const openRowMenu = (event: MouseEvent<HTMLElement>, id: "alpha" | "beta") => {
+    event.preventDefault();
+    setRowMenu({ open: true, x: event.clientX, y: event.clientY, targetId: id });
+  };
+
+  /** Shift+F10 / ContextMenu key mirrors right-click for keyboard users. */
+  const rowKeyboardMenu = (
+    event: KeyboardEvent<HTMLElement>,
+    id: "alpha" | "beta",
+  ) => {
+    if (event.key === "ContextMenu" || (event.shiftKey && event.key === "F10")) {
+      event.preventDefault();
+      const rect = event.currentTarget.getBoundingClientRect();
+      setRowMenu({ open: true, x: rect.left, y: rect.bottom, targetId: id });
+    }
+  };
+
+  /** Rename / Archive / Delete — shared by the row More menu and right-click. */
+  const sessionMenuItems = (id: "alpha" | "beta") => (
+    <>
+      <DropdownMenuItem icon={<PencilIcon />}>
+        {t("globals.navDrawerModeEntryRename")}
+      </DropdownMenuItem>
+      <DropdownMenuItem
+        icon={<ArchiveIcon />}
+        onClick={() => {
+          closeRowMenu();
+          archiveSession(id);
+        }}
+      >
+        {t("globals.navDrawerModeEntryArchive")}
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem icon={<TrashIcon />} tone="danger">
+        {t("globals.navDrawerModeEntryDelete")}
+      </DropdownMenuItem>
+    </>
+  );
+
+  const renderSessionItem = (
+    id: "alpha" | "beta",
+    onSelect: () => void,
+  ) => (
+    <NavigationDrawerItem
+      label={sessionLabel(id)}
+      active={activeSession === id}
+      onClick={onSelect}
+      aria-haspopup="menu"
+      onContextMenu={(event) => openRowMenu(event, id)}
+      onKeyDown={(event) => rowKeyboardMenu(event, id)}
+      trailing={
+        <DropdownMenu
+          trigger={<MoreHorizontalIcon />}
+          ariaLabel={t("globals.navDrawerModeEntryMore")}
+          align="end"
+          iconOnly
+          size="sm"
+          variant="ghost"
+        >
+          {sessionMenuItems(id)}
+        </DropdownMenu>
+      }
+    />
+  );
 
   /** New-chat landing: centered greeting + starter; composer pinned bottom. */
   const isNewChatLanding = sessionsEmpty;
@@ -128,7 +248,10 @@ export function ChatProductLayoutsDemo({ withTopBar = false }: { withTopBar?: bo
           <NavDrawerFooterAccount
             accountLabel={t("layouts.chatProductAccountLabel")}
             settingsLabel={t("globals.appBarSettings")}
-            onSettingsClick={() => setModalNavOpen(false)}
+            onSettingsClick={() => {
+              setModalNavOpen(false);
+              setSettingsOpen(true);
+            }}
           />
         }
       >
@@ -139,7 +262,7 @@ export function ChatProductLayoutsDemo({ withTopBar = false }: { withTopBar?: bo
             setModalNavOpen(false);
           }}
         />
-        {sessionsEmpty ? (
+        {visibleIds.length === 0 ? (
           <EmptyState
             size="sm"
             title={t("layouts.chatProductSessionsEmptyTitle")}
@@ -147,16 +270,9 @@ export function ChatProductLayoutsDemo({ withTopBar = false }: { withTopBar?: bo
           />
         ) : (
           <>
-            <NavigationDrawerItem
-              label={t("layouts.chatProductSessionA")}
-              active={activeSession === "alpha"}
-              onClick={() => setModalNavOpen(false)}
-            />
-            <NavigationDrawerItem
-              label={t("layouts.chatProductSessionB")}
-              active={activeSession === "beta"}
-              onClick={() => setModalNavOpen(false)}
-            />
+            {visibleIds.map((id) =>
+              renderSessionItem(id, () => setModalNavOpen(false)),
+            )}
           </>
         )}
       </NavigationDrawer>
@@ -181,11 +297,7 @@ export function ChatProductLayoutsDemo({ withTopBar = false }: { withTopBar?: bo
                   accountLabel={t("layouts.chatProductAccountLabel")}
                   settingsLabel={t("globals.appBarSettings")}
                   settingsTip={t("globals.appBarSettings")}
-                  onSettingsClick={() =>
-                    snackbar(t("layouts.chatProductSettingsToast"), {
-                      dismissAriaLabel: t("globals.snackbarDismiss"),
-                    })
-                  }
+                  onSettingsClick={() => setSettingsOpen(true)}
                 />
               }
             >
@@ -209,7 +321,7 @@ export function ChatProductLayoutsDemo({ withTopBar = false }: { withTopBar?: bo
                     <DropdownMenuItem
                       icon={<TrashIcon />}
                       tone="danger"
-                      disabled={sessionsEmpty}
+                      disabled={visibleIds.length === 0}
                       onClick={() => {
                         resetToNewChatLanding();
                         snackbar(t("layouts.chatProductDeleteAllToast"), {
@@ -222,7 +334,7 @@ export function ChatProductLayoutsDemo({ withTopBar = false }: { withTopBar?: bo
                   </DropdownMenu>
                 }
               />
-              {sessionsEmpty ? (
+              {visibleIds.length === 0 ? (
                 <EmptyState
                   size="sm"
                   title={t("layouts.chatProductSessionsEmptyTitle")}
@@ -230,47 +342,9 @@ export function ChatProductLayoutsDemo({ withTopBar = false }: { withTopBar?: bo
                 />
               ) : (
                 <>
-                  <NavigationDrawerItem
-                    label={t("layouts.chatProductSessionA")}
-                    active={activeSession === "alpha"}
-                    onClick={() => setActiveSession("alpha")}
-                    trailing={
-                      <DropdownMenu
-                        trigger={<MoreHorizontalIcon />}
-                        ariaLabel={t("globals.navDrawerModeEntryMore")}
-                        align="end"
-                        iconOnly
-                        size="sm"
-                        variant="ghost"
-                      >
-                        <DropdownMenuItem icon={<PencilIcon />}>
-                          {t("globals.navDrawerModeEntryRename")}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem icon={<TrashIcon />} tone="danger">
-                          {t("globals.navDrawerModeEntryDelete")}
-                        </DropdownMenuItem>
-                      </DropdownMenu>
-                    }
-                  />
-                  <NavigationDrawerItem
-                    label={t("layouts.chatProductSessionB")}
-                    active={activeSession === "beta"}
-                    onClick={() => setActiveSession("beta")}
-                    trailing={
-                      <DropdownMenu
-                        trigger={<MoreHorizontalIcon />}
-                        ariaLabel={t("globals.navDrawerModeEntryMore")}
-                        align="end"
-                        iconOnly
-                        size="sm"
-                        variant="ghost"
-                      >
-                        <DropdownMenuItem icon={<TrashIcon />} tone="danger">
-                          {t("globals.navDrawerModeEntryDelete")}
-                        </DropdownMenuItem>
-                      </DropdownMenu>
-                    }
-                  />
+                  {visibleIds.map((id) =>
+                    renderSessionItem(id, () => setActiveSession(id)),
+                  )}
                   <RevealMore
                     canRevealMore={!sessionsExpanded}
                     onRevealMore={() => setSessionsExpanded(true)}
@@ -300,6 +374,8 @@ export function ChatProductLayoutsDemo({ withTopBar = false }: { withTopBar?: bo
                 activeSessionId={activeSession}
                 onFirstSend={() => {
                   setSessionsEmpty(false);
+                  // A first send after archiving everything revives the landing target.
+                  setArchivedIds((prev) => prev.filter((id) => id !== "alpha"));
                   setActiveSession("alpha");
                 }}
               />
@@ -307,6 +383,36 @@ export function ChatProductLayoutsDemo({ withTopBar = false }: { withTopBar?: bo
           </div>
         </ClippedNavShell>
       </div>
+      {/* Right-click parity with the row More menu: Rename / Archive / Delete. */}
+      <ContextMenu
+        open={rowMenu.open}
+        x={rowMenu.x}
+        y={rowMenu.y}
+        ariaLabel={t("globals.navDrawerModeEntryMore")}
+        onOpenChange={(open) => {
+          if (!open) closeRowMenu();
+        }}
+      >
+        {rowMenu.targetId == null ? null : sessionMenuItems(rowMenu.targetId)}
+      </ContextMenu>
+      {/* ChatGPT-style settings: footer gear opens the settings window. */}
+      <ArchivedChatsSettingsDialog
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+        sessions={archivedIds.map((id) => ({ id, label: sessionLabel(id) }))}
+        labels={{
+          title: t("globals.appBarSettings"),
+          categories: t("layouts.chatProductSettingsCategories"),
+          general: t("layouts.chatProductGeneral"),
+          generalSample: t("layouts.chatProductGeneralSample"),
+          archived: t("layouts.chatProductArchivedTitle"),
+          unarchive: t("layouts.chatProductArchivedUnarchive"),
+          close: t("layouts.chatProductSettingsClose"),
+          archivedEmptyTitle: t("layouts.chatProductArchivedEmptyTitle"),
+          archivedEmptyDescription: t("layouts.chatProductArchivedEmptyBody"),
+        }}
+        onUnarchive={unarchiveSession}
+      />
       <SandboxHelp text={t("layouts.chatProductHelp")} />
     </>
   );

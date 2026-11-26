@@ -48,6 +48,17 @@ describe("bounded unified diff engine", () => {
     expect(unrelated.rows[0].emphasis).toBeUndefined();
   });
 
+  it("emphasizes whole words and joins a changed phrase into one range", () => {
+    const model = buildTextDiff(
+      "  - Layoutgestaltung und -entwicklung mit Microsoft Power Apps\n",
+      "  - Layout entworfen und mit Microsoft Power Apps umgesetzt\n",
+    );
+    const words = (row: number) => model.rows[row].emphasis?.map(([a, b]) => model.rows[row].text.slice(a, b));
+    // Whole words, never stray letters; neighbours split only by spaces are one range.
+    expect(words(0)).toEqual(["Layoutgestaltung", "-entwicklung"]);
+    expect(words(1)).toEqual(["Layout entworfen", "umgesetzt"]);
+  });
+
   it("keeps long inline candidates at whole-line highlighting", () => {
     const model = buildTextDiff(`${"x".repeat(2000)}a\n`, `${"x".repeat(2000)}b\n`);
     expect(model.rows[0].emphasis).toBeUndefined();

@@ -82,7 +82,11 @@ export default defineConfig({
     dedupe: ["react", "react-dom"],
   },
   server: {
+    // 独占端口：5174。strictPort 保证被占用时直接报错退出，禁止静默顺延
+    //（曾与 fynns_agentic_drive 同占 5174，localhost 与 127.0.0.1 命中不同实例）。
+    host: "127.0.0.1",
     port: 5174,
+    strictPort: true,
     headers: { "Cache-Control": "no-store" },
   },
 });

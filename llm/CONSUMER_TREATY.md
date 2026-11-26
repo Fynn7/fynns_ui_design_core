@@ -88,11 +88,14 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | mode drawer toolbar trash+new twin | DESIGN_SYSTEM Hard rules / NavigationDrawerNewChat ≥ 0.5.256 | `#sandbox-navdrawer-session-chrome` |
 | session history leading icon by default | DESIGN_SYSTEM Hard rules / Content density ≥ 0.5.298 | `#sandbox-navdrawer-session-chrome` / `#sandbox-navdrawer-session-icon` |
 | session sidebar hardcoded context menus / right-click selects session | DESIGN_SYSTEM catalog / `ChatSessionsDrawer` | `#sandbox-chat-sessions-drawer` |
+| live session status as pane banner / ring replaces label or leading icon | DESIGN_SYSTEM content-density / `NavigationDrawerItem.running` + `ChatSessionsDrawerSession.running` | `#sandbox-chat-sessions-drawer` / `#sandbox-navdrawer-session-chrome` |
 | list Ctrl+A steals text editing / multi-select activates conversation / batch menu deletes one row | [LIST_SELECTION](LIST_SELECTION.md) / `SelectionArea` | `#sandbox-list-selection` / `#sandbox-chat-sessions-drawer` |
 | chat product / session host wrong tree | DESIGN_SYSTEM Content density / Chat product | `#layouts-demo-chat-product` |
+| live chat mounts rows in a batch / collapses history / blank start | DESIGN_SYSTEM Hard rules / [CHAT_SEQUENCE](CHAT_SEQUENCE.md) Live reveal | `#layouts-demo-chat-product` |
 | narrow session modal account row stranded below empty/history content | DESIGN_SYSTEM Hard rules / Chat product modal `NavigationDrawer footer` | `#layouts-demo-chat-product` |
 | chat aside host wrong tree | DESIGN_SYSTEM Content density / Chat aside | `#layouts-demo-chat-aside` |
 | FieldHeader inline InfoHint kissed | DESIGN_SYSTEM forms / FieldStack | `#info-hint` / `#form-recipe` |
+| field label-row icon action in body / body cluster, not `FieldBlock actions` | DESIGN_SYSTEM form-rhythm / FieldBlock `actions` hard rule | `#field-header` |
 | Input type=number UA spinners | DESIGN_SYSTEM hard-rules (≥ **0.5.301**) | `#number-input` |
 | env key FieldHint under input (hint split) | DESIGN_SYSTEM forms / FieldStack | `#env-check` / `#password` |
 | env key status Chip (information redundancy) | DESIGN_SYSTEM forms / FieldStack | `#env-check` / `#password` |
@@ -134,7 +137,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | PageScroll mid-scroll hard clip (no edge fade) | DESIGN_SYSTEM Hard rules / Scrollbar | `#page-scroll` |
 | Dialog / Drawer / Sheet body or other core scroll container hard-clips overflowing content (including a full-height CodeBlock inside a Dialog) | DESIGN_SYSTEM philosophy / Scrollbar: core `.fynns-scroll` automatically detects overflow and fades its vertical edges; render the core component without private scroll wrappers or mask CSS | `#dialog-nested-scroll` / `#drawer-nested-scroll` |
 | FillColumn header mid-scroll hard clip (no edge fade) | DESIGN_SYSTEM Hard rules / Scrollbar | `#sandbox-fill-column-guide` |
-| Textarea / bordered scroll-edge fade erases stroke | DESIGN_SYSTEM philosophy / Scrollbar (≥ **0.5.282**) | `#textarea` |
+| Textarea / bordered scroll-edge fade erases or breaks the stroke | DESIGN_SYSTEM philosophy / Scrollbar (≥ **0.5.316**: the frame paints the hairline, the inner viewport carries the fade) | `#textarea` |
 | Private selection-reference input / lost quote on focus / ad-hoc range flyout | DESIGN_SYSTEM catalog / TextSelectionComposer | `#text-selection-composer` |
 | PageScroll Card sheet-max-width under ControlRow | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
 | PageScroll form Card chat-max-width column | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
@@ -147,7 +150,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Banner icon/dismiss top-pinned vs multi-line | DESIGN_SYSTEM Hard rules / Content density | `#banner` |
 | Banner dismiss as sibling IconButton outside strip | DESIGN_SYSTEM Hard rules / Content density | `#banner` |
 | Dialog foot Delete leftmost of Cancel | DESIGN_SYSTEM Dialog / overlays | `#timeline` |
-| Dialog exit clears title/body (flash) | DESIGN_SYSTEM Hard rules / overlays | `#sandbox-list-recipe-catalog` |
+| Dialog exit clears title/body (legacy flash) | DESIGN_SYSTEM Hard rules / overlays (DialogFrame freezes exit children) | `#sandbox-list-recipe-catalog` |
 | twin Button loading rings in one control-cluster | DESIGN_SYSTEM form-rhythm | `#rhythm` |
 | Card batch CTA + ListItem row twin loading rings | DESIGN_SYSTEM Hard rules / Loading placement | `#sandbox-list-repo-path-actions` |
 | Skeleton as compact busy mark / small centered text emblem / visible loading copy; block used as default text placeholder | [Content-position skeleton convention](../docs/design-system/loading.md) | `#sandbox-loading-skeleton` |
@@ -238,7 +241,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Pagination bar gaps crushed to 4dp | DESIGN_SYSTEM Hard rules / Content density | `#pagination` |
 | Pagination Select option repeats noun | DESIGN_SYSTEM Hard rules / Content density | `#pagination` |
 | consumer restyles keep-set chrome radius | DESIGN_SYSTEM Hard rules / Consumer apps | `#select` / `#menu` |
-| Select Autocomplete deprecated prefer Menu SearchBar | DESIGN_SYSTEM Hard rules / Consumer apps | `#select` / `#autocomplete` / `#menu` / `#search-bar` |
+| picker region mismatch (new Select use / chrome SearchBar for form filter) | DESIGN_SYSTEM Hard rules / Consumer apps | `#autocomplete` / `#select` / `#menu` / `#search-bar` |
 | KPI stat grid stacks full-width (undefined layout token) | DESIGN_SYSTEM Hard rules | `—` |
 | DropdownMenu bare btn in IconButton strip | DESIGN_SYSTEM form-rhythm | `#menu` |
 | sparse dashboard shortcut List | DESIGN_SYSTEM content-density / List | `#list` |
@@ -323,6 +326,8 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | chart tooltip clipped at plot edge | DESIGN_SYSTEM hard-rules | `#chart` |
 | chart tooltip edge clamp jitter | DESIGN_SYSTEM chart recipe | `—` |
 | catalog morph remounts ClippedNavShell (drawer bounce) | DESIGN_SYSTEM hard-rules | `—` |
+| hand-rolled app shell (TopAppBar + docked drawer outside a core shell) | [Workspace chrome](../docs/design-system/workspace-chrome.md) (App shell composition) / static gate `app-shell-slots` + consumer shell-import check | `#layouts-demo-shell` |
+| invented `--fynns-*` token (undefined var drops the declaration) | [Tokens](../docs/design-system/tokens.md) (Only reference tokens the core defines) / `api.mjs --tokens` / static gate `unknown-token` | `—` |
 | InlineAlert + orphan List for one catalog | DESIGN_SYSTEM content-density / List | `—` |
 | InlineAlert beside List in ControlStack | DESIGN_SYSTEM content-density / List | `#env-check` |
 | Components / Collapsible / List / controls nested inside InlineAlert | [SectionNotice contract](../docs/design-system/section-notice.md): plain text in InlineAlert; in-flow details/actions via SectionNotice string slots and action descriptors | `#section-notice` |

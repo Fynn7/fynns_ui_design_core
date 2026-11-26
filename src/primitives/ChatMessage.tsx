@@ -25,7 +25,6 @@ import {
 import { applyStreamingTail } from "./chatStreamingTail";
 import { isChatStackBlock } from "./chatBlockHost";
 import { RefreshIcon } from "./icons";
-import { ChatEntranceContext, useChatEntrance } from "./chatEntrance";
 
 export type ChatMessageRole = "user" | "assistant" | "system";
 
@@ -59,14 +58,13 @@ export type ChatMessageProps = Omit<
   /** Optional author label above the body. Ignored for `system`. */
   name?: ReactNode;
   /**
-   * Incomplete / streaming UI cues: last-glyph color pulse (R05 — only when
-   * there is answer text), `aria-busy`, and optional `aria-label` while
-   * streaming. Does **not**
-   * generate tokens — set `true` while the app appends `children` / `markdown`,
-   * then `false` when the stream ends. No empty bubble / lone cue while
-   * waiting on thinking with no answer tokens yet (including when children
-   * are only `null` slots from conditional JSX). Ignored for `system`.
-   * Suppressed when `error` is set.
+   * Incomplete / streaming UI cues: new markdown words fade in place, a
+   * ChatGPT-style ink dot follows the newest glyph (only when there is answer
+   * text), `aria-busy`, and an optional `aria-label` while streaming. Does
+   * **not** generate tokens — set `true` while the app appends `children` /
+   * `markdown`, then `false` when the stream ends. No empty bubble / lone cue while waiting on thinking with no
+   * answer tokens yet (including when children are only `null` slots from
+   * conditional JSX). Ignored for `system`. Suppressed when `error` is set.
    * @default false
    */
   streaming?: boolean;
@@ -152,8 +150,8 @@ function hasRenderableBody(children: ReactNode): boolean {
  * Promote bare text / inline runs to `.fynns-chat-message-prose` so they stack
  * against sibling CodeBlock / wells with `--fynns-chatmessage-body-stack-gap`.
  * Consecutive non-block children (string + inline `code`, …) coalesce into
- * **one** prose unit so chatCaption-style mixes stay inline. Streaming R05
- * cue wraps the last glyph inside the trailing prose / markdown host.
+ * **one** prose unit so chatCaption-style mixes stay inline. The streaming
+ * tail wraps the last glyph inside the trailing prose / markdown host.
  */
 function renderBodyChildren(
   children: ReactNode,
@@ -248,8 +246,9 @@ function renderBodyChildren(
 
 /**
  * Chat row for user / assistant / system turns (ChatGPT-style).
- * `streaming` is a **UI prop only** — last-glyph color pulse + incomplete
- * semantics; no LLM.
+ * `streaming` is a **UI prop only** — tail ink dot + incomplete semantics;
+ * no LLM. Rows paint at full opacity in their final position; the thread
+ * grows downward instead of fading each turn in.
  *
  * Dual placement: main uses rem-capped host (`--fynns-chatmessage-max-width`)
  * with user bubble at 70%; `EndAside` / `.fynns-chat-host--fill` use 100% pane
@@ -287,11 +286,6 @@ export function ChatMessage({
   ...rest
 }: ChatMessageProps) {
   const isSystem = role === "system";
-  const enter = useChatEntrance();
-  const [nestedReady, setNestedReady] = useState(false);
-  useEffect(() => {
-    setNestedReady(true);
-  }, []);
   const isAssistant = role === "assistant";
   const hasError =
     isAssistant && error != null && error !== false && error !== "";
@@ -306,9 +300,9 @@ export function ChatMessage({
       ? children
       : markdown.trim().length === 0
         ? null
-        : <ChatMarkdown source={markdown} />;
+        : <ChatMarkdown source={markdown} reveal={isStreaming} />;
   const hasBody = hasRenderableBody(bodyChildren);
-  /** Caret → R05 last-glyph pulse only while tokens exist. */
+  /** Tail dot only while tokens exist (ChatGPT streaming cue). */
   const showCursor = isStreaming && hasBody;
   const showBubble = hasBody;
   const showCitations =
@@ -345,7 +339,6 @@ export function ChatMessage({
       {...rest}
       className={join(
         "fynns-chat-message",
-        enter && "fynns-chat-message--enter",
         `fynns-chat-message--${role}`,
         isStreaming && "fynns-chat-message--streaming",
         hasError && "fynns-chat-message--error",
@@ -426,9 +419,5 @@ export function ChatMessage({
       </div>
     </article>
   );
-  return (
-    <ChatEntranceContext.Provider value={nestedReady}>
-      {message}
-    </ChatEntranceContext.Provider>
-  );
+  return message;
 }

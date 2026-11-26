@@ -13,6 +13,7 @@ import {
   FileIcon,
   Surface,
   snackbar,
+  useChatSequencer,
 } from "@fynns/ui";
 import { useEffect, useRef, useState } from "react";
 import { useLocale } from "../i18n";
@@ -59,7 +60,7 @@ export function ChatConversationDemo({
     setDraft("");
     setTurns((items) => [...items, { id: ++nextId.current, kind: "user", text }]);
 
-    // A demo transport beat lets the two entrance states be inspected.
+    // A demo transport beat lets the appended component and answer be inspected.
     const raw = getComputedStyle(document.documentElement)
       .getPropertyValue("--fynns-duration-activity")
       .trim();
@@ -85,6 +86,11 @@ export function ChatConversationDemo({
       onSubmit={send}
     />
   );
+  const { visibleItems: visibleTurns } = useChatSequencer({
+    items: turns,
+    getKey: (turn) => String(turn.id),
+    seed: "first",
+  });
   const showLanding = landing && turns.length === 0;
   const sessionId = activeSessionId === undefined
     ? (turns.length > 0 ? "sample-session" : null)
@@ -135,7 +141,7 @@ export function ChatConversationDemo({
           )
         }
       >
-        {turns.map((turn) =>
+        {visibleTurns.map((turn) =>
           turn.kind === "component" ? (
             <ChatReveal key={turn.id}>
               <Surface variant="soft" padded>

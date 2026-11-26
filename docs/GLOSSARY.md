@@ -51,4 +51,4 @@ Module names that keep Core navigable — **not** public Consumer APIs.
 | **Destination geometry** | Crowding lengths without probes (`layoutMeasure` / `PERF.md`) | probes under shell MutationObserver |
 | **Status-tree timing** | Deep open module (`statusTreeOpen` / `useStatusTreeOpen`) + settle helpers (`chatActivityPolicy`; labels in `chatThinkingPolicy`). **Activity has no post-stream auto-collapse; Thinking does.** | dual write of open in render+effect; pin clear only after paint |
 | **Catalog row geometry** | Trailing action vs decorative + meta partition (`catalogRowGeometry`) | List ticks as fake Timeline; duplicated `--with-end` assembly |
-| **Chat block host** | Stack vs stream-opaque tables (`chatBlockHost`) | diverging CodeBlock/Surface lists; ChatMarkdown treated opaque for R05 |
+| **Chat block host** | Stack vs stream-opaque tables (`chatBlockHost`) | diverging CodeBlock/Surface lists; ChatMarkdown treated opaque for the tail cue |

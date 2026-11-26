@@ -92,4 +92,37 @@ describe("ChatSessionsDrawer controlled session data", () => {
     update({ open: false });
     expect(currentMenu()).toBeNull();
   });
+
+  it("requests archive from the row menu without selecting the row", () => {
+    const onArchive = vi.fn();
+    const { host, props } = mount({ onArchive });
+    context(host.querySelector('[data-chat-session-id="other"]')!);
+    const item = Array.from(currentMenu()!.querySelectorAll("button")).find((el) => el.textContent === "Archive")!;
+    act(() => item.click());
+    expect(onArchive).toHaveBeenCalledExactlyOnceWith("other");
+    expect(props.onSelect).not.toHaveBeenCalled();
+  });
+
+  it("renders a running session as a row-end status ring, not extra drawer chrome", () => {
+    const { host } = mount({
+      sessions: [
+        { id: "toolbar", label: "First", running: true },
+        { id: "other", label: "Second" },
+      ],
+    });
+    const row = host.querySelector('[data-chat-session-id="toolbar"]')!;
+    expect(row.getAttribute("aria-busy")).toBe("true");
+    const ring = row.querySelector(".fynns-nav-drawer-running .fynns-loading-spinner");
+    expect(ring).not.toBeNull();
+    expect(host.querySelector(".fynns-banner, .fynns-inline-alert, .fynns-busy-region")).toBeNull();
+    expect(host.querySelector('[data-chat-session-id="other"]')?.hasAttribute("aria-busy")).toBe(false);
+  });
+
+  it("omits the archive action when archiving is not enabled", () => {
+    const { host } = mount();
+    context(host.querySelector('[data-chat-session-id="other"]')!);
+    const names = Array.from(currentMenu()!.querySelectorAll("button")).map((el) => el.textContent);
+    expect(names).not.toContain("Archive");
+    expect(names).toEqual(["Rename", "Delete"]);
+  });
 });

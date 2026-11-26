@@ -7,6 +7,7 @@
 import "./theme/theme.css";
 import "./primitives/primitives.css";
 export * from "./primitives/SectionNotice";
+export * from "./primitives/ArchivedChatsSettingsDialog";
 export * from "./primitives/ChatSessionsDrawer";
 export * from "./primitives/ChatSessionMenu";
 export * from "./primitives/SelectionArea";
@@ -47,6 +48,7 @@ export {
   EyeIcon,
   EyeOffIcon,
   FileIcon,
+  FileKindIcon,
   FolderOpenIcon,
   GlobeIcon,
   HomeIcon,
@@ -54,6 +56,7 @@ export {
   InfoIcon,
   LayoutGridIcon,
   ListChecksIcon,
+  MaximizeIcon,
   MenuIcon,
   MessageSquareIcon,
   MicIcon,
@@ -67,6 +70,7 @@ export {
   PlugIcon,
   RefreshIcon,
   SaveIcon,
+  ScanIcon,
   SearchIcon,
   SettingsIcon,
   SparklesIcon,
@@ -78,7 +82,7 @@ export {
   UploadIcon,
   WrenchIcon,
 } from "./primitives/icons";
-export type { IconProps } from "./primitives/icons";
+export type { FileKind, IconProps } from "./primitives/icons";
 
 /* Primitives — named keep-list only */
 export { LoadingSkeleton } from "./primitives/LoadingSkeleton";
@@ -403,6 +407,12 @@ export type { ChatComposerToggleProps } from "./primitives/ChatComposerToggle";
 export { ChatMessage } from "./primitives/ChatMessage";
 export { ChatReveal } from "./primitives/ChatReveal";
 export type { ChatRevealProps } from "./primitives/ChatReveal";
+export { useChatSequencer } from "./primitives/useChatSequencer";
+export type {
+  ChatSequencerOptions,
+  ChatSequencerResult,
+  ChatSequencerSeed,
+} from "./primitives/useChatSequencer";
 export type {
   ChatMessageProps,
   ChatMessageRole,

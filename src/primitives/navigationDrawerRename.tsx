@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Button } from "./Button";
 import { isDevEnv } from "./devEnv";
 import { Dialog } from "./Dialog";
@@ -156,7 +156,8 @@ export type NavigationDrawerRenameDialogProps = {
 
 /**
  * Core rename dialog: title, one `Name` field, `feet` = ghost Cancel (X) then
- * the single primary Save (✓). `Enter` commits, `Escape` cancels.
+ * the single primary Save (✓). `Enter` commits, `Escape` cancels. On open the
+ * current name is focused and fully selected, so typing replaces it at once.
  */
 export function NavigationDrawerRenameDialog({
   open,
@@ -167,6 +168,18 @@ export function NavigationDrawerRenameDialog({
   labels,
 }: NavigationDrawerRenameDialogProps) {
   const fieldId = useId();
+  // `DialogFrame` mounts the field only after its presence state commits, so an
+  // effect keyed on `open` can miss it. A ref callback fires on mount instead,
+  // and because its identity only changes with `open`, typing never re-selects
+  // the draft.
+  const selectOnOpen = useCallback(
+    (node: HTMLInputElement | null) => {
+      if (!node || !open) return;
+      node.focus();
+      node.select();
+    },
+    [open],
+  );
   return (
     <Dialog
       open={open}
@@ -190,6 +203,7 @@ export function NavigationDrawerRenameDialog({
       <FieldStack>
         <FieldBlock label={labels.field} htmlFor={fieldId}>
           <Input
+            ref={selectOnOpen}
             id={fieldId}
             value={value}
             onChange={(event) => onValueChange(event.target.value)}

@@ -7,7 +7,7 @@ import {
   NavigationDrawer, NavigationDrawerItem, NavigationDrawerNewChat,
   type NavigationDrawerProps,
 } from "./NavigationDrawer";
-import { PencilIcon, PlusIcon, TrashIcon } from "./icons";
+import { PencilIcon, PlusIcon, TrashIcon, ArchiveIcon } from "./icons";
 import { RevealMore } from "./RevealMore";
 import { SelectionArea, type SelectionMenuContext } from "./SelectionArea";
 import type { UseListSelectionOptions } from "./useListSelection";
@@ -22,6 +22,11 @@ export type ChatSessionsDrawerSession = {
   /** Localized title, including any untitled fallback. */
   label: string;
   disabled?: boolean;
+  /**
+   * True while this session's run is live. Renders one small status ring at
+   * the row end; the drawer never grows a batch / running banner.
+   */
+  running?: boolean;
 };
 
 export type ChatSessionsDrawerLabels = {
@@ -30,6 +35,8 @@ export type ChatSessionsDrawerLabels = {
   rename: string;
   delete: string;
   deleteAll: string;
+  /** Row Archive action — required together with `onArchive`. */
+  archive?: string;
   /** Required together with onDeleteSelected for the built-in bulk action. */
   deleteSelected?: string;
   sessionMenu: string;
@@ -38,6 +45,8 @@ export type ChatSessionsDrawerLabels = {
   emptyDescription?: string;
   /** Accessible loading label only; never visible copy. */
   loading: string;
+  /** Accessible status name for a row's running ring; never visible copy. */
+  runningLabel?: string;
   revealMore: string;
 };
 
@@ -58,6 +67,13 @@ export type ChatSessionsDrawerProps = Omit<NavigationDrawerProps, "children" | "
   /** Requests only: the consumer owns dialogs, confirmation and persistence. */
   onRename: (sessionId: string) => void;
   onDelete: (sessionId: string) => void;
+  /**
+   * Archive request — enables the row Archive action (Rename / Archive /
+   * Delete, ChatGPT order) in both the More menu and right-click. The consumer
+   * moves the session to archived storage; browse + restore through
+   * `ChatArchivedDialog` (opened from the drawer footer settings).
+   */
+  onArchive?: (sessionId: string) => void;
   onDeleteAll: () => void;
   /** Bulk target snapshot; never confused with onDeleteAll. */
   onDeleteSelected?: (sessionIds: readonly string[]) => void;
@@ -66,7 +82,7 @@ export type ChatSessionsDrawerProps = Omit<NavigationDrawerProps, "children" | "
 /** Session-history drawer with scoped selection and shared context / More menus. */
 export function ChatSessionsDrawer({
   sessions, activeSessionId, labels, busy = false, error, reveal, selection, renderMenu,
-  onNewChat, onSelect, onRename, onDelete, onDeleteAll, onDeleteSelected,
+  onNewChat, onSelect, onRename, onDelete, onArchive, onDeleteAll, onDeleteSelected,
   variant = "standard", open, onClose, ...drawerProps
 }: ChatSessionsDrawerProps) {
   const listWindow = useRevealMore({
@@ -89,6 +105,9 @@ export function ChatSessionsDrawer({
       return <>
         <DropdownMenuItem icon={<PencilIcon />} disabled={unavailable}
           onClick={() => onRename(id)}>{labels.rename}</DropdownMenuItem>
+        {onArchive == null ? null :
+          <DropdownMenuItem icon={<ArchiveIcon />} disabled={unavailable}
+            onClick={() => onArchive(id)}>{labels.archive ?? "Archive"}</DropdownMenuItem>}
         <DropdownMenuSeparator />
         <DropdownMenuItem icon={<TrashIcon />} tone="danger" disabled={unavailable}
           onClick={() => onDelete(id)}>{labels.delete}</DropdownMenuItem>
@@ -121,6 +140,8 @@ export function ChatSessionsDrawer({
             {...scope.getItemProps(session.id)}
             data-chat-session-id={session.id} label={session.label}
             active={session.id === activeSessionId} disabled={session.disabled}
+            running={session.running}
+            runningLabel={labels.runningLabel}
             aria-haspopup="menu"
             onClick={() => { scope.closeMenu(); onSelect(session.id); }}
             trailing={scope.menuTrigger(session.id)} />)}

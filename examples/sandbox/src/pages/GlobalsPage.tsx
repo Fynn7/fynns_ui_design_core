@@ -2709,10 +2709,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="autocomplete">
           <div className="sandbox-globals-row sandbox-globals-row--stack">
-            <InlineAlert
-              severity="warning"
-              message={t("globals.autocompleteDeprecatedAlert")}
-            />
             <Autocomplete
               ariaLabel={t("globals.autocompleteAria")}
               placeholder={t("globals.autocompletePlaceholder")}
@@ -7942,6 +7938,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             label={t("globals.dropzoneLabel")}
             hint={t("globals.dropzoneHint")}
             browseLabel={t("globals.dropzoneBrowse")}
+            actions={
+              <Button variant="ghost" size="sm" type="button">
+                <ClipboardIcon />
+                Paste image
+              </Button>
+            }
             onFiles={(files) => {
               const names = files.map((f) => f.name);
               setDropNames(names);

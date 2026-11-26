@@ -92,4 +92,42 @@ describe("check-ui-exports.mjs", () => {
     expect(json.ok).toBe(true);
     expect(json.missing).toEqual([]);
   });
+
+  function makeCoreWithTokens(pkg: string, css: string) {
+    const themeDir = path.join(pkg, "node_modules", "@fynn7", "ui-design-core", "src", "theme");
+    fs.mkdirSync(themeDir, { recursive: true });
+    fs.writeFileSync(path.join(themeDir, "theme.css"), css);
+  }
+
+  function makeConsumer(pkg: string, appCss: string) {
+    const barrelDir = path.join(pkg, "node_modules", "@fynn7", "ui-design-core", "src");
+    fs.mkdirSync(barrelDir, { recursive: true });
+    fs.writeFileSync(path.join(barrelDir, "index.ts"), "export function Button() {}\n");
+    fs.mkdirSync(path.join(pkg, "src"), { recursive: true });
+    fs.writeFileSync(path.join(pkg, "src", "App.tsx"), 'import { Button } from "@fynns/ui";\nexport const x = <Button>ok</Button>;\n');
+    fs.writeFileSync(path.join(pkg, "src", "app.css"), appCss);
+    fs.writeFileSync(path.join(pkg, "package.json"), '{ "name": "fixture" }\n');
+  }
+
+  it("fails when consumer css references an undefined --fynns-* token", () => {
+    const pkg = makeTmp();
+    makeConsumer(pkg, ".a { color: var(--fynns-color-bg-canvas); }\n.b { color: var(--fynns-color-text); }\n");
+    makeCoreWithTokens(pkg, ":root {\n  --fynns-color-text: #fff;\n}\n");
+
+    const { status, json } = runCheck(pkg);
+    expect(status).toBe(1);
+    expect(json.ok).toBe(false);
+    const report = json as { unknownTokens?: Array<{ token: string }> };
+    expect((report.unknownTokens ?? []).map((u) => u.token)).toEqual(["--fynns-color-bg-canvas"]);
+  });
+
+  it("passes when every referenced token is defined by the linked core", () => {
+    const pkg = makeTmp();
+    makeConsumer(pkg, ".a { color: var(--fynns-color-text); }\n");
+    makeCoreWithTokens(pkg, ":root {\n  --fynns-color-text: #fff;\n}\n");
+
+    const { status, json } = runCheck(pkg);
+    expect(status).toBe(0);
+    expect(json.ok).toBe(true);
+  });
 });

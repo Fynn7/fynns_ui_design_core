@@ -5,8 +5,8 @@ import { Chat, ChatThread } from "./Chat";
 import { ChatMessage } from "./ChatMessage";
 import { ChatReveal } from "./ChatReveal";
 
-describe("chat entrance", () => {
-  it("keeps initial history still and reveals only later messages and blocks", () => {
+describe("chat append paint", () => {
+  it("paints appended messages and blocks immediately, without entrance classes", () => {
     const host = document.createElement("div");
     document.body.appendChild(host);
     const root = createRoot(host);
@@ -41,25 +41,22 @@ describe("chat entrance", () => {
 
     try {
       render(false);
+      render(true);
       expect(host.querySelectorAll(".fynns-chat-message--enter")).toHaveLength(0);
       expect(host.querySelectorAll(".fynns-chat-reveal--enter")).toHaveLength(0);
-
-      render(true);
-      expect(host.querySelectorAll(".fynns-chat-message--enter")).toHaveLength(1);
-      expect(host.querySelectorAll(".fynns-chat-reveal--enter")).toHaveLength(1);
-      expect(host.querySelector(".fynns-chat-message--enter")?.textContent).toContain("New answer");
-      expect(host.querySelector(".fynns-chat-reveal--enter")?.textContent).toContain("New block");
+      expect(host.textContent).toContain("New answer");
+      expect(host.textContent).toContain("New block");
     } finally {
       act(() => root.unmount());
       host.remove();
     }
   });
 
-  it("slides an appended part without doubling the entrance of a new message", () => {
+  it("does not mark a part appended inside an existing message", () => {
     const host = document.createElement("div");
     document.body.appendChild(host);
     const root = createRoot(host);
-    const render = (phase: number) => {
+    const render = (append: boolean) => {
       act(() => {
         root.render(
           createElement(
@@ -70,17 +67,11 @@ describe("chat entrance", () => {
               {},
               createElement(
                 ChatMessage,
-                { key: "old", role: "assistant" },
-                createElement(ChatReveal, { key: "old-part" }, "Existing part"),
-                phase >= 2 &&
-                  createElement(ChatReveal, { key: "added-part" }, "Added part"),
+                { key: "answer", role: "assistant" },
+                createElement(ChatReveal, { key: "part-1" }, "Existing part"),
+                append &&
+                  createElement(ChatReveal, { key: "part-2" }, "Added part"),
               ),
-              phase >= 1 &&
-                createElement(
-                  ChatMessage,
-                  { key: "new", role: "assistant" },
-                  createElement(ChatReveal, { key: "new-part" }, "New part"),
-                ),
             ),
           ),
         );
@@ -88,14 +79,10 @@ describe("chat entrance", () => {
     };
 
     try {
-      render(0);
-      render(1);
-      expect(host.querySelectorAll(".fynns-chat-message--enter")).toHaveLength(1);
+      render(false);
+      render(true);
       expect(host.querySelectorAll(".fynns-chat-reveal--enter")).toHaveLength(0);
-
-      render(2);
-      expect(host.querySelectorAll(".fynns-chat-reveal--enter")).toHaveLength(1);
-      expect(host.querySelector(".fynns-chat-reveal--enter")?.textContent).toBe("Added part");
+      expect(host.textContent).toContain("Added part");
     } finally {
       act(() => root.unmount());
       host.remove();

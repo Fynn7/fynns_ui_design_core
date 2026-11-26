@@ -60,9 +60,10 @@ export function DialogShell({
  * ConfirmDialog). Focus trap, scroll lock, Esc + scrim dismiss are built in via
  * `DialogFrame`.
  *
- * Keep `title` / body / feet source state until the next open — do not clear
- * them in the same tick as `open→false` (`DialogFrame` exit still paints props
- * ~240ms). Never reuse a ConfirmDialog title as this Dialog’s title fallback.
+ * Keep `title` / body / feet source state until the next open as the first
+ * choice; `DialogFrame` also freezes the last open children for the exit
+ * transition, so clearing them on `open→false` no longer flashes empty copy.
+ * Never reuse a ConfirmDialog title as this Dialog’s title fallback.
  *
  * Canonical dismiss/confirm actions belong in `feet` (Cancel ghost → primary),
  * not inside scrollable `children` — long Lists must not bury Cancel.
@@ -174,9 +175,10 @@ export function Dialog({
  * dialog anatomy). `danger` styles Confirm destructively; `loading` blocks
  * dismiss when `blockCloseWhileLoading` (default).
  *
- * Keep `title` / description / children until the next open — clearing them on
- * the same tick as `open→false` flashes empty content during exit. Do not
- * reuse this title as a `Dialog` title fallback.
+ * Keep `title` / description / children until the next open as the first
+ * choice; the frame freezes exit children, so clearing them on `open→false`
+ * no longer flashes empty copy. Do not reuse this title as a `Dialog` title
+ * fallback.
  */
 export type ConfirmDialogProps = {
   open: boolean;

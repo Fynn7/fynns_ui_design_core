@@ -15,6 +15,32 @@ into consumer agent guidance. See [workspace contract](design-system/workspace-c
 
 ## Model
 
+**Rename dialog select-all ≥ 0.5.317:** the core `NavigationDrawerRenameDialog`
+focuses its `Name` field and selects the whole current label as soon as it
+opens (double-click, `F2` or controlled `renameOpen`), so typing replaces the
+name immediately. No API or consumer change; linked source consumers receive it
+through their existing file dependency. Verify in the actual app that the name
+is highlighted on open and that editing does not re-select the draft.
+
+**Chat append motion ≥ 0.5.315:** new `ChatMessage` / `ChatReveal` rows paint
+at full opacity in their final position. The previous rise/fade entrance and
+its stagger are gone; `useChatSequencer` defaults to interval **0** and only
+gates on settled rows. `ChatMessage.streaming` now paints a small ink dot after
+the newest glyph (ChatGPT's streaming tail) instead of pulsing the last glyph;
+new markdown words fade in place (opacity only) while earlier words stay put.
+`--fynns-chat-entry-offset` / `--fynns-chat-entry-duration` are removed; delete
+consumer delay code that read them. Linked source consumers receive this
+through their existing file dependency; verify append order and the tail dot in
+the actual app.
+
+**autoGrow scroll stability ≥ 0.5.314:** editable `CodeBlock` and `Textarea`
+measure their content height with a collapsed probe. The probe no longer
+moves the page: the previous height and every captured scroll offset are
+restored before the measured height is applied, so typing in a long entry
+keeps the page scroll where it was instead of snapping back to the top. No
+API change; linked source consumers receive it through their existing file
+dependency.
+
 **Core rename flow ≥ 0.5.313:** `NavigationDrawerItem` ships the rename
 gesture and dialog (`renamable` + `onRename` + `renameLabels`, optional
 controlled `renameOpen` / `onRenameOpenChange`). Double-click a destination

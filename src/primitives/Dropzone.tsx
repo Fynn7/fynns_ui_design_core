@@ -28,6 +28,12 @@ export type DropzoneProps = Omit<
   hint?: ReactNode;
   /** Browse button label. @default "Browse" */
   browseLabel?: string;
+  /**
+   * Extra controls shown next to the browse button inside the dashed surface
+   * (for example a paste-from-clipboard button). Clicks inside this slot do not
+   * open the file dialog and stay inert while the zone is disabled or busy.
+   */
+  actions?: ReactNode;
 };
 
 function join(...parts: Array<string | false | null | undefined>) {
@@ -53,6 +59,7 @@ export function Dropzone({
   label = "Drop files here",
   hint,
   browseLabel = "Browse",
+  actions,
   className,
   ...rest
 }: DropzoneProps) {
@@ -133,19 +140,30 @@ export function Dropzone({
       <div className="fynns-dropzone-body">
         <div className="fynns-dropzone-label">{label}</div>
         {hint != null ? <div className="fynns-dropzone-hint">{hint}</div> : null}
-        <Button
-          type="button"
-          variant="tonal"
-          size="sm"
-          className="fynns-dropzone-browse"
-          disabled={blocked}
-          onClick={(event) => {
-            event.stopPropagation();
-            openDialog();
-          }}
-        >
-          {browseLabel}
-        </Button>
+        <div className="fynns-dropzone-controls">
+          <Button
+            type="button"
+            variant="tonal"
+            size="sm"
+            className="fynns-dropzone-browse"
+            disabled={blocked}
+            onClick={(event) => {
+              event.stopPropagation();
+              openDialog();
+            }}
+          >
+            {browseLabel}
+          </Button>
+          {actions != null ? (
+            <div
+              className="fynns-dropzone-actions"
+              inert={blocked || undefined}
+              onClick={(event) => event.stopPropagation()}
+            >
+              {actions}
+            </div>
+          ) : null}
+        </div>
       </div>
       {busy ? (
         <LinearProgress

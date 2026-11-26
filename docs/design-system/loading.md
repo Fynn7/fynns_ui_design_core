@@ -128,10 +128,13 @@ import { BusyRegion, LoadingSkeleton } from "@fynns/ui";
 ```
 
 The skeleton slot is decorative, contains no interactive controls, and occupies
-the content region. Loaded children remain mounted, hidden and inert during
-the wait, preserving local state and the region's geometry. Clearing busy
-reveals them at the same bounds. No centered 20rem skeleton stack, visible
-loading message or frosted mask accompanies a content skeleton. A cold-start
+the content region. Core clips a busy-region skeleton overlay to that region,
+so a slot with more explicit `lines` than the content can fit is trimmed rather
+than painting over following sections. Prefer `fill` on the slot so rows adapt
+to the available height instead. Loaded children remain mounted, hidden and
+inert during the wait, preserving local state and the region's geometry.
+Clearing busy reveals them at the same bounds. No centered 20rem skeleton
+stack, visible loading message or frosted mask accompanies a content skeleton. A cold-start
 without children uses the large text skeleton; provide matching layout when its shape
 is known. `fill` preserves the existing FillColumn / PageScroll height chain.
 Do not overlay a new region skeleton on top of an existing nested placeholder.

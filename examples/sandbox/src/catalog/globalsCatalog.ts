@@ -176,8 +176,8 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
   {
     id: "autocomplete",
     categoryId: "textInputs",
-    label: "Autocomplete (deprecated)",
-    keywords: ["自动完成", "combo", "suggest", "deprecated", "废弃", "SearchBar"],
+    label: "Autocomplete",
+    keywords: ["自动完成", "combo", "suggest", "筛选", "filter", "表单", "DropdownMenu"],
   },
   {
     id: "otp",

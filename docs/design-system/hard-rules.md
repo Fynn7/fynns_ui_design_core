@@ -646,14 +646,15 @@ Use the core CSS recipe; never compress these with local margins or line heights
   **0.5.131**). Live `#password` / `#input`. Failure: CONSUMER_TREATY Input
   trailing affix far from shell edge; Input trailing md IconButton in field
   shell.
-- **DON'T** start **new** consumer screens on soft-deprecated **`Select`** /
-  **`Autocomplete`** (≥ **0.5.236**) — still exported + taught on Globals
-  `#select` / `#autocomplete` with `InlineAlert` warning, but prefer
-  **`DropdownMenu`** (`#menu`) for discrete picks and **`SearchBar`** /
-  **`CommandPalette`** for type-to-filter / commands. Temporary carve-out:
+- **DON'T** start **new** consumer screens on soft-deprecated **`Select`**
+  (≥ **0.5.236**) — still exported + taught on Globals `#select` with
+  `InlineAlert` warning, but prefer **`DropdownMenu`** (`#menu`) for discrete
+  picks, **`Autocomplete`** (`#autocomplete`) for body-region (form / prose)
+  type-to-filter, and **`SearchBar`** / **`CommandPalette`** for chrome /
+  global search and command pickers. Temporary carve-out:
   Pagination `.fynns-pagination-bar` rows-per-page may keep stock Select until
-  a Menu-based pager recipe lands. Failure: CONSUMER_TREATY Select Autocomplete
-  deprecated prefer Menu SearchBar.
+  a Menu-based pager recipe lands. Failure: CONSUMER_TREATY picker region
+  mismatch (new Select use / chrome SearchBar for form filter).
 - **DON'T** bake the page-size noun into every Select option (`Rows: 10`,
   `Sessions: 50`, `每页 100 行`) — options are **digits only**; noun once via
   sibling `.fynns-table-meta` + `ariaLabel`. Live `#pagination`. Failure:
@@ -717,6 +718,18 @@ Use the core CSS recipe; never compress these with local margins or line heights
   question. Never dock a perpetual result/question or move answered cards.
   Only composer/task-summary chrome is docked. Live `#chat-question`; contract:
   [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md).
+- **MUST** append live chat rows through `useChatSequencer` (or the identical
+  rule): paint each queued row at full opacity as soon as every painted row has
+  settled (media loaded, streaming stopped), no row removed/reordered/collapsed
+  after paint, and no later row while a painted row is still streaming or
+  loading media. Core's default interval is **0** — no row entrance fade/rise
+  or stagger; ChatGPT appends in place and grows the thread downward. Streaming
+  markdown may fade only its newly mounted words (opacity, no translate); the
+  old words never replay. Keep a real
+  tail status row from submit to settle; every backend phase needs a visible
+  row. Terminal state appends, never rewrites. Live `#layouts-demo-chat-product`;
+  contract: [`CHAT_SEQUENCE.md`](../../llm/CHAT_SEQUENCE.md) → Live reveal
+  contract + [`CHAT_MOTION.md`](../../llm/CHAT_MOTION.md).
 - **DON'T** invent shell/column/chat insets as raw `rem`/`px` or private CSS
   vars — reuse `--fynns-layout-*` (see **Inset decision tree**). Don't ship
   broken chrome type/row proportion (see **Chrome type & row proportion** /
@@ -983,10 +996,12 @@ Use the core CSS recipe; never compress these with local margins or line heights
   Live `#layouts-demo-fill-column` / `#sandbox-fill-column-guide`.
   Failure: CONSUMER_TREATY FillColumn guide Surface flush to Chat /
   FillColumn header mid-scroll hard clip (no edge fade).
-- **DON'T** clear `Dialog` / `ConfirmDialog` title/body source state in the
-  same tick as `open→false` — `DialogFrame` exit (~240ms) still paints props;
-  keep content until the next open. Never reuse a Confirm title as a Dialog
-  title fallback (exit flash / wrong head). Live `#sandbox-list-recipe-catalog`.
+- **DON'T** rely on consumers clearing `Dialog` / `ConfirmDialog` title/body
+  source state in the same tick as `open→false`: `DialogFrame` now freezes the
+  last open children for the exit (~240ms), so the closing panel cannot flash
+  empty copy. Keeping source state until the next open remains the simplest
+  diagnostic habit. Never reuse a Confirm title as a Dialog title fallback
+  (wrong head). Live `#sandbox-list-recipe-catalog`.
   Failure: CONSUMER_TREATY Dialog exit clears title/body (flash).
 - **DON'T** crush centered `Dialog` title top clearance below body end —
   non-confirm `.fynns-dialog-head` `padding-block-start` is

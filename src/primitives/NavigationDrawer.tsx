@@ -500,6 +500,14 @@ export type NavigationDrawerItemProps = Omit<
    */
   trailing?: ReactNode;
   /**
+   * Live-run state for session / history rows. Renders **one small status
+   * ring at the row end** — never a pane banner, Card or extra chrome. Pair
+   * it with `runningLabel` so the ring carries a localized status name.
+   */
+  running?: boolean;
+  /** Accessible name for the running ring; never visible copy. */
+  runningLabel?: string;
+  /**
    * Enable the **core rename flow**: double-click the destination (or press
    * `F2` while it has focus) opens the core rename `Dialog` (title + field +
    * ghost Cancel / primary Save). Commit through `onRename`.
@@ -544,6 +552,8 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
     active = false,
     badge,
     trailing,
+    running = false,
+    runningLabel,
     className,
     type = "button",
     "aria-label": ariaLabel,
@@ -633,6 +643,7 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
       className={rootClass}
       disabled={disabled}
       aria-current={active ? "page" : undefined}
+      aria-busy={running || undefined}
       aria-label={resolvedAriaLabel}
       aria-labelledby={resolvedAriaLabel == null ? labelId : undefined}
       onDoubleClick={handleDoubleClick}
@@ -646,6 +657,11 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
       <span className="fynns-nav-drawer-label" id={labelId}>
         <OverflowTip content={label}>{label}</OverflowTip>
       </span>
+      {running ? (
+        <span className="fynns-nav-drawer-running">
+          <Spinner size="sm" label={runningLabel ?? label} />
+        </span>
+      ) : null}
       {badgeNode}
     </button>
   );

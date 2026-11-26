@@ -81,9 +81,11 @@ ASCII `-`。
    overflow / 展开方位（含 `.fynns-select` / `.fynns-search-bar*` / `.fynns-menu` /
    `.fynns-field-shell` / `.fynns-field-affix`）。对照 `#select` / `#menu` /
    `#password` / `#input`；不对 → **只**在 core 约束。
-4c. **Select / Autocomplete 已软废弃（硬）**：新 UI 勿用。离散选项 →
-   `DropdownMenu`（`#menu`）；可筛选 / 命令式 → `SearchBar` / `CommandPalette`。
-   现有命中 → 推荐迁移。例外：Pagination 每页条数可暂留 stock Select。
+4c. **Select 已软废弃（硬）**：新 UI 勿用。离散选项 →
+   `DropdownMenu`（`#menu`）；正文区（表单 / 正文行）可筛选 →
+   `Autocomplete`（`#autocomplete`）；全局 / 顶栏搜索 → `SearchBar`；
+   命令式 → `CommandPalette`。
+   现有 Select 命中 → 推荐迁移。例外：Pagination 每页条数可暂留 stock Select。
 5. 样式只用 `var(--fynns-*)`。正文/chrome `--fynns-font-ui`；代码
    `--fynns-font-mono`；禁止主界面 serif。
 6. 瞬时反馈：`snackbar` + `<SnackbarHost />`。
@@ -190,7 +192,7 @@ sandbox `#anchor`。
 - **PageScroll mid-scroll hard clip** — 只用 keep-set `PageScroll`（渐隐已封装）；禁止裸 `overflow:auto`。`#page-scroll`
 - **Table H-scroll hard clip** — `.fynns-table-wrap.fynns-scroll` 左右渐隐已封装（`data-fade-left`/`right` ≥ **0.5.296**）；禁止私有 `mask-image` / 硬裁末列。`#table`
 - **FillColumn header mid-scroll hard clip** — canvas 封顶的 `header` 渐隐已封装（≥ **0.5.278**）；禁止私有 `mask-image`。Header **content-sized**（`flex: 0 0 auto` ≥ **0.5.279**），勿靠 flex-shrink 把短 guide Surface 压出嵌套滚动条。`#sandbox-fill-column-guide`
-- **Textarea scroll-edge fade erases border** — core mask 保留外缘 hairline 框（≥ **0.5.282**）；禁止私有 `mask-image` 再抹掉描边。`#textarea`
+- **Textarea scroll-edge fade erases border / breaks the top edge** — core 把描边与渐隐拆开：`.fynns-textarea-frame` 保留 hairline 与圆角，内层 `.fynns-textarea-viewport` 承担渐隐（≥ **0.5.316**）；禁止再 mask `<textarea>` 或私有 `mask-image`。`#textarea`
 - **overlay scrollbar above / buried under Select/Menu** — 页轨 z 在 modal-flyout 下；飞层轨用 scroll-overlay-flyout。`#sandbox-scroll-menu-stack`
 - **mode drawer tools↔filter crushed / toolbar-end md** — body 直接子间距 8dp；toolbar-end 盘 sm 32dp。`#layouts-demo-navigation-drawer`
 - **Dialog foot Delete leftmost / exit clears title** — Cancel 左、主确认右；`open→false` 同拍勿清空 title/body。`#sandbox-list-recipe-catalog`
@@ -236,7 +238,7 @@ sandbox `#anchor`。
 - **ChatComposer mode toggle buried in + Menu** — Thinking / Vision 等模式用 `ChatComposerToggle` 放 `endActions`（Model → Thinking → Vision → Send）+ Tooltip（窄壳仅图标时 tip 必留）；禁止埋进 leading `+` 菜单或消费仓自绘 chip。`#sandbox-chat-composer-thinking-toggle` / `#sandbox-chat-composer-thinking-toggle-narrow`
 - **ChatComposer model Menu flat without source sections** — 模型 Menu 分 Local / Cloud / CLI（`DropdownMenuGroup` + Separator）；仅已配置源显示分区，皆无则禁用「No models available」。`#sandbox-chat-composer-model-sections`
 - **truncated option / chrome label lacks OverflowTip** — 溢出须 `…`+Tooltip 全文；禁止 `title=`。`#select` / `#card` / `#list`
-- **consumer restyles keep-set chrome / Select Autocomplete deprecated** — 铬改只在 core；新屏用 Menu/SearchBar。`#select` / `#menu`
+- **consumer restyles keep-set chrome / picker region mismatch** — 铬改只在 core；离散用 Menu、正文筛选 Autocomplete、全局 SearchBar。`#autocomplete` / `#select` / `#menu`
 - **outcome Chip as status / List path Switch+Chip+danger soup** — 结果标用 `.fynns-list-item-status`；目录 trailing 仅 ghost md 簇。`#list` / `#sandbox-list-repo-path-actions`
 - **List scroll-well meta/rail / spill / underlap / focus ring crack** — 勿私造 end pad/overflow/z-index。`#sandbox-list-repo-path-actions` / `#sandbox-list-status-action`
 - **FieldStack Grid centers / hugs max-content** — Grid `align-items: start`；列铺满父级；勿消费仓改回 center。`#sandbox-field-stack-grid-select` / `#form-recipe`

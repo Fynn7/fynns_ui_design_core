@@ -22,7 +22,6 @@ import { ArrowUpIcon, ChevronDownIcon, MicIcon, StopSquareIcon } from "./icons";
 import { IconButton } from "./IconButton";
 import { Tooltip } from "./Tooltip";
 import { clearScrollEdgeFade, syncScrollEdgeFadeOnto } from "./scrollEdgeFade";
-import { ChatEntranceContext } from "./chatEntrance";
 import { ChatComposerTodoList, type ChatComposerTodoListProps } from "./ChatComposerTodoList";
 import { refreshOverlayScrollbars } from "../theme/overlayScrollbar";
 
@@ -137,11 +136,6 @@ export function ChatThread({
     stickToBottom,
   } = useChatContext("ChatThread");
   const hasMessages = Children.count(children) > 0;
-  const [entranceReady, setEntranceReady] = useState(false);
-
-  useEffect(() => {
-    setEntranceReady(true);
-  }, []);
 
   useEffect(() => {
     const el = threadRef.current;
@@ -189,9 +183,7 @@ export function ChatThread({
       aria-relevant="additions"
     >
       <div className="fynns-chat-thread-inner">
-        <ChatEntranceContext.Provider value={entranceReady}>
-          {hasMessages ? children : empty}
-        </ChatEntranceContext.Provider>
+        {hasMessages ? children : empty}
       </div>
     </div>
   );
@@ -267,6 +259,13 @@ export type ChatComposerProps = Omit<
   trailing?: ReactNode;
   busy?: boolean;
   onStop?: () => void;
+  /**
+   * Stop already requested and the host is waiting for the run to settle.
+   * The Stop action renders disabled + busy (IconButton `loading`:淡灰 +
+   * spinner via the sanctioned button chrome, no ad-hoc ring) and ignores
+   * repeat clicks / Esc until the host clears `busy`.
+   */
+  stopping?: boolean;
   /** When set, empty idle shows a mic in the primary slot (Send stays when text). */
   onDictate?: () => void;
   dictating?: boolean;
@@ -296,7 +295,7 @@ export type ChatComposerProps = Omit<
  * Multiline layout (model C + compact morph): full-width textarea above a
  * bottom toolbar when expanded; collapsed keeps a single ~44dp row via
  * toolbar `display: contents` (32dp controls + 6dp pad — Cursor-dense
- * circle; not SearchBar 56dp).
+ * circle; not the SearchBar chrome).
  * Spec: `llm/CHAT_COMPOSER_LAYOUT.md`.
  *
  * ChatGPT’s live prompt is ProseMirror (`contenteditable`) with a
@@ -322,6 +321,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       trailing,
       busy = false,
       onStop,
+      stopping = false,
       onDictate,
       dictating = false,
       onStopDictate,
@@ -566,6 +566,11 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       if (e.defaultPrevented) return;
 
       if (e.key === "Escape" && busy && onStop) {
+        // Stop already requested: stay silent, do not re-fire while stopping.
+        if (stopping) {
+          e.preventDefault();
+          return;
+        }
         e.preventDefault();
         onStop();
         return;
@@ -607,7 +612,8 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
             size="sm"
             variant="primary"
             aria-label={stopLabel}
-            onClick={onStop}
+            onClick={stopping ? undefined : onStop}
+            loading={stopping}
             className="fynns-chat-composer-primary"
           >
             <StopSquareIcon />

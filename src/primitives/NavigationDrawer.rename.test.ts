@@ -94,6 +94,34 @@ describe("NavigationDrawerItem core rename flow", () => {
     expect(panel!.querySelector(".fynns-btn--primary")).not.toBeNull();
   });
 
+  it("focuses and selects the whole current name when the dialog opens", () => {
+    const { host } = mount();
+    doubleClick(row(host));
+    const field = dialog()!.querySelector<HTMLInputElement>("input")!;
+    expect(document.activeElement).toBe(field);
+    expect(field.selectionStart).toBe(0);
+    expect(field.selectionEnd).toBe("Sample document".length);
+  });
+
+  it("selects the whole name on a controlled open without re-selecting while typing", () => {
+    const { render } = mount({ renameOpen: false });
+    render({ renameOpen: true });
+    const field = dialog()!.querySelector<HTMLInputElement>("input")!;
+    expect(field.selectionStart).toBe(0);
+    expect(field.selectionEnd).toBe("Sample document".length);
+
+    const select = vi.spyOn(field, "select");
+    act(() => {
+      const setter = Object.getOwnPropertyDescriptor(
+        HTMLInputElement.prototype,
+        "value",
+      )!.set!;
+      setter.call(field, "Renamed");
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    expect(select).not.toHaveBeenCalled();
+  });
+
   it("commits the trimmed name and closes the dialog", () => {
     const { host, onRename } = mount();
     doubleClick(row(host));

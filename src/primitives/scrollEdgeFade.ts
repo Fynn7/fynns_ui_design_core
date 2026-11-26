@@ -9,10 +9,13 @@
  * The overlay scrollbar manager syncs all non-replaced `.fynns-scroll` hosts;
  * canvas-capped FillColumn `header` also syncs directly. `.fynns-table-wrap`
  * gets inline-axis fade when
- * columns overflow (≥ **0.5.296** — live `#table`). Masks keep the outer
- * hairline opaque on Textarea (≥ **0.5.282**) so borders are not erased with
- * the fade. Editable CodeBlock: never mask `.fynns-code-block-input` — fade
- * the highlight twin via `syncScrollEdgeFadeOnto` (≥ **0.5.299**) so
+ * columns overflow (≥ **0.5.296** — live `#table`). Textarea is never masked
+ * itself (≥ **0.5.316**): `Textarea` mirrors these attrs onto
+ * `.fynns-textarea-viewport` inside an unmasked chrome frame, because masking
+ * the native control made Chromium paint scrolled glyphs above its rounded
+ * border box and broke the hairline at the corners. Editable CodeBlock: never
+ * mask `.fynns-code-block-input` — fade the highlight twin via
+ * `syncScrollEdgeFadeOnto` (≥ **0.5.299**) so
  * Chromium `::selection` stays locked to the scrolling caret host.
  */
 

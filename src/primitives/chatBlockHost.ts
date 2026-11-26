@@ -7,8 +7,8 @@ import { isValidElement, type ReactElement, type ReactNode } from "react";
  * Two modes share name/class locality but diverge intentionally:
  * - **stack** — answer body units that must open body-stack-gap (includes
  *   ChatMarkdown + block HTML tags).
- * - **streamOpaque** — hosts that must not receive the streaming glyph cue
- *   (ChatMarkdown stays wrapable so the R05 pulse can land on prose).
+ * - **streamOpaque** — hosts that must not receive the streaming tail cue
+ *   (ChatMarkdown stays wrapable so the dot can land on prose).
  */
 
 const STACK_COMPONENT =
